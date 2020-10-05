@@ -1,8 +1,7 @@
 
-\chapter{Séquences répliquées synchronisées par différences}
-\label{ch:dotted-logootsplit}
+\chapter{Séquences répliquées synchronisées par différences}\label{ch:dotted-logootsplit}
 
-\minitoc
+\minitoc{}
 \bigskip
 
 Une séquence est une abstraction utile à la conception d'applications de collaboration tel que des éditeurs collaboratifs de texte \autocite{2017_nicolas-mute-demo,nedelec2016_crate}.
@@ -236,8 +235,7 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
         \foreach \src/\dest in {a1/b1,a8/b3}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:replseq-sematic-1}
+    \caption{}\label{fig:replseq-sematic-1}
 \end{subfigure}
 \par\medskip
 \begin{subfigure}{0.49\linewidth}
@@ -257,8 +255,7 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
         \draw (i2) to (e);
         \draw (e) to (s);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:replseq-sematic-2}
+    \caption{}\label{fig:replseq-sematic-2}
 \end{subfigure}
 \begin{subfigure}{0.49\linewidth}
     \centering
@@ -279,8 +276,7 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
         \draw (i2) to (e);
         \draw (e) to (s);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:replseq-sematic-3}
+    \caption{}\label{fig:replseq-sematic-3}
 \end{subfigure}
 \par\medskip
 \begin{subfigure}{\linewidth}
@@ -291,16 +287,14 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
         $\textit{ladies\textit{\negthinspace!}}$ & \checkmark & \checkmark & \checkmark \\
         $\textit{ladi\textit{\negthinspace!}es}$ & \checkmark & \checkmark & \checkmark \\
         $\textit{ladie\textit{\negthinspace!}s}$ & \checkmark & \checkmark & \\
-        $\textit{lad\textit{\negthinspace!}ies}$ & \checkmark & & \\
+        $\textit{lad\textit{\negthinspace!}ies}$ & \checkmark& & \\
     \end{tabular}
-    \caption{}
-    \label{fig:replseq-sematic-4}
+    \caption{}\label{fig:replseq-sematic-4}
 \end{subfigure}
 \caption[Illustration des différentes spécifications partielles d'une séquence répliquée]{Illustration des différentes spécifications partielles d'une séquence répliquée.
 \subref{fig:replseq-sematic-1} L'exécution abstraite considérée respecte le modèle de cohérence causale.
 \subref{fig:replseq-sematic-4} Les valeurs de retour admises de l'opération de lecture $a_3$ dépendent de la spécification choisit.
-Elles correspondent à des extensions linéaires des ordres partiels induits par la spécification faible \subref{fig:replseq-sematic-2} ou la spécification forte \subref{fig:replseq-sematic-3}.}
-\label{fig:replseq-sematic}
+Elles correspondent à des extensions linéaires des ordres partiels induits par la spécification faible \subref{fig:replseq-sematic-2} ou la spécification forte \subref{fig:replseq-sematic-3}.}\label{fig:replseq-sematic}
 \end{figure}
 
 %\paragraph{} \textcite{attiyai_2016_spec-text-editing} ont montré que le protocole de réplication optimiste de séquence \emph{RGA} respecte la spécification forte.
@@ -468,8 +462,7 @@ En répétant l'algorithme pour le caractère $\textsf{'\textit{s}'}$, on en dé
             ]{$\negthinspace!$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:woot-1}
+    \caption{}\label{fig:woot-1}
 \end{subfigure}
 \begin{subfigure}[b]{0.49\linewidth}
     \centering
@@ -493,15 +486,13 @@ En répétant l'algorithme pour le caractère $\textsf{'\textit{s}'}$, on en dé
         \draw[-latex] (e) to (i2);
         \draw[-latex] (s) to (e);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:woot-2}
+    \caption{}\label{fig:woot-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{WOOT}]{Exemple d'une séquence \emph{WOOT}.
 \subref{fig:woot-1} Séquence de valeurs et pierres tombales associées à leurs identifiants.
 Les pierres tombales sont représentées par un caractère barré.
 \subref{fig:woot-2} Valeurs référencés par les valeurs de la séquence.
-    Les références vers le début et la fin de la séquence sont omises.}
-\label{fig:woot}
+    Les références vers le début et la fin de la séquence sont omises.}\label{fig:woot}
 \end{figure}
 
 Lorsqu'un pair exécute une opération de suppression il détermine d'abord l'identifiant de la valeur à supprimer.
@@ -603,8 +594,7 @@ Il intègre de la même manière les insertions des caractères $\textsf{'\texti
             ]{$\negthinspace!$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:rga-1}
+    \caption{}\label{fig:rga-1}
 \end{subfigure}
 \begin{subfigure}[b]{0.49\linewidth}
     \centering
@@ -626,15 +616,13 @@ Il intègre de la même manière les insertions des caractères $\textsf{'\texti
         \draw[-latex] (e) to (i2);
         \draw[-latex] (s) to (e);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:rga-2}
+    \caption{}\label{fig:rga-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{RGA}]{Exemple d'une séquence \emph{RGA}.
 \subref{fig:rga-1} Séquence de valeurs et pierres tombales associées à leurs identifiants.
 Les pierres tombales sont représentées par un caractère barré.
 \subref{fig:rga-2} Valeurs référencés par les valeurs de la séquence.
-Les références vers le début de la séquence sont omises.}
-\label{fig:rga}
+Les références vers le début de la séquence sont omises.}\label{fig:rga}
 \end{figure}
 
 La suppression d'une valeur et la lecture d'une séquence suivent les mêmes logiques que celles présentées pour \emph{WOOT}.
@@ -735,8 +723,7 @@ Le message est intégré à la copie et transmis aux autres pairs.
             ]{$\negthinspace!$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:logoot-1}
+    \caption{}\label{fig:logoot-1}
 \end{subfigure}
 \begin{subfigure}[b]{0.29\linewidth}
     \centering
@@ -746,13 +733,11 @@ Le message est intégré à la copie et transmis aux autres pairs.
             ]{$y$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:logoot-2}
+    \caption{}\label{fig:logoot-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{Logoot}]{Exemple d'une séquence \emph{Logoot}.
 \subref{fig:logoot-1} Séquence de valeurs associées à leurs positions.
-\subref{fig:logoot-2} Valeur supprimée associée à sa position.}
-\label{fig:logoot}
+\subref{fig:logoot-2} Valeur supprimée associée à sa position.}\label{fig:logoot}
 \end{figure}
 
 Pour illustrer cette algorithme, nous reprenons l'exemple de la \autoref{fig:replseq-sematic-1}.
@@ -867,8 +852,7 @@ La taille des positions croit rapidement.
     \draw (y) to node[above,sloped]{$1$} (!);
 \end{tikzpicture}
 \caption[Exemple d'une séquence \emph{treedoc}]{Exemple d'une séquence \emph{treedoc} de valeurs associées à leurs positions (chemin dans l'arbre) et leurs identifiants.
-Les noeuds conservés dont la valeur a été supprimée sont barrés.}
-\label{fig:treedoc}
+Les noeuds conservés dont la valeur a été supprimée sont barrés.}\label{fig:treedoc}
 \end{figure}
 
 La \autoref{fig:treedoc} correspond à la séquence \emph{Treedoc} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic-1}.
@@ -951,8 +935,7 @@ Une position agréable à $\textsf{'\textit{y}'}$ ne peut être généré étant
             ]{$\negthinspace!$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:logootsplit-1}
+    \caption{}\label{fig:logootsplit-1}
 \end{subfigure}
 \begin{subfigure}[b]{0.29\linewidth}
     \centering
@@ -962,13 +945,11 @@ Une position agréable à $\textsf{'\textit{y}'}$ ne peut être généré étant
             ]{$y$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:logootsplit-2}
+    \caption{}\label{fig:logootsplit-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{LogootSplit}]{Exemple d'une séquence \emph{LogootSplit}.
 \subref{fig:logootsplit-1} Séquence de valeurs associées à leurs positions.
-\subref{fig:logootsplit-2} Valeur supprimée associée à sa position.}
-\label{fig:logootsplit}
+\subref{fig:logootsplit-2} Valeur supprimée associée à sa position.}\label{fig:logootsplit}
 \end{figure}
 
 L'exécution d'une opération de suppression suit la même logique que \emph{Logoot}.
@@ -1135,7 +1116,7 @@ Un ensemble $P$ de positions est un ensemble de positions \emph{dot}-ifiées, et
 \item La spécification de la fonction $\trm{pick}$ peut être raffinée comme suit~:
 \begin{equation*}\begin{split}
     \trm{pick}_{i\;\in\;\mathbb{I}}: \set*{l \in P_{\bot}} \times \set*{u \in P^{\top} \given l < u} \times \set*{X \in \powerfset{\trm{\mathbb{N}^*}}}\\
-    \to \set*{p \given l < p < u \land \trm{id}(p) = \tuple*{i, \trm{max}(X) + 1}}
+    \to \set*{p \given l < p < u \land \trm{id}(p) = \tuple*{i, \max(X) + 1}}
 \end{split}\end{equation*}
 \end{itemize}
 \end{definition}
@@ -1239,7 +1220,7 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
   \top_P & \when k = \card*{m}\\
   \trm{nthPos}(m, k) &
 \end{dcases}\\
-&\where k \defeq \trm{min}(j, \card*{m})
+&\where k \defeq \min(j, \card*{m})
 \end{aligned}\\
 %
 &\begin{aligned}
@@ -1248,7 +1229,7 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
 \tuple*{\textbf{del}, p} & \when \card*{m} \neq 0\\
 \bot_{\trm{Msg}} &
 \end{dcases}\\
-&\where p \defeq \trm{nthPos}(m, \trm{min}(j, \card*{m}))\\
+&\where p \defeq \trm{nthPos}(m, \min(j, \card*{m}))\\
 \end{aligned}\\
 %
 &\begin{aligned}
@@ -1376,7 +1357,7 @@ Cependant, seuls les couples d'opérations qui concernent une même valeur ont u
 
 Si nous considérons une séquence qui autorise uniquement des insertions, elle peut donc être aisément synchronisée par différences d'états.
 Pour ce faire, il suffit d'insérer une valeur et sa position si et seulement si elle n'est pas déjà présente dans la séquence.
-Nous obtenons ainsi la propriété d'idempotence des séquence synchronisées par différences d'états : une insertion peut être intégrée plusieurs fois.
+Nous obtenons ainsi la propriété d'idempotence des séquence synchronisées par différences d'états~: une insertion peut être intégrée plusieurs fois.
 
 Lorsque la séquence autorise les suppressions, des valeurs peuvent être supprimées.
 Si une insertion d'une valeur est intégrée après sa suppression, la valeur est alors de nouveau insérée.
@@ -1435,7 +1416,7 @@ Ces deux derniers ajouts permettent d'insérer les valeurs présentes uniquement
   \top_P & \when k = \card*{m}\\
   \trm{nthPos}(m, k) &
 \end{dcases}\\
-&\where k \defeq \trm{min}(j, \card*{m})
+&\where k \defeq \min(j, \card*{m})
 \end{aligned}\\
 %
 &\begin{aligned}
@@ -1444,7 +1425,7 @@ Ces deux derniers ajouts permettent d'insérer les valeurs présentes uniquement
     \tuple*{\emptyset,\set*{\trm{id}(p)}} & \when \card*{m} \neq 0\\
     \bot_{\trm{Msg}} &
 \end{dcases}\\
-&\where p \defeq \trm{nthPos}(m, \trm{min}(j, \card*{m}))
+&\where p \defeq \trm{nthPos}(m, \min(j, \card*{m}))
 \end{aligned}\\
 %
 &\begin{aligned}
@@ -1526,21 +1507,18 @@ Une position agréable à $\textsf{'\textit{y}'}$ ne peut être généré étant
             ]{$\negthinspace!$}
         ;
     \end{tikzpicture}
-    \caption{}
-    \label{fig:dottedlogootsplit-1}
+    \caption{}\label{fig:dottedlogootsplit-1}
 \end{subfigure}
 \begin{subfigure}[b]{0.29\linewidth}
     \centering
     \begin{equation*}
         \set*{A_{\irange{1}{7}},B_1}
     \end{equation*}
-    \caption{}
-    \label{fig:dottedlogootsplit-2}
+    \caption{}\label{fig:dottedlogootsplit-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{LogootSplit}]{Exemple d'une séquence \emph{Dotted LogootSplit}.
 \subref{fig:logootsplit-1} Séquence de valeurs associées à leurs positions.
-\subref{fig:logootsplit-2} Contexte causal de la séquence.}
-\label{fig:dottedlogootsplit}
+\subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 \end{figure}
 
 Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu sup-demi-treilli des états de la séquence obtenue dans la \autoref{fig:dottedlogootsplit}.
@@ -1622,8 +1600,7 @@ Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu sup-demi-t
 \caption[Sup-demi-treillis des états d'une séquence répliquée synchronisée par états]{Aperçu du diagramme de Hasse du sup-demi-treillis des états de la séquence répliquée synchronisée par états.
 Pour simplifier la représentation, les positions associées aux valeurs sont omises.
 Les états entourés sont irréductibles.
-}
-\label{fig:dottedlogootsplit-semilattice}
+}\label{fig:dottedlogootsplit-semilattice}
 \end{figure}
 
 Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est disponible sur \emph{GitHub}~: \href{https://github.com/coast-team/dotted-logootsplit}{github.com/coast-team/dotted-logootspli}} et intégré ce protocole de réplication à l'éditeur collaboratif \emph{MUTE}\footnote{\href{https://coedit.re}{coedit.re}}.

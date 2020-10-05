@@ -1,8 +1,7 @@
 
-\chapter{Problématiques}
-\label{ch:problematic}
+\chapter{Problématiques}\label{ch:problematic}
 
-\minitoc
+\minitoc{}
 \bigskip
 
 % Spécifier la convergence
@@ -149,8 +148,7 @@ L'ensemble est fortement cohérent, une modification qui survient avant une autr
 La première interrogation retourne un singleton composé de l'élément $1$ et la seconde interrogation retourne un ensemble composé des éléments $1$ et $2$.
 La cohérence forte maintient l'illusion de l'interrogation et la modification d'une seule copie.
 \subref{subfig:strong-consistency-single-copy} L'histoire de l'exécution de cette copie abstraite peut être obtenue en projetant toutes les opérations sur un pair abstrait $p_V$.
-}
-\label{fig:strong-consistency}
+}\label{fig:strong-consistency}
 \end{figure}
 
 Le maintien de l'illusion de l'interrogation et de la modification d'une seule copie a un coût.
@@ -244,8 +242,7 @@ $p_B$ ajoute en parallèle l'élément $2$ sur sa copie.
 Les copies divergent~: les deux pairs obtiennent des singletons distincts.
 Ils synchronisent ultérieurement leurs copies pour échanger et intégrer leurs modifications respectives.
 Les modifications ne sont pas intégrés dans le même ordre sur les copies~: ils intégrèrent la modification de l'autre pair après avoir intégré leur propre modification.
-Les copies finissent par converger~: les pairs obtiennent le même ensemble.}
-\label{fig:optimistic-replication}
+Les copies finissent par converger~: les pairs obtiennent le même ensemble.}\label{fig:optimistic-replication}
 \end{figure}
 
 Plusieurs modèles de cohérence dits \enquote{faibles} peuvent être respectés par un protocole de réplication optimiste.
@@ -323,8 +320,7 @@ Les pairs $p_A$ et $p_B$ répliquent un ensemble qui supporte une opération d'a
 $p_A$ ajoute l'élément $1$ puis le supprime. En parallèle, $p_B$ ajoute également l'élément $1$.
 L'ajout et la suppression en parallèle d'un même élément constitue un conflit de modification.
 L'élément ne peut pas être à la fois présent et absent de l'ensemble.
-L'intégration \textquote{naïve} des modifications dans des ordres distincts conduit à une divergence des copies.}
-\label{fig:modif-conflict}
+L'intégration \textquote{naïve} des modifications dans des ordres distincts conduit à une divergence des copies.}\label{fig:modif-conflict}
 \end{figure}
 
 
@@ -403,8 +399,7 @@ Pour réduire au maximum les délais de convergence, toutes coordinations devrai
 \caption[Réplication optimiste et coordination]{Exemple de coordination après l'intégration de modifications.
 Les pairs $p_A$ et $p_B$ intègrent les modifications de chacun.
 Les copies ne convergent pas.
-Les pairs se coordonnent après l'intégration des modifications afin de converger.}
-\label{fig:convergence-post-coord}
+Les pairs se coordonnent après l'intégration des modifications afin de converger.}\label{fig:convergence-post-coord}
 \end{figure}
 
 
@@ -471,39 +466,39 @@ On peut considérer que l'emprunteur·ice final·e correspond à la personne qui
 %Au fil des modifications et de leurs échanges, les pairs suivent des cycles de divergence et de convergence.
 
 
-\section{Intention des opérations}
+% \section{Intention des opérations}
 
-Il peut exister plusieurs manière de réconcilier les copies d'un contenu partagé.
-Dans la \autoref{fig:optimistic-replication}, les pairs intègrent les ajouts de chaque pair afin de converger vers un état équivalent.
-Cependant, rien n'empêche de réconcilier les copies en rejetant les ajouts effectuées en parallèle.
-Les pairs $p_A$ et $p_B$ pourraient ainsi converger vers un ensemble vide.
+% Il peut exister plusieurs manière de réconcilier les copies d'un contenu partagé.
+% Dans la \autoref{fig:optimistic-replication}, les pairs intègrent les ajouts de chaque pair afin de converger vers un état équivalent.
+% Cependant, rien n'empêche de réconcilier les copies en rejetant les ajouts effectuées en parallèle.
+% Les pairs $p_A$ et $p_B$ pourraient ainsi converger vers un ensemble vide.
 
-Cette approche de réconciliation pourrait surprendre les collaborateur·ice·s.
-En effet, si deux éléments sont ajoutés en parallèle dans l'ensemble, on pourrait s'attendre à ce qu'ils appartiennent dans l'ensemble après la réconciliation des copies.
-\textcite{sun_1998_cci} parlent d'intention des opérations.
-Intuitivement, l'intention d'une opération capture l'effet observable de l'opération.
-Cette effet devrait être observable quelque soit le pair qui exécute l'opération.
+% Cette approche de réconciliation pourrait surprendre les collaborateur·ice·s.
+% En effet, si deux éléments sont ajoutés en parallèle dans l'ensemble, on pourrait s'attendre à ce qu'ils appartiennent dans l'ensemble après la réconciliation des copies.
+% \textcite{sun_1998_cci} parlent d'intention des opérations.
+% Intuitivement, l'intention d'une opération capture l'effet observable de l'opération.
+% Cette effet devrait être observable quelque soit le pair qui exécute l'opération.
 
-L'intégration d'opération concurrentes ou plus largement la réconciliation de copies devrait préserver autant que possible l'intention des opérations qui sont exécutées.
-L'intention d'une opération peut être exprimée comme une postcondition.
-Cette postcondition doit être prudemment spécifiée afin d'assurer son respect quelque soit l'ordre d'exécution des opérations qui sont indépendantes de l'opération considérée.
-Les opérations indépendantes correspondent aux opérations concurrentes et éventuellement à d'autres opérations.
+% L'intégration d'opération concurrentes ou plus largement la réconciliation de copies devrait préserver autant que possible l'intention des opérations qui sont exécutées.
+% L'intention d'une opération peut être exprimée comme une postcondition.
+% Cette postcondition doit être prudemment spécifiée afin d'assurer son respect quelque soit l'ordre d'exécution des opérations qui sont indépendantes de l'opération considérée.
+% Les opérations indépendantes correspondent aux opérations concurrentes et éventuellement à d'autres opérations.
 
-Reprenons l'exemple de l'ensemble répliqué pour illustrer la spécification de l'intention des opérations.
-Le type abstrait de donnée Ensemble spécifie l'ajout d'un élément dans un ensemble comme l'ensemble auquel a été ajouté l'élément.
-Dans un premier temps nous pouvons définir l'intention de l'ajout d'un élément comme sa spécification.
-Dans la \autoref{fig:optimistic-replication} l'opération $\trm{add}(1)$ a comme intention l'obtention du singleton $\set*{1}$.
-L'opération $\trm{add}(2)$ a comme intention l'obtention du singleton $\set*{2}$.
-La réconciliation des copies des deux pairs conduit nécessairement à la violation de l'intention de l'une des opérations.
-Nous pouvons définir plus prudemment l'intention des opérations de telle manière à ce qu'elle offre une garantie pertinente tout en évitant leur violation.
-Dans notre cas, nous pouvons définir l'intention d'un ajout comme l'obtention d'un ensemble qui contient à la fois l'élément ajouté et les éléments précédemment ajoutés.
-La présence d'éléments ajoutés en concurrence n'est donc pas exclut.
-Dans la \autoref{fig:optimistic-replication} l'opération $\trm{add}(1)$ a comme intention l'obtention d'un ensemble qui contient l'élément $1$.
-L'opération $\trm{add}(2)$ a comme intention l'obtention d'un ensemble qui contient l'élément $2$.
+% Reprenons l'exemple de l'ensemble répliqué pour illustrer la spécification de l'intention des opérations.
+% Le type abstrait de donnée Ensemble spécifie l'ajout d'un élément dans un ensemble comme l'ensemble auquel a été ajouté l'élément.
+% Dans un premier temps nous pouvons définir l'intention de l'ajout d'un élément comme sa spécification.
+% Dans la \autoref{fig:optimistic-replication} l'opération $\trm{add}(1)$ a comme intention l'obtention du singleton $\set*{1}$.
+% L'opération $\trm{add}(2)$ a comme intention l'obtention du singleton $\set*{2}$.
+% La réconciliation des copies des deux pairs conduit nécessairement à la violation de l'intention de l'une des opérations.
+% Nous pouvons définir plus prudemment l'intention des opérations de telle manière à ce qu'elle offre une garantie pertinente tout en évitant leur violation.
+% Dans notre cas, nous pouvons définir l'intention d'un ajout comme l'obtention d'un ensemble qui contient à la fois l'élément ajouté et les éléments précédemment ajoutés.
+% La présence d'éléments ajoutés en concurrence n'est donc pas exclut.
+% Dans la \autoref{fig:optimistic-replication} l'opération $\trm{add}(1)$ a comme intention l'obtention d'un ensemble qui contient l'élément $1$.
+% L'opération $\trm{add}(2)$ a comme intention l'obtention d'un ensemble qui contient l'élément $2$.
 
-% Intention -> No rollbacks
-La préservation de l'intention des opérations peut plus largement retranscrire le principe d'intégrer les opérations de chaque pair sans les ignorer.
-Ce qui empêche la mise en place de retour en arrière.
+% % Intention -> No rollbacks
+% La préservation de l'intention des opérations peut plus largement retranscrire le principe d'intégrer les opérations de chaque pair sans les ignorer.
+% Ce qui empêche la mise en place de retour en arrière.
 
 
 \section{Modèle du système}
@@ -513,8 +508,7 @@ Ce qui empêche la mise en place de retour en arrière.
 \begin{figure}[htb]
 \centering
 \includegraphics{fig/impl.pdf}
-\caption{Une infrastructure de collaboration composée de 3 pairs qui répliquent le contenu partagé. Les 3 pairs sont connectés par un réseau asynchrone.}
-\label{fig:collab-system}
+\caption{Une infrastructure de collaboration composée de 3 pairs qui répliquent le contenu partagé. Les 3 pairs sont connectés par un réseau asynchrone.}\label{fig:collab-system}
 \end{figure}
 
 Dans les infrastructure pair-à-pair de collaboration, chaque collaborateur·ice est associé·e à un pair qui lui est exclusif.
@@ -551,7 +545,7 @@ L'adversaire du système est mû par un objectif et contrôle des ressources, te
 
 L'objectif de notre adversaire est de compromettre la convergence des copies des collaborateur·ice·s honnêtes~\footnote{Dans la littérature le terme \textquote{correct} est également utilisé.}.
 Et ce dans le but de faire échouer leur collaboration.
-Pour simplifier les références ultérieures, nous proposons de classifier les capacités de l'adversaire à travers trois profils : réseau asynchrone non-fiable, réseau corrompu, pairs perturbées, pairs mal-intentionnés.
+Pour simplifier les références ultérieures, nous proposons de classifier les capacités de l'adversaire à travers trois profils~: réseau asynchrone non-fiable, réseau corrompu, pairs perturbées, pairs mal-intentionnés.
 
 \paragraph{Réseau asynchrone non-fiable.} L'adversaire contrôle le réseau et peut exposer l'ensemble des comportements observées sur un réseau asynchrone non-fiable~\autocite{lynch_1996_asyncnet}.
 En particulier, les messages échangées entre les pairs peuvent être réordonnés, dupliqués, retardés, et omis.

@@ -1,8 +1,7 @@
 
-\chapter{Journaux authentifiés tronqués}
-\label{ch:pruned-log}
+\chapter{Journaux authentifiés tronqués}\label{ch:pruned-log}
 
-\minitoc
+\minitoc{}
 \bigskip
 
 
@@ -117,8 +116,7 @@ Bien que certaines applications requièrent cette historique pour fournir des fo
         \draw (B) edge[link] (C);
         \draw (A) edge[link,-latex] node[midway]{\includegraphics[scale=0.5]{fig/collab/log-sample.pdf}} (C);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:invite-by-log-1}
+    \caption{}\label{fig:invite-by-log-1}
 \end{subfigure}
 \begin{subfigure}{0.49\linewidth}
 \centering
@@ -145,15 +143,13 @@ Bien que certaines applications requièrent cette historique pour fournir des fo
         \draw[link] (B) to (C);
         \draw[link] (C) to (A);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:invite-by-log-2}
+    \caption{}\label{fig:invite-by-log-2}
 \end{subfigure}
 \caption[Transmission d'un journal complet à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
 Ils utilisent un journal authentifié pour assurer la convergence des copies des pairs honnêtes.
 Carol veut rejoindre la collaboration.
 \subref{fig:invite-by-log-1} Alice envoie son journal à Carol.
-\subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal et construit le dessin à partir du journal.}
-\label{fig:invite-by-log}
+\subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal et construit le dessin à partir du journal.}\label{fig:invite-by-log}
 \end{figure}
 
 Un journal enregistre l'ensemble des modifications qui ont été jouées sur un document partagé.
@@ -194,8 +190,7 @@ La~\autoref{fig:invite-by-snaplog} illustre cette approche.
         \draw (B) edge[link] (C);
         \draw (A) edge[link,-latex] node[midway,below]{\includegraphics[scale=0.5]{collab/doc-a1-b1.pdf}} node[midway,above]{\includegraphics[scale=0.5]{fig/collab/pruned-log.pdf}} (C);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:invite-by-snaplog-1}
+    \caption{}\label{fig:invite-by-snaplog-1}
 \end{subfigure}
 \begin{subfigure}{0.49\linewidth}
 \centering
@@ -222,16 +217,14 @@ La~\autoref{fig:invite-by-snaplog} illustre cette approche.
         \draw (B) edge[link] (C);
         \draw (C) edge[link] (A);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:invite-by-snaplog-2}
+    \caption{}\label{fig:invite-by-snaplog-2}
 \end{subfigure}
 \caption[Transmission d'un journal tronqué et d'une instantané à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
 Ils utilisent un journal authentifié pour assurer la convergence des copies des pairs honnêtes.
 Carol veut rejoindre la collaboration.
 \subref{fig:invite-by-log-1} Alice envoie une instantané de l'état actuel du dessin, ainsi qu'une version tronqué de son journal authentifié.
 \subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal tronqué.
-Elle vérifié également l'authenticité de l'instantané à partir du journal tronqué.}
-\label{fig:invite-by-snaplog}
+Elle vérifié également l'authenticité de l'instantané à partir du journal tronqué.}\label{fig:invite-by-snaplog}
 \end{figure}
 
 Un journal ne peut pas être tronqué de manière arbitraire.
@@ -283,8 +276,7 @@ L'opération $\top_{\trm{vis}}$ est un peu particulière.
 Son auteur $p_B$ correspond au possesseur du journal.
 Les arcs dirigés mettent en évidence les dépendances immédiates des opérations.
 Par exemple, $a_2$ est une dépendance immédiate de $a_3$ et $b_1$.
-}
-\label{fig:log-example}
+}\label{fig:log-example}
 \end{figure}
 
 Lorsqu'une opération est une dépendance de toutes opérations futures, nous disons que cette opération est stable.
@@ -597,8 +589,7 @@ Pour qu'une opération soit causalement stable, il suffit donc que chaque pair o
     \foreach \src/\dest in {a1/b1,c1/b1,b1/c2}
         \draw[vis] (\src) to (\dest);
 \end{tikzpicture}
-\caption{}
-\label{fig:cs-example-1}
+\caption{}\label{fig:cs-example-1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
 \centering
@@ -633,8 +624,7 @@ Pour qu'une opération soit causalement stable, il suffit donc que chaque pair o
     \foreach \src/\dest in {a1/b1,c1/b1,b1/c2,a1/a2}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption{}
-\label{fig:cs-example-2}
+\caption{}\label{fig:cs-example-2}
 \end{subfigure}
 \caption[Stabilité causale]{Un ensemble de trois pairs $\trm{Peers} = \set{p_A, p_B, p_C}$ modifie un contenu répliqué.
 Dans l'exécution abstraite \subref{fig:cs-example-1}, l'opération $a_1$ est observée par son auteur $p_A$, par $p_B$ parce-que $a_1$ est visible à $b_1$, et par $p_C$ parce-que $a_1$ est visible à $c_2$.
@@ -645,8 +635,7 @@ Par transitivité, $a_1$ est visible à toute opération future de $p_B$ et $p_C
 $a_1$ est donc causalement stable (cs).
 $c_1$ et $b_1$ ne sont pas causalement stables car le pair $p_A$ ne les observe pas.
 Il existe en effet une extension causale de \subref{fig:wf-example-1}, l'exécution abstraite \subref{fig:cs-example-2}, où $c_1$ et $b_1$ ne sont pas visible à au moins une opération ($a_2$).
-}
-\label{fig:cs-example}
+}\label{fig:cs-example}
 \end{figure}
 
 
@@ -661,7 +650,7 @@ Dans une exécution abstraite qui respecte le modèle de cohérence causale, une
 \end{theorem}
 
 \begin{proof}
-Le ~\autoref{th:cs} est décomposable en deux implications que nous démontrons par contradiction.
+Le \autoref{th:cs} est décomposable en deux implications que nous démontrons par contradiction.
 
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence causale.
 Soit $x$ une opération de $A$ qui est observée par chaque pair.
@@ -757,8 +746,7 @@ Pour autant, dans l'extension de $A_1$, $p_M$ exécute une opération $m_2$ conc
     % Prefix
     \node[draw, dashed, label=below:$A_1$, fit=(B) (a2)] {};
 \end{tikzpicture}
-\caption[Opérations non-linéaires]{Exécution abstraite qui explique la modification d'un contenu partagé par un pair mal-intentionné $p_M$ , ainsi que deux pairs honnêtes $p_A$ et $p_B$.}
-\label{fig:vfjc-malicious-obs}
+\caption[Opérations non-linéaires]{Exécution abstraite qui explique la modification d'un contenu partagé par un pair mal-intentionné $p_M$, ainsi que deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjc-malicious-obs}
 \end{figure}
 
 Cependant, et contrairement au modèle de cohérence \acl{FJC}, le modèle de cohérence \acl{VFJC} contraint l'acceptation d'opérations non-linéaires.
@@ -816,8 +804,7 @@ Dans la \autoref{fig:vfjc-malicious-obs}, aucune opération est vfjc-stable.
     \foreach \src/\dest in {a1/m1,m1/a2,m1/b1}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption{}
-\label{fig:vfjcs-one-malicious-1}
+\caption{}\label{fig:vfjcs-one-malicious-1}
 \end{subfigure}%
 \begin{subfigure}{.55\linewidth}
 \centering
@@ -852,11 +839,9 @@ Dans la \autoref{fig:vfjc-malicious-obs}, aucune opération est vfjc-stable.
     \foreach \src/\dest in {a1/m1,a1/m2,m2/a2,m1/b1}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption{}
-\label{fig:vfjcs-one-malicious-2}
+\caption{}\label{fig:vfjcs-one-malicious-2}
 \end{subfigure}
-\caption[Stabilité \acl{VFJC} en présence d'un pair mal-intentionné]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un seul pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.}
-\label{fig:vfjcs-one-malicious}
+\caption[Stabilité \acl{VFJC} en présence d'un pair mal-intentionné]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un seul pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjcs-one-malicious}
 \end{figure}
 
 En présence de plusieurs pairs mal-intentionnés, il faut également s'assurer que chaque pair mal-intentionné ne peut pas accepter une opération concurrente à $x$ d'un autre pair mal-intentionné.
@@ -899,8 +884,7 @@ Dans la \autoref{fig:vfjc-two-malicious-obs}, le pair mal-intentionné $p_G$ acc
     % Prefix
     \node[draw, dashed, label=below:$A_1$, fit=(G) (a2)] {};
 \end{tikzpicture}
-\caption{Exécution abstraite qui explique la modification d'un contenu partagé par un pair honnête $p_A$ , ainsi que deux pairs mal-intentionné $p_M$ et $p_G$.}
-\label{fig:vfjc-two-malicious-obs}
+\caption{Exécution abstraite qui explique la modification d'un contenu partagé par un pair honnête $p_A$, ainsi que deux pairs mal-intentionné $p_M$ et $p_G$.}\label{fig:vfjc-two-malicious-obs}
 \end{figure}
 
 Pour toute énumération de pairs mal-intentionnés distincts $\tuple*{p_1, \dotsc ,p_{n-1}}$, si il existe une chaîne de visibilité $x \viseq x_1 \vis \dotsb \vis x_{n-1}$ tel que le i-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne, alors un pair honnête qui observe $x_{n-1}$ (et donc par extension qui observe la chaîne) ne peut pas accepter directement une chaîne de visibilité immédiate $y_1 \idr \dotsc \idr y_{n-1}$ dont le i-ème pair de l'énumération est l'auteur de la i-ème opération de cette chaîne immédiate avec $y_1$ concurrente à $x$.
@@ -932,7 +916,7 @@ Ce qui contredit une hypothèse initiale.
 \end{proof}
 
 Il suffit donc que chaque pair honnête observe pour chaque permutation de pairs mal-intentionnés, une chaîne de visibilité correspondante pour que les opération qui précèdent (ou sont égales) à toutes ces chaînes soient vfjc-stable.
-Dans la \autoref{fig:vfjcs-two-malicious}, il existe une chaîne de visibilité correspondante qui succède ou est égale à $m_1$ pour chaque permutation de l'ensemble des pairs mal-intentionnées : $m_1 \vis g_1$ pour la permutation $\tuple*{p_M, p_G}$, et $g_1 \vis m_2$ pour la permutation $\tuple*{p_G, p_M}$.
+Dans la \autoref{fig:vfjcs-two-malicious}, il existe une chaîne de visibilité correspondante qui succède ou est égale à $m_1$ pour chaque permutation de l'ensemble des pairs mal-intentionnées~: $m_1 \vis g_1$ pour la permutation $\tuple*{p_M, p_G}$, et $g_1 \vis m_2$ pour la permutation $\tuple*{p_G, p_M}$.
 Ces deux chaînes sont observées par le seul pair honnête $p_A$.
 $a_1$ et $m_1$ sont des opérations vfjc-stables.
 
@@ -969,8 +953,7 @@ $a_1$ et $m_1$ sont des opérations vfjc-stables.
     \foreach \src/\dest in {a1/m1,m1/g1,g1/m2,m2/a2}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption[Stabilité \acl{VFJC} en présence de deux pairs mal-intentionnés]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence de deux pairs mal-intentionnés $p_M$ et $p_G$ et d'un pair honnête $p_A$.}
-\label{fig:vfjcs-two-malicious}
+\caption[Stabilité \acl{VFJC} en présence de deux pairs mal-intentionnés]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence de deux pairs mal-intentionnés $p_M$ et $p_G$ et d'un pair honnête $p_A$.}\label{fig:vfjcs-two-malicious}
 \end{figure}
 
 Le modèle de cohérence \acl{VFJC} ne se contente pas de rejeter l'acceptation direct des opérations non-linéaires.
@@ -1030,8 +1013,7 @@ $a_1$ et $m_1$ sont donc des opérations vfjc-stables.
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
 \caption{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence de deux pairs mal-intentionnés $p_M$ et $p_G$ et d'un pair honnête $p_A$.
-Le pair $p_M$ est reconnu mal-intentionné par $p_A$ et $p_G$.}
-\label{fig:vfjcs-evicted-peer}
+Le pair $p_M$ est reconnu mal-intentionné par $p_A$ et $p_G$.}\label{fig:vfjcs-evicted-peer}
 \end{figure}
 
 
@@ -1052,7 +1034,7 @@ Pour que la relation de précédence immédiate entre $y_{i-1}$ et $y_i$ soit au
 Si $p_{i-1}$ n'est pas l'auteur de $x_{i-1}$, alors il est, selon une hypothèse initiale, reconnu mal-intentionné en $p_{i-1}$.
 Par transitivité il l'est également en $y_i$.
 Il n'existe donc pas de telle chaîne dans ce cas là.
-Si $p_{i-1}$ est l(auteur de $x_{i-1}$, alors il ne doit pas être reconnu mal-intentionné en $y_i$.
+Si $p_{i-1}$ est l'auteur de $x_{i-1}$, alors il ne doit pas être reconnu mal-intentionné en $y_i$.
 Par conséquent, $x_{i-1}$ doit précéder $y_{i-1}$.
 Récursivement, nous concluons que $x_1$ précède $y_1$.
 Or $x$ précède $x_1$.
@@ -1542,8 +1524,7 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale
         \foreach \src/\dest in {a1/a2,a2/a3,a2/c1,c1/b1,a3/b1}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:dyn-causal-example-1}
+    \caption{}\label{fig:dyn-causal-example-1}
 \end{subfigure}
 \par\medskip
 \begin{subfigure}{\linewidth}
@@ -1586,15 +1567,13 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale
         \foreach \src/\dest in {a1/a2,a2/a3,b1/b2,a2/b1,a2/c1,c1/b2,a3/b2}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:dyn-causal-example-2}
+    \caption{}\label{fig:dyn-causal-example-2}
 \end{subfigure}
 \caption[Stabilité causale dynamique]{L'exécution abstraite \subref{fig:dyn-causal-example-1} respecte le modèle de cohérence causale dynamique.
 Les opérations DynCausal-stables (dcs) dont encadrées.
 L'exécution abstraite \subref{fig:dyn-causal-example-2} ne respecte pas le modèle de cohérence causale dynamique.
 En effet, $b_1$ ne succède pas une opération qui invite son auteur $p_B$.
-La propriété~\ref{itm:rq-invite} est violée.}
-\label{fig:dyn-causal-example}
+La propriété~\ref{itm:rq-invite} est violée.}\label{fig:dyn-causal-example}
 \end{figure}
 
 Le modèle de cohérence causale dynamique est plus fort que le modèle de cohérence causale.
@@ -1631,8 +1610,7 @@ Un pair honnête est un observateur requis d'une opération $x$ si et seulement 
         $c_1$ & $\set*{p_A, p_C}$ & $\set*{p_B, p_C}$\\
         $b_1$ & $\set*{p_A, p_B, p_C}$ & $\set*{p_B}$ \\
     \end{tabular}
-    \caption[Observateurs requis]{observateurs requis et observateurs des opérations de l'exécution abstraite de la \autoref{fig:dyn-causal-example-1}.}
-    \label{tab:rq-obs}
+    \caption[Observateurs requis]{observateurs requis et observateurs des opérations de l'exécution abstraite de la \autoref{fig:dyn-causal-example-1}.}\label{tab:rq-obs}
 \end{table}
 
 
@@ -1692,7 +1670,7 @@ Le modèle de cohérence causale dynamique nous a permis de remédier à ce prob
 Il exige qu'un pair soit invité avant qu'il puisse exécuter des opérations.
 Toutes ses opérations succèdent à son invitation.
 Il est ainsi possible de définir une stabilité adaptée à des groupes dynamiques.
-Existe t-il un modèle de cohérence basé sur le modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permettent de définir une stabilité adaptée aux groupes dynamiques ?
+Existe t-il un modèle de cohérence basé sur le modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permettent de définir une stabilité adaptée aux groupes dynamiques~?
 
 La conjonction des modèles de cohérence \acs{VFJC} et \emph{Invitation} ne permet pas d'aboutir à une telle définition.
 En effet, si nous considérons un ensemble de pairs composé d'au moins un pair mal-intentionné, et d'un nombre de pairs honnêtes dénombrable infini, le pair mal-intentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
@@ -1744,8 +1722,7 @@ $p_A$ reconnaît que $p_M$ est mal-intentionné mais il est forcé d'accepter l'
     % Prefix
     \node[draw, dashed, label=below:$A_1$, fit=(G) (a3) (la1)] {};
 \end{tikzpicture}
-\caption{Exemple  d'une exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation} dans laquelle le pair mal-intentionné $p_M$ invite le pair $p_G$ dans un nouvel embranchement.}
-\label{fig:vfjc-invitation-issue}
+\caption{Exemple  d'une exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation} dans laquelle le pair mal-intentionné $p_M$ invite le pair $p_G$ dans un nouvel embranchement.}\label{fig:vfjc-invitation-issue}
 \end{figure}
 
 Pour pouvoir définir une stabilité adaptée à des groupes dynamiques, il nous faut rejeter ce type d'embranchements.
@@ -1902,8 +1879,7 @@ Autrement, une opération $x$ est stable si et seulement si pour chaque énumér
     \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1/b1}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption[Stabilité \acl{VFJC} dynamique]{Exemple d'une exécution abstraite avec des opération \emph{DynVFJC}-stables (dvfjjcs).}
-\label{fig:dvfjcs-example}
+\caption[Stabilité \acl{VFJC} dynamique]{Exemple d'une exécution abstraite avec des opération \emph{DynVFJC}-stables (dvfjjcs).}\label{fig:dvfjcs-example}
 \end{figure}
 
 En principe un pair mal-intentionné peut exécuter une seconde opération d'invitation initiale.
@@ -1921,7 +1897,7 @@ La stabilité \acl{VFJC} dynamique identifie des opérations stables malgré la 
 Des opérations peuvent devenir stables alors que de nouveaux pairs sont invités au fur et à mesure de l'évolution de la collaboration.
 Les applications du concepts de stabilité sont nombreuses.
 Elle peut par exemple être la base d'un mécanisme de consensus asynchrone.
-Dans la section suivante nous explorons l'un de ses applications : les journaux tronqués et l'authentification d'instantanés à l'aide de journaux tronqués authentifiés.
+Dans la section suivante nous explorons l'un de ses applications~: les journaux tronqués et l'authentification d'instantanés à l'aide de journaux tronqués authentifiés.
 
 %\section{Stabilité (old)}
 %
@@ -3236,7 +3212,7 @@ Un pair mal-intentionné peut ainsi s'assurer qu'un de ses message déclare une 
 Ce qui conduit à une divergence des deux pairs honnêtes.
 Pour éviter cette situation, les pairs honnêtes vérifient que les messages déclarent uniquement des dépendances directes.
 Ainsi le message rejeté par le second pair honnête pour cause d'une dépendance manquante, est rejetée également par le premier pair car la dépendance est reconnue indirecte.
-vérifier si les dépendances d'un message sont directes dans un journal tronqué est-il faisable ?
+vérifier si les dépendances d'un message sont directes dans un journal tronqué est-il faisable~?
 Seul un préfixe du journal est tronqué.
 Ce préfixe contient des message stables qui ne sont pas déclarées comme dépendances de messages non-stables.
 Étant donné que l'ordre d'ajout des messages est un ordre topologique du graphe de dépendance, i lest donc possible de vérifier que chaque dépendance déclarée est directe.
@@ -3359,7 +3335,7 @@ Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces m
 Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs mal-intentionnés.
 Il garantir également la convergence des pairs honnêtes.
 
-\paragraph{Instantané authentifiée} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté SnapDoc, un protocole qui vise des objectifs similaires aux nôtres.
+\paragraph{Instantané authentifiée} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
 
 
 \section{Conclusion}
@@ -3372,7 +3348,7 @@ Un pair peut ainsi récupérer un journal tronqué et un instantané pour rejoin
 
 La troncature du journal se base sur le concept de stabilité.
 Nous avons exploré ce concept avec le modèle de cohérence causale et le modèle de cohérence \ac{VFJC}.
-Nous avons également introduit deux nouveaux modèles de cohérences : le modèle de cohérence causale dynamique et le modèle de cohérence \ac{VFJC} dynamique.
+Nous avons également introduit deux nouveaux modèles de cohérences~: le modèle de cohérence causale dynamique et le modèle de cohérence \ac{VFJC} dynamique.
 Ces deux modèles prennent en compte l'aspect dynamique des groupes de collaboration.
 
 Les protocoles que nous avons présenté n'ont pas été évalué de manière expérimentale.

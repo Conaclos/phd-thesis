@@ -1,8 +1,7 @@
 
-\chapter{Prérequis}
-\label{ch:background}
+\chapter{Prérequis}\label{ch:background}
 
-\minitoc
+\minitoc{}
 \bigskip
 
 Dans ce chapitre, nous introduisons les formalismes et les concepts que nous utilisons pour définir les contributions du~\autoref{ch:pruned-log} et du~\autoref{ch:dotted-logootsplit}.
@@ -37,7 +36,7 @@ Dans la~\autoref{subsec:consistency-spec-honest} nous présentons son formalisme
 Nous l'étendons dans la~\autoref{subsec:consistency-spec-malicious} pour permettre la description d'exécutions soumises à la présence de comportements mal-intentionnés.
 
 Les propriétés de cohérence sont groupées en ensembles logiques dénommés \emph{modèles de cohérence}.
-Les modèles de cohérence sont organisés en hiérarchie~ de celui qui offre les garanties de cohérence les plus fortes à ceux qui offrent les garantie les plus faibles.
+Les modèles de cohérence sont organisés en hiérarchie de celui qui offre les garanties de cohérence les plus fortes à ceux qui offrent les garantie les plus faibles.
 
 Dans le~\autoref{ch:problematic} nous avons distingué les propriétés de sûreté des propriétés de vivacité.
 Dans la~\autoref{subsec:consistency-spec-liveness-safety} nous montrons comment reconnaître et spécifier ces deux genres de propriétés au sein du formalisme introduit.
@@ -101,8 +100,7 @@ L'opération de lecture donne l'ensemble des messages qui ont été ajoutés.
 Bea ajoute un premier message $t_1$ suivi d'un second message $t_2$.
 Elle s'attend à ce que Alice prenne connaissance du premier message avant de prendre connaissance du second message.
 Cependant, le protocole ne lui garantit pas cette propriété.
-Alice lit le second message avant de lire le premier.}
-\label{fig:causal-expectation}
+Alice lit le second message avant de lire le premier.}\label{fig:causal-expectation}
 \end{figure}
 
 Les propriétés de cohérence sont de différentes natures.
@@ -167,8 +165,7 @@ La~\autoref{fig:rb-example} montre un exemple de deux opérations dont l'exécut
         \foreach \src/\dest in {A/a1,B/b1,b1/b2,a1/aend,b2/bend}
             \draw[timeline] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:rb-example-1}
+    \caption{}\label{fig:rb-example-1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
     \centering
@@ -204,8 +201,7 @@ La~\autoref{fig:rb-example} montre un exemple de deux opérations dont l'exécut
         \draw[-latex] (a1) to node[above,sloped] {\footnotesize rb} (b2);
         \draw[-latex] (b1) to node[above,sloped] {\footnotesize rb} (b2);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:rb-example-2}
+    \caption{}\label{fig:rb-example-2}
 \end{subfigure}
 \caption[Relation retourne-avant d'une histoire]{\subref{fig:rb-example-1} L'intervalle de temps sur lequel l'opération d'interrogation de Alice ($p_A$) s'exécute a une intersection non-nulle avec l'intervalle de temps sur lequel l'opération d'interrogation de Bea ($p_B$) s'exécute.
 Ces deux opérations coïncident donc dans le temps.
@@ -215,8 +211,7 @@ Dans ce manuscrit, les propriétés de cohérence que nous exprimons ne nécessi
 \subref{fig:rb-example-2} Nous contractons donc les intervalles en des points.
 Deux points alignés verticalement correspondent à des opérations dont l'exécution coïncide dans le temps.
 Si l'exécution de deux opérations ne coïncide pas, alors une opération \emph{retourne-avant} l'autre.
-Ici, cette information est explicitement marquée par l'utilisation de la relation \emph{retourne-avant} $\rb$.}
-\label{fig:rb-example}
+Ici, cette information est explicitement marquée par l'utilisation de la relation \emph{retourne-avant} $\rb$.}\label{fig:rb-example}
 \end{figure}
 
 \begin{definition}[histoire]\label{def:history}
@@ -249,8 +244,7 @@ Il s'agit d'un ordre partiel localement fini qui peut être interprété sur une
     \end{tabular}
     \caption{Caractéristiques des opérations exécutées dans l'histoire de la~\autoref{fig:causal-expectation}.
     Un fil de discussion supporte une opération de lecture et une opération de modification $\trm{Op}_T = \set*{\trm{rd}} \cup \set*{\trm{post}(\trm{msg}) \given \trm{msg} \in \trm{String}}$.
-    Les valeurs de retour correspondent à des ensembles de messages $\trm{Val}_T = \powerfset{\trm{String}}$. $\powerfset{\trm{String}}$ est l'ensemble des sous-ensembles finis des chaînes de caractères.}
-    \label{tab:op-attributes}
+    Les valeurs de retour correspondent à des ensembles de messages $\trm{Val}_T = \powerfset{\trm{String}}$. $\powerfset{\trm{String}}$ est l'ensemble des sous-ensembles finis des chaînes de caractères.}\label{tab:op-attributes}
 \end{table}
 
 Un protocole garantit une propriété de cohérence si et seulement si toutes les histoires qu'il peut produire vérifient cette propriété.
@@ -317,8 +311,7 @@ Par souci de concision, nous écrivons $x \viseq y$ si $x$ est visible ou est é
 \end{tikzpicture}
 \caption[Exécution abstraite]{Une \emph{exécution abstraite} de l'histoire de la~\autoref{fig:causal-expectation}.
 La relation \emph{retourne-avant} est inférée par le positionnement horizontal des opérations.
-}
-\label{fig:vis-example}
+}\label{fig:vis-example}
 \end{figure}
 
 Une histoire augmentée de la relation de \emph{visibilité} consiste en une \emph{exécution abstraite}~\autocite{burckhardt_eventualconsistency_2014}.
@@ -392,8 +385,7 @@ $\bsq_1$ et $\bsq_2$ correspondaient aux exécutions abstraites que nous obtenon
 $\bsq_3$ et $\bsq_4$ correspondaient aux exécutions abstraites que nous obtenons à partir de $\bullet_2$.
 L'histoire $\bullet_1$ vérifié les propriétés de cohérence $p_1$ et $p_3$ puisque l'exécution abstraite $\bsq_2$ les respectent.
 De même, l'histoire $\bullet_2$ vérifié la propriété $p_1$ ou $p_2$ puisque l'exécution abstraite $\bsq_3$ respecte $p_1$ et l'exécution abstraite $\bsq_4$ respecte $p_2$.
-Le protocole $P$ garantit ainsi la propriété $p_1$ puisque chcune de ses histoires est associée à au moins une exécution abstraite qui la respecte.}
-\label{fig:hist-absexec}
+Le protocole $P$ garantit ainsi la propriété $p_1$ puisque chcune de ses histoires est associée à au moins une exécution abstraite qui la respecte.}\label{fig:hist-absexec}
 \end{figure}
 
 \begin{definition}[exécution abstraite]\label{def:abstract-exec}
@@ -436,8 +428,7 @@ Le \emph{contexte} d'une opération $x$ dans une \emph{exécution abstraite} $A$
         $b_2$ & $\emptyset$ & $\set*{p_A, p_B}$ \\
         $b_3$ & $\emptyset$ & $\set*{p_A, p_B}$ \\
     \end{tabular}
-    \caption{Contexte et observateurs des opérations de l'exécution abstraite de la~\autoref{fig:vis-example}.}
-    \label{tab:op-ctx-obs}
+    \caption{Contexte et observateurs des opérations de l'exécution abstraite de la~\autoref{fig:vis-example}.}\label{tab:op-ctx-obs}
 \end{table}
 
 La spécification du type de données répliquées de la~\autoref{fig:causal-expectation} peut ainsi être exprimé de la manière suivante~:
@@ -550,8 +541,7 @@ Pour pouvoir numéroter les opérations des pairs mal-intentionnés, nous utilis
         \foreach \src/\dest in {M/mfork,mfork/mfork1,mfork1/m1,mfork/mfork2,mfork2/m2,m1/mfork1end,m2/mfork2end}
             \draw[timeline] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:no-enum-example-1}
+    \caption{}\label{fig:no-enum-example-1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
     \centering
@@ -576,14 +566,12 @@ Pour pouvoir numéroter les opérations des pairs mal-intentionnés, nous utilis
         \foreach \src/\dest in {M/mfork,mfork/mfork1,mfork1/m1,mfork/mfork2,mfork2/m2,m1/mfork1end,m2/mfork2end}
             \draw[timeline] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:no-enum-example-2}
+    \caption{}\label{fig:no-enum-example-2}
 \end{subfigure}
 \caption{Mallory est une collaboratrice mal-intentionnée.
 Elle est attachée au pair $p_M$.
 \subref{fig:no-enum-example-1} Les exécutions des deux opérations de Mallory coïncident dans le temps.
-\subref{fig:no-enum-example-2} Exemple d'une exécution abstraite correspondante.}
-\label{fig:no-enum-example}
+\subref{fig:no-enum-example-2} Exemple d'une exécution abstraite correspondante.}\label{fig:no-enum-example}
 \end{figure}
 
 \begin{definition}[histoire bien-formée]\label{def:wf-history-malicious}
@@ -642,8 +630,7 @@ En présence de pairs mal-intentionnés, une \emph{exécution abstraite} $A \def
         \draw[vis] (a1) to node[above,sloped] {\footnotesize vis} (m1);
         \draw[vis] (b1) to node[above,sloped] {\footnotesize vis} (m1);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:wf-example-1}
+    \caption{}\label{fig:wf-example-1}
 \end{subfigure}%
 \begin{subfigure}{.5\linewidth}
     \centering
@@ -679,15 +666,13 @@ En présence de pairs mal-intentionnés, une \emph{exécution abstraite} $A \def
         \draw[vis] (b1) to node[above,sloped] {\footnotesize vis} (m1);
         \draw[vis] (m1) to node[above,sloped] {\footnotesize vis} (a2);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:wf-example-2}
+    \caption{}\label{fig:wf-example-2}
 \end{subfigure}
 \caption{Soit un groupe de pairs composé d'un pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.
 L'exécution abstraite \subref{fig:wf-example-1} n'est pas bien-formée.
 Elle ne respecte pas la propriété~\ref{itm:bf2}. L'opération $m_1$ est uniquement observée par un pair mal-intentionné $p_M$.
 L'exécution abstraite \subref{fig:wf-example-2} est bien-formée.
-L'opération $m_1$ est observée par le pair honnête $p_A$.}
-\label{fig:wf-example}
+L'opération $m_1$ est observée par le pair honnête $p_A$.}\label{fig:wf-example}
 \end{figure}
 
 \begin{remark}
@@ -871,8 +856,7 @@ Pour faciliter son introduction nous présentons le modèle de cohérence~\acf{F
     \draw (0,-0.3) ellipse (3cm and 1.2cm);
     \draw (0,-0.6) ellipse (2cm and 0.6cm);
 \end{tikzpicture}
-\caption{Comparaison de la force des modèles de cohérence présentés}
-\label{fig:causal-fjc-vfjc-order}
+\caption{Comparaison de la force des modèles de cohérence présentés}\label{fig:causal-fjc-vfjc-order}
 \end{figure}
 
 \subsection{Cohérence Causale}\label{subsec:caucal-consistency}
@@ -991,8 +975,7 @@ Dans la~\autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que 
         \draw[vis,bend left=35] (a1) to node[above,sloped] {\footnotesize vis} (b3);
         \draw[vis,bend right=30] (b1) to node[below,sloped] {\footnotesize vis} (b3);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:vis-vs-pre-1}
+    \caption{}\label{fig:vis-vs-pre-1}
 \end{subfigure}
 \par\medskip
 \begin{subfigure}{\linewidth}
@@ -1035,11 +1018,9 @@ Dans la~\autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que 
         \foreach \src/\dest in {a1/a2,b1/b2,b2/a2,a2/b3}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:vis-vs-pre-2}
+    \caption{}\label{fig:vis-vs-pre-2}
 \end{subfigure}
-\caption{Exécutions abstraites qui respectent le modèle de cohérence causale.}
-\label{fig:vis-vs-pre}
+\caption{Exécutions abstraites qui respectent le modèle de cohérence causale.}\label{fig:vis-vs-pre}
 \end{figure}
 
 La littérature comptent plusieurs spécifications de la cohérence causale.
@@ -1127,7 +1108,7 @@ Procédons par déduction.
 Soit $x$ une opération de $A$ et $y$ une opération de $A'$ absente de $A$.
 $A'$ est une extension de $A$.
 Par conséquent, $y$ ne retourne pas avant $x$.
-$A$ et $A"$ respectent le modèle de cohérence \ac{VTNS}.
+$A$ et $A'$ respectent le modèle de cohérence \ac{VTNS}.
 D'après~\ref{itm:vtns2}, si une opération ne retourne pas avant une seconde opération, alors cette dernière ne peut pas être visible à la première.
 $y$ ne peut donc pas être visible à $x$.
 \end{proof}
@@ -1263,8 +1244,7 @@ Il est démontrable que dans un environnement mal-intentionné, l'une des trois 
 \caption{Exemple d'équivoque.
 Les pairs $p_A$, $p_B$, et $p_M$ répliquent un fil de discussion.
 $p_M$ est un pair mal-intentionné.
-Il prétend au pair $p_A$ que sa deuxième opération est $m_2$, alors qu'il prétend au pair $p_B$ que sa deuxième opération est $m_3$.}
-\label{fig:causal-violation}
+Il prétend au pair $p_A$ que sa deuxième opération est $m_2$, alors qu'il prétend au pair $p_B$ que sa deuxième opération est $m_3$.}\label{fig:causal-violation}
 \end{figure}
 
 Le modèle de cohérence~\acf{FJC}~\autocite{mahajan_2011_cac,mahajan_astro_2008} propose d'affaiblir la propriété~\ref{itm:peer-linear} pour tolérer la présence de pairs mal-intentionnés.
@@ -1401,8 +1381,7 @@ Le pair $p_B$ n'a pas encore observé $m_2$. Il présume que $m_3$ est une opér
         \draw[pre] (\src) to (\dest);
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
-\caption{Exemple d'exécutions abstraites qui respectent le modèle de cohérence \ac{VFJC}.}
-\label{fig:provably-malicious}
+\caption{Exemple d'exécutions abstraites qui respectent le modèle de cohérence \ac{VFJC}.}\label{fig:provably-malicious}
 \end{figure}
 
 %\begin{definition}[Reconnus mal-intentionnés]\label{def:known-malicious}
@@ -1447,8 +1426,7 @@ Le pair $p_B$ n'a pas encore observé $m_2$. Il présume que $m_3$ est une opér
         $b_2$ & $\emptyset$ \\
         $b_3$ & $\set*{p_M}$ \\
     \end{tabular}
-    \caption{Pairs reconnus mal-intentionnés dans l'exécution abstraite de la~\autoref{fig:provably-malicious} par le pair qui exécute l'opération considérée.}
-    \label{tab:known-malicious}
+    \caption{Pairs reconnus mal-intentionnés dans l'exécution abstraite de la~\autoref{fig:provably-malicious} par le pair qui exécute l'opération considérée.}\label{tab:known-malicious}
 \end{table}
 
 L'éviction d'un pair reconnu mal-intentionné ne doit pas menacer la convergence des copies des pairs honnêtes.
@@ -1516,8 +1494,7 @@ Dans l'extension de cette exécution abstraite, $p_O$ accepte $m_4$ alors qu'il 
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
 \caption{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
-L'excéutio nabstarite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}
-\label{fig:known-colluding-malicious}
+L'excéutio nabstarite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
 \end{figure}
 
 Les pairs honnêtes doivent s'assurer qu'un pair qui reconnaît un autre pair comme mal-intentionné arrête d'accepter directement les opérations de ce dernier.
@@ -1624,22 +1601,20 @@ La suppression et l'ajout en parallèle d'une même valeur dans un ensemble rép
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
 \caption[Exécution en parallèle d'opérations incompatibles]{Exemple d'exécutions en parallèle d'opérations incompatibles.
-L'exécution abstraite respecte le modèle de cohérence causale.}
-\label{fig:set-conflict-example}
+L'exécution abstraite respecte le modèle de cohérence causale.}\label{fig:set-conflict-example}
 \end{figure}
 
 Les \acfp{CRDT}~\autocite{shapiro_2011_crdt,roh_2011_rga} sont des types de données et des structures de données conçus pour être répliqués et modifiés en parallèle par un ensemble de pairs.
 Ils encapsulent la complexité des mécanismes de réplication optimiste derrière une interface bien définit.
 Les concepteur·euse·s d'applications peuvent ainsi se concentrer sur la sémantique des contenus répliqués.
 Nous spécifions un \ac{CRDT} avec deux modèles~\autocite{preguia2018_crdt}~: un type abstrait de données répliquées et un schéma de synchronisation.
-Le type abstrait de données répliquées définit les op"rations qui peuvent être exécutées et leur effet lorsqu'elles sont exécutées en parallèle ou en séquence.
+Le type abstrait de données répliquées définit les opérations qui peuvent être exécutées et leur effet lorsqu'elles sont exécutées en parallèle ou en séquence.
 Nous abordons ce sujet plus en détail dans la \autoref{sec:crdt-spec}.
 Le schéma de synchronisation conditionne la manière dont les copies d'un \ac{CRDT} peuvent se synchroniser.
 Il repose lui même sur un modèle réseau.
 Nous détaillons cet aspect dans la \autoref{sec:crdt-sync}.
 
-\subsection{Type abstrait de données répliquées}
-\label{sec:crdt-spec}
+\subsection{Type abstrait de données répliquées}\label{sec:crdt-spec}
 
 Pour modifier et consulter un contenu, un pair exécute respectivement des opérations de modification et des opérations d'interrogations.
 L'exécution des opérations d'interrogations ne modifient pas le contenu.
@@ -1655,7 +1630,7 @@ Prenons l'exemple du type abstrait de données \emph{Ensemble} noté $\trm{Set}\
 $V$ est l'ensemble des valeurs que l'ensemble peut contenir.
 La~\autoref{fig:set-spec} présente une spécification algébrique \autocite{wirsing1990_algebraicspec} commune de ce type.
 Nous proposons de l'adapter au formalisme utilisé dans ce manuscrit.
-Les opérations de ce type regroupent une opération de lecture $\trm{rd}$, une opération d'ajout $\trm{add}$(v), et une opération de suppression $\trm{rmv}(v)$ tel que $v$ est une valeur de l'ensemble $V$.
+Les opérations de ce type regroupent une opération de lecture $\trm{rd}$, une opération d'ajout $\trm{add}(v)$, et une opération de suppression $\trm{rmv}(v)$ tel que $v$ est une valeur de l'ensemble $V$.
 Les valeurs de retour de l'opération de lecture est l'ensemble des parties finies de $V$~: $\trm{Val}_{\trm{Set}\tuple*{V}} = \powerfset{V}$.
 La sémantique de ce type est précisé par la propriété de cohérence suivante~:
 
@@ -1685,8 +1660,7 @@ Ils supposent donc un modèle de cohérence séquentiel dans lequel la relation 
     &\trm{rmv}(\trm{add}(s, v_1), v_2) = \trm{add}(\trm{rmv}(s, v_2), v_1) \tag{\small add/rmv commutativity}\\
     &\trm{rmv}(\trm{rmv}(s, v_1), v_2) = \trm{rmv}(\trm{rmv}(s, v_2), v_1) \tag{\small rmv commutativity}\\
     \end{align*}
-    \caption{Spécification algébrique du type abstrait de données usuel Ensemble.}
-    \label{fig:set-spec}
+    \caption{Spécification algébrique du type abstrait de données usuel Ensemble.}\label{fig:set-spec}
 \end{figure}
 
 Le type abstrait de données Ensemble est spécifié pour une exécution séquentielle.
@@ -1807,8 +1781,7 @@ Dans ce manuscrit nous considérons uniquement des \acp{CRDT} qui présentent ce
     \end{tikzpicture}
     \caption{}
 \end{subfigure}
-\caption[Impact d'ordres distincts d'intégration des messages sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la~\autoref{fig:set-conflict-example}.}
-\label{fig:spec-linearization}
+\caption[Impact d'ordres distincts d'intégration des messages sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la~\autoref{fig:set-conflict-example}.}\label{fig:spec-linearization}
 \end{figure}
 
 La relation de visibilité rend compte des opérations intégrées.
@@ -1882,8 +1855,7 @@ La littérature a par exemple proposé les sémantiques suivantes pour les ensem
         \foreach \src/\dest in {a1/a2,a2/a3,a3/a4,a4/a5,a1/b1,b1/b2,b2/b3,b3/a5}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
-    \caption{}
-    \label{fig:set-alt-sem-1}
+    \caption{}\label{fig:set-alt-sem-1}
 \end{subfigure}
 \par\medskip
 \begin{subfigure}{\linewidth}
@@ -1896,14 +1868,12 @@ La littérature a par exemple proposé les sémantiques suivantes pour les ensem
         \emph{Remove-Win (RW)} & $\emptyset$ \\
         \emph{Causal-Length (CL)} & $\set*{1}$ \\
     \end{tabular}
-    \caption{}
-    \label{fig:set-alt-sem-2}
+    \caption{}\label{fig:set-alt-sem-2}
 \end{subfigure}
 \caption[Sémantiques d'un ensemble répliqué]{Illustration des différentes sémantiques d'un ensemble répliqué d'entiers.
 \subref{fig:set-alt-sem-1} L'exécution abstraite considérée respecte le modèle de cohérence causale.
 \subref{fig:set-alt-sem-2} La valeur de retour de l'opération de lecture $a_5$ dépend de la sémantique choisit pour l'ensemble répliqué.
-}
-\label{fig:set-alt-sem}
+}\label{fig:set-alt-sem}
 \end{figure}
 
 \paragraph{Un Last-Writer-Win Set (LWWSet)} \autocite{shapiro2011_comprehensive} spécifie que la dernière opération l'emporte sur les précédentes. Les opérations sont ainsi estampées par un horodatage.
@@ -1941,12 +1911,12 @@ L'ensemble lu est donc un singleton qui contient la valeur $1$.
 
 %\begin{equation}\begin{split}
 %\MoveEqLeft\forall v \qsep x \in A \land x = \trm{add}(v) \implies\\
-%    &\trm{cl}(x) \defeq \trm{max}(\set*{1 + \trm{cl}(y) \given y \vis x \land \trm{call}(y) = \trm{rmv}(v)})
+%    &\trm{cl}(x) \defeq \max(\set*{1 + \trm{cl}(y) \given y \vis x \land \trm{call}(y) = \trm{rmv}(v)})
 %\end{split}\end{equation}
 %
 %\begin{equation}\begin{split}
 %\MoveEqLeft\forall v \qsep x \in A \land x = \trm{rmv}(v) \implies\\
-%    &\trm{cl}(x) \defeq \trm{max}(\set*{1 + \trm{cl}(y) \given y \vis x \land \trm{call}(y) = \trm{add}(v)})
+%    &\trm{cl}(x) \defeq \max(\set*{1 + \trm{cl}(y) \given y \vis x \land \trm{call}(y) = \trm{add}(v)})
 %\end{split}\end{equation}
 %
 %\begin{equation}\begin{split}
@@ -1990,8 +1960,7 @@ La réplication optimiste d'un contenu partagé requiert la synchronisation des 
 Les \acp{CRDT} proposent différentes stratégie de synchronisation que nous présentons dans la sous-section suivante.
 
 
-\subsection{Schéma de synchronisation}
-\label{sec:crdt-sync}
+\subsection{Schéma de synchronisation}\label{sec:crdt-sync}
 
 Afin de converger, les pairs doivent intégrer les effets de l'ensemble des modifications effectuées sur les copies du contenu partagé.
 Pour ce faire, les pairs s'échangent leurs modifications sous forme de messages.
@@ -2083,8 +2052,7 @@ Le message encapsule donc simplement l'opération exécutée.
 &\trm{integrate}_i(\tuple*{m, n}, \tuple*{\trm{rmv}, x}) \defeq \tuple*{m \sminus x, n}
 \end{align*}
 \caption[Implémentation d'un ensemble répliqué synchronisé par opérations]{Implémentation d'un ensemble répliqué synchronisé par opérations qui respecte la sémantique \emph{Add-Win}.
-L'intégration de la suppression d'une valeur est effectuée après l'intégration de son ajout.}
-\label{fig:op-add-win-set}
+L'intégration de la suppression d'une valeur est effectuée après l'intégration de son ajout.}\label{fig:op-add-win-set}
 \end{figure}
 
 La \autoref{fig:op-add-win-set} propose une implémentation d'un ensemble répliqué synchronisé par opérations.
@@ -2135,7 +2103,7 @@ Le coût peut être si élevé qu'un \ac{CRDT} synchronisé par opérations est 
 &\trm{eval}(\tuple*{m, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in m}\\
 &\begin{aligned}
 \MoveEqLeft\trm{prepare}_i(\tuple*{m, c}, \trm{add}(v)) \defeq \tuple*{m \cup \set*{\tuple*{v, i, n}},c \cup \tuple*{i, n}}\\
-    &\where n \defeq 1 + \trm{max}(\set*{0,n \given \tuple*{i, n} \in c})
+    &\where n \defeq 1 + \max(\set*{0,n \given \tuple*{i, n} \in c})
 \end{aligned}\\
 &\trm{prepare}_i(\tuple*{m, c}, \trm{rmv}(v)) \defeq \tuple*{m \sminus \set*{\tuple*{v, \_,\_} \in m},c}\\
 &\begin{aligned}
@@ -2147,8 +2115,7 @@ Le coût peut être si élevé qu'un \ac{CRDT} synchronisé par opérations est 
     \end{aligned}
 \end{aligned}
 \end{align*}
-\caption[Implémentation d'un ensemble répliqué synchronisé par états]{Implémentation d'un ensemble répliqué synchronisé par états qui respecte la sémantique \emph{Add-Win}.}
-\label{fig:state-add-win-set}
+\caption[Implémentation d'un ensemble répliqué synchronisé par états]{Implémentation d'un ensemble répliqué synchronisé par états qui respecte la sémantique \emph{Add-Win}.}\label{fig:state-add-win-set}
 \end{figure}
 
 La \autoref{fig:state-add-win-set} présente une implémentions d'un ensemble répliqué synchronisé par états.
@@ -2200,8 +2167,7 @@ Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivem
 \caption[Sup-demi-treillis des états de l'ensemble répliqué synchronisé par états]{Aperçu du diagramme de Hasse du sup-demi-treillis des états de l'ensemble répliqué synchronisé par états.
 L'ensemble des états représentés est restreint à une seule valeur ($1$), et deux \emph{dots} ($A_1$, $A_2$).
 Les états entourés sont irréductibles.
-}
-\label{fig:state-add-win-set-semilattice}
+}\label{fig:state-add-win-set-semilattice}
 \end{figure}
 
 
@@ -2247,7 +2213,7 @@ Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state
 &\trm{eval}(\tuple*{m, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in m}\\
 &\begin{aligned}
 \MoveEqLeft\trm{prepare}_i(\tuple*{m, c}, \trm{add}(v)) \defeq \tuple*{\tuple*{v, i, n},\set*{i, n}}\\
-    &\where n \defeq 1 + \trm{max}(\set*{0,n \given \tuple*{i, n} \in c})
+    &\where n \defeq 1 + \max(\set*{0,n \given \tuple*{i, n} \in c})
 \end{aligned}\\
 &\trm{prepare}_i(\tuple*{m, c}, \trm{rmv}(v)) \defeq \tuple*{\emptyset, \set*{\tuple*{i, n} \given \tuple*{v, i, n} \in m}}\\
 &\begin{aligned}
@@ -2259,8 +2225,7 @@ Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state
     \end{aligned}
 \end{aligned}
 \end{align*}
-\caption[Implémentation d'un ensemble répliqué synchronisé par différences d'états]{Implémentation d'un ensemble répliqué synchronisé par différences d'états qui respecte la sémantique \emph{Add-Win}.}
-\label{fig:delta-add-win-set}
+\caption[Implémentation d'un ensemble répliqué synchronisé par différences d'états]{Implémentation d'un ensemble répliqué synchronisé par différences d'états qui respecte la sémantique \emph{Add-Win}.}\label{fig:delta-add-win-set}
 \end{figure}
 
 La \autoref{fig:delta-add-win-set} présente l'implémentation d'un ensemble répliqué synchronisé par différences d'états.
