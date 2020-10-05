@@ -1,0 +1,13 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb*
+*.flg
+*.fls
+*.log
+*.toc
+*.maf
+*.mtc*
+*.run.xml
+main.pdf
