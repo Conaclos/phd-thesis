@@ -1,0 +1,26 @@
+% List
+\usepackage[inline]{enumitem}
+\setlist[description]{leftmargin=0cm}
+
+\newlist{inlinelist}{enumerate*}{1}
+\setlist*[inlinelist,1]{%
+  label=(\roman*),
+}
+
+% Mini-tables
+\usepackage[french]{minitoc}
+
+% Named labels
+\makeatletter % Enable to call macro with @
+\newcommand*{\namedlabel}[2]{\begingroup
+    #2%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother % Disable @ as normal character
+
+% Layout
+\setlength{\HeadRuleWidth}{0.4pt}
+
+% Warn against obsoletes
+\usepackage[l2tabu, orthodox]{nag}

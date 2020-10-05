@@ -1,0 +1,21 @@
+% http://www.khirevich.com/latex/microtype/
+\usepackage[
+    % enable chars to cross the margin
+    activate={true,nocompatibility},
+    % enable in draft mode
+    final,
+    tracking=true,
+    kerning=true,
+    spacing=true,
+    factor=1100,
+    % enable char stetching/shrinking 10 = 1%
+    stretch=10,
+    shrink=10]{microtype}
+% reduce space between SmallCaps introduced by tracking=true
+\SetTracking{encoding={*}, shape=sc}{40}
+
+\usepackage{type1cm} % remove font size limit (for lettrines)
+\usepackage{lettrine}
+
+% remmove indent, add paragraph spacing
+%\usepackage{parskip}

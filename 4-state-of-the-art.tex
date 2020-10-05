@@ -1,0 +1,88 @@
+
+\chapter{État de l'art}
+\label{ch:state-of-the-art}
+
+\minitoc
+\bigskip
+
+
+\section{Journaux authentifiés}
+
+Les journaux authentifiés~\autocite{mahajan_depot_2011,truong_authenticating_2012} sont des journaux qui ne peuvent pas être falsifiés.
+L'adversaire ne peut pas omettre, dupliquer, ou réordonner des opérations sans qu'un pair honnête s'en aperçoive.
+Pour ce faire, les opérations sont signées par le pair qui les émet et leur identifiant contient une empreinte cryptographique (\emph{hash}) qui résiste aux collisions.
+
+
+\subsection{Exemple}
+
+Suppose qu'une équipe de volontaires co-organisent un événement.
+Alice créait un contenu partagé pour faciliter l'organsinions de l'événement.
+Elle invite plusieurs organisateurs à prendre part à la collaboration.
+Chaque année, des perturbateurs tentent de compromettre le bon déroulement de l'évènement.
+Puisque l'équipe de volontaires est ouverte à tous et toutes, des volontaires mal-intentionné·e·s, tel que Mallory, rejoignent le groupe.
+Afin de protéger la convergence du contenu partagé, un journal \ac{VFJC} est utilisé.
+
+Alice, Mallory, et d'autres membres participent dans plusieurs sessions de collaboration.
+Le contenu paratgé contient des rapports, des compte-rendu de réunion, et un sondage pour recenser les personnes disponible le 4 mai., date de l'événement.
+Les collaborateur·ice·s obtiennent des journaux convergents.
+
+%La~\autoref{fig:collaborative-example} la partie de la collaboration qui nous intéresse.
+Alice ($P_A$) invite Bob ($P_B$) et demande à ses collaborateurs de remplir le sondage.
+$c^A_1$ somme ces actions.
+Bob rejoint le gtroupe grâce à Mallory ($P_M$).
+Mallory tente de tromper Bob en modifiant la date de l'événement.
+Elle modifie donc la date au 8 Mars et partage cette modification $c^M_2$ uniquement avec Bob.
+Mallory génère également $c^M_1$ où elle confirme à Alice sa présence pour le 4 Mai.
+Bob génère $c^B_1$ où il confirme sa présence pour le 8 Mars.
+A la réception de $c^B_1$, Alice est consciente que Bob n'a pas le même contexte causal qu'elle.
+Prenant $c^M_2$, elle détecte l'équivocation de Mallory.
+A la fin de la session illustrée, les journaux de Alice et Bob convergent.
+Alice et Bob arrêtent de communiquer avec Mallory.
+
+%\begin{figure}[ht]
+%  \begin{subfigure}{\linewidth}
+%    \centering
+%    \begin{utikzhbgraph}
+%      \node (A) at (0,0) {$P_A$};
+%      \node (M) at (0,-2) {$P_M$};
+%      \node (B) at (1,-4) {$P_B$};
+%      \draw[timeline] (A) to (8,0);
+%      \draw[timeline] (M) to (8,-2);
+%      \draw[timeline] (B) to (8,-4);
+%      \uevent{a1}{1, 0}{$c^A_1$}
+%      \uevent{m1}{2.4,-1.55}{$c^M_1$}
+%      \uevent{m2}{2.4,-2.45}{$c^M_2$}
+%      \uevent{b1}{3.8,-4}{$c^B_1$}
+%      \uevent{a2}{5.2,0}{$c^A_2$}
+%      \uevent{b2}{6.8,-4}{$c^B_2$}
+%      \draw[com] (a1) to (1.6,-2);
+%      \draw[com] (m1) to (3,0);
+%      \draw[com] (m2) to (3,-4);
+%      \draw[com] (b1) to (4,-2);
+%      \draw[com] (b1) to (4.8,0);
+%      \draw[com] (a2) to (5.6,-4);
+%      \draw[com] (b2) to (7.4,0);
+%    \end{utikzhbgraph}
+%    \caption{Dashed arrows are transmissions of one or more contributions.}\label{fig:communication-graph}
+%  \end{subfigure}
+%  \begin{subfigure}{\linewidth}
+%    \centering
+%    \begin{utikzhbgraph}
+%      \uevent{a1}{0, 0}{$c^A_1$}
+%      \uevent{m1}{2, 1}{$c^M_1$}
+%      \uevent{a2}{4, 1}{$c^A_2$}
+%      \uevent{m2}{2, -1}{$c^M_2$}
+%      \uevent{b1}{4, -1}{$c^B_1$}
+%      \uevent{b2}{6, 0}{$c^B_2$}
+%      \uhb{a1}{m1}
+%      \uhb{m1}{a2}
+%      \uhb{a1}{m2}
+%      \uhb{m2}{b1}
+%      \uhb{a2}{b2}
+%      \uhb{b1}{b2}
+%    \end{utikzhbgraph}
+%    \caption{A \ac{VFJC} log with a fork junction at $c^B_2$.}\label{fig:vjc-log-fork-junction}
+%  \end{subfigure}
+%
+%  \caption{\subref{fig:communication-graph} A collaborative session and \subref{fig:vjc-log-fork-junction} the \ac{VFJC} log of honest participants (Alice $P_A$ and Bob $P_B$) after their convergence. Mallory ($P_M$) issues two non-linear contributions ($c^M_1 \| c^M_2$). She is provably malicious.}\label{fig:collaborative-example}
+%\end{figure}

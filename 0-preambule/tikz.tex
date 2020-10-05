@@ -1,0 +1,148 @@
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta} % '-latex' arrow
+%\usetikzlibrary{backgrounds}
+\usetikzlibrary{fit} % fit attribute
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.misc} % rounded rectangle
+
+%\usetikzlibrary{external}
+%\tikzexternalize[prefix=tikz/]
+
+\tikzset{
+    com/.style = {dashed,-latex},
+    link/.style = {dotted,line width=0.5mm},
+    %timeline/.style = {dotted,line width=0.25mm,-{Latex[length=2.5mm,width=1.25mm]}},
+    timeline/.style = {dotted,semithick},
+    timedevt/.style= {shape=rounded rectangle,inner sep=0,fill=black,minimum height=0.1cm,anchor=west}
+}
+
+\tikzset{
+    hb/.style = {-latex},
+    vis/.style = {-latex},
+    pre/.style = {-latex}
+}
+
+\tikzset{
+    stable/.style = {draw}
+}
+
+\newcommand\widthletter{9mm}
+\newcommand\widthblock{12mm}
+
+\tikzset{
+    common/.style={anchor=west, draw, rectangle, minimum height=\widthletter},
+    letter/.style={common, minimum width=\widthletter},
+    block/.style={common, minimum width=\widthblock},
+    crossed/.style={
+        path picture={
+            \draw
+                (path picture bounding box.south west)--(path picture bounding box.north east);
+        }
+    }
+}
+
+%
+% PLEASE DO NOT USE FOLLOWING ENVS
+%
+
+% Prefix every command with 'u' (u like user)
+
+%\newenvironment{utikzhbgraph}{%
+%    \tikzset{every label/.style={draw,fill=white,label distance=-1mm,text centered,text width={width ("vfjcs")},text height={height ("vfjcs")},inner sep=1mm}}
+%    \tikzset{every pin/.style={pin distance=3mm}}
+%    \tikzset{every pin edge/.style={{Circle}-}}
+%
+%    \tikzset{event/.style = {draw,shape=circle,fill=white,text width={width ("AAA")},align=center,inner sep=0}}
+%    \tikzset{ulabel/.style = {draw,fill=white,text centered,text width={width ("vfjcs")},text height={height ("vfjcs")},inner sep=1mm}}
+%    %% \uevent{node-id}{position}{content}
+%
+%    \newcommand{\uevent}[3]{\node[event] (##1) at (##2) {};\node[] at (##1) {##3};}%
+%    \newcommand{\uevt}[3]{\node[event] (##1) at (##2) {##3};}%
+%    %% \uhb{source}{target}
+%    \newcommand{\uhb}[2]{\draw[hb] (##1) to (##2);}%
+%    %% \ulabelled{labelled-node-id}{at-most-five-letter-label}
+%    \newcommand{\ulabelled}[2]{%
+%        \path (##1.south west) to +(0.2,0) node[ulabel,below left]{##2};%
+%    }%
+%    %% \uembedded{embedded-node-id}{relative-pos}{text}
+%    %% relative-pos: below|above left|right
+%    \newcommand{\uembedded}[3]{%
+%        \node[##2=-7.5pt and -7.5pt of ##1] (uembeddedp0##1) {};%
+%        \node[##2=10pt and 1pt of ##1] (uembeddedp1##1) {};%
+%        \draw[-Circle] (uembeddedp1##1) to (uembeddedp0##1);%
+%        \node[##2=-10pt and -7pt of uembeddedp1##1] {##3};}%
+%    %% \uparticipants{event-node-id}{relative-pos}{coma-seperated-list-of-participants}
+%    %% relative-pos: below|above left|right
+%    \newcommand{\uparticipants}[3]{\uembedded{##1}{##2}{$\left\{##3\right\}$}}%
+%    \begin{tikzpicture}%
+%}{\end{tikzpicture}}
+%
+%\newcounter{timelinecount}
+%%\utikzcomgraph[evt-spacing]{timeline-length}{timeline-spacing}
+%\newenvironment{utikzcomgraph}[3][0.8]{%
+%    \newcommand{\pevtspacing}{#1}
+%    \newcommand{\ptimelinelen}{#2}
+%    \newcommand{\ptimelinespacing}{#3}
+%    \tikzset{evt/.style = {fill,circle,inner sep=0,minimum size=1.5mm}}
+%    \tikzset{com/.style = {dashed,line width=0.25mm,-{Latex[length=2mm,width=2mm]}}}
+%    \setcounter{timelinecount}{0}
+%    \newcommand{\vtimelinecount}{\value{timelinecount}}
+%    %% \utimeline{timeline-id}
+%    \newcommand{\utimeline}[1]{%
+%        \stepcounter{timelinecount};%
+%        \node (##1) at (0,\vtimelinecount*\ptimelinespacing) {##1};%
+%        \draw (##1) edge[timeline] ++(\ptimelinelen,0);%
+%    }
+%    %% \uanchor[label]{anchor-id}{utimeline-id}{tick}
+%    \newcommand{\uanchor}[4][]{%
+%        \path (##3) to ++(##4*\pevtspacing,0) node[inner sep=0](##2){};%
+%        \path (##2) to ++(0,0.5) node{##1};%
+%    }
+%    %% \uevt{evt-id}{utimeline-id}{tick}{evt-label}
+%    \newcommand{\uevt}[4]{%
+%        \path (##2) to ++(##3*\pevtspacing,0) node[evt](##1){};%
+%        \path (##1) to ++(0,0.5) node{##4};%
+%    }
+%    %% \usend{evt-id}{timeline-id}{tick}
+%    \newcommand{\usend}[3]{%
+%        \uanchor{##2rcv##1}{##2}{##3};%
+%        \draw[com] (##1) to (##2rcv##1);%
+%    }
+%    \begin{tikzpicture}%
+%}{\end{tikzpicture}}
+%
+%\newenvironment{utikzcollab}{%
+%    % \udevice{device-id}{x,y}{display-name}
+%    \newcommand{\udevice}[4][below]{%
+%        \node[label=##1:{##4}] (##2) at (##3) {\includegraphics[scale=0.4]{fig/utikzcollab/device.pdf}};%
+%    }
+%    % \ulink{src}{dest}
+%    \newcommand{\ulink}[2]{%
+%        \draw (##1) edge[link] (##2);%
+%    }
+%    \newcommand{\usync}[2]{%
+%        \draw[link] (##1) -- (##2) node[midway]{\includegraphics[scale=0.4]{fig/utikzcollab/sync.pdf}};%
+%    }
+%    % \udlabel{device-id}{orientation}{label-content}
+%    % orientation = above left | above right | below left | below right
+%    \newcommand{\udlabel}[3]{%
+%        \edef\pos{##2}%
+%        \edef\al{above left}%
+%        \edef\ar{above right}%
+%        \edef\bl{below left}%
+%        \edef\br{below right}%
+%        \ifx\pos\al%
+%            \path (##1) to ++(-0.4,0) node[anchor=south east]{##3};%
+%        \else\ifx\pos\ar%
+%            \path (##1) to ++(0.4,0) node[anchor=south west]{##3};%
+%        \else\ifx\pos\bl%
+%            \path (##1) to ++(-0.4,0) node[anchor=north east]{##3};%
+%        \else\ifx\pos\br%
+%            \path (##1) to ++(0.4,0) node[anchor=north west]{##3};%
+%        \else%
+%            \PackageError{current}{invalid orientation}{}%
+%        \fi\fi\fi\fi%
+%    }
+%    \begin{tikzpicture}%
+%}{\end{tikzpicture}}
+%

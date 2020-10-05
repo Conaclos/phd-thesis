@@ -1,0 +1,30 @@
+\usepackage[
+  unicode=true,
+  pdftitle={},
+  pdfauthor={},
+  pdfsubject={},
+  pdfkeywords={},
+  pdfstartview=Fit,
+  bookmarks=false,
+  hyperindex,
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+ ]{hyperref}
+
+\newcommand{\propositionautorefname}{Proposition}
+
+%\newcommand{\theoremautorefname}{Théorème}
+\newcommand{\corollaryautorefname}{Corollaire}
+\newcommand{\lemmaautorefname}{Lemme}
+\newcommand{\claimautorefname}{Affirmation}
+
+\newcommand{\definitionautorefname}{Définition}
+
+% Remove warning about unset thesul bookmark level
+% FIXME: should be integrated in the thesul class
+% See https://tex.stackexchange.com/questions/123575/how-to-suppress-the-author-bookmark-generated-by-svmult-with-bookmark-package-wi
+\makeatletter
+\providecommand*{\toclevel@tulstarchapter}{0} 
+\makeatother

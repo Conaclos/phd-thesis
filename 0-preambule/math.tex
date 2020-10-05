@@ -1,0 +1,84 @@
+% Theorem
+\usepackage{amsthm}
+
+\newtheorem{proposition}{Proposition}[chapter]
+
+\newtheorem{claim}{Affirmation}[chapter]
+
+\newtheorem{theorem}{Théorème}[chapter]
+\newtheorem{corollary}{Corollaire}[theorem]
+\newtheorem{lemma}{Lemme}[theorem]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remarque}
+
+\newtheoremstyle{case}
+  {}{} % Space above/below
+  {\normalfont} % Body font
+  {} % Indent amount
+  {\itshape} % Theorem head font
+  {.} % Punctuation after theorem head
+  { } % Space after head, (' ', '\newline')
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}
+
+\theoremstyle{case}
+\newtheorem*{case}{Cas}
+
+% Math
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools} % fix amsmath bugs + better typeset
+
+% Math - paired notations
+% Each commands
+% - has a * version that scales to the size of the content
+%   e.g. set*{x}
+% - an option to specify delimiter size
+%   e.g. set[\Big]{x}
+%   among: \big, \Big, \bigg, \Bigg
+
+\DeclarePairedDelimiter{\card}{\lvert}{\rvert}
+
+\DeclarePairedDelimiter{\tuple}{\langle}{\rangle}
+
+\providecommand{\given{}}
+\newcommand*{\setgivenpart}[1][]{%
+    \nonscript\:#1\vert\allowbreak\nonscript\:\mathopen{}}
+\DeclarePairedDelimiterX{\set}[1]{\{}{\}}{%
+    \renewcommand\given{\setgivenpart[\delimsize]}#1}
+\DeclarePairedDelimiterX{\setopen}[1]{\{}{.}{%
+    \renewcommand\given{\setgivenpart[\delimsize]}#1}
+\DeclarePairedDelimiterX{\setclose}[1]{.}{\}}{%
+    \renewcommand\given{\setgivenpart[\delimsize]}#1}
+
+% Math - other notations
+
+\newcommand*{\lappend}{\operatorname{++}}
+\newcommand*{\sminus}{-} % set minus
+\newcommand*{\qsep}{\ldotp} % separator between quantifier and predicate
+\newcommand*{\trm}[1]{\operatorname{\mathsf{#1}}} % custom math term
+\newcommand*{\powerset}[1]{\mathcal{P}(#1)}
+\newcommand*{\powerfset}[1]{\mathcal{P}_{\mathsf{fin}}(#1)}
+\newcommand*{\defeq}{\overset{\mathrm{def}}{=}}
+\newcommand*{\defiff}{\overset{\mathrm{def}}{\iff}}
+\newcommand*{\assign}{\operatorname{\vcentcolon=}}
+\newcommand{\irange}[2]{#1 \mathinner {\ldotp \ldotp} #2}
+\newcommand*{\pto}{\hookrightarrow}
+%\newcommand*{\pto}{\mathrel{\ooalign{\hfil$\mapstochar\mkern5mu$\hfil\cr$\to$\cr}}}
+
+\newcommand*{\where}{\mathrel{\mathbf{where}}} % where keyword
+\newcommand*{\when}{\mathrel{\mathbf{if}}} % if keyword
+
+\newcommand*{\rb}{\overset{\mathsf{rb}}{\longrightarrow}} % returns-before
+\newcommand*{\vis}{\overset{\mathsf{vis}}{\longrightarrow}} % visibility
+\newcommand*{\viseq}{\leq_{\trm{vis}}} % visibility or equality
+\newcommand*{\nviseq}{\nleq_{\trm{vis}}} % neither visibility nor equality
+\newcommand*{\integr}{\overset{\mathsf{int}}{\longrightarrow}} % integration
+\newcommand*{\concur}{\|} % concurrency
+\newcommand*{\pre}{\longrightarrow} % precedence
+\newcommand*{\idr}{\downarrow} % immediate dependency relation
+\newcommand*{\dep}{\overset{\mathsf{dep}}{\longrightarrow}} % dep
+\newcommand*{\ao}{\overset{\mathsf{ao}}{\longrightarrow}} % dep
+\newcommand*{\hb}{\overset{\mathsf{hb}}{\longrightarrow}} % happens-before

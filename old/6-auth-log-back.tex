@@ -1,0 +1,726 @@
+
+\chapter{Journaux authentifiés tronqués}
+\label{ch:pruned-log}
+\minitoc
+\bigskip
+
+\fcnote{Rappeler problématique}
+
+Dans le \autoref{ch:secured-convergence} nous avons montré que l'utilisation de journaux authentifiés permettent de sécuriser la convergence des \acp{CRDT} synchronisés par opérations.
+La préservation de la totalité d'un journal authentifié implique un coût de stockage non négligeable.
+Une manière de réduire ce coût est de conserver seulement les opérations les plus récentes.
+Ces opérations forment un suffixe du journal original.
+Nous disons que le journal est tronqué.
+
+%Un pair honnête ne peut pas tronquer son journal de manière arbitraire sans menacer la cohérence future de son journal ou la convergence de son journal avec journaux des autres pairs honnêtes.
+%La cohérence d'un journal est conservée en vérifiant systématiquement les opérations qui sont reçues.
+
+Un journal ne peut être arbitrairement tronqué sans menacer la cohérence future du journal ou sa convergence avec les autres journaux.
+Une opération est ajoutée dans un journal cohérent, si elle ne rend pas ce dernier incohérent.
+Cette vérification requiert la présence d'un certain nombre d'opérations qui dépendent du modèle de cohérence considéré.
+Par exemple, pour vérifier une opération dans un journal qui respecte le modèle de cohérence PRAM (ou FIFO), seul l'opération précédente du même auteur est requise.
+Si des opérations nécessaires à la vérification d'une opération sont manquantes, l'opération ne peut être vérifiée.
+L'opération doit donc être rejetée ou intégrée dans le journal avec le risque de le rendre incohérent.
+Pour conserver un journal cohérent, le rejet semble donc le choix le plus judicieux.
+Cependant, elle peut conduire à une divergence permanente des journaux.
+Certains journaux peuvent avoir vérifié et intégré des opérations, e d'autres peuvent les avoir rejetées parce qu'elles ne peuvent pas être vérifiées.
+
+Afin de maintenir un journal cohérent et convergent, les pairs doivent conserver les opérations nécessaires à la vérification de toutes nouvelles opérations.
+Pour supprimer des opérations nous devons donc rencontrer deux conditions~: les opérations nécessaires à la vérification d'une opération devraient représentées un sous-ensemble du journal, et la collaboration devrait progresser de telle manière qu'un préfixe croissant d'opérations n'est plus nécessaire pour vérifier toutes nouvelles opérations.
+Ces deux contraintes peuvent être atteintes en utilisant un modèle de cohérence.
+Un modèle de cohérence restreint la manière dont peut être mis en relation deux opérations.
+La concurrence entre opérations joue un rôle important dans la détermination des opérations qui peuvent être ôtées du journal.
+Nous disons qu'une opération est stable une fois qu'il n'est plus possible d'intégrer dans le journal une opération qui lui est concurrente.
+
+Dans un premier temps nous explorons la stabilisation de journaux de manière itératif. dans un second temps, nous utilisant la notion de stabilité pour définir qu'elle partie d'un journal peut être tronquée sans menacer sa cohérence future ou sa convergence avec les autres journaux.
+
+
+\section{Stabilisation de journaux}
+
+Au fil de cette section nous explorons le concept de stabilisation de journaux.
+Un journal peut être divisé en une partie stable et une partie non stabilisé.
+La partie stable contient seulement des opérations stables.
+Une opération est stable dès qu'il n'est plus possible d'intégrer dans le journal des opérations qui lui sont concurrentes.
+
+Nous nous proposons de définir quand une opération est stable dans le contexte d'un groupe dynamique et en présence de l'adversaire précédemment définit.
+Nous faisons d'abord l'hypothèse que l'adversaire est absent et nous adaptons le concept de Stabilité Causale au contexte des groupes dynamiques.
+Puis nous montrons qu'un journal qui respecte le modèle de cohérence \ac{VFJC} ne peut pas être stabilisé en présence de l'adversaire.
+Nous proposons donc un nouveau modèle de cohérence et un concept de stabilité qui lui est associé pour construire des journaux qui peuvent être stabilisé en présence de l'adversaire.
+
+Puisqu'une opération stable le reste indéfiniment, elle nous permet de définir, dans la prochaine section, qu'elles opérations peuvent être ôtées du journal sans menacé sa convergence.
+
+\vicnote{Introduire davantage la notion de stabilité ? avec une formule générale ?}
+
+\subsection{Stabilité Causale dans les groupes dynamiques}
+
+La Stabilité Causale~\autocite{baquero_2014_pure-op-crdt} fut définit dans le contexte de groupes statiques et en l'absence d'un adversaire actif.
+Dans cette sous-section, nous nous proposons d'adapter ce concept à des groupes dynamiques.
+Nous supposons que les pairs sont honnêtes.
+
+Lorsqu'un pair intègre une opération dans son journal, il joue cette opération sur sa copie du contenu partagé.
+Dans un journal qui respecte le modèle de cohérence Causal, une opération ne peut être intégrée que si toutes ses dépendances ont déjà été intégrées dans le journal.
+Le pair qui génère une nouvelle opération doit faire dépendre cette opération sur toutes les opérations qui sont incluses dans son journal.
+La \autoref{fig:causal-delivery} illustre le retardement de l'application d'une opération dans l'attente de l'application de ses dépendances.
+
+\begin{figure}[ht]
+\centering
+\begin{utikzcomgraph}{12}{-1.5}
+    \utimeline{A}
+    \utimeline{B}
+    \utimeline{C}
+    \uevt{a1}{A}{2}{$o_1^A$}
+    \usend{a1}{B}{3}
+    \uevt{b1}{B}{4}{$o_1^B$}
+    \usend{b1}{C}{6}
+    \usend{a1}{C}{13}
+\end{utikzcomgraph}
+\caption{Un pair $A$ modifie un contenu partagé et génère ainsi une opération $o_1^A$.
+Cette opération est transmise à un pair $B$ qui l'applique.
+Le pair $B$ modifie à son tour le contenu et génère une opération $o_2^B$.
+Le pair $C$ reçoit l'opération $o_2^B$ avant l'opération $o_1^A$.
+Il ne peut pas appliquer l'opération de $B$ tant que l'opération de $A$ n'est pas appliquée.}
+\label{fig:causal-delivery}
+\end{figure}
+
+Une opération est causalement stable une fois qu'il y a la certitude que chaque  pair du groupe l'a intégré dans son journal.
+Lorsqu'un pair génère une opération qui dépend sur une autre opération, il certifie avoir intégré cette dernière dans son journal.
+Un pair qui reçoit l'opération nouvellement générée, a donc la certitude que l'auteur de l'opération a intégré dans son journal toutes les opérations sur laquelle son opération dépend.
+\vicnote{Donner un exemple?}
+
+Un point de vue alternatif, que nous proposons d'adopter, se base sur la concurrence entre opérations.
+Dans un journal causal, une fois qu'un pair génère une opération qui dépend d'opérations données, toutes les opérations qu'il génère par la suite dépendent également sur ces opérations.
+Elles ne peuvent donc plus être concurrentes à ces dépendances.
+Dans un journal causal, une opération est donc causalement stable une fois qu'il n'est plus possible d'intégrer une autre opération qui lui est concurrente.
+
+Dans un groupe dynamique, les pairs entrent et quittent la collaboration à tout moment.
+Un pair a une connaissance partielle et imprécise de la composition du groupe. 
+Il est donc difficile de prévoir qui peut générer des opérations concurrentes à une opération donnée.
+Cependant, pour rejoindre une collaboration, un nouveau pair doit récupérer le journal d'un autre pair de la collaboration.
+Toutes opérations que ce nouveau pair générera dépendra sur les opérations déjà présente dans ce journal.
+par conséquent si une opération est présente dans le journal, le nouveau pair ne peut pas émettre une opération qui lui est concurrente.
+Inversement, si une opération n'est pas incluse dans ce journal, alors le nouveau pair peut probablement générer une opération qui lui sera concurrente.
+
+En nous basant sur cette observation ,nous pouvons déterminer qui peut émettre une opération concurrente à une opération donnée.
+Pour ce faire, nous devons déterminer quand un nouveau pair récupère un journal pour rejoindre une collaboration.
+Cette information devrait être disponible dans le journal qui est récupéré par le nouveau pair et devrait contraindre le nouveau pair a générer des opérations qui dépendent sur les opérations déjà présentes dans le journal.
+
+Lorsqu'un nouveau pair souhaite rejoindre la collaboration, un pair de la collaboration l'invite.
+Une \emph{invitation} est une opération particulière.
+Sans perte de généralité, nous supposons qu'une \emph{invitation} invite un seul pair.
+Plusieurs pairs sont donc invités par des invitations successives.
+$\trm{invitedIn}(c)$ donne le pair invité avec l'invitation $c$.
+Une invitation inclut les clefs publiques des pairs invités.
+\begin{equation*}
+\trm{previouslyInvited}_H(c) \defeq \set{\trm{invitedIn}(x) \ssep x \to c}
+\end{equation*}
+
+\vicnote{$invitedIn$ devrait être une fonction totale pour que $previouslyInvited$ soit valide ?}
+
+Un nouveau pair ne peut contribuer à la collaboration seulement si il a été invité.
+Afin d'assurer le respect de cette contrainte, l'opération d'un pair doit dépendre sur au moins une \emph{invitation}.
+Cette contrainte ne s'applique pas au pair qui initie la collaboration.
+Le pair qui initie la collaboration génère une première opération qui correspond à une \emph{invitation}.
+Cette \emph{invitation} invite son auteur.
+Par conséquent, toutes opérations, à l'exception de la première, à au moins une dépendance.
+La première opération est l'élément minimal du journal.
+Nous notons cette opération $\bot$.
+\begin{align*}
+&\forall c^k = \bot \qsep P_k = \trm{invitedIn}_H(c^k) \tag{\small self-invited}\\
+&\forall c^k \neq \bot \qsep P_k \in \trm{previouslyInvited}_H(c^k) \tag{\small previously invited}
+\end{align*}
+
+Si l'\emph{invitation} d'un nouveau pair dépends sur une opération donnée, alors cet pair peut seulement générer des opérations qui dépendent sur cette dernière.
+Inversement, si l'\emph{invitation} d'un nouveau pair précède ou est concurrente à une opération donnée, alors le nouveau pair peut générer une opération qui est concurrente à cette dernière.
+Les pairs qui peuvent émettre des opérations concurrentes à une opération donnée, sont des observateurs requis de cette opération.
+Si tout les observateurs requis d'une opération observe cette opération, alors l'opération est causalement stable.
+
+\vicnote{Parler des invitations concurrentes d'un même pair~?}
+
+Les observateurs requis d'une opération peuvent quitter la collaboration.
+Il est donc possible que certains d'entre eux n'observent jamais l'opération.
+L'opération ne pourrait donc jamais atteindre une stabilité causale.
+Il est donc nécessaire de prendre en compte les départs du groupe.
+Un pair peut quitter une collaboration en demandant à un autre pair d'être évincé du groupe.
+Afin d'évincer un autre pair, un pair émet une \emph{éviction}.
+Une \emph{éviction} est une opération spéciale.
+$\trm{evictedIn}(c)$ donne le pair qui a été évincé dans $c$.
+La \refdef{known-evicted} définit les pairs qui ont été évincé dans un journal.
+Les pairs évincés correspondent aux pairs qui ont quitté la collaboration et aux pairs qui sont considérés comme mal-intentionnés.
+
+\vicnote{Discuter du pourquoi on quitte indirectement. Ou réfléchir aux implications de remplacer l'éviction par une opération pour quitter ?}
+
+\vicnote{$evictedIn$ devrait être une fonction totale pour que $evicted$ soit valide ?}
+
+\begin{definition}[Pairs évincés connus]\label{def:known-evicted}
+Soit une opération $c$ d'un journal \ac{VFJC} $H^i_t$.
+Un pair est un évincé connu dans $c$ si et seulement si il peut être montré qu'il est mal-intentionné dans le sous-journal qui contient $c$ et ses dépendances, ou si il existe une \emph{éviction} dans ce sous-journal qui l'évince.
+\begin{align*}
+\trm{evicted}_H(c) = &\set{\trm{evictedIn}(x) \ssep x \to c \lor x = c} \cup \trm{provablyMalicious}(c)
+\end{align*}
+\end{definition}
+
+Les opérations des auteurs qui ont été évincés suivent des règles de cohérences adaptées de~\ref{itm:l3} et~\ref{itm:l4}:
+\begin{align*}
+\forall &c^k \idr c^l \qsep P_k, P_l \not\in \trm{evicted}_H(c^l) \tag{\small sharing with no evicted}\\
+\forall &c^k, c^j \in \trm{latest}^i_t \qsep P_k \not\in \trm{evicted}_H(c^j) \tag{\small appendable}
+\end{align*}
+
+Un pair évincé ne peut pas émettre une opération qui dépend sur une opération qui le sait évincé.
+Par conséquent, les évincés connus d'une opération $c$, ne sont pas des observateurs requis de $c$.
+
+\vicnote{détailler davantage l'interaction entre évincement et causalité~?}
+
+Des observateurs requis d'une opération peuvent également être évincés dans des opérations concurrentes ou des opérations qui la succède.
+Pour simplifier, nous considérons uniquement les pairs évincés dans les opérations qui la succède.
+
+\vicnote{exemple~?}
+
+Une fois qu'un pair émet une opération qui dépend sur une opération $c$, il ne peut plus accepter directement une opération d'un pair qui est un évincé connu dans cette dernière.
+Par conséquent, si tous les observateurs requis d'une opération ont certifié avoir observé cette dernière, alors il n'est plus possible d'accepter une opération émise par un pair qui est un évincé connu de cette opération.
+L'opération est causalement stable.
+Tous les évincés connus d'une opération causalement stable ne sont plus des observateurs requis.
+\refdef{required-observer} définit quels pairs sont des observateurs requis pour une opération donnée.
+
+\begin{definition}[Observateurs requis]\label{def:required-observer}
+Soit une opération $C$ d'un journal \ac{VFJC} $H^i_t$.
+Un observateur requis de $c$ est soit un pair invité dans une \emph{invitation} qui précède $c$ ou qui est concurrente à $c$.
+Tous les évincés connus dans $c$ et dans les opérations causalement stables qui succèdent à $c$ ne sont pas des observateurs requis.
+\begin{align*}
+&\trm{requiredObs}_H(c) = \set{\trm{invitedIn}(x) \ssep x \| c} \cup \trm{previouslyInvited}_H(c)\\
+&\qquad\sminus \trm{evicted}_H(c) \sminus \bigcup \set{\trm{evicted}_H(x) \ssep c \to x \land \trm{isProvablyCausallyStable}(x)}
+\end{align*}
+\end{definition}
+
+Sous~\ref{itm:l1}, les pairs honnêtes ordonne linéairement leurs opérations.
+Si il émet une opération qui dépend sur une autre, il ne peut pas émettre une opération qui lui est concurrente.
+Par conséquent, une opération est causalement stable dès que ses observateurs requis ont certifiés l'avoir observé.
+
+La définition originale de la Stabilité Causale prend en compte l'observation implicite du possesseur du journal.
+Il est donc possible d'avoir deux journaux convergents avec des ensemble d'opérations causalement stable distincts.
+Puisque de nouveaux pairs récupèrent et vérifient les journaux d'autres pairs, il est important d'avoir une convergence forte sur la stabilité.
+Deux pairs avec des journaux convergents devraient donc avoir le même ensemble d'opérations stables.
+\refdef{cs} définit \acf{PCS} qui adapte la Stabilité Causale aux groupes dynamiques et et ne prend pas en compte l'observation implicite du possesseur du journal.
+La \autoref{fig:invitations} montre l'interaction entre des invitations et la stabilité d'une opération.
+
+\begin{definition}[\acl{PCS}]\label{def:cs}
+Dans un journal \ac{VFJC} $H^i_t$, une opération est \acl{pcs} si et seulement si ses observateurs requis ont certifié l'avoir observé.
+\begin{align*}
+&\trm{isProvablyCausallyStable}_H(c) = \\
+&\qquad\trm{requiredObs}_H(c) \subseteq \trm{provablyObs}(c)\\
+&\where \trm{provablyObs}(c^j) = \set{P_j} \cup \set{P_k \ssep \exists\ c^k \qsep c^j \to c^k}
+\end{align*}
+\end{definition}
+
+\begin{figure}[ht]
+  \centering
+  \begin{utikzhbgraph}
+    \node[event,
+        label=-110:{pcs},
+        pin=100:{$\set{P_A,P_B}$}
+    ] (a1) at (0,0) {$c^A_1$};
+    \node[event,
+        label=-110:{pcs}
+    ] (a2) at (2, 1) {$c^A_2$};
+    \node[event,
+        pin=-100:{$\set{P_C}$}
+    ] (b1) at (2,-1) {$c^B_1$};
+    \node[event,
+        pin=80:{$\set{P_D}$}
+    ] (b2) at (4,0) {$c^B_2$};
+    \node[event] (c1) at (6,-1) {$c^C_1$};
+    \begin{scope}[on background layer]
+        \draw[hb] (a1) to (a2);
+        \draw[hb] (a1) to (b1);
+        \draw[hb] (a2) to (b2);
+        \draw[hb] (b1) to (b2);
+        \draw[hb] (b2) to (c1);
+    \end{scope}
+  \end{utikzhbgraph}
+  \caption{
+  Lorsque Alice ($P_A$) génère $c^A_2$, elle sait qu'elle et Bob ($P_B$) font partie du groupe de collaboration.
+  Par conséquent, Alice et Bob sont des observateurs requis de $c^A_2$.
+  Dès que $c^B_1$ est livrée, Alice sait que Bob a invité Carol ($P_C$).
+  Parce que $c^B_1$ est concurrent à $c^A_2$, Carol peut génèrer une opération qui est concurrente à $c^A_2$.
+  Carol fait donc désormais partie des observateurs requis de $c^A_2$.
+  Dès que $c^B_2$ est livrée, Alice peut démontrer que Bob a observé $c^A_2$.
+  Elle sait également que Dave ($P_D$) est invité.
+  Parce que $c^B_2$ dépends sur $c^A_2$, Dave n'est pas un observateur requis de $c^A_2$.
+  Dès que $c^C_1$ est livrée, Alice peut démontrer que Carol a observé $c^A_2$.
+  Tous le observateurs requis de $c^A_2$ ont donc certifié avoir observé $c^A_2$.
+  $c^A_2$ devient \acf{pcs}.}%
+  \label{fig:invitations}
+\end{figure}
+
+\subsection{Journal \acl{SVFJC}}
+
+Un pair mal-intentionné peut générer une nouvelle opération qui est \emph{non-linéaire} avec une de ses anciennes opérations.
+Si l'on peut démontrer que tous les pairs ont observé les anciennes opération du pair mal-intentionné, alors sous~\ref{itm:l3} et~\ref{itm:l4} ils ne peuvent pas accepter de manière honnête cette nouvelle opération.
+
+Cependant, un pair peut inviter un nouveau pair.
+Un pair mal-intentionné peut générer une \emph{invitation} qui est \emph{non-linéaire} avec une ou plusieurs de ses anciennes opérations.
+Si le nouveau pair contribue à la collaboration, alors il génère une opération qui dépend sur cette \emph{invitation}.
+Il n'est pas considéré mal-intentionné.
+Sous~\ref{itm:l3} et~\ref{itm:l4}, les pairs honnêtes ont à accepter son opération et par extension le \emph{fork}.
+La \autoref{fig:unstabilizable-vfjc-log} illustre ce scénario.
+
+\begin{figure}[ht]
+  \centering
+  \begin{utikzhbgraph}
+    \node[event,pin=-100:{$\set{P_A,P_B,P_M}$}] (a1) at (0, 0) {$c^A_1$};
+    \node[] (hidden) at (2, 0) {\ldots};
+    \node[event] (m20) at (4, 0) {$c^M_{20}$};
+    \node[event] (b20) at (6, 0) {$c^B_{20}$};
+    \node[event,pin=-100:{$\set{P_F}$}] (m21) at (2, -1.5) {$c^M_{21}$};
+    \node[event] (f1) at (4, -1.5) {$c^B_{20}$};
+    \draw[hb] (a1) to (hidden);
+    \draw[hb] (hidden) to (m20);
+    \draw[hb] (m20) to (b20);
+    \draw[hb] (a1) to (m21);
+    \draw[hb] (m21) to (f1);
+  \end{utikzhbgraph}
+  \caption{Alice ($P_A$), Bob ($P_B$), et Mallory ($P_M$) génèrent plusieurs opérations.
+  Puis Mallory génère une \emph{invitation} $c^M_{21}$ qui invite Franck ($P_F$) et est non-linéaire avec les autres opérations de Mallory $c^M_1, \ldots, c^M_{20}$.
+  Franck génère $c^F_1$.
+  $c^F_1$ dépend sur $c^M_{21}$.
+  Parce que Franck n'est pas considéré comme mal-intentionné, les pairs honnêtes acceptent le \emph{fork} $c^M_{21} \idr c^F_1$.
+  Le journal obtenu respecte le modèle de cohérence \ac{VFJC}.}%
+  \label{fig:unstabilizable-vfjc-log}
+\end{figure}
+
+La participation de nouveaux pairs dans un \emph{fork} conduit à son acceptation par les pairs honnêtes.
+Par conséquent, il est toujours possible d'avoir une opération concurrente à n'importe quelle autre opération.
+La stabilisation d'un journal implique que à un certain point, des opérations deviennent stables.
+En d'autres termes, qu'il n'est plus possible d'accepter des opérations qui soient concurrentes.
+Un journal qui respecte le modèle de cohérence \ac{VFJC} n'est donc pas stabilisable au sein d'un groupe dynamique et en présence de pairs mal-intentionnés.
+
+Afin de stabiliser un journal \ac{VFJC}, nous devons rejeter les \emph{forks} qui incluent uniquement des opérations générées par des pairs considérés comme mal-intentionnés et des opérations générées par des pairs invités dans ces \emph{forks}.
+Les pairs invités de manière transitifs sont éagelemnt à prendre en compte.
+Pour simplifier l'expression de cette propriété de cohérence, nous ne permettons pas les invitations concurrente d'un même pair.
+Cette contrainte supplémentaire peut être assurée en incluant le \emph{hash} cryptographique de l'\emph{invitation} dans l'identifiant généré pour le nouveau pair.
+Par exemple, dans la \autoref{fig:invitations}, l'identifiant de Carol correspond à d'agrégation de sa clef publique et du \emph{hash} de $c^B_1$.
+Le possesseur de la clef publique peut être invité plusieurs fois et avoir plusieurs identifiants.
+
+Une façon de rejeter ces \emph{forks} est d'accepter seulement une opération si son auteur est un pair connu à participer à la collaboration à la fois dans les dépendances immédiates de l'opération et dans les branches qui lui sont concurrentes.
+dans la figure \autoref{fig:unstabilizable-vfjc-log}, Franck n'est pas connu à participer dans le journal qui inclut $c^B_20$ et ses dépendances.
+$c^B_20$ est la dernière opération d'une branche qui est concurrente à $c^F_1$.
+Par conséquent $c^F_1$ ne peut pas être accepter.
+Afin d'accepter une opération dont l'auteur n'est pas connu, les pairs honnêtes doivent d'abord accepter son \emph{invitation}.
+dans notre exemple, le spairs honnêtes doivent d'abord accepter $c^M_2$.
+Cependant, sous~\ref{itm:l3} et~\ref{itm:l4}, les pairs honnêtes ne peuvent pas accepter l'opération \emph{non-linéaire} $c^M_2$.
+Par conséquent, ils ne peuvent pas accepter le \emph{fork} $c^M_2 \idr c^F_1$.
+
+\begin{definition}[pairs connus à participer]\label{def:known-participants}
+Soit une opération $c$ d'un journal \ac{VFJC} $H^i_t$.
+$\trm{participants}(c)$ donne tous les pairs invités dans le journal qui inclut seulement $c$ et ses dépendances.
+Les pairs évincés dans ce journal ne sont pas inclus.
+\begin{equation*}
+\trm{participants}_H(c) = \trm{previouslyInvited}_H(c) \cup \set{\trm{invitedIn}(c)} \sminus \trm{evicted}_H(c)
+\end{equation*}
+\end{definition}
+
+La \refdef{svfjc-log} définit un journal \acf{SVFJC}. \ac{SVFJC} renforce \ac{VFJC} en rejetant les \emph{forks} qui émpéchent la stabilisation du journal.
+Similairement à~\ref{itm:l4}, la propriété~\ref{itm:l8} évite un problème de disponibilité en écriture du journal.
+
+\begin{definition}[\ac{SVFJC} log]\label{def:svfjc-log}
+Soit un journal \ac{SVFJC} $H^i_t = (\trm{Contrib}^i_t, \to, \bot)$ d'un pair honnête $P_i$ à un temps discret $t$.
+$H^i_t$ est un journal \ac{VFJC} avec un élément minimal $\bot$ et des propriétés supplémentaires~:
+
+  \begin{description}
+  \item[\namedlabel{itm:l5}{L5} (evicting only existing participants)]
+  \begin{equation*}
+  \forall c \qsep \trm{evictedIn}(c) \in \bigcup \set{\trm{participants}_H(x) \ssep x \idr c}
+  \end{equation*}
+
+  \item[\namedlabel{itm:l6}{L6} (sharing with no evicted)]
+  If there exists an immediate dependency relation between two contributions, then neither is authored by an evicted participant in the sublog that contains only them and all contributions that precede them (Implies~\ref{itm:l3}).
+  \begin{equation*}
+  \forall c^k \idr c^l \qsep P_k, P_l \not\in \trm{evicted}_H(c^l)
+  \end{equation*}
+
+  \item[\namedlabel{itm:l7}{L7} (sharing with known participants)]
+  The author of $c$ has to be known as participant in immediate dependencies of $c$. The author of an immediate dependency of $c$ has to be known as participant in every immediate dependency of $c$.
+  \begin{equation*}
+  \forall c^k \idr c^l \ \forall c^j \idr c^l \qsep P_l, P_k \in \trm{participants}_H(c^j)
+  \end{equation*}
+
+    \item[\namedlabel{itm:l8}{L8} (appendable --- sharing with known participants)]
+    The author of every latest contribution has to be known as participant in all latest contributions. The owner of the log has to be a known participant of all latest contributions. This also excludes contributions whom the author is evicted.
+  \begin{align*}
+  \forall c^k, c^j &\in \trm{latest}^i_t \qsep P_i, P_k \in \trm{participants}_H(c^j)\\
+  &\where \trm{latest}^i_t = \set{x \ssep \nexists y \qsep x \to y}
+  \end{align*}
+  \end{description}
+\end{definition}
+
+La \autoref{fig:sharing-with-known-participants} illustre l'addition de \ac{SVFJC},
+Sous~\ref{itm:l8}, un pair honnête ne peut pas accepter une opération dont l'auteur n'est pas connu à participer dans les opérations les plus récentes du journal.
+Il ne peut pas non plus accepter une opération qui n'inclut pas dans les pairs connu à participer ceux connu à participer dans les opérations le splus récentes du journal.
+$c^A_2$ n'inclut pas Carol comme pairs connus à participer.
+Sous~\ref{itm:l8}, il n'est pas possible de maintenir journal qui inclut à la fois $c^A_2$ et $c^C_1$ comme opérations les plus récentes du journal.
+
+Pour remédier à la situation, Alice et Bob doivent générer de nouvelles opérations pour accepter $c^A_2$ et $c^A_2$.
+Alice génère $c^A_3$ et peut donc accepter $c^C_1$.
+Bob génère $c^B_2$ et accepte donc $c^A_2$.
+$c^A_3$ et $c^B_2$ peuvent être des \emph{observations}.
+Nous puvons remarquer que carol ne peut pas accepter $c^A_2$ sans accepter une opération qui dépend à la fois sur $c^A_2$ et $c^B_1$.
+$c^A_3$ remplie cette condition.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \begin{utikzhbgraph}
+      \uevent{a1}{0, 0}{$c^A_1$}
+      \uevent{a2}{1.5, 1}{$c^A_2$}
+      \uevent{b1}{1.5, -1}{$c^B_1$}
+      \uevent{c1}{3, -1}{$c^C_1$}
+      \uevent{a3}{3, 1}{$c^A_3$}
+      \uhb{a1}{b1}
+      \uhb{a1}{a2}
+      \uhb{b1}{c1}
+      \uhb{b1}{a3}
+      \uhb{a2}{a3}
+      \uparticipants{a1}{above left}{P_A,P_B}
+      \uparticipants{b1}{below left}{P_C}
+    \end{utikzhbgraph}
+    \caption{Alice's \acs{SVFJC} log.}\label{fig:sharing-with-known-participants-alice}
+  \end{subfigure}
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \begin{utikzhbgraph}
+      \uevent{a1}{0, 0}{$c^A_1$}
+      \uevent{a2}{1.5, 1}{$c^A_2$}
+      \uevent{b1}{1.5, -1}{$c^B_1$}
+      \uevent{c1}{3, -1}{$c^C_1$}
+      \uevent{b2}{4.5, -1}{$c^B_2$}
+      \uhb{a1}{b1}
+      \uhb{a1}{a2}
+      \uhb{b1}{c1}
+      \uhb{c1}{b2}
+      \uparticipants{a1}{above left}{P_A,P_B}
+      \uparticipants{b1}{below left}{P_C}
+    \end{utikzhbgraph}
+    \caption{Bob's \acs{SVFJC} log.}\label{fig:sharing-with-known-participants-bob}
+  \end{subfigure}
+  \caption{Bob ($P_B$) invite Carol ($P_C$) dans son opération $c^B_1$.
+  Carol génère $c^C_1$  qui dépend sur $c^B_1$.
+  En parallèle, Alice ($P_A$) génère $c^A_2$ qui est concurrente avec les opérations de Bob et carol.
+  Alice reçoit dans son journal $c^B_1$ et $c^C_1$, alors que Bob reçoit l'opération de Carol avant celle de Alice. 
+  \subref{fig:sharing-with-known-participants-alice} et \subref{fig:sharing-with-known-participants-bob} représentent respectivement le journal de Alice et le journal de Bob.}\label{fig:sharing-with-known-participants}
+\end{figure}
+
+Pour permettre la stabilisation, un journal \ac{SVFJC} rejete les \emph{forks} dans lesquels de nouveaux pairs ont contribué.
+Ce choix limite la disponibilité du système pour les nouveaux pairs.
+L'application peut utiliser des règles de cohérence additionnelles pour mitiger le problème.
+Par exemple, une \emph{invitation} pourrait être considéré effective seulement lorsqu'un ensemble de pairs de confiance (auteur du document, modérateurs, ami·e·s, etc.) certifient l'avoir observé.
+
+\subsection{\acl{VFJCS}}\label{subsec:vfjcs}
+
+En présence de pairs mal-intentionnés, \acl{PCS} est insuffisante pour stabiliser un journal \ac{SVFJC}.
+La \autoref{fig:pcs-is-not-stable-alice-obs} montre un scénario dans lequel une opération est considéré comme stable alors qu'une opération concurrente à cette dernière peut encore être accepté de manière honnête.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{\linewidth}
+    \centering
+    \begin{utikzhbgraph}
+      \uevent{a1}{0, 0}{$c^A_1$}
+      \uevent{b1}{2, 0.8}{$c^B_1$}
+      \uevent{m1}{4, 0.8}{$c^M_1$}
+      \uevent{a2}{6, 0.8}{$c^A_2$}
+      \uhb{a1}{b1}
+      \uhb{b1}{m1}
+      \uhb{m1}{a2}
+      \ulabelled{a1}{pcs}
+      \ulabelled{b1}{pcs}
+      \uparticipants{a1}{above left}{P_A,P_B,P_M}
+    \end{utikzhbgraph}
+    \caption{Alice's \acs{SVFJC} log.}\label{fig:pcs-is-not-stable-alice-obs}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \centering
+    \begin{utikzhbgraph}
+      \uevent{a1}{0, 0}{$c^A_1$}
+      \uevent{b1}{2, 1}{$c^B_1$}
+      \uevent{m2}{2, -1}{$c^M_2$}
+        \uevent{b2}{4, -1}{$c^B_2$}
+        \uhb{a1}{b1}
+        \uhb{a1}{m2}
+        \uhb{b1}{b2}
+        \uhb{m2}{b2}
+      \ulabelled{a1}{pcs}
+      \uparticipants{a1}{above left}{P_A,P_B,P_M}
+    \end{utikzhbgraph}
+    \caption{Bob's \acs{SVFJC} log.}\label{fig:pcs-is-not-stable-bob-obs}
+  \end{subfigure}%
+  \caption{
+  Alice ($P_A$) débute une collaboration avec Bob ($P_B$) et Mallory ($P_M$).
+  Mallory génère un couple d'opérations \emph{non-linéaires} $c^M_1$ et $c^M_2$.
+  \subref{fig:pcs-is-not-stable-alice-obs} Dans le journal journal de Alice, Alice et Mallory certifient avoir observé $c^B_1$.
+  Du point de vue de Alice, $c^B_1$ is \acf{pcs}.
+  \subref{fig:pcs-is-not-stable-bob-obs} Parce que Bob n'a pas encore observé $c^M_1$, il accepte $c^M_2$ dans son journal.
+  Il existe donc une opération concurrente à $c^B_1$ qui a été accepté de manière honnête.}\label{fig:pcs-is-not-stable}
+\end{figure}
+
+Seulement les pairs qui n'ont pas certifié avoir observé une opération $c$ peuvent accepter directement une opération qui est \emph{non-linéaire} avec $c$.
+Il n'est pas possible d'accepter une opération qui est \emph{non-linéaire} avec $c$ une fois que $c$ est \ac{pcs}.
+Nous disons que l'auteur de $c$ est un observateur linéaire du journal qui contient $c$ et les dépendances de $c$.
+
+\begin{definition}[Provably linear observer]\label{def:linear-obs}
+Soit une opération $c$ d'un journal \ac{SVFJC}.
+Un observateur linéaire de $c$ est un pair qui est l'auterur d'au moins une opération qui dépend sur $c$ et qui est \acl{pcs}.
+\begin{align*}
+&\trm{provablyLinearObs}_H(c) = \{P_k \ssep \exists c^k = c \lor c \to c^k \qsep\\
+&\qquad\qquad\trm{isProvablyCausallyStable}_H(c^k)\}
+\end{align*}
+\end{definition}
+
+dans un journal \ac{SVFJC}, une opération est stable une fois qu'il n'est plus possible d'accepter de manière honnête des opérations qui lui sont concurrentes.
+Par conséquent une opération est stable si et seulement si tous les observateurs requis sont des observateurs linéaires.
+\refdef{vfjcs} définit cette notion de stabilité sous le nom de \acf{VFJCS}.
+la \autoref{fig:vfjcs-example} fournit un exemple de stabilisation d'un journal \ac{SVFJC}.
+
+\begin{definition}[\acl{VFJCS}]\label{def:vfjcs}
+Dans un journal \ac{SVFJC}, une opération est \acl{vfjcs} si et seulement si tous des observateurs requis sont des observateurs linéaires.
+\begin{align*}
+&\trm{isVFJCStable}_H(c) =\\
+&\qquad\trm{requiredObs}_H(c) \subseteq \trm{provablyLinearObs}_H(c)
+\end{align*}
+\end{definition}
+
+\begin{figure}[ht]
+  \centering
+  \begin{utikzhbgraph}
+    \uevent{a1}{0, 0}{$c^A_1$}
+    \uevent{b1}{2, 0}{$c^B_1$}
+    \uevent{m1}{4, 0}{$c^M_1$}
+    \uevent{a2}{6, 0}{$c^A_2$}
+    \uevent{m2}{1, -2}{$c^M_2$}
+    \uevent{b2}{3, -2}{$c^B_2$}
+    \uevent{a3}{7, -2}{$c^A_3$}
+    \uevent{b3}{9, -2}{$c^B_3$}
+    \uhb{a1}{b1}
+    \uhb{a1}{m2}
+    \uhb{b1}{b2}
+    \uhb{m2}{b2}
+    \uhb{b1}{m1}
+    \uhb{m1}{a2}
+    \uhb{a2}{a3}
+    \uhb{b2}{a3}
+    \uhb{a3}{b3}
+    \ulabelled{a1}{vfjcs}
+    \ulabelled{b1}{vfjcs}
+    \ulabelled{m2}{vfjcs}
+    \ulabelled{b2}{vfjcs}
+    \ulabelled{m1}{pcs}
+    \ulabelled{a2}{pcs}
+    \ulabelled{a3}{pcs}
+    \uparticipants{a1}{above right}{P_A,P_B,P_M}
+  \end{utikzhbgraph}
+  \caption{
+  Mallory ($P_M$) est mal-intentionnée.
+  Elle est une évincée connue dna sle journal qui inclut $c^A_3$ et ses dépendances.
+  Parce que $c^A_3$ est \acf{pcs}, alors Mallory n'est plus une observatrice requise.
+  $c^B_2$ précède $c^A_2$.
+  Ces deux opérations sont \ac{pcs}.
+  Par conséquent, Alice ($P_A$) et Bob ($P_B$) sont des observateurs linéaires de $c^B_2$ et des dépendances de $c^B_2$.
+  Toutes ces opérations ont seulement Alice et Bob en tant qu'obseravteurs requis.
+  Elles sont donc \acf{vfjcs}.}\label{fig:vfjcs-example}
+\end{figure}
+
+\vicnote{tarnsition~?}
+
+\section{Journaux tronqués}
+
+\vicnote{tarnsition~?}
+
+Dans cette section nous décrivons comment tronquer un journal et vérifier la cohérence d'un journal tronqué.
+Dans un premier temps, nous augmentons les opérations afin de permettre de faire des vérifications de cohérence de manière localisé dans le journal.
+Nous analysons ensuite qu'elles opérations peuvent être éliminé sans menacer la vérification de la cohérence du journal.
+
+Une stratégie pour tronquer le journal est de supprimer autant d'opérations que possible.
+Seulement les opérations qui sont nécessaires au maintien de la cohérence du journal doivent être conservées.
+Si un pair honnête reçoit ou génère une opération, elle doit être capable de vérifier si l'opération ne brise pas la cohérence du journal.
+
+Avant d'ajouter une opération à son journal, un pair honnête vérifie que les propriétés~\ref{itm:l4},~\ref{itm:l5} (implies~\ref{itm:l3}),~\ref{itm:l6},~\ref{itm:l7},~\ref{itm:l8} sont respectées.
+Cette vérification requiert le journal dans son intégralité ou un journal qui inclut l'opération et ses dépendances.
+Pour supprimer des opération du journal, nous devons donc rendre ces vérifications locales.
+
+Ces propriétés repose directement ou indirectement sur les fonctions $\trm{evicted}_H$ et $\trm{previouslyInvited}_H$.
+Nous proposons d'inclure leur résultat dans chaque opération.
+En pratique ces informations peuvent être efficacement stockés.
+$\trm{evicted}_h$ et $\trm{previouslyInvited}_h$ sont les versions de ces fonctions qui donnent les informations incluses dans les opérations augmentées.
+ces changements permettent de vérifier ces propriétés et la stabilité d'une opération dans un sous-ensemble du journal qui inclut l'opération ajoutée, ses dépendances directes, et toutes les branches concurrentes à au moins une dépendance directe.
+
+\vicnote{exemple~?}
+
+Dans la \autoref{subsec:vfjcs}, nous avons remarqué qu'un pair ne peut pas accepter de manière honnête une opération concurrente à une opération stable (\ac{vfjcs}).
+Nous pouvons donc supprimer toutes les opérations stables, à l'exception des opérations sur lesquelles peuvent dépendre une opération non stable.
+Dans la \autoref{fig:vfjcs-example}, $c^A_1$ et $c^M_2$ précédent des opérations stables.
+Elles sont donc supprimable du journal.
+
+\begin{definition}[\ac{SVFJC} pruned log]\label{def:svfjc-pruned-log}
+Un journal $h^i_t$  est un journal \ac{SVFJC}  tronqué si et seulement si~:
+\begin{description}
+  \item[\namedlabel{itm:p1}{P1} (stable base)]
+  Every contribution of the base of the pruned log is stable.
+  \begin{align*}
+  \forall\ c^k \in\ &\trm{base}(h) \qsep \trm{isVFJCStable}_h(c^k) \where\\
+  &\trm{base}(h) = \set{x \in h \ssep \exists y \in \trm{deps}(x) \land y \not\in h^j_t}
+  \end{align*}
+
+  \item[\namedlabel{itm:p2}{P2} (well-formed unstable contributions)]
+  Every unstable contribution is well-formed.
+  \begin{equation*}
+  \forall\ \neg\ \trm{isVFJCStable}_h(c^k) \qsep \trm{isWellFormed}(c^k)
+  \end{equation*}
+
+  \item[\namedlabel{itm:p3}{P3} (per-participant linear ordering)]
+  Similar to~\ref{itm:l1}
+  \begin{equation*}
+  \forall c^i_k \ \forall c^i_l \qsep c^i_k \to c^i_l \iff k < l
+  \end{equation*}
+
+  \item[\namedlabel{itm:p4}{P4} (proper generation)]
+  Adaptation of~\ref{itm:l2}
+  \begin{align*}
+    &\forall\ \neg\ \trm{isVFJCStable}_h(c^i)\ \exists t' \qsep\\
+    &\qquad h^i_{t'+1} \sminus h^i_{t'} = \set{c^i} \land \forall x \in \trm{latest}^i_{t'} \qsep x \idr c^i
+  \end{align*}
+
+  \item[\namedlabel{itm:p5}{P5} (appendable --- sharing with no provably malicious)]
+  Similar to~\ref{itm:l4}
+  \begin{equation*}
+  \forall c^k_l \qsep\ \nexists c^k_m \| c^k_l \land c^k_m \in \trm{latest}^i_t
+  \end{equation*}
+
+    \item[\namedlabel{itm:p6}{P6} (appendable --- sharing with known participants)] Adaptation of~\ref{itm:l8}
+  \begin{equation*}
+  \forall c^k, c^j \in \trm{latest}^i_t \qsep P_i, P_k \in \trm{participants}_h(c^j)
+  \end{equation*}
+\end{description}
+\end{definition}
+
+La~\refdef{wfc} liste toutes les vérifications de cohérence qui sont localement effectuées sur une opération.
+En se basant sur cette définition, la~\refdef{svfjc-pruned-log} définit la cohérence d'un journal tronqué.
+$\trm{deps}(c)$ fournit les identifiants des dépendances directes de $c$
+
+\begin{definition}[Well-formed contribution]\label{def:wfc}
+  Let a \ac{SVFJC} pruned log $h^i_t$ from a \ac{SVFJC} log $H^i_t$ with $\bot$ the bottom contribution. A well-formed contribution $c^k$ (we write $\trm{isWellformed}(c^k)$) respects the following properties:
+  \begin{description}
+    \item[\namedlabel{itm:w1}{W1} (bottom identity)]
+    The contribution is either the bottom element or an intermediate contribution. An intermediate contribution has at least one dependency.
+    \begin{equation*}
+    c^k = \bot \lor \trm{deps}(c^k) \neq \emptyset
+    \end{equation*}
+
+    \item[\namedlabel{itm:w2}{W2} (no transitive dependencies)]
+    The contribution exposes only its immediate dependencies.
+    \begin{equation*}
+    \forall x, y \in \trm{deps}(c^k) \qsep x \| y
+    \end{equation*}
+
+    \item[\namedlabel{itm:w3}{W3} (known evicted)]
+    Previously evicted participants, new evicted participants, and new provably malicious participants are the only known evicted participants of the contribution.
+    \begin{align*}
+    \trm{evicted}_h(c^k) = &\bigcup \set{\trm{evicted}_h(x) \ssep x \in \trm{deps}(c^k)}\\
+    &\cup \set{\trm{evictedIn}(c^k)}\\
+    &\cup \trm{provablyMalicious}(c^k)
+    \end{align*}
+
+    \item[\namedlabel{itm:w4}{W4} (sharing with no evicted participants)]
+    Authors of the contribution and of its immediate dependencies are not known as evicted in the contribution.
+    \begin{equation*}
+    \forall c^j \in \trm{deps}(c^k) \qsep P_j, P_k \not\in \trm{evicted}_h(c^k)
+    \end{equation*}
+
+    \item[\namedlabel{itm:w5}{W5} (Previously invited)]
+    Previously invited participants in $c^k$ correspond to previously invited participants and newly invited participants in all immediate dependencies of the contribution.
+    \begin{align*}
+    &\trm{previouslyInvited}_h(c^k) =\\
+    &\quad\bigcup \{\trm{previouslyInvited}_h(x) \cup \set{\trm{invitedIn}(x)} \ssep x \in \trm{deps}(c^k)\}
+    \end{align*}
+
+    \item[\namedlabel{itm:w6}{W6} (sharing with known participants)]
+    The author of $c^k$ is known as participant in all immediate dependencies. The author of every immediate dependency of $c^k$ is known as participant in all immediate dependencies of $c^k$.
+    \begin{equation*}
+    \forall c^j, c^l \in \trm{deps}(c^k) \qsep P_l, P_k \in \trm{participants}_h(c^j)
+    \end{equation*}
+
+    \item[\namedlabel{itm:w7}{W7} (evicting only existing participants)]
+    \begin{equation*}
+    \trm{evictedIn}(c^k) \in \bigcup \set{\trm{participants}_h(x) \ssep x \in \trm{deps}(c^k)}
+    \end{equation*}
+  \end{description}
+\end{definition}
+
+Un pair honnête est capable de tronquer son journal sans menacer sa cohérence ou sa disponibilité.
+Il peut recevoir une nouvelle opération et vérifier sa cohérence.
+Il peut aussi génèrer de nouvelles opérations qui ne brise pas la cohérence de son journal.
+Parce que nous avons définit la stabilité sans prendre en compte l'observation implicite de son possesseur, un nouveau pair ou un tiers à la collaboration peut vérifier la cohérence d'un journal tronqué.
+De nouveaux pairs peuvent donc rejoindre la collaboration, récupérer un journal tronqué et le vérifier.
+Parce que des opérations sont manquantes, ils ne peuvent pas vérifier que toutes les opérations sont bien-formées.
+Ils doivent faire confiance aux vérifications effectuées par d'autres pairs.
+Toute opération stable est considérée comme bien-formée.
+Si un nouveau pair récupère un journal tronqué, il n'est pas capable de reconstituer le contenu partagé.
+Pour y remédier, nous proposons de récupérer un journal tronqué et un instantané.
+Nous proposons d'authentifier l'instantané à l'aide du journal authentifié et tronqué.
+
+\section{Instantané authentifiée}
+
+Dans cette section nous proposons un mécanisme pour authentifier une instantané à l'aide d'un journal \ac{SVFJC} authentifié et tronqué.
+A cette fin, nous augmentons les \emph{invitations} avec un \emph{hash} cryptographique de l'état actuel.
+
+Quand une collaboration débute, un journal \ac{SVFJC} contient une seule opération.
+Cette opération $\bot$ est l'\emph{invitation} qui invite l'initiateur de la collaboration.
+Chaque fois qu'une opération est ajoutée dans le journal, elle est appliquée sur la copie du contenu partagé.
+Certaines opération, tel que les \emph{observations}, les \emph{invitations}, et les \emph{évictions}, ne modifient pas le contenu partagé.
+
+Nous disons qu'un état $S^i_t$ et un journal $H^i_t$ sont mutuellement cohérent si et seulement si l'exécution causale des opérations incluses dans $H^i_t$ sur un état vide $S_0$ donnes l'état $S^i_t$.
+Lorsque le journal inclut des opérations courantes, il existe plusieurs séquence d'exécutions causales.
+Étant donné que nous considérons une convergence forte, deux séquence d'exécution causale d'un même journal produit des états équivalents.
+$\trm{undo}(\trm{Contrib}, S)$ causalement annule un ensemble fini d'opérations $\trm{Contrib}$ sur un ensemble $S$.
+
+Sous~\ref{itm:l8}, les opérations les plus récentes d'un journal \ac{SVFJC} doivent inclure le possesseur du journal comme pair connu à participer.
+Un nouveau pair honnête accepte uniquement de recevoir un journal \ac{SVFJC}
+tronqué cohérent.
+Par conséquent, il doit être un pair connu à participer dans chacune des opération le splus récentes du journal tronqué.
+Aussi longtemps qu'un nouveau pair n'a pas contribué, l'invitation qui l'invite reste non-stable.
+Un journal tronqué cohérent inclut des opérations non-stables.
+L'opération qui invite le nouveau pair fait donc partie du journal tronqué.
+
+Un nouveau pair honnête observera à terme l'\emph{invitation} qui l'invite.
+Nous pouvons inclure dans cette \emph{invitation} les informations nécessaires pour authentifier l'instantané.
+Quand un pair invite un nouveau pair, il calcule le \emph{hash} cryptographique de l'état actuel de sa copie.
+Ce \emph{hash} est inclut dans l'\emph{invitation} qui génère.
+$\trm{fingerprint}(c)$ donnes le \emph{hash} inclut dans l'\emph{invitation} $c$.
+
+Pour vérifier  si le \emph{hash} d'une \emph{invitation} $c$ est correcte, un pair doit recréer l'état observé au moment de la génération de $c$.
+Le pair duplique l'état actuel de sa copie et annule toutes les opérations de modifications concurrentes à $c$ et qui succèdent $c$ sur la réplique temporaire.
+Il calcule le \emph{hash} de la réplique temporaire et le compare au \emph{hash} inclut dans l'\emph{invitation}.
+Si ils sont identiques, alors le \emph{hash} inclus dans l'\emph{invitation} est correct.
+$\trm{computedFingerprint}(S)$ est la fonction qui calcule le \emph{hash} sur l'état $S$.
+
+\begin{definition}[Opération bien-formée et \emph{hash}]\label{def:wfc-f}
+Soit un journal \ac{SVFJC} $H^i_t$ et un état $S^i_t$.
+$H^i_t$ et $S^i_t$ sont mutuellement cohérents.
+Soit un journal \ac{SVFJC} tronqué $h^i_t$ de $H^i_t$.
+Une opération bien-formée $c^k \in h^i_t$ respecte~:
+\begin{description}
+    \item[\namedlabel{itm:w8}{W8} (correct fingerprint)]
+    If the contribution is an invitation, then the embedded fingerprint matches the computed fingerprint on the state observed by the contribution.
+    \begin{align*}
+    &c^k \textit{is an invitation} \implies\\
+    &\qquad\trm{fingerprint}(c^k) = \trm{computedFingerprint}(\trm{S})\\
+    &\where\trm{S} = \trm{undo}(\set{x \in h^i_t \ssep x \| c^k \lor c^k \to x}, S^i_t)
+    \end{align*}
+\end{description}
+\end{definition}
+
+Le nouveaux pairs récupèrent un journal tronqué et un instantané à partir d'un pair qui fait déjà partie la collaboration.
+En vérifiant la cohérence du journal tronqué, ils vérifient également la cohérence mutuelle du journal et de l'instantané.
+Par conséquent, si le journal \ac{SVFJC} tronqué est cohérent et authentique, alors l'instantané est cohérente et authentique.
+
+Un pair mal-intentionné peut falsifier une instantané et inclure le \emph{hash} de cet instantané falsifié dans l'\emph{invitation} d'un nouveau pair.
+Si le journal tronqué n'inclut pas une autre \emph{invitation} effectuée par un pair honnête, alors le nouveau pair n'est pas capable de détecter la falsification de l'instantané.
+L'application peut utiliser des règles de cohérence supplémentaire pour mitiger cette attaque.

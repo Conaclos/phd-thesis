@@ -1,0 +1,27 @@
+\chapter{Notations mathématiques}
+\label{ch:math-notations}
+
+\minitoc
+\bigskip
+
+Ce chapitre groupe l'ensemble des notations mathématiques utilisées dans ce manuscrit.
+
+\section{Notations}
+
+$f: I \to O$ représente une fonction totale dont le domaine de définition de $f$ est $\trm{dom}(f) = I$.
+$m: K \pto V$ représente une fonction partielle ou une fonction totale où $\trm{dom}(m) \subseteq K$.
+Il peut également représenter un dictionnaire qui associe des clefs d'un ensemble $K$ à des valeurs d'un ensemble $V$.
+Une fonction $m$ peut être représentée comme un ensemble de couples ordonnés $\set*{\tuple*{k, m(k)} \given k \in \trm{dom}(m)}$.
+Deux fonctions représentées par les mêmes ensembles sont égales.
+Nous utilisons des types dépendants pour rendre totale la majorité des fonctions partielles que nous pouvons rencontrer.
+Par exemple, la fonction qui soustrait un entier naturel $b$ à un entier naturel $a$, et qui donne un entier naturel est une fonction partielle.
+En effet la fonction n'est pas définit lorsque $b$ est strictement supérieur à $a$.
+cette fonction partielle $sub: \mathbb{N}_0 \times \mathbb{N}_0 \pto \mathbb{N}_0$ peut être exprimer comme une fonction totale en utilisant des types dépendants~: $sub: \set*{a \in \mathbb{N}}_0 \times \set*{b \in \mathbb{N}_0 \given b \leq a} \to \mathbb{N}_0$.
+
+$\powerfset{E}$ représente l'ensemble des sous-ensembles finis de $E$, i.e. $\set*{X \subseteq E \given X\ \textit{is finite}}$.
+$\card{E}$ représente la cardinalité de l'ensemble $E$.
+Nous utilisons la notation $\forall T : \trm{Toy} \qsep \tuple*{T, \trm{play}}$ pour exprimer le fait que tout ensemble $T$, qui appartient à la famille d'ensembles $\trm{Toy}$, est équipé d'une fonction $\trm{play}$.
+Afin de lever de potentiels ambiguïtés, nous pouvons indexer de telles fonctions avec l'ensemble correspondant ($\trm{play}_U$ for $U : \trm{Toy}$).
+Pour éviter toute ambiguïté, nous notons $\mathbb{N}_0$ l'ensemble des entiers naturels qui inclut $0$, et $\mathbb{N}^*$ l'ensemble des entiers naturels qui n'inclut pas $0$.
+
+

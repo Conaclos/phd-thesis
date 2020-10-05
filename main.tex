@@ -1,0 +1,63 @@
+\documentclass[12pt]{thesul}
+
+\input{0-preambule/acronyms.tex}
+\input{0-preambule/biblio.tex}
+\input{0-preambule/comments.tex}
+%\input{0-preambule/debug.tex}
+\input{0-preambule/figure.tex}
+\input{0-preambule/hyperref.tex}
+\input{0-preambule/math.tex}
+\input{0-preambule/other.tex}
+\input{0-preambule/tikz.tex}
+\input{0-preambule/typo.tex}
+
+% TIP: You should also remove 'draft' from the class
+%\ThesisDraft
+
+
+% Which chapter to include?
+\includeonly{
+1-intro,
+2-problematic,
+3-background,
+5-auth-log,
+6-delta-seq-crdt,
+7-conclusion%,
+%8-math-notations
+}
+
+%\tikzexternalize
+
+\begin{document}
+\ThesisTitle{Réplication sécurisée dans les infrastructures pair-à-pair de collaboration}
+\ThesisDate{jour J}
+\ThesisAuthor{Victorien Elvinger}
+\ThesisUL
+\ThesisDomain{mention informatique}
+\AddLab{}
+\President = {Jean-Luc Picard}
+\Rapporteurs = {}
+\Examinateurs = {}
+\MakeThesisTitlePage
+
+\WriteChapterLabelInToc
+\dominitoc % minitoc init
+
+\tableofcontents
+
+%\listoffigures
+%\listoftables
+
+\mainmatter
+\include{1-intro}
+\include{2-problematic}
+\include{3-background}
+\include{5-auth-log}
+\include{6-delta-seq-crdt}
+\include{7-conclusion}
+
+\printbibliography
+
+%\appendix
+%\include{8-math-notations}
+\end{document}
