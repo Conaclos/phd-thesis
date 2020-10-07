@@ -1601,9 +1601,9 @@ Un pair honnête est un observateur requis d'une opération $x$ si et seulement 
 
 \begin{table}[htb]
     \centering
-    \begin{tabular}{c|c|c}
+    \begin{tabular}{ccc}
         opération & $\trm{rqHonestObs}$ & $\trm{obs}$ \\
-        \hline
+        \toprule
         $a_1$ & $\emptyset$ & $\set*{p_A, p_B, p_C}$ \\
         $a_2$ & $\set*{p_A}$ & $\set*{p_A, p_B, p_C}$ \\
         $a_3$ & $\set*{p_A, p_B, p_C}$ & $\set*{p_A}$ \\
@@ -2762,7 +2762,7 @@ Il s'assure donc qu'il ne peut y avoir de messages dont l'auteur est reconnu mal
 
 Lorsqu'un pair vérifie qu'un message est bien-formé, il vérifie notamment que ce message ne déclare pas une dépendance dont l'auteur est reconnu mal-intentionné dans le sous-journal qu'il couvre.
 Il vérifie également que l'auteur du message n'est pas reconnu mal-intentionné dans le sous-journal couvert par le message.
-...
+\ldots
 
 L'exécution abstraite associée respecte la propriété d'opération d'invitation étant donné que le type de données répliquées inclut cette opération.
 
@@ -3063,7 +3063,7 @@ Nous nous intéressons donc à la stabilité convergente qui a été définit da
 
 Déterminer avec précision la stabilité d'un message tout en passant à l'échelle est un défi difficile.
 Pour déterminer si un message $m$ est stable, le pair doit vérifier que pour chaque permutations des pairs de la collaboration il existe un chemin dans le journal qui prend source en $m$ et qui respecte un certain prédicat.
-Étant donné que le nombre de permutations est $N!$ avec $N$ le nombre de pairs, la complexité de cette vérification est exponentielle.
+Étant donné que le nombre de permutations est $N!$ avec $N$ le nombre de pairs, la complexité de cette vérification est exponentielle. % chktex 40 % for factorial
 
 C'est pourquoi, nous proposons un mécanisme qui détermine comme convergent-stable un sous-ensemble des messages qui le sont.
 Cette approche nous permet également d'introduire des implications pour rendre le mécanisme plus compréhensible.

@@ -281,13 +281,13 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
 \par\medskip
 \begin{subfigure}{\linewidth}
     \centering
-    \begin{tabular}{c|c|c|c}
-        $\trm{rval}(b_3)$ & Spéc. faible & Spéc. forte & Spéc. forte sans entrelacement\\
-        \hline
-        $\textit{ladies\textit{\negthinspace!}}$ & \checkmark & \checkmark & \checkmark \\
-        $\textit{ladi\textit{\negthinspace!}es}$ & \checkmark & \checkmark & \checkmark \\
-        $\textit{ladie\textit{\negthinspace!}s}$ & \checkmark & \checkmark & \\
-        $\textit{lad\textit{\negthinspace!}ies}$ & \checkmark& & \\
+    \begin{tabular}{cccc}
+        $\trm{rval}(b_3)$ & Spéc.\ faible & Spéc.\ forte & Spéc.\ forte sans entrelacement\\
+        \toprule
+        $\textit{ladies\textit{\negthinspace!}}$ & \checkmark{} & \checkmark{} & \checkmark{} \\
+        $\textit{ladi\textit{\negthinspace!}es}$ & \checkmark{} & \checkmark{} & \checkmark{} \\
+        $\textit{ladie\textit{\negthinspace!}s}$ & \checkmark{} & \checkmark{} & \\
+        $\textit{lad\textit{\negthinspace!}ies}$ & \checkmark{}& & \\
     \end{tabular}
     \caption{}\label{fig:replseq-sematic-4}
 \end{subfigure}
@@ -744,16 +744,16 @@ Pour illustrer cette algorithme, nous reprenons l'exemple de la \autoref{fig:rep
 Une fois l'ensemble des insertions intégrées, La séquence \emph{Logoot} de la \autoref{fig:logoot-1} est obtenue.
 Dans cette représentation un couple $\tuple*{2, p_A}$ est représenté par $b_A$ où $b$ est la deuxième lettre de l'alphabet latin.
 Pour simplifier nous considérons donc que les entiers des couples sont compris entre $1$ et $26$.
-Par exemple, la position $l_Aq_A5$ a une liste de deux couples et un nombre séquentiel égal à $5$.
+Par exemple, la position $l_A q_A5$ a une liste de deux couples et un nombre séquentiel égal à $5$.
 $p_A$ insère le caractère $textsf{'\textit{i}'}$ entre les caractères $textsf{'\textit{d}'}$ et $textsf{'\textit{y}'}$.
 Il doit donc générer une position entre les positions $l_{A3}$ et $m_{A4}$.
 $l$ et $m$ sont contiguës.
 Le couple $l_A$ est donc copié.
 Le couple $q_A$ est généré.
-Nous obtenons donc la liste $l_Aq_A$ auquel est adjoint la valeur actuel du nombre séquentiel de $p_A$.
+Nous obtenons donc la liste $l_A q_A$ auquel est adjoint la valeur actuel du nombre séquentiel de $p_A$.
 Puisqu'il s'agit de la cinquième insertion de $p_A$, son nombre séquentiel est égal à $5$.
-Le caractère insérée est donc associé à la position $l_Aq_{A5}$.
-On constate un ordre total entre les positions des valeurs insérées~: $f_A1 < h_A2 < l_A3 < l_Aq_A5 < m_A4 < p_A6 < r_A7 < t_B1$.
+Le caractère insérée est donc associé à la position $l_A q_{A5}$.
+On constate un ordre total entre les positions des valeurs insérées~: $f_A1 < h_A2 < l_A3 < l_A q_A5 < m_A4 < p_A6 < r_A7 < t_B1$.
 
 L'intégration d'un message d'insertion d'une valeur $v$ de position $p$ se déroule simplement par le placement de $v$ de telle manière à ce que les positions des valeurs qui précèdent $v$ dans la séquence soient inférieurs à $p$ et les positions des valeurs qui succèdent $v$ soient supérieurs à $p$.
 
@@ -1146,7 +1146,7 @@ Remarquons que les nombres prioritaires sont des entiers naturels strictement in
 $u$ est supérieur ou égal à $2$.
 
 \begin{equation*}\begin{split}
-&\trm{LogootPos}_{u\;\in\;\mathbb{N}^{> 1}} \defeq ((\mathbb{N}_0^{< u} \times \mathbb{I})^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I})) \times \mathbb{N}^*\\
+&\trm{LogootPos}_{u\;\in\;\mathbb{N}^{> 1}} \defeq ({(\mathbb{N}_0^{< u} \times \mathbb{I})}^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I})) \times \mathbb{N}^*\\
 &\trm{id}(\tuple*{\set*{\tuple*{\_, i_k}}_{k=0}^m, \trm{n}}) \defeq \tuple*{i_m, n}
 \end{split}\end{equation*}
 
@@ -1165,7 +1165,7 @@ Si une valeur est insérée entre ces deux valeurs, le \emph{dot} de la valeur �
 Par exemple la valeur associée à la position $\tuple{\tuple*{0, 1, 0, A_1},A_2}$ se situe entre les deux valeurs précédentes.
 
 \begin{equation*}\begin{split}
-&\trm{TreedocPos} \defeq ((\mathbb{I} \times \mathbb{N}^*)^{m \in \set*{0, 1}} \times \set*{0, 1})^{n \in \mathbb{N}_0} \times (\mathbb{I} \times \mathbb{N}^*)\\
+&\trm{TreedocPos} \defeq {({(\mathbb{I} \times \mathbb{N}^*)}^{m \in \set*{0, 1}} \times \set*{0, 1})}^{n \in \mathbb{N}_0} \times (\mathbb{I} \times \mathbb{N}^*)\\
 &\trm{id}(\tuple*{\_, \tuple*{i, n}}) \defeq \tuple*{i, n}
 \end{split}\end{equation*}
 
@@ -1204,7 +1204,7 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
 \end{aligned}\\
 %
 &\begin{aligned}
-\MoveEqLeft \trm{eval}(\tuple*{m, x}, \trm{rd}) \defeq \set*{v_k}_{k=0}^{k=\card*{m} - 1}\\
+\MoveEqLeft \trm{eval}_i(\tuple*{m, x}, \trm{rd}) \defeq \set*{v_k}_{k=0}^{k=\card*{m} - 1}\\
 & \where \tuple*{p_k, v_k} \in m\\
 & \where p_k \defeq \trm{nthPos}(m, k)
 \end{aligned}\\
@@ -1328,7 +1328,7 @@ Quand une valeur est insérée entre deux valeurs d'un même bloc, le bloc est d
 La position générée inclut l'ensemble des n-uplets de la position qui la précède, auquel est joint un nouveau n-uplet.
 
 \begin{align*}
-&\trm{LogootSplitPos}_u \defeq (\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}_0 \times \mathbb{Z})^{n \in \mathbb{N}^*} \times \mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^* \times \mathbb{Z}\\
+&\trm{LogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}_0 \times \mathbb{Z})}^{n \in \mathbb{N}^*} \times \mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^* \times \mathbb{Z}\\
 &\trm{id}(\set*{\tuple*{\_, i_k, n_k, z_k}}_{k=0}^m) \defeq \tuple*{i_m, \tuple*{n_m, z_m}}\\
 &\begin{aligned}
     \MoveEqLeft \trm{agg}(\set*{\tuple*{x_k, i_k, n_k, z_k}}_{k=0}^m) \defeq \set*{a_h}_{h=0}^m\\
@@ -1399,7 +1399,7 @@ Ces deux derniers ajouts permettent d'insérer les valeurs présentes uniquement
 \end{aligned}\\
 %
 &\begin{aligned}
-\MoveEqLeft \trm{eval}(\tuple*{m, c}, \trm{rd}) \defeq \set*{v_k}_{k=0}^{k=\card*{m} - 1}\\
+\MoveEqLeft \trm{eval}_i(\tuple*{m, c}, \trm{rd}) \defeq \set*{v_k}_{k=0}^{k=\card*{m} - 1}\\
 & \where \tuple*{p_k, v_k} \in m\\
 & \where p_k \defeq \trm{nthPos}(m, k)
 \end{aligned}\\
@@ -1469,7 +1469,7 @@ Deux positions sont agréables, si et seulement si \begin{inlinelist}\item elles
 Le nombre séquentiel joue à la fois le rôle t'identifiant local et d'indice de bloc.
 
 \begin{align*}
-&\trm{DottedLogootSplitPos}_u \defeq (\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}^*)^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^*)\\
+&\trm{DottedLogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}^*)}^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^*)\\
 &\begin{aligned}
     \MoveEqLeft \trm{agg}(\set*{\tuple*{x_k, i_k, n_k}}_{k=0}^m) \defeq \set*{a_h}_{h=0}^m\\
     &\where a_h = \begin{dcases}
