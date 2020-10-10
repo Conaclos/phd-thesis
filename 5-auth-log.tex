@@ -8,7 +8,7 @@
 La réplication optimiste d'un contenu et la modification concurrente de ce contenu conduit à la divergence des copies du contenu.
 Les protocoles de réplication optimiste s'assurent que à terme les copies convergent.
 La convergence des copies des pairs est une propriété essentielle d'un système collaboratif.
-Si deux copies ne sont pas capable de converger, la vue du contenu peut diverger entre deux pairs.
+Si deux copies ne sont pas capables de converger, la vue du contenu peut diverger entre deux pairs.
 Les pairs ne disposent pas du même contexte pour collaborer.
 Ce qui peut conduire à des incompréhensions, voire à l'échec de la collaboration.
 
@@ -19,13 +19,13 @@ Pour atteindre ses objectifs, l'adversaire contrôle le réseau et un ensemble d
 Les pairs qui ne sont pas sous le contrôle de l'adversaire sont qualifiés d'\emph{honnêtes}.
 
 La présence de pairs mal-intentionnés représente un défi.
-Ils peuvent exposer des comportements mal-intentionnés difficile à détecter et déjouer.
+Ils peuvent exposer des comportements mal-intentionnés difficiles à détecter et déjouer.
 Ils peuvent en particulier produire des \emph{équivoques}.
 Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identique par le protocole de réplication.
 Les copies des pairs honnêtes divergent donc de manière permanente sans qu'ils s'en rendent compte.
 
 Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications qui ont été faites sur le contenu, les pairs peuvent maintenir des journaux authentifiés.
-Un journal contient l'ensemble des modifications qu'un pair a intégré à sa copie.
+Un journal contient l'ensemble des modifications qu'un pair a intégrées à sa copie.
 La préservation de la totalité d'un journal authentifié implique un coût de stockage important.
 Ce coût est particulièrement notable lorsqu'un pair rejoint la collaboration et qu'il a besoin de l'ensemble du journal pour débuter à contribuer.
 L'utilisation de journaux complets passent donc difficilement à l'échelle.
@@ -156,10 +156,10 @@ Un journal enregistre l'ensemble des modifications qui ont été jouées sur un 
 Le document correspond à la somme des modifications effectuées.
 Un document est donc souvent plus petit que le journal qui lui est attaché.
 Certaines applications prennent avantage de cette observation.
-Au lieu de transmettre un journal à un nouveau pair, elles transmettent une instantané du document.
+Au lieu de transmettre un journal à un nouveau pair, elles transmettent un instantané du document.
 
 Notre contexte ne nous permet pas d'adopter cette approche.
-En effet, un pair mal-intentionné peut facilement falsifier une instantané du document avant de la transmettre à un nouveau pair.
+En effet, un pair mal-intentionné peut facilement falsifier un instantané du document avant de la transmettre à un nouveau pair.
 Ce dernier n'a aucun moyen de vérifier l'authenticité de l'instantané.
 
 Nous proposons une approche qui permet de tronquer le journal authentifié et d'authentifier un instantané à partir du journal tronqué qui lui est associé.
@@ -219,12 +219,12 @@ La~\autoref{fig:invite-by-snaplog} illustre cette approche.
     \end{tikzpicture}
     \caption{}\label{fig:invite-by-snaplog-2}
 \end{subfigure}
-\caption[Transmission d'un journal tronqué et d'une instantané à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
+\caption[Transmission d'un journal tronqué et d'un instantané à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
 Ils utilisent un journal authentifié pour assurer la convergence des copies des pairs honnêtes.
 Carol veut rejoindre la collaboration.
-\subref{fig:invite-by-log-1} Alice envoie une instantané de l'état actuel du dessin, ainsi qu'une version tronqué de son journal authentifié.
+\subref{fig:invite-by-log-1} Alice envoie un instantané de l'état actuel du dessin, ainsi qu'une version tronquée de son journal authentifié.
 \subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal tronqué.
-Elle vérifié également l'authenticité de l'instantané à partir du journal tronqué.}\label{fig:invite-by-snaplog}
+Elle vérifie également l'authenticité de l'instantané à partir du journal tronqué.}\label{fig:invite-by-snaplog}
 \end{figure}
 
 Un journal ne peut pas être tronqué de manière arbitraire.
@@ -470,9 +470,9 @@ Dans un journal, une opération stable est une opération qui est une dépendanc
 Puisque l'acceptation d'une opération est conditionnée par le modèle de cohérence utilisé, la stabilité l'est également.
 Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
 Au lieu de définir la stabilité d'une opération sur un journal, nous définissons la stabilité sur une exécution abstraite.
-Un exécution abstraite est suffisamment général pour représenter une exécution abstraite globale ou un journal.
+Une exécution abstraite est suffisamment général pour représenter une exécution abstraite globale ou un journal.
 Lorsqu'une exécution abstraite représente un journal, nous parlons d'exécution abstraite associé au journal.
-Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir l'exécution abstraite associée d'un journal.L
+Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir l'exécution abstraite associée d'un journal.
 De ce fait, nos contributions peuvent être utilisées dans des contextes variés, au-delà du périmètre dans lequel nous les employons.
 Pour simplifier la compréhension nous utilisons dans les exemples des exécutions abstraites qui ne sont pas forcément associées à des journaux.
 
@@ -504,7 +504,7 @@ Soit deux modèles de cohérence $C$ et $C'$ tel que $C$ est plus fort que $C'$.
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence $C$.
 Elle respecte donc également le modèle de cohérence $C'$.
 Supposons qu'il existe une opération $x$ de $A$ qui est $C'$-stable et n'est pas $C$-stable.
-Puisque $x$ n'est pas $C$-stable, il existe donc un opération $y$ d'une extension $A'$ de $A$ tel que $A'$ respecte $C$, $y$ est absente de $A$, et $x$ n'est pas visible à $y$.
+Puisque $x$ n'est pas $C$-stable, il existe donc une opération $y$ d'une extension $A'$ de $A$ tel que $A'$ respecte $C$, $y$ est absente de $A$, et $x$ n'est pas visible à $y$.
 $A'$ respecte également $C'$.
 $x$ n'est donc pas $C'$-stable.
 Ce qui contredit l'hypothèse initiale.
@@ -627,7 +627,7 @@ Pour qu'une opération soit causalement stable, il suffit donc que chaque pair o
 \caption{}\label{fig:cs-example-2}
 \end{subfigure}
 \caption[Stabilité causale]{Un ensemble de trois pairs $\trm{Peers} = \set{p_A, p_B, p_C}$ modifie un contenu répliqué.
-Dans l'exécution abstraite \subref{fig:cs-example-1}, l'opération $a_1$ est observée par son auteur $p_A$, par $p_B$ parce-que $a_1$ est visible à $b_1$, et par $p_C$ parce-que $a_1$ est visible à $c_2$.
+Dans l'exécution abstraite \subref{fig:cs-example-1}, l'opération $a_1$ est observée par son auteur $p_A$, par $p_B$ parce que $a_1$ est visible à $b_1$, et par $p_C$ parce que $a_1$ est visible à $c_2$.
 $\trm{obs}(a_1) = \set{p_A, p_B, p_C}$.
 $a_1$ est visible à toute opération future de $p_A$.
 $b_1$ et $c_2$ sont respectivement visible à toute opération future de $p_B$ et $p_C$.
@@ -762,7 +762,7 @@ Dans l'exécution abstraite $A_1$ de la \autoref{fig:vfjc-malicious-obs}, si nou
 De même si nous considérons la chaîne $m_1 \viseq m_1 \viseq a_2$, nous pouvons en conclure qu'il ne peut y avoir une extension de $A_1$ dans laquelle il existe une opération $a_3$ qui succède $a_2$ et succède immédiatement une opération $m_2$ concurrente à $m_1$.
 
 Une opération $x$ devient stable lorsqu'il n'est plus possible d'exécuter une opération qui lui est concurrente.
-En présence d'un seul pair mal-intentionné $p_M$, nous déduisons qu'une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations concurrente à $x$ de $p_M$.
+En présence d'un seul pair mal-intentionné $p_M$, nous déduisons qu'une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations concurrentes à $x$ de $p_M$.
 Suivant les observations précédentes, il suffit donc que chaque pair honnête observe au moins une opération de $p_M$ qui succède (ou est égale à) $x$ pour rejeter toute opération concurrente à $x$ de $p_M$.
 Dans la \autoref{fig:vfjcs-one-malicious-1}, les pairs honnêtes $p_A$ et $p_B$ observent l'opération $m_1$ de $p_M$ qui succède ou est égale à $a_1$ et $m_1$.
 $a_1$ et $m_1$ sont donc vfjc-stables.
@@ -915,7 +915,7 @@ Donc $x$ précède $y_1$.
 Ce qui contredit une hypothèse initiale.
 \end{proof}
 
-Il suffit donc que chaque pair honnête observe pour chaque permutation de pairs mal-intentionnés, une chaîne de visibilité correspondante pour que les opération qui précèdent (ou sont égales) à toutes ces chaînes soient vfjc-stable.
+Il suffit donc que chaque pair honnête observe pour chaque permutation de pairs mal-intentionnés, une chaîne de visibilité correspondante pour que les opérations qui précèdent (ou sont égales) à toutes ces chaînes soient vfjc-stable.
 Dans la \autoref{fig:vfjcs-two-malicious}, il existe une chaîne de visibilité correspondante qui succède ou est égale à $m_1$ pour chaque permutation de l'ensemble des pairs mal-intentionnées~: $m_1 \vis g_1$ pour la permutation $\tuple*{p_M, p_G}$, et $g_1 \vis m_2$ pour la permutation $\tuple*{p_G, p_M}$.
 Ces deux chaînes sont observées par le seul pair honnête $p_A$.
 $a_1$ et $m_1$ sont des opérations vfjc-stables.
@@ -956,7 +956,7 @@ $a_1$ et $m_1$ sont des opérations vfjc-stables.
 \caption[Stabilité \acl{VFJC} en présence de deux pairs mal-intentionnés]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence de deux pairs mal-intentionnés $p_M$ et $p_G$ et d'un pair honnête $p_A$.}\label{fig:vfjcs-two-malicious}
 \end{figure}
 
-Le modèle de cohérence \acl{VFJC} ne se contente pas de rejeter l'acceptation direct des opérations non-linéaires.
+Le modèle de cohérence \acl{VFJC} ne se contente pas de rejeter l'acceptation directe des opérations non-linéaires.
 Il borne le nombre d'embranchements acceptés par les pairs honnêtes.
 Pour ce faire, les pairs rejettent à terme les opérations des pairs reconnus mal-intentionnés.
 les pairs reconnus mal-intentionnés sont donc à terme évincés définitivement de la collaboration.
@@ -969,7 +969,7 @@ Le pair qui est reconnu mal-intentionné ne peut pas exécuter une opération qu
 
 Nous devons également prendre en compte ces contraintes dans la définition de la stabilité.
 Pour toute énumération de pairs mal-intentionnés distincts $\tuple*{p_1, \dotsc ,p_{n-1}}$, si il existe une chaîne de visibilité $x \viseq x_1 \viseq \dotsb \viseq x_{n-1}$ tel que le i-ème pair de l'énumération est soit l'auteur de la i-ème opération de la chaîne ou un pair reconnu mal-intentionné dans la i-ème opération de la chaîne, alors un pair honnête qui observe $x_{n-1}$ (et donc par extension qui observe la chaîne) ne peut pas accepter directement une chaîne de visibilité immédiate $y_1 \idr \dotsc \idr y_{n-1}$ dont le i-ème pair de l'énumération est l'auteur de la i-ème opération de cette chaîne immédiate avec $y_1$ concurrente à $x$.
-Dans la \autoref{fig:vfjcs-evicted-peer}, $p_A$ reconnaît $p_M$ comme mal-inetionné en $a_3$.
+Dans la \autoref{fig:vfjcs-evicted-peer}, $p_A$ reconnaît $p_M$ comme mal-intentionné en $a_3$.
 Pour la permutation $\tuple*{p_M, p_G}$, il existe la chaîne de visibilité $m_1 \vis g_1$.
 Pour la permutation $\tuple*{p_G, p_M}$, il existe la chaîne de visibilité $g_1 \vis a_3$ où $p_M$ est reconnu mal-intentionné en $a_3$.
 $a_1$ et $m_1$ sont donc des opérations vfjc-stables.
@@ -1033,7 +1033,7 @@ $x_{i-1}$ précède donc $y_i$.
 Pour que la relation de précédence immédiate entre $y_{i-1}$ et $y_i$ soit autorisée, l'auteur de $y_{i-1}$ ne doit pas être reconnu mal-intentionné en $y_i$.
 Si $p_{i-1}$ n'est pas l'auteur de $x_{i-1}$, alors il est, selon une hypothèse initiale, reconnu mal-intentionné en $p_{i-1}$.
 Par transitivité il l'est également en $y_i$.
-Il n'existe donc pas de telle chaîne dans ce cas là.
+Il n'existe donc pas de telle chaîne dans ce cas-là.
 Si $p_{i-1}$ est l'auteur de $x_{i-1}$, alors il ne doit pas être reconnu mal-intentionné en $y_i$.
 Par conséquent, $x_{i-1}$ doit précéder $y_{i-1}$.
 Récursivement, nous concluons que $x_1$ précède $y_1$.
@@ -1096,7 +1096,7 @@ Ce qui contredit une hypothèse initiale.
 
 
 \begin{theorem}[Stabilité~\acs{VFJC}]\label{th:vfjc-stable}
-Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$, une opération $x$ est vfjc-stable si et seulement si les pairs honnêtes observent $x$ et pour chaque énumération de $n$ pairs issues du produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes, il existe une chaîne de visibilité de $n$ opérations tel que la première opération succède ou est égale à $x$ et le i-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou un pair reconnu mal-intentionné dans la i-ème opération de la chaîne.
+Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$, une opération $x$ est vfjc-stable si et seulement si les pairs honnêtes observent $x$ et pour chaque énumération de $n$ pairs issus du produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes, il existe une chaîne de visibilité de $n$ opérations tel que la première opération succède ou est égale à $x$ et le i-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou un pair reconnu mal-intentionné dans la i-ème opération de la chaîne.
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{stable}_A^{\trm{VFJC}}(x_0) \iff \\
     &\trm{Honest} \subseteq \trm{obs}_A(x_0) \:\land \\
@@ -1651,11 +1651,11 @@ Le modèle de cohérence causale dynamique est donc stabilisable.
 
 Pour être réaliste nous devrions également prendre en compte les pairs qui quittent une collaboration.
 Par simplicité nous ne les prenons pas un compte.
-Nous remarquons toutefois qu'un tel mécanisme pourrait être implémenter avec un mécanisme qui ressemble à l'éviction de pairs mal-intentionnés.
+Nous remarquons toutefois qu'un tel mécanisme pourrait être implémenté avec un mécanisme qui ressemble à l'éviction de pairs mal-intentionnés.
 
 Le modèle de cohérence causale dynamique permet à des opérations de devenir stable dans un contexte où le groupe de pairs évolue au cours de la collaboration.
 Similairement au modèle de cohérence causale, il ne tolère pas la présence de pairs mal-intentionnés.
-Dans la section suivante nous tentons de définir un nouveau podèle de cohérence basé sur les modèles de cohérence \acs{VFJC} et \emph{Invitation} pour définir une stabilité adaptée aux groupes dynamiques.
+Dans la section suivante nous tentons de définir un nouveau modèle de cohérence basé sur les modèles de cohérence \acs{VFJC} et \emph{Invitation} pour définir une stabilité adaptée aux groupes dynamiques.
 
 
 \subsection{Stabilité~\acl{VFJC} Dynamique}\label{subsec:dvfjcs}
@@ -1670,10 +1670,10 @@ Le modèle de cohérence causale dynamique nous a permis de remédier à ce prob
 Il exige qu'un pair soit invité avant qu'il puisse exécuter des opérations.
 Toutes ses opérations succèdent à son invitation.
 Il est ainsi possible de définir une stabilité adaptée à des groupes dynamiques.
-Existe t-il un modèle de cohérence basé sur le modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permettent de définir une stabilité adaptée aux groupes dynamiques~?
+Existe-t-il un modèle de cohérence basé sur le modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permettent de définir une stabilité adaptée aux groupes dynamiques~?
 
 La conjonction des modèles de cohérence \acs{VFJC} et \emph{Invitation} ne permet pas d'aboutir à une telle définition.
-En effet, si nous considérons un ensemble de pairs composé d'au moins un pair mal-intentionné, et d'un nombre de pairs honnêtes dénombrable infini, le pair mal-intentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
+En effet, si nous considérons un ensemble de pairs composé d'au moins un pair mal-intentionné, et d'un esnembel dénombrable infini de pairs honnêtes, le pair mal-intentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
 Toute opération $x$ ne peut donc pas devenir stable sans le concourt de l'ensemble des pairs.
 Dans la \autoref{fig:vfjc-invitation-issue}, le pair mal-intentionné $p_M$ invite un pair $p_G$ dans un embranchement dont il est à l'origine.
 $p_A$ reconnaît que $p_M$ est mal-intentionné mais il est forcé d'accepter l'opération linéaire $g_1$.
@@ -1727,7 +1727,7 @@ $p_A$ reconnaît que $p_M$ est mal-intentionné mais il est forcé d'accepter l'
 
 Pour pouvoir définir une stabilité adaptée à des groupes dynamiques, il nous faut rejeter ce type d'embranchements.
 Dans la \autoref{fig:vfjc-invitation-issue}, $p_A$ devrait rejeter l'embranchement $m_2 \idr g_1$.
-Quelque soit le nombre d'invitations effectuées dans l'embranchement, il existe toujours une première invitation effectuée par le pair à l'origine de l'embranchement.
+Quel que soit le nombre d'invitations effectuées dans l'embranchement, il existe toujours une première invitation effectuée par le pair à l'origine de l'embranchement.
 Cette première invitation est une opération non-linéaire.
 Dans la \autoref{fig:vfjc-invitation-issue}, il s'agit de l'opération d'invitation $m_2$.
 Une manière simple de rejeter de tels embranchements est donc de contraindre les pairs à d'abord accepter cette première invitation.
@@ -1741,7 +1741,7 @@ Contraindre chaque pair à observer l'invitation avant d'observer les opération
 Elle rejette des exécutions abstraites qui pourraient être stabilisées.
 En réalité, nous n'avons pas besoin que chaque pair observe l'invitation il suffit d'un seul pair qui n'est pas reconnu mal-intentionné.
 Lorsqu'un pair joint deux branches, il s'assure ainsi que pour chaque opération qui précède la jonction, l'invitation de l'auteur de l'opération est observée par un invité connu dans chaque branche jointe.
-Cette observateur ne doit pas être reconnu mal-intentionné à la jonction.
+Cet observateur ne doit pas être reconnu mal-intentionné à la jonction.
 Dans la \autoref{fig:vfjc-invitation-issue}, l'invitation de $p_G$ est observée par $p_G$ et $p_M$ avant l'exécution de $a_1$.
 $p_G$ n'est pas un invité connu en $a_3$.
 $p_M$ est un invité connu en $a_3$, cependant il est reconnu mal-intentionné en $a_4$.
@@ -1798,7 +1798,7 @@ Il ou elle pourrait donc demander à un autre pair de la collaboration de l'invi
 
 Les raisonnements élaborés dans la \autoref{subsec:vfjcs} peuvent être en partie repris.
 Au lieu de considérer l'ensemble des pairs, nous nous restreignons aux pairs invités.
-Il suffit donc que chaque pair honnête invité observe pour chaque permutation de pairs mal-intentionnés invités, une chaîne de visibilité correspondante pour que les opération qui précèdent (ou sont égales) à toutes ces chaînes soient stables.
+Il suffit donc que chaque pair honnête invité observe pour chaque permutation de pairs mal-intentionnés invités, une chaîne de visibilité correspondante pour que les opérations qui précèdent (ou sont égales) à toutes ces chaînes soient stables.
 
 Cependant, il est nécessaire de prendre en compte les contraintes introduites par les invitations.
 Toutes les opérations d'un pair succèdent son invitation.
@@ -1879,7 +1879,7 @@ Autrement, une opération $x$ est stable si et seulement si pour chaque énumér
     \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1/b1}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption[Stabilité \acl{VFJC} dynamique]{Exemple d'une exécution abstraite avec des opération \emph{DynVFJC}-stables (dvfjjcs).}\label{fig:dvfjcs-example}
+\caption[Stabilité \acl{VFJC} dynamique]{Exemple d'une exécution abstraite avec des opérations \emph{DynVFJC}-stables (dvfjjcs).}\label{fig:dvfjcs-example}
 \end{figure}
 
 En principe un pair mal-intentionné peut exécuter une seconde opération d'invitation initiale.
@@ -2060,7 +2060,7 @@ Nous présentons dans cette section un protocole qui assure la convergence des c
 Il repose sur le maintien d'un journal répliqué qui est conservé tout au long de la collaboration.
 Dans la~\autoref{sec:pruned-log-protocol}, nous nous baserons sur ce protocole pour construire un protocole qui tronque les journaux et authentifie des instantanées à partir de ces derniers.
 
-Dans un premier temps nous présentons les structures de données principales nécessaire au bon fonctionnement du protocole.
+Dans un premier temps nous présentons les structures de données principales nécessaires au bon fonctionnement du protocole.
 Nous présentons ensuite le protocole et des optimisations possible de ce dernier.
 Finalement nous montrons que le protocole produit des journaux dans lesquels nous pouvons identifier des messages stables.
 
@@ -2095,7 +2095,7 @@ Puisque nous n'avons pas ajouté d'opération d'interrogation, les valeurs de re
 \end{align*}
 
 Chaque exécution d'une opération de modification de $T$, d'une opération d'invitation, ou d'une opération d'acquiescement génère un message.
-Un message contient les informations nécessaires à l'intégration de l'effet d'une opération quelque soit la copie sur-laquelle il est intégré.
+Un message contient les informations nécessaires à l'intégration de l'effet d'une opération quel que soit la copie sur-laquelle il est intégré.
 Notre protocole garantit qu'un message est intégré exactement une fois dans un ordre qui respecte les causalités entre l'exécution des opérations.
 Un schéma de synchronisation par opérations est donc adéquate.
 Nous définissons donc le message généré par l'exécution d'une opération d'invitation comme un n-uplet qui contient l'étiquette $\trm{invite}$ et le pair invité.
@@ -2105,7 +2105,7 @@ L'exécution d'une opération d'acquiescement donne lieu à un message avec une 
     \trm{Msg}_G \defeq \trm{Msg}_T \cup \set*{\tuple*{\trm{ack}}, \tuple*{\trm{invite}, q} \given q \in \trm{Peers}}
 \end{equation*}
 
-Lorsqu'un pair $p_i$ exécute une opération $o$, il dérive un message à partir de de la fonction $\trm{prepare}_i$.
+Lorsqu'un pair $p_i$ exécute une opération $o$, il dérive un message à partir de la fonction $\trm{prepare}_i$.
 Il intègre ce message à sa copie du contenu répliqué, ainsi que tout autre message qui lui sont livrés à l'aide de la fonction $\trm{integrate}$.
 Nous définissons l'état du contenu répliqué de type $G$ comme un singleton qui contient un état de type $T$.
 Les opérations d'invitation et d'acquiescement ne modifient pas l'état.
@@ -2191,7 +2191,7 @@ cette intégration permet d'obtenir une version mise-à-jour de $S$ notée $S'$.
 Les messages d'un journal et leurs relations de dépendances forment un graphe dirigé acyclique.
 Nous dénotons par $\trm{max}_J$, l'ensemble des messages maximaux de $J$.
 C'est-à-dire, des messages qui ne sont pas déclarés comme dépendance d'un autre message du journal.
-Lorsqu'un message $m$ est ajouté dans le journal, il peut être simplement mis à jour en ajoutant $m$ à l'ensemble et en supprimant les dépendances déclarés de $m$ de l'ensemble.
+Lorsqu'un message $m$ est ajouté dans le journal, il peut être simplement mis à jour en ajoutant $m$ à l'ensemble et en supprimant les dépendances déclarées de $m$ de l'ensemble.
 
 \begin{equation*}
     \trm{max}_{J'} \assign \set*{m} \cup \set*{x \in \trm{max}_J \given \trm{id}(x) \not\in \trm{deps}_m}
@@ -2400,7 +2400,7 @@ Le pair s'assure donc que chaque dépendance de $m$ est présente dans le journa
     k \in \trm{deps}_m \implies \exists x \in W \qsep k = \trm{id}(x)
 \end{equation*}
 
-Le pair s'assure ensuite que le message dépend transitivement sur un message du même auteur avec un nombre séquentiel contiguë.
+Le pair s'assure ensuite que le message dépend transitivement sur un message du même auteur avec un nombre séquentiel contigu.
 Il n'y a pas de messages sur-lequel il dépend qui a un nombre séquentiel égal ou plus grand que le sien.
 
 \begin{equation*}
@@ -2493,7 +2493,7 @@ Nous expliquons dans les deux paragraphes suivants dans quels cas ces opération
 Nous avons précédemment fait remarquer qu'un message bien-formé ne peut pas déclarer un message non-linéaire comme dépendance.
 Nous devons donc nous assurer qu'à l'issue de ces ajouts de messages dans le journal, l'ensemble des messages les plus récents $\trm{max}_J'$ ne contient pas le message d'un pair reconnu mal-intentionné dans $J$.
 Pour s'en assurer un pair doit exécuter une opération avant ces ajouts.
-Puisque nous ne pouvons pas demander aux collaborateur·ices de modifier sur demande le contenu partagé, le protocole exécute lui même une opération d'acquiescement.
+Puisque nous ne pouvons pas demander aux collaborateur·ices de modifier sur demande le contenu partagé, le protocole exécute lui-même une opération d'acquiescement.
 
 %Si nous n'effectuons pas cette vérification, le pair pourrait produire des messages mal-formés.
 %Si l'ensemble $\trm{max}_J'$ contient un tel message, alors le possesseur du journal doit exécuter une opération avant ces ajouts.
@@ -2594,7 +2594,7 @@ Pour faciliter la mise en correspondance du journal avec une exécution abstrait
     Il s'agit d'un ordre total strict localement fini
 \end{itemize}
 
-Lorsqu'un pair déclare des dépendances sur l'un de ses messgaes,, cette dernière dépend récursivement sur les dépendances de ses dépendances.
+Lorsqu'un pair déclare des dépendances sur l'un de ses messages,, cette dernière dépend récursivement sur les dépendances de ses dépendances.
 Nous pouvons ainsi définir la relation suivante~:
 
 \paragraph{Dépendance.} Une relation qui rend compte des dépendances directes et indirectes entre les messages d'un journal.
@@ -2614,12 +2614,12 @@ En déclarant une dépendance sur l'un de ses messages, un pair honnête atteste
 Les relations de dépendances entre messages exposent donc les observations des pairs honnêtes.
 Nous pouvons donc créer une correspondance entre les relations de \emph{dépendance} au sein d'un journal et les relations de \emph{visibilité} au sein de l'exécution abstraite associée au journal.
 
-Les dépendances déclarées par les pair mal-intentionnées ne traduisent pas nécessairement leurs observations réelles.
+Les dépendances déclarées par les pairs mal-intentionnées ne traduisent pas nécessairement leurs observations réelles.
 Il en va de même au sein d'une exécution abstraite~: les relations de \emph{visibilité} ne traduisent pas les observations des pairs mal-intentionnées.
 
 Cette correspondance n'est pas suffisante.
 Lorsqu'un pair honnête ajoute un message dans son journal, il l'observe.
-cette observation devrait être exposée au sein de l'exécution abstraite associée au journal.
+Cette observation devrait être exposée au sein de l'exécution abstraite associée au journal.
 Pour ce faire, une exécution abstraite associée inclut une opération supplémentaire~: l'opération d'observation implicite.
 L'opération d'observation implicite a pour auteur le possesseur du journal et toutes les autres opérations lui sont visibles.
 
@@ -2680,7 +2680,7 @@ Par conséquent, la propriété~\ref{itm:bf1} est respectée.
 Toute opération de $A$ est visible ou égale à l'opération d'observation implicite $\top_{\trm{vis}}$.
 L'auteur de cette dernière est le possesseur du journal.
 Il est par définition honnête.
-Par conséquent, toutes les opération, y compris les opérations émises par des pairs mal-intentionnées, sont observées par au moins un pair honnête.
+Par conséquent, toutes les opérations, y compris les opérations émises par des pairs mal-intentionnées, sont observées par au moins un pair honnête.
 La propriété~\ref{itm:bf2} est donc satisfaite.
 \end{proof}
 
@@ -2713,7 +2713,7 @@ La relation de dépendance entre les messages du journal est un ordre partiel st
 \begin{proof}
 Par construction la relation de dépendance est transitive et strict.
 Par construction l'ordre d'ajout des messages est total et strict.
-D'après le \autoref{th:has-deps}, les dépendances d'un messages sont présents dans le journal avant l'ajout de ce dernier.
+D'après le \autoref{th:has-deps}, les dépendances d'un message sont présents dans le journal avant l'ajout de ce dernier.
 par conséquent il ne peut y avoir de cycle de dépendance.
 La relation de dépendance est donc un ordre partiel strict et l'ordre d'ajout en est une extension linéaire.
 \end{proof}
@@ -2753,12 +2753,12 @@ Ces messages correspondent aux éléments maximaux du journal.
 Le sous-journal couvert par le message correspond donc simplement au journal après son ajout.
 Ainsi nous devons nous assurer que le message ne déclare pas comme dépendance un message dont l'auteur est reconnu mal-intentionné dans le journal.
 Ce qui revient à s'assurer qu'il n'y a pas de messages d'un pair reconnu mal-intentionné dans l'ensemble $\trm{max}_J$.
-Cette contrainte est garantit par deux mécanismes~: les messages des pairs reconnus mal-intentionnés sont systématiquement mis en attente.
+Cette contrainte est garanti par deux mécanismes~: les messages des pairs reconnus mal-intentionnés sont systématiquement mis en attente.
 il n'est donc pas possible d'ajouter un message non-linéaire dans l'ensemble $\trm{max}_J$.
 En revanche, un message présumé non-linéaire peut être présent dans l'ensemble $\trm{max}_J$ au moment de l'ajout indirect d'un message non-linéaire.
 En effet, un message non-linéaire peut être accepté indirectement par l'ajout d'un autre message.
 Or, le pair exécute une opération d'acquiescement avant d'ajouter un message non-linéaire si un autre message du même auteur est présent dans l'ensemble $\trm{max}_J$.
-Il s'assure donc qu'il ne peut y avoir de messages dont l'auteur est reconnu mal-intentionné dans l'ensemble $\trm{max}_J$ et donc dans les dépendances déclarés de ses messages.
+Il s'assure donc qu'il ne peut y avoir de messages dont l'auteur est reconnu mal-intentionné dans l'ensemble $\trm{max}_J$ et donc dans les dépendances déclarées de ses messages.
 
 Lorsqu'un pair vérifie qu'un message est bien-formé, il vérifie notamment que ce message ne déclare pas une dépendance dont l'auteur est reconnu mal-intentionné dans le sous-journal qu'il couvre.
 Il vérifie également que l'auteur du message n'est pas reconnu mal-intentionné dans le sous-journal couvert par le message.
@@ -2769,7 +2769,7 @@ L'exécution abstraite associée respecte la propriété d'opération d'invitati
 L'exécution abstraite associée respecte la propriété d'invitation exigée.
 
 Lorsqu'un pair vérifié qu'un message $m$ est bien-formé il vérifie que $m$ dépend directement ou indirectement sur un message qui invite l'auteur de $m$.
-Pour s'assurer que se propres messages dépendent sur un message qui l'invite un pair s'invite lui même lorsqu'il initie la collaboration et vérifie que le journal contient une invitation qui l'invite lorsqu'il rejoint une collaboration existante.
+Pour s'assurer que ses propres messages dépendent sur un message qui l'invite un pair s'invite lui-même lorsqu'il initie la collaboration et vérifie que le journal contient une invitation qui l'invite lorsqu'il rejoint une collaboration existante.
 Puisqu'un message déclare les dépendances de l'ensemble $\trm{max}_J$ et que $\trm{max}_J$ correspond aux éléments maximaux du journal, les messages du pair dépendent toujours sur le message qui l'invite.
 
 L'exécution abstraite associée respecte la propriété d'unicité des invitations.
@@ -2832,7 +2832,7 @@ Soit l'exécution abstraite $A'$ associée à une version future $J'$ de $J$.
 $A'$ est une extension de $A$ privée de son opération d'observation implicite $\top_A$.
 Il est démontable que si une opération est stable dans $A$, elle est également stable dans toute extension de $A$ privée de son opération d'observation implicite $\top_A$.
 Cette démonstration repose sur le fait que le possesseur du journal, et donc l'auteur des opérations d'observation implicites $\top_A$ et $\top_{A'}$ est honnête par définition, et que les opérations visible à $\top_A$ sont également visible à $\top_{A'}$.
-Apr conséquent, si $x_A$ est \emph{DynVFJC}-stable, alors son message associée est stabled ans $J$.
+Par conséquent, si $x_A$ est \emph{DynVFJC}-stable, alors son message associé est stable dans $J$.
 \end{proof}
 
 
@@ -2882,11 +2882,11 @@ Les temps de début et de fin du déroulement des événements sont relevés sur
 Chaque exécution d'une opération d'interrogation ou d'une opération de modification par un pair honnête se manifeste par une opération dans l'histoire.
 Le temps de début et de fin d'exécution permettent de déduire les relations retourne-avant entre les opérations des pairs honnêtes.
 
-Les pairs honnêtes peuvent accepter dans leur journaux les messages de pairs mal-intentionnés.
+Les pairs honnêtes peuvent accepter dans leur journal les messages de pairs mal-intentionnés.
 Chaque message d'un pair honnête accepté dans le journal d'au moins un pair (honnête) donne lieu à une opération dans l'histoire de l'exécution.
 Les pairs honnêtes peuvent accepter à des temps distincts un même message.
-L'oracle utilise la date à laquelle le message a été accepté pour la première fois de l'exécution dans un journal pour définir les relation retourne-avant entre l'opération $x$ correspondante au message et les autres opérations.
-Les relations retourne-avant entre cette opération est les opérations des pairs honnêtes sont définit comme suit.
+L'oracle utilise la date à laquelle le message a été accepté pour la première fois de l'exécution dans un journal pour définir les relations retourne-avant entre l'opération $x$ correspondante au message et les autres opérations.
+Les relations retourne-avant entre cette opération est les opérations des pairs honnêtes sont défini comme suit.
 Si la date de fin de l'exécution d'une opération est strictement inférieure à la date de première acceptation de $x$, alors l'opération retourne-avant $x$.
 Si la date de début de l'exécution d'une opération est strictement supérieure à la date de première acceptation de $x$, alors $x$ retourne-avant cette opération.
 La définition des relations retourne-avant entre les exécutions des opérations des pairs mal-intentionnés suit l'ordre de leur date d'acceptation première.
@@ -2901,7 +2901,7 @@ Pour ce faire nous montrons que les histoires peuvent être augmentées en des e
 
 Le modèle de cohérence \emph{DynVFJC} n'offre aucune garantie sur la convergence des copies d'un contenu répliqué.
 Notre protocole se veut générique~: il peut être utilisé pour n'importe quel type de données répliquées.
-Nous devrions donc montrer que quelque soit le type de données répliquées il permet de garantir la convergence des copies des pairs honnêtes.
+Nous devrions donc montrer que quel que soit le type de données répliquées il permet de garantir la convergence des copies des pairs honnêtes.
 Pour ce faire nous employons un ensemble d'entiers répliqués munit d'une opération d'ajout $\trm{add}$ et d'une opération qui renvoie simplement les entiers présents dans l'ensemble.
 Chaque entier ajouté dans l'ensemble est unique.
 Cette contrainte permet de connaître avec précision quel modification est prise en compte par une lecture.
@@ -2916,7 +2916,7 @@ Ce type de données répliquées est capable de modéliser d'un point de vue abs
     y \in A \land \trm{call}(y) = \trm{rd} \land v \in \trm{rval}(y) \implies \exists x \vis y \qsep \trm{call}(x) = \trm{add}(v)
 \end{equation*}
 
-Les exécutions abstraites formaient par les histoire auquel ont été ajoutées la relation de visibilité comme défini ci-après respecte le modèle de cohérence $\trm{DynVFJC}$.
+Les exécutions abstraites formaient par les histoires auquelles ont été ajoutées la relation de visibilité comme défini ci-après respecte le modèle de cohérence $\trm{DynVFJC}$.
 
 Pour chaque exécution d'une opération de lecture et chaque message du journal au moment de son exécution, une relation de visibilité est créée tel que la destination soit l'opération de lecture et la source l'opération de modification à l'origine du message.
 
@@ -2928,16 +2928,16 @@ Les messages des pairs mal-intentionnés donnent lieu à une opération dans l'h
 Par construction, ces opérations sont donc toujours visibles à au moins une opération d'un pair honnête.
 L'exécution abstraite produite est donc bien-formée.
 
-Dans la section précédente nous avons montré que les exécutions abstraites asscoiées au journal respectent le modèle de cohérence \emph{DynVFJC}.
-Nous avons définit la relation de visibilité à l'aide du journal.
-par déduction la restriction de l'exécution abstraite aux opérations de modifications respecte le modèle de cohérence \emph{DynVFJC}.
+Dans la section précédente nous avons montré que les exécutions abstraites associées au journal respectent le modèle de cohérence \emph{DynVFJC}.
+Nous avons défini la relation de visibilité à l'aide du journal.
+Par déduction la restriction de l'exécution abstraite aux opérations de modifications respecte le modèle de cohérence \emph{DynVFJC}.
 
 L'ensemble des entiers retournés par une lecture correspond à l'ensemble des messages intégrés dans la copie. Ces messages sont enregistrés dans le journal.
 Ainsi il existe bien une relation de visibilité entre la lecture et les messages à l'origine des valeurs présentes dans l'ensemble.
 
 \subsubsection{Convergence des pairs honnêtes}
 
-Le modèle de cohérence \emph{DynVFJC} considère les pairs honnêtes qui ont été invités dans des embranchement rejetés par les autres pairs honnêtes comme des pairs mal-intentionnés.
+Le modèle de cohérence \emph{DynVFJC} considère les pairs honnêtes qui ont été invités dans des embranchements rejetés par les autres pairs honnêtes comme des pairs mal-intentionnés.
 En pratique, nous ne pouvons pas faire une telle hypothèse.
 Nous devons donc admettre que notre protocole peut conduire un pair honnête à diverger des autres pairs honnêtes du groupe.
 Toutefois, ce dernier peut aisément détecter que le message qui l'a invité est non-linéaire et que ses opérations sont systématiquement rejetés par les autres pairs.
@@ -2952,12 +2952,12 @@ Nous exploitons cette observation pour tronquer le journal.
 Nous présentons dans un premier temps un protocole qui se base sur le protocole à journaux complets.
 Nous montrons alors qu'une partie du journal peut être tronquée sans menacer la cohérence du contenu répliqué.
 La transmission d'un journal tronqué à un pair qui rejoint la collaboration ne permet pas à ce dernier de recréer une copie du contenu répliqué.
-Nous terminons ainsi par un protocole qui permet d'authentifier une instantané du contenu avec un journal tronqué.
+Nous terminons ainsi par un protocole qui permet d'authentifier un instantané du contenu avec un journal tronqué.
 
 \subsection{Structures de données}
 
-Un pair maintient une instantané $I$ du contenu partagé.
-Cette instantané représente un état antérieur de la copie du contenu partagé.
+Un pair maintient un instantané $I$ du contenu partagé.
+Cet instantané représente un état antérieur de la copie du contenu partagé.
 Elle intègre l'ensemble des messages qui ont été supprimés du journal.
 Nous détaillons sa construction dans la section suivante.
 
@@ -2965,7 +2965,7 @@ Cette instantanée est accompagnée des structures de données dépendantes $\tr
 
 %Cette instantanée est accompagnée de des ensembles $\trm{KnownInvited}_I$ et $\trm{knownMalicious}_I$ qui contiennent respectivement les invités connus et les pairs reconnus mal-intentionnés dans le journal qui a permis de l''obtenir.
 
-Nous parlons d'\emph{empreinte} d'une instantané $I$ ou d'une copie $S$, le \emph{hash} calculé sur $I$ ou respectivement $S$ et ses structures de données dépendantes~: $\trm{vv}_I$ et $\trm{knownMalicious}_I$, ou respectivement $\trm{vv}_S$ et $\trm{knownMalicious}_S$.
+Nous parlons d'\emph{empreinte} d'un instantané $I$ ou d'une copie $S$, le \emph{hash} calculé sur $I$ ou respectivement $S$ et ses structures de données dépendantes~: $\trm{vv}_I$ et $\trm{knownMalicious}_I$, ou respectivement $\trm{vv}_S$ et $\trm{knownMalicious}_S$.
 Le \emph{hash} est calculé de tel manière à résister aux collisions et aux attaques de préimages.
 Deux instantanés ou copies convergentes, c'est-à-dire qui ont intégrés le même ensemble de messages, avec les même structures de données dépendantes ont un \emph{hash} identique.
 L'empreinte de $I$ et l'empreinte de $S$ sont respectivement notées $\trm{footprint}(I)$ et $\trm{footprint}(S)$.
@@ -2987,9 +2987,9 @@ Un message $m$, dérivé de l'exécution d'une opération d'invitation, est acco
     \item[$\trm{footprint}_m$] l'\emph{empreinte} de la copie avant l'exécution de l'invitation.
 \end{description}
 
-L'empreinte est utilisée pour authentifier une instantané.
+L'empreinte est utilisée pour authentifier un instantané.
 Lorsqu'une opération d'invitation est exécutée, le pair dérive le message $m$ d'invitation correspondant.
-Il calcul l'empreinte de la copie avant l'exécution de l'opération et l'assigne comme empreinte de $m$.
+Il calcule l'empreinte de la copie avant l'exécution de l'opération et l'assigne comme empreinte de $m$.
 %Il assigne également les invités connus et les pairs reconnus mal-intentionnés aux champs correspondants.
 
 \begin{equation*}
@@ -3052,7 +3052,7 @@ Pour ce faire, il procède en deux temps.
 Dans un premier temps, il choisit un message et détermine si ce dernier est stable.
 Si le message n'est pas stable la troncature du journal n'a pas lieu.
 Si le message est stable, alors l'ensemble des dépendances de ce message sont également stables.
-Il détermine dans un second temps les message qui peuvent être supprimés du journal.
+Il détermine dans un second temps les messages qui peuvent être supprimés du journal.
 Il s'agit d'un sous-ensemble de l'ensemble des messages stables.
 
 Un pair considère les autres pairs comme potentiellement mal-intentionnés.
@@ -3062,7 +3062,7 @@ Similairement au possesseur du journal, il considère les autres pairs comme mal
 Nous nous intéressons donc à la stabilité convergente qui a été définit dans la~\autoref{subsec:msg-stable}.
 
 Déterminer avec précision la stabilité d'un message tout en passant à l'échelle est un défi difficile.
-Pour déterminer si un message $m$ est stable, le pair doit vérifier que pour chaque permutations des pairs de la collaboration il existe un chemin dans le journal qui prend source en $m$ et qui respecte un certain prédicat.
+Pour déterminer si un message $m$ est stable, le pair doit vérifier que pour chaque permutation des pairs de la collaboration il existe un chemin dans le journal qui prend source en $m$ et qui respecte un certain prédicat.
 Étant donné que le nombre de permutations est $N!$ avec $N$ le nombre de pairs, la complexité de cette vérification est exponentielle. % chktex 40 % for factorial
 
 C'est pourquoi, nous proposons un mécanisme qui détermine comme convergent-stable un sous-ensemble des messages qui le sont.
@@ -3086,8 +3086,8 @@ Ainsi si un pair affirme qu'un message $m$ est stable dans un journal $J$, alors
 
 La formation d'une séquence minimale qui inclut toutes les permutations est un problème ouvert.
 Toutefois plusieurs articles~\autocite{engen2018_containing} prouvent des bornes supérieures sur la taille de cette séquence.
-Pour ce faire, il décrivent dans leur preuve la génération d'une telle séquence.
-L'un des article~\autocite{adleman_1974_shortperm} a particulièrement attiré notre attention puisqu'il décrit une manière simple de générer une séquence de taille $N^2 -2N +4$ qui inclut l'ensemble des permutations de ces $N$ composantes.
+Pour ce faire, ils décrivent dans leur preuve la génération d'une telle séquence.
+L'un des articles~\autocite{adleman_1974_shortperm} a particulièrement attiré notre attention puisqu'il décrit une manière simple de générer une séquence de taille $N^2 -2N +4$ qui inclut l'ensemble des permutations de ces $N$ composantes.
 Ainsi nous pouvons réduire la recherche de la stabilité au parcours de cette séquence et du chemin du journal qui a été choisit.
 Si le chemin a une chaîne de visibilité qui correspond à cette séquence, alors $m$ est stable.
 La complexité au pire cas se réduit donc au parcours du journal.
@@ -3096,7 +3096,7 @@ Nous proposons un algorithme qui repose sur cette idée et prend en compte les p
 
 Le pair créé d'abord un journal temporaire $Z$ dont il initialise les structures de données dépendantes à l'aides des structures de données dépendantes de l'instantané $I$.
 Il ajoute alors l'ensemble des dépendances de $m$ présent dans $J$ dans le journal temporaire $Z$.
-Ces ajouts sont fait dans l'ordre dans lequel les messages ont été ajoutés dans $J$.
+Ces ajouts sont faits dans l'ordre dans lequel les messages ont été ajoutés dans $J$.
 
 Une fois ces ajouts effectués dans $Z$, nous pouvons débuter la procédure qui permet de déterminer si $m$ est convergent-stable.
 L'algorithme consiste à parcourir le chemin choisit dans le journal $J$ et la séquence qui inclut l'ensemble des permutations des pairs.
@@ -3115,7 +3115,7 @@ Nous supprimons un préfixe du journal qui inclut uniquement des messages stable
 cette dernière contrainte est nécessaire pour qu'un nouveau pair puisse vérifier que les messages non-stables sont bien-formés.
 
 Un pair mal-intentionné pourrait déclarer le premier message du journal complet comme dépendance pour empêcher la troncature des journaux des pairs honnêtes.
-C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarés aux des dépendances directes du message.
+C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarées aux dépendances directes du message.
 Les optimisations présentées dans le protocole à journaux complets peuvent toutefois être intégrées.
 Les dépendances indirectes qui sont déclarés comme dépendance sont bien-définies et dépendent au fur et à mesure sur un préfixe croissant du journal.
 
@@ -3129,7 +3129,7 @@ Un pair teste uniquement la stabilité de ses messages.
 \subsubsection{Initialisation}
 
 Pour initier une collaboration, un pair procède de la même manière que dans le protocole à journaux complets.
-Il exécute une première opération qui l'invite lui même.
+Il exécute une première opération qui l'invite lui-même.
 
 Pour rejoindre une collaboration un collaborateur ou une collaboratrice doit en premier lieu se faire inviter.
 Il ou elle obtient alors un identifiant qui correspond à un pair de la collaboration.
@@ -3159,8 +3159,8 @@ Ces messages constituent la base stable du journal.
 Il livre ensuite chaque message restant de $J_j$ dans l'ordre dans lequel ils apparaissent dans $J_j$.
 Les messages sont alors vérifiés comme si ils étaient reçues normalement.
 
-Une fois l'ensemble des messages de $J_j$ livrés, si $J_j$ est identique à $J_i$, alors les données reçues sont mutuellement cohérents.
-Pour s'assurer que le journal a été tronqué correctement, le pair $p_i$ vérifie que $\trm{ref}_{I_j}$ est bien un message convergents-stable.
+Une fois l'ensemble des messages de $J_j$ livrés, si $J_j$ est identique à $J_i$, alors les données reçues sont mutuellement cohérentes.
+Pour s'assurer que le journal a été tronqué correctement, le pair $p_i$ vérifie que $\trm{ref}_{I_j}$ est bien un message convergent-stable.
 Pour finir, il s'assure qu'il a bien été invité.
 Il doit faire partie des pairs invités connus en $J_i$.
 
@@ -3182,8 +3182,8 @@ Dans cette section nous montrons que la troncature du journal ne remet pas en ca
 En d'autres termes le journal tronqué accepte et rejettent les mêmes ensemble de messages qu'un journal complet.
 Il nous suffit de montrer que l'ensemble des messages utilisés pour déterminer si un message est bien-formé et acceptable immédiatement dans le journal sont présentes autant dans un journal complet que dans toute version tronquée de ce dernier.
 
-Si les dépendances déclarés d'un message livré ont été préalablement livrées, alors elles sont présentes dans le journal étendu.
-Ceci est garantit par le fait que seulement les messages stables sur lesquels ne dépendent pas de messages non-stables sont supprimés du journal (et donc du journal étendu).
+Si les dépendances déclarées d'un message livré ont été préalablement livrées, alors elles sont présentes dans le journal étendu.
+Ceci est garanti par le fait que seulement les messages stables sur lesquels ne dépendent pas de messages non-stables sont supprimés du journal (et donc du journal étendu).
 
 Si les dépendances déclarées de $m$ sont présents dans le journal étendu et que l'auteur de $m$ n'est pas reconnu mal-intentionné, alors il existe au moins un de ses messages qui est non-stable et présent dans le journal étendu.
 Le possesseur du journal peut ainsi vérifier que le nombre séquentiel de $m$ est contiguë au dernier message reçu de l'auteur de $m$.
@@ -3212,9 +3212,9 @@ Un pair mal-intentionné peut ainsi s'assurer qu'un de ses message déclare une 
 Ce qui conduit à une divergence des deux pairs honnêtes.
 Pour éviter cette situation, les pairs honnêtes vérifient que les messages déclarent uniquement des dépendances directes.
 Ainsi le message rejeté par le second pair honnête pour cause d'une dépendance manquante, est rejetée également par le premier pair car la dépendance est reconnue indirecte.
-vérifier si les dépendances d'un message sont directes dans un journal tronqué est-il faisable~?
+Vérifier si les dépendances d'un message sont directes dans un journal tronqué est-il faisable~?
 Seul un préfixe du journal est tronqué.
-Ce préfixe contient des message stables qui ne sont pas déclarées comme dépendances de messages non-stables.
+Ce préfixe contient des messages stables qui ne sont pas déclarées comme dépendances de messages non-stables.
 Étant donné que l'ordre d'ajout des messages est un ordre topologique du graphe de dépendance, i lest donc possible de vérifier que chaque dépendance déclarée est directe.
 
 \subsection{Cohérence du protocole}
@@ -3223,14 +3223,14 @@ Nous montrons que le protocole, sous des conditions bien déterminées, respecte
 
 Dans la sous-section précédente nous avons montré qu'un journal complet et tronqué acceptent et rejettent les mêmes ensemble de messages.
 Ainsi, si l'ensemble des pairs ont débuté avec un journal complet, le protocole respecte le modèle de cohérence \emph{DynVFJC}.
-Il nous faut désormais montrer que les pairs honnêtes qui rejoignent la collaboration en récupérant un journal tronqué accompagné d'une instantané ne compromet par la cohérence de l'exécution.
+Il nous faut désormais montrer que les pairs honnêtes qui rejoignent la collaboration en récupérant un journal tronqué accompagné d'un instantané ne compromet par la cohérence de l'exécution.
 
 Nous supposons qu'au moins un pair honnête observe l'invitation du nouveau pair et que le message qui représente la preuve de cette observation est présente dans le journal trinqué récupéré.
 Si ce n'est pas le cas, le nouveau pair est considéré mal-intentionné.
 
 L'histoire de l'exécution est construite de la même manière que celle du protocole à journaux complets.
 
-Parce que le nouveau pair récupère une instantané, nous devons prendre en compte le fait qu'il observe l'effet d'opérations dont les messages ne sont pas présents dans le journal.
+Parce que le nouveau pair récupère un instantané, nous devons prendre en compte le fait qu'il observe l'effet d'opérations dont les messages ne sont pas présents dans le journal.
 
 Pour chaque valeur présente dans l'instantanée, nous identifions l'opération qui correspond à son ajout.
 Pour chacune de ces opérations et pour chaque opération correspondante à un message ajouté dans le journal $J$, nous créons une relation de visibilité dirigé de la première à la seconde opération.
@@ -3240,7 +3240,7 @@ TODO
 
 \subsection{Discussions}
 
-Le protocole à journaux tronqués repose sur la présence d'une instantané qui représente un état antérieur de la copie.
+Le protocole à journaux tronqués repose sur la présence d'un instantané qui représente un état antérieur de la copie.
 Elle intègre l'ensemble des messages qui ont été supprimés du journal.
 Cet instantané permet de recréer des états à partir du journal tronqué et de vérifier ainsi si l'empreinte renseignée dans une invitation est correcte.
 La conservation de cet instantané peut être évitée si les types de données répliquées sont équipés d'une opération qui annule l'intégration d'un message.
@@ -3250,7 +3250,7 @@ Nous avons proposé une approximation pour déterminer si un message est stable 
 Cette approximation écarte la spécificité des invitations.
 Leur prise en compte n'est pas insurmontable.
 En effet, en plus des cas évoqués, nous pourrions également avancer d'un pas dans la séquence des permutations des pairs si le pair courant est invité dans un message qui dépend sur le message courant.
-Pour éviter des parcours redondants dans le journal, le pair peut conserver l'ensemble des pairs invités dans un message qui précède ou est concurrent au message courant.
+Pour éviter des parcours redondants dans le journal, le pair peut conserver l'ensemble des pairs invités dans un message qui précède ou qui est concurrent au message courant.
 
 La stabilisation d'un message requiert le concours de l'ensemble des pairs qui ne sont pas reconnus mal-intentionnés.
 Si l'un de ces pairs n'exécute pas d'opération de modification, il peut bloquer la stabilisation des journaux des autres pairs.
@@ -3278,7 +3278,7 @@ La stabilité causale dynamique peut facilement être adapté aux applications d
 \paragraph{Stabilité et cohérence faible.} \textcite{golding_1992_ackvector} présente un mécanisme qui permet d'identifier approximativement les messages qui ont été observés par l'ensemble des pairs.
 Son mécanisme est compatible avec un modèle de cohérence plus faible que le modèle de cohérence causale.
 En effet, il permet aux pairs de ne pas respecter les causalités entre les exécutions de leurs opérations.
-Cette affaiblissement permet de borner la taille des méta-données des messages pour les applications qui requiert par exemple le respect d'un modèle du cohérence \emph{PRAM}\footnote{Il garantit que l'ordre d'intégration des opérations d'un pair correspond à leur ordre d'exécution}~\autocite{viotti_consistency_2016}.
+Cet affaiblissement permet de borner la taille des méta-données des messages pour les applications qui requiert par exemple le respect d'un modèle de cohérence \emph{PRAM}\footnote{Il garantit que l'ordre d'intégration des opérations d'un pair correspond à leur ordre d'exécution}~\autocite{viotti_consistency_2016}.
 
 Dans ce manuscrit nous nous sommes borné à des modèles de cohérence qui respectent les causalités entre les opérations exécutées.
 Leur protocole démontre que la notion de stabilité peut avoir un intérêt dans des systèmes qui respecte des modèles de cohérence plus faible.
@@ -3295,11 +3295,11 @@ La notion de coupure globale s'apparente à celle de stabilité.
 Toutefois, les \emph{timestamps} utilisés n'encodent pas de causalité entre les mise-à-jours.
 Ainsi une mise-à-jour future peut toujours être en concurrence avec une mise-à-jour passée.
 De plus, la connaissance des mise-à-jours livrées n'est pas suffisante à la détermination d'une \emph{coupure globale}.
-En effet, les \emph{timestamps} utilisés par chaque pairs ne sont pas garantit à croître de manière monotone.
+En effet, les \emph{timestamps} utilisés par chaque pair ne sont pas garanti à croître de manière monotone.
 Ils conçoivent ainsi un mécanisme qui permet aux pairs de coopérer de manière asynchrone pour déterminer une \emph{coupure globale}.
 
 \paragraph{Stabilité de livraison de message.} \textcite{birman_1991_causalmulticast} introduisent une notion de stabilité dénommée \emph{message stability}.
-Elles s'intéresse à la stabilité de  la livraison d'un message.
+Elles s'intéressent à la stabilité de  la livraison d'un message.
 Une livraison d'un message devient stable dès lors que l'ensemble des destinataires du message ont reçu ce dernier.
 Un message concurrent à un message dont la livraison est stable peut toujours être reçu.
 
@@ -3316,7 +3316,7 @@ L'utilisation de protocole à base de journaux est fréquent pour offrir des gar
 Les messages référencent leurs dépendances et sont livrés lorsque les dépendances sont satisfaites.
 A tout moment, un pair peut décider de réduire la taille de son journal en remplaçant des séquences de messages par un résumé sécurisé.
 Le résumé référencent les dépendances des messages qu'il résume (à l'exception des dépendances qui correspondent à des messages qu'il résume).
-Lorsqu'un message est produit il référence le résumé sécurisé de l'ensemble des message précédemment livrés.
+Lorsqu'un message est produit il référence le résumé sécurisé de l'ensemble des messages précédemment livrés.
 De ce fait, des séquences de messages peuvent être remplacés par des résumés de manière transparente.
 Un résumé est construit à l'aide d'un arbre de Merkle~\autocite{merkle_1979_merkletree} résistant aux collisions.
 
@@ -3333,9 +3333,9 @@ De même, l'article ne discute pas des messages qui dépendent sur un message in
 Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces messages.
 
 Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs mal-intentionnés.
-Il garantir également la convergence des pairs honnêtes.
+Il garantit également la convergence des pairs honnêtes.
 
-\paragraph{Instantané authentifiée} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
+\paragraph{Instantané authentifié} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
 
 
 \section{Conclusion}
@@ -3351,6 +3351,6 @@ Nous avons exploré ce concept avec le modèle de cohérence causale et le modè
 Nous avons également introduit deux nouveaux modèles de cohérences~: le modèle de cohérence causale dynamique et le modèle de cohérence \ac{VFJC} dynamique.
 Ces deux modèles prennent en compte l'aspect dynamique des groupes de collaboration.
 
-Les protocoles que nous avons présenté n'ont pas été évalué de manière expérimentale.
+Les protocoles que nous avons présentés n'ont pas été évalué de manière expérimentale.
 Des travaux ultérieurs devraient mesurer son impact sur le passage à l'échelle d'une collaboration.
 %Par ailleurs, nous avons effectué de nombreuses approximations pour simplifier la troncature du journal.

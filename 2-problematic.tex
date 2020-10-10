@@ -34,7 +34,7 @@ La copie est donc \emph{toujours disponible}~\autocite{mahajan_2011_cac} pour ê
 C'est ce qui permet de tolérer les latences et les partitions réseaux.
 La modification parallèle des copies conduit inévitablement à leur divergence~: les copies fournissent des réponses distinctes à une ou plusieurs interrogations qui peuvent leur être soumis.
 Les pairs échangent à terme leurs modifications.
-Les algorithmes de réplication de données sont en charge de la convergence des copies.
+Les algorithmes de réplication de données sont responsables de la convergence des copies.
 Ils doivent s'assurer qu'à terme les copies répondent de manière identique à toutes les interrogations qui peuvent leur être soumit.
 
 La convergence des copies conditionne le succès d'une collaboration.
@@ -249,7 +249,7 @@ Plusieurs modèles de cohérence dits \enquote{faibles} peuvent être respectés
 L'une des garanties élémentaires de ces modèle concerne la convergence des copies.
 En l'absence de modifications, les copies devraient converger.
 Toute interrogation sur deux copies convergentes devraient donner les mêmes réponses.
-La convergence peut être définit de différentes manières.
+La convergence peut être défini de différentes manières.
 La \emph{cohérence à terme}~\autocite{terry_sessionguarentees_1994,saito_2005_optimisticreplication, vogels_eventuallyconsistent_2009} offre la garantie de convergence la plus faible qu'un protocole de réplication optimiste doit respecter.
 Elle garantit que deux copies finissent par converger dès lors qu'elles ont intégré le même ensemble de modifications.
 Elle garantit également qu'une modification intégrée par un pair finit par l'être par les autres pairs.
@@ -511,7 +511,7 @@ On peut considérer que l'emprunteur·ice final·e correspond à la personne qui
 \caption{Une infrastructure de collaboration composée de 3 pairs qui répliquent le contenu partagé. Les 3 pairs sont connectés par un réseau asynchrone.}\label{fig:collab-system}
 \end{figure}
 
-Dans les infrastructure pair-à-pair de collaboration, chaque collaborateur·ice est associé·e à un pair qui lui est exclusif.
+Dans les infrastructures pair-à-pair de collaboration, chaque collaborateur·ice est associé·e à un pair qui lui est exclusif.
 \textcite{guerraoui_2016_tradeoffs-replication} parlent de \emph{sticky availability}.
 L'une des principales implications est que des pairs peuvent joindre et quitter le système de réplication au gré des connexions et des déconnexions des collaborateur·ice·s.
 De nouveaux pairs peuvent joindre lorsque de nouveaux et nouvelles collaborateur·ice·s joignent le groupe
@@ -521,7 +521,7 @@ Pour interroger et modifier le contenu partagé, un·e collaborateur·ice soumet
 Ces opérations dépendent du type du contenu répliqué.
 Dans la~\autoref{fig:optimistic-replication}, l'ensemble répliqué peut être modifié par une opération d'ajout $\set*{\trm{add}(n) \given n \in \mathbb{N}_0}$ et peut être intérrogé par une opération de lecture $\trm{rd}$ qui donne la composition de l'ensemble.
 Les opérations sont d'abord intégrées sur la copie que le pair détient.
-Les pairs synchronisent leur copie en arrière plan.
+Les pairs synchronisent leur copie en arrière-plan.
 Une synchronisation peut s'effectuer après chaque nouvelle modification ou peut être espacée dans le temps.
 
 Nous supposons qu'un·e collaborateur·ice ne peut être dissocié·e du pair qui lui est attaché.
@@ -530,7 +530,7 @@ La copie est donc \emph{toujours disponible}~\autocite{mahajan_2011_cac} pour ê
 
 \section{Adversaire du système}
 
-Un protocole de réplication optimiste doit respecté un ensemble de propriétés de cohérence.
+Un protocole de réplication optimiste doit respecter un ensemble de propriétés de cohérence.
 Pour assurer ces propriétés, un protocole doit résister aux défaillances et aux comportements mal-intentionnés qu'il rencontre au cours de ses exécutions.
 Par exemple, il doit se prémunir contre les défaillances inhérentes aux réseaux.
 
@@ -545,10 +545,10 @@ L'adversaire du système est mû par un objectif et contrôle des ressources, te
 
 L'objectif de notre adversaire est de compromettre la convergence des copies des collaborateur·ice·s honnêtes~\footnote{Dans la littérature le terme \textquote{correct} est également utilisé.}.
 Et ce dans le but de faire échouer leur collaboration.
-Pour simplifier les références ultérieures, nous proposons de classifier les capacités de l'adversaire à travers trois profils~: réseau asynchrone non-fiable, réseau corrompu, pairs perturbées, pairs mal-intentionnés.
+Pour simplifier les références ultérieures, nous proposons de classifier les capacités de l'adversaire à travers trois profils~: réseau asynchrone non-fiable, réseau corrompu, pairs perturbés, pairs mal-intentionnés.
 
 \paragraph{Réseau asynchrone non-fiable.} L'adversaire contrôle le réseau et peut exposer l'ensemble des comportements observées sur un réseau asynchrone non-fiable~\autocite{lynch_1996_asyncnet}.
-En particulier, les messages échangées entre les pairs peuvent être réordonnés, dupliqués, retardés, et omis.
+En particulier, les messages échangés entre les pairs peuvent être réordonnés, dupliqués, retardés, et omis.
 L'adversaire peut séparer les pairs en partitions.
 Toutefois il ne peut pas empêcher les pairs honnêtes de s'échanger à terme un nombre non-borné de messages.
 Ce qui implique qu'il ne peut pas maintenir indéfiniment une partition réseau ou omettre tous les messages émit par un pair.
@@ -572,7 +572,7 @@ Toutefois, nous supposons les limitations suivantes~:
 
 \begin{itemize}
   \item L'adversaire a des ressources limitées en puissance de calcul et en temps.
-  Ces ressources ne sont pas suffisantes pour compromette les primitives de cryptographies, telles que les signatures digitales et les fonctions de hachage résistants aux collisions.
+  Ces ressources ne sont pas suffisantes pour compromettre les primitives de cryptographies, telles que les signatures digitales et les fonctions de hachage résistants aux collisions.
   \item Il ne peut pas empêcher un pair honnête d'authentifier la clef publique d'un autre pair honnête.
   L'adversaire ne peut pas obtenir la clef privé d'un pair honnête et il ne peut donc pas usurper son identité cryptographique.
 \end{itemize}

@@ -20,9 +20,9 @@ La~\autoref{sec:causal-models} présente le modèle de cohérence causale ainsi 
 La convergence des copies est une propriété essentielle des protocoles de réplication optimiste.
 Dans le~\autoref{ch:problematic}, nous avons motivé notre intérêt pour des protocoles qui permettent la convergence des copies sans coordination.
 De tels protocoles n'imposent pas aux pairs de dialoguer pour s'entendre sur la manière de résoudre les conflits de modification qui surviennent au cours de la collaboration.
-Ils n'ont d'autres choix que d'adopter des résolutions pré-déterminées de conflit.
+Ils n'ont d'autres choix que d'adopter des résolutions prédéterminées de conflit.
 Les protocoles de réplication optimiste décident en général la manière de résoudre un conflit.
-Pour faciliter la comparaison des protocoles et leur implémentation, les stratégies de résolution de conflits sont encapsulées aux sein de type de données répliquées nommés \acfp{CRDT}.
+Pour faciliter la comparaison des protocoles et leur implémentation, les stratégies de résolution de conflits sont encapsulées au sein de type de données répliquées nommés \acfp{CRDT}.
 Les concepteur·ice·s d'applications peuvent ainsi utiliser des type de données prêt à l'emploi.
 La~\autoref{sec:crdt} présente ces types de données et illustre plusieurs sémantiques de résolution de conflits.
 
@@ -218,7 +218,7 @@ Ici, cette information est explicitement marquée par l'utilisation de la relati
 \end{figure}
 
 \paragraph{}La \autoref{def:history} définit formellement une histoire.
-Elle définit en particulier les acractéristiques associées aux opérations.
+Elle définit en particulier les caractéristiques associées aux opérations.
 La \autoref{tab:op-attributes} donne les caractéristiques des opérations de l'histoire de la \autoref{fig:causal-expectation}.
 
 \begin{definition}[histoire~\autocite{burckhardt_eventualconsistency_2014}]\label{def:history}
@@ -233,7 +233,7 @@ Ces valeurs de retour dépendent de $T$.
 \end{itemize}
 \begin{itemize}[leftmargin=*]
 \item[] $\trm{rb} \subseteq E \times E$ est la relation \emph{retourne-avant}.
-Il s'agit d'un ordre partiel localement fini\footnote{Pour tout couple d'opérations, l'ensmeble des opérations comprises entre ces 2 opérations est fini.} qui peut être interprété sur une ligne de temps\footnote{\textcite{greenough_1976_semiorder} parle d'ordre d'intervalle.}~:
+Il s'agit d'un ordre partiel localement fini\footnote{Pour tout couple d'opérations, l'ensemble des opérations comprises entre ces 2 opérations est fini.} qui peut être interprété sur une ligne de temps\footnote{\textcite{greenough_1976_semiorder} parle d'ordre d'intervalle.}~:
 \begin{equation*}
     u \rb v \land y \rb z \implies u \rb z \lor y \rb v
 \end{equation*}
@@ -268,15 +268,14 @@ Dans ce cas, nous écrivons $x \vis y$.
 La relation de visibilité n'est pas forcément transitive.
 Par exemple, dans la \autoref{fig:vis-example}, $b_2$ est visible à $b_3$ et $b_3$ est visible à $a_2$, mais $b_2$ n'est pas visible à $a_2$.
 Par souci de concision, nous écrivons $x \viseq y$ si $x$ est visible ou est égal à $y$.
-\bigskip
 
 % Nous pourrions nous contenter des histoires pour exprimer des propriétés de cohérences.
 % En procédant de la sortes nos propriétés mélangent des contraintes d'ordre et des contraintes de type.
 % Afin de séparer les contraintes nous exprimant nos propriétés de cohérence à l'aide d'exécution abstraites.
 
-Une histoire augmentée de la relation de \emph{visibilité} consiste en une \emph{exécution abstraite}~\autocite{burckhardt_eventualconsistency_2014}.
-La \autoref{def:abstract-exec} définit formellemnt une exécution abstraite.
-La \autoref{fig:vis-example} est une exécution abstraite de l'hésitoire de la \autoref{fig:causal-expectation}.
+\paragraph{} Une histoire augmentée de la relation de \emph{visibilité} consiste en une \emph{exécution abstraite}~\autocite{burckhardt_eventualconsistency_2014}.
+La \autoref{def:abstract-exec} définit formellement une exécution abstraite.
+La \autoref{fig:vis-example} est une exécution abstraite de l'histoire de la \autoref{fig:causal-expectation}.
 
 \begin{definition}[exécution abstraite~\autocite{burckhardt_eventualconsistency_2014}]\label{def:abstract-exec}
 Une \emph{exécution abstraite} d'un contenu partagé de type $T$ est un n-uplet $A \defeq \tuple*{H, \trm{vis}}$ tel que~:
@@ -448,10 +447,10 @@ Le \emph{contexte} d'une opération $x$ dans une \emph{exécution abstraite} $A$
     \caption{Contexte et observateurs des opérations de l'exécution abstraite de la~\autoref{fig:vis-example}.}\label{tab:op-ctx-obs}
 \end{table}
 
-La spécification du type de données répliquées de la~\autoref{fig:causal-expectation} (fil de discussion) peut ainsi être exprimé de la manière suivante~:
+La spécification du type de données répliquées de la~\autoref{fig:causal-expectation} (fil de discussion) peut ainsi être exprimé par l'\autoref{eq:chat-spec}~:
 
 \begin{equation}\label{eq:chat-spec}
-    x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) = \set*{m \given \exists y \in \trm{ctx}_A(x) \qsep \trm{call}(y) = \trm{post}(m)}
+    x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) = \set*{t \given \exists y \in \trm{ctx}_A(x) \qsep \trm{call}(y) = \trm{post}(t)}
 \end{equation}
 
 L'exécution abstraite de la~\autoref{fig:vis-example} respecte cette propriété de cohérence.
@@ -490,7 +489,7 @@ Cette extension permet de décrire des exécutions dans lesquels des pairs peuve
 Nous qualifions ces pairs de \emph{mal-intentionnés}.
 Inversement, les pairs qui suivent le protocole sont qualifiés d'\emph{honnêtes}.
 Nous notons $\trm{Honest}$ et $\trm{Malicious}$ l'ensemble des pairs honnêtes et mal-intentionnés.
-L'union de ces deux ensemble correpond à l'ensemble des pairs $\trm{Peers}$.
+L'union de ces deux ensemble correspond à l'ensemble des pairs $\trm{Peers}$.
 Ces ensembles sont connus étant donné que nous décrivons des exécutions d'un point de vue global.
 
 Sans perte de généralité, nous supposons que les pairs honnêtes exécutent les opérations de manière séquentielle.
@@ -517,16 +516,16 @@ Ils peuvent par exemple~:
     \item Exécuter des opérations qui ne sont pas reconnues par le protocole
     \item Produire des interactions qui ne peuvent pas être caractérisées par des opérations
 \end{itemize}
-Un protocole offre des garanties de cohérence uniquement aux pairs qui le suivent, c'est à dire aux pairs honnêtes.
+Un protocole offre des garanties de cohérence uniquement aux pairs qui le suivent, c'est-à-dire aux pairs honnêtes.
 Ces garanties se vérifient donc sur ce que les pairs honnêtes prennent en compte.
 Seuls les interactions acceptées par les pairs honnêtes sont incluses dans une histoire.
 
 Les pairs honnêtes acceptent uniquement les interactions reconnues par le protocole.
-En d'autres termes ils rejettent toute les interactions qui ne correspondent pas à des opérations définies par le protocole.
+En d'autres termes ils rejettent toutes les interactions qui ne correspondent pas à des opérations définies par le protocole.
 Au sein d'une exécution abstraite, une opération est acceptée par les pairs honnêtes si et seulement si elle est exécutée par un pair honnête ou si elle est visible à au moins une opération exécutée par un pair honnête.
 Une opération acceptée est ainsi observée par au moins un pair honnête.
 La \autoref{def:op-obs} définit ce qu'est un observateur d'une opération.
-La \autoref{tab:op-ctx-obs} donne les observateurs de chaque opérations de l'histoire de la \autoref{fig:causal-expectation}.
+La \autoref{tab:op-ctx-obs} donne les observateurs de chaque opération de l'histoire de la \autoref{fig:causal-expectation}.
 
 \begin{definition}[Observateurs]\label{def:op-obs}
 Soit une opération $x$ d'une exécution abstraite $A$.
@@ -543,7 +542,7 @@ Ces opérations correspondent \begin{inlinelist}
     \item aux opérations exécutées par des pairs mal-intentionnés qui sont visibles à au moins une opération d'un pair honnête
 \end{inlinelist}.
 La \autoref{def:wf-abstract-exec-malicious} définit formellement une exécution abstraite bien-formée.
-La \autoref{fig:wf-example} donne un exemple d'exécution abstraite mal-gformée et d'une exécution abstraite bien-formée.
+La \autoref{fig:wf-example} donne un exemple d'exécution abstraite mal-formée et d'une exécution abstraite bien-formée.
 %Les pairs mal-intentionnés peuvent exécuter des opérations qui ne se terminent pas.
 %Parce qu'elles ne se terminent pas, elles ne peuvent pas être observées par d'autres pairs, en particulier par les pairs honnêtes.
 %Les pairs mal-intentionnés peuvent exécuter des opérations arbitraires.
@@ -728,7 +727,7 @@ Elle doit être respectée en tout point de l'exécution d'un protocole.
 Il s'agit d'un invariant.
 Une propriété de vivacité décrit \enquote{quelque chose de positif} qui devrait survenir~\autocite{lamport_1977_correctness}.
 Elle peut être violée en plusieurs points de l'exécution d'un protocole.
-Une propriété de cohérence peut être la conjonction d'une propriété de sûreté et d'un propriété de vivacité~\autocite{alpern_liveness_1985}.
+Une propriété de cohérence peut être la conjonction d'une propriété de sûreté et d'une propriété de vivacité~\autocite{alpern_liveness_1985}.
 
 Dans ce chapitre nous avons déjà rencontré plusieurs propriétés de sûreté telles que l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
 En revanche, nous n'avons pas rencontré de propriétés de vivacité.
@@ -782,7 +781,7 @@ Une histoire $H'$ est une extension d'une histoire $H$, et nous écrivons $H' \s
     H \subset H' \land H \textit{est finie}
   \end{equation*}
 
-  \item Si l'opération $y$ est incluse dans $H$, alors toutes les opérations de $H'$ qui retournent-avant $y$ sont également inclues dans $H$.
+  \item Si l'opération $y$ est incluse dans $H$, alors toutes les opérations de $H'$ qui retournent-avant $y$ sont également incluses dans $H$.
   \begin{equation*}
     y \in H \land x \rb_{H'} y \implies x \in H
   \end{equation*}
@@ -832,7 +831,7 @@ Pour apprécier la différence entre deux protocoles de réplication, il suffit 
 La comparaison de ces ensembles de propriétés de cohérence peut être fastidieux.
 C'est pour cette raison que les propriétés de cohérence sont généralement réunies au sein de \emph{modèles de cohérence}.
 Un protocole garantit un \emph{modèle de cohérence} si toutes les histoires qu'il peut produire peuvent être justifiées par au moins une \emph{exécution abstraite} qui respecte ce modèle de cohérence.
-Par abus de langage nousd ésignons l'ensemble des exécutions abstraites qui respectent un modèle de cohérence par le nom du modèle de cohérecne.
+Par abus de langage nous désignons l'ensemble des exécutions abstraites qui respectent un modèle de cohérence par le nom du modèle de cohérence.
 La \autoref{def:consistency-model} introduit cet abus de langage.
 
 \begin{definition}[Modèle de cohérence et exécutions abstraites]\label{def:consistency-model}
@@ -851,7 +850,7 @@ $C$ désigne donc également l'ensemble des exécutions abstraites qui respecten
 Les modèles de cohérences offrent des garanties variées.
 Certains modèles de cohérence permettent des exécutions que d'autres ne permettent pas.
 Un modèle de cohérence est dit plus fort qu'un second modèle de cohérence si il accepte un sous-ensemble strict des exécutions abstraites que le premier accepte.
-Dans la \autoref{def:consistency-hierearchy}, nous introduisons la notation que nous utilisons pour mettre en évidence qu'un modèle de cohérecne est plus fort qu'un autre.
+Dans la \autoref{def:consistency-hierearchy}, nous introduisons la notation que nous utilisons pour mettre en évidence qu'un modèle de cohérence est plus fort qu'un autre.
 Deux modèles de cohérence sont incompatibles si l'un n'est pas plus fort que l'autre.
 Nous pouvons néanmoins juger de la \enquote{force} d'un modèle de cohérence par rapport au nombre d'exécutions abstraites qu'il permet.
 L'ensemble des modèles de cohérence est alors partiellement ordonné
@@ -888,7 +887,7 @@ Les pairs honnêtes s'accordent sur l'ordre d'intégration des opérations causa
 Les opérations qui ne sont pas causalement liées sont dites concurrentes.
 Les pairs intègrent les opérations concurrentes dans des ordres potentiellement distincts.
 %Elles peuvent être intégrées par un pair dans un ordre arbitraire.
-Par exemple si $x$ et $y$ sont deux opération concurrentes et causent toutes deux l'opération $z$, alors un premier pair peut intégrer $x$, puis $y$, puis $z$ et un second pair peut intégrer $y$, puis $x$, puis $z$.
+Par exemple si $x$ et $y$ sont deux opérations concurrentes et causent toutes deux l'opération $z$, alors un premier pair peut intégrer $x$, puis $y$, puis $z$ et un second pair peut intégrer $y$, puis $x$, puis $z$.
 $x$ et $y$ doivent être intégrées avant $z$.
 
 \textcite{lamport_1978_time} a introduit la définition communément acceptée de la causalité potentielle dans le cadre d'un système de passage de messages.
@@ -909,14 +908,14 @@ Une opération $x$ cause potentiellement une opération $y$ si et seulement si \
 La causalité potentielle est transitive.
 
 Dans une exécution abstraite qui respecte le modèle de cohérence causale, si une opération $x$ cause potentiellement une opération $y$, alors $x$ est intégrée avant l'exécution de $y$.
-Il s'en suit que chaque relation de causalité potentielle donne lieu à une relation de visibilité.
+Il s'ensuit que chaque relation de causalité potentielle donne lieu à une relation de visibilité.
 La relation de visibilité devient donc transitive.
 
 La \autoref{fig:vis-vs-pre-1} montre que la représentation graphique d'une exécution abstraite où la relation de visibilité est transitive peut devenir alternative.
 Lorsque la relation de visibilité est transitive, nous utilisons une représentation graphique plus liisble.
-La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont équiavlentes.
-La représentation graphique de la \autoref{fig:vis-vs-pre-2} correspond à la réduction transitive de la erlation de viisbilité.
-Pour éviter toute ambiguité, les relations ne sont pas étiquettées.
+La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont équivalentes.
+La représentation graphique de la \autoref{fig:vis-vs-pre-2} correspond à la réduction transitive de la relation de visibilité.
+Pour éviter toute ambiguïté, les relations ne sont pas étiquetées.
 
 % Pour simplifier leur représentation, nous introduisons la relation de précédence~:
 
@@ -1036,7 +1035,7 @@ Pour éviter toute ambiguité, les relations ne sont pas étiquettées.
     \caption{}\label{fig:vis-vs-pre-2}
 \end{subfigure}
 \caption[Exécutions abstraites qui respectent le modèle de cohérence causale]{Exécutions abstraites qui respectent le modèle de cohérence causale.
-L'exécution abstraite de la la \subref{fig:vis-vs-pre-2} correpond à la réduction transitive de l'exécution abstraite de la la \subref{fig:vis-vs-pre-1}.}\label{fig:vis-vs-pre}
+L'exécution abstraite de la \subref{fig:vis-vs-pre-2} correspond à la réduction transitive de l'exécution abstraite de la \subref{fig:vis-vs-pre-1}.}\label{fig:vis-vs-pre}
 \end{figure}
 
 
@@ -1099,7 +1098,7 @@ Dans une exécution abstraite $A$ qui respecte le modèle de cohérence causale,
 La~\autoref{th:rb-vis} est décomposable en deux implications.
 
 Procédons par contradiction.
-Soit une exécution abstraite $A$ et deux opération $x$ et $y$ d'un même pair $p$ tel que $x$ retourne-avant $y$.
+Soit une exécution abstraite $A$ et deux opérations $x$ et $y$ d'un même pair $p$ tel que $x$ retourne-avant $y$.
 Supposons que $x$ n'est pas visible à $y$.
 $y$ est visible à $x$, ou elles n'ont pas de relation de visibilité entre elles.
 Le premier cas contredit la propriété~\ref{itm:vtns2} de visibilité non-spéculative.
@@ -1141,7 +1140,7 @@ Un protocole peut garantir la cohérence causale avec divers mécanismes~\autoci
 Un protocole naïf pourrait~:
 
 \begin{itemize}
-    \item Inclure dans chaque opérations l'ensemble des opérations intégrées par son auteur avant son exécution.
+    \item Inclure dans chaque opération l'ensemble des opérations intégrées par son auteur avant son exécution.
     Cet ensemble correspond au contexte de l'opération.
     \item Intégrer une opération après l'intégration de l'ensemble des opérations présentes dans son contexte.
 \end{itemize}
@@ -1283,7 +1282,7 @@ Pour assurer la convergence des pairs honnêtes, les opérations observées par 
 Par conséquent les embranchements doivent être joints.
 Les opérations non-linéaires sont donc acceptées par les pairs honnêtes.
 Seuls les pairs honnêtes ordonnent linéairement leurs opérations.
-Dans la~\autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchement avec l'opération $a_2$.
+Dans la~\autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchements avec l'opération $a_2$.
 
 \begin{definition}[Cohérence \emph{\acl{FJC}} non-spéculative~\autocite{mahajan_2011_cac}]\label{def:fjc-consistency}
   Soit une exécution abstraite bien-formée $A$. $A$ respecte le modèle de cohérence \emph{\acf{FJC}} non-spéculative, et nous écrivons $A \in \trm{FJC}$, si et seulement si~:
@@ -1316,7 +1315,7 @@ Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{FJC}
 \end{equation*}
 \end{proposition}
 
-La preuve de la~\autoref{th:honest-rb-vis} suit la même structure que la preuve de la~\autoref{th:rb-vis}.
+La preuve de la~\autoref{th:honest-rb-vis} suit la même structure que la preuve de la \autoref{th:rb-vis}.
 \enquote{pair} doit être remplacé par \enquote{pair honnête} et~\ref{itm:peer-linear} par~\ref{itm:honest-linear}.
 
 \begin{proposition}\label{th:causal-fjc}
@@ -1334,7 +1333,7 @@ Si tous les pairs sont honnêtes alors les propriétés~\ref{itm:peer-linear} et
 le modèle de cohérence \ac{FJC} est plus faible que le modèle de cohérence causale.
 Les deux modèles partagent les mêmes garanties à l'exception de~\ref{itm:peer-linear} qui est une spécialisation de~\ref{itm:honest-linear}.
 Toutes les exécutions qui respectent le modèle de cohérence causale respectent également le modèle de cohérence~\ac{FJC}.
-Une application qui se base sur le modèle de cohérence~\ac{FJC} doit gérer la complexité induite par l'acceptation d'opérations \emph{non-linéaires}, c'est à dire d'opérations concurrentes d'un même pair.
+Une application qui se base sur le modèle de cohérence~\ac{FJC} doit gérer la complexité induite par l'acceptation d'opérations \emph{non-linéaires}, c'est-à-dire d'opérations concurrentes d'un même pair.
 Il est toutefois possible de présenter une exécution \ac{FJC} comme une exécution causale en assignant des pairs virtuels aux opérations \emph{non-linéaires}~\autocite{mahajan_depot_2011}.
 Ainsi, l'application considère que deux opérations non-linéaires n'ont pas été exécutées par le même pair.
 
@@ -1427,8 +1426,8 @@ Le pair $p_B$ n'a pas encore observé $m_2$. Il présume que $m_3$ est une opér
 %  \end{equation*}
 %\end{definition}
 
-Pour faciliter la spécification du modèled e cohérence \ac{VFJC}, nous définissons dans la \autoref{def:known-malicious} l'enemble des pairs reconnus mal-intentionné en une opération.
-La \autoref{tab:known-malicious} indique pour chaque opérations de la \autoref{fig:provably-malicious} les pairs qui sont reconnus mal-intentionnés.
+Pour faciliter la spécification du modèle de cohérence \ac{VFJC}, nous définissons dans la \autoref{def:known-malicious} l'ensemble des pairs reconnus mal-intentionné en une opération.
+La \autoref{tab:known-malicious} indique pour chaque opération de la \autoref{fig:provably-malicious} les pairs qui sont reconnus mal-intentionnés.
 
 \begin{definition}[Reconnus mal-intentionnés]\label{def:known-malicious}
   Soit une opération $x$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence \acl{FJC}.
@@ -1522,13 +1521,13 @@ Dans l'extension de cette exécution abstraite, $p_O$ accepte $m_4$ alors qu'il 
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
 \caption{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
-L'excéutio nabstarite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
+L'excéution abstraite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
 \end{figure}
 
 Les pairs honnêtes doivent s'assurer qu'un pair qui reconnaît un autre pair comme mal-intentionné arrête d'accepter directement les opérations de ce dernier.
 En d'autres termes, reconnaître qu'un pair est mal-intentionné devrait être responsabilisant.
 
-Pour définir cette notion de direct nous introduisons une relation construite sur la relation de viisbilité~:
+Pour définir cette notion de direct nous introduisons une relation construite sur la relation de visibilité~:
 
 \paragraph{Précédence immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
 Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, précède immédiatement $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
@@ -1595,16 +1594,16 @@ Il est toutefois plus fort que le modèle de cohérence~\ac{FJC} puisqu'il n'acc
 La réplication optimiste~\autocite{saito_2005_optimisticreplication} d'un contenu partagé permet d'interroger et de modifier ce dernier à tout moment.
 Pour ce faire, chaque pair détient sa propre copie du contenu partagé sur-laquelle il exécute ses opérations de modification et ses opérations d'interrogation.
 Un pair intègre ses modifications avant de les transmettre ultérieurement aux autres pairs qui les intègrent à leur tour.
-La modification parallèle des copies conduit nécessairement à leur divergence.
-Les protocoles de réplication optimiste sont en charge de la convergence à terme des copies et plus largement du maintien de la cohérence des copies.
+La modification parallèle des copies conduit nécessairement à leur divergence~\autocite{dourish_1995_divergence}.
+Les protocoles de réplication optimiste sont responsables de la convergence à terme des copies et plus largement du maintien de la cohérence des copies.
 Le maintien de la cohérence des copies doit préserver autant que possible l'intention des opérations exécutées.
 
 La conception d'un protocole de réplication n'est pas une tâche aisée~\autocite{oster2005_otisuues}.
-Il doit prendre en compte les aléas du réseau et résoudre les éventuels conflits engendrés par des modifications parallèles et incompatibles.
+Il doit prendre en compte les aléas du réseau~\autoref{rotem_falalcies_2006} et résoudre les éventuels conflits engendrés par des modifications parallèles et incompatibles.
 Dans la \autoref{fig:set-conflict-example}, les pairs $p_A$ et $p_B$ modifient un ensemble répliqué d'entiers.
 Alors que $p_B$ ajoute puis supprime un entier dans l'ensemble, le pair $p_A$ ajoute en parallèle ce même entier dans l'ensemble.
 $p_B$ a l'intention de supprimer l'entier de l'ensemble, alors que $p_A$ a l'intention de l'ajouter à l'ensemble.
-Il est autant correcte que l'ensemble contienne ou ne contienne pas cet entier.
+Il est autant correct que l'ensemble contienne ou ne contienne pas cet entier.
 La suppression et l'ajout en parallèle d'une même valeur dans un ensemble répliqué sont deux opérations incompatibles.
 
 
@@ -1656,7 +1655,7 @@ Nous spécifions un \ac{CRDT} avec deux modèles~\autocite{preguia2018_crdt}~: u
 Le type abstrait de données répliquées définit les opérations qui peuvent être exécutées et leur effet lorsqu'elles sont exécutées en parallèle ou en séquence.
 Nous abordons ce sujet plus en détail dans la \autoref{sec:crdt-spec}.
 Le schéma de synchronisation conditionne la manière dont les copies d'un \ac{CRDT} peuvent se synchroniser.
-Il repose lui même sur un modèle réseau.
+Il repose lui-même sur un modèle réseau.
 Nous détaillons cet aspect dans la \autoref{sec:crdt-sync}.
 
 \subsection{Type abstrait de données répliquées}\label{sec:crdt-spec}
@@ -1665,19 +1664,20 @@ Pour modifier et consulter un contenu, un pair exécute respectivement des opér
 L'exécution des opérations d'interrogations ne modifient pas le contenu.
 En d'autres termes, leur exécution ou l'absence de leur exécution ne change pas le résultat des interrogations ultérieures.
 Les opérations qui peuvent être exécutées sur un contenu dépendent du type du contenu.
-Un type abstrait de données définit les opérations qui peuvent être exécutées sur un ensemble de types de données ou de structures de données, ainsi que l'effet de l'exécution de ces opérations.
-L'ensemble des opérations $\trm{Op}_T$ et l'ensemble des valeurs de retours des opérations d'interrogations $\trm{Val}_T$ d'un type abstrait de données $T$ constituent la \emph{signature syntaxique} de $T$.
+Un type abstrait de données définit les opérations qui peuvent être exécutées sur un ensemble de types de données, ainsi que l'effet de l'exécution de ces opérations.
+L'ensemble des opérations $\trm{Op}_T$ et l'ensemble des valeurs de retour des opérations d'interrogations $\trm{Val}_T$ d'un type abstrait de données $T$ constituent la \emph{signature syntaxique} de $T$.
 Cette signature syntaxique est couplée à une sémantique qui détermine les effets de l'exécution des opérations de modification sur les valeurs retournées par l'exécution d'opérations d'interrogation.
 La sémantique du type abstrait de données est spécifiée par un modèle de cohérence.
 Elle est donc formulée à l'aide d'un ensemble de propriétés de cohérence.
 
 Prenons l'exemple du type abstrait de données \emph{Ensemble} noté $\trm{Set}\tuple*{V}$.
 $V$ est l'ensemble des valeurs que l'ensemble peut contenir.
-La~\autoref{fig:set-spec} présente une spécification algébrique \autocite{wirsing1990_algebraicspec} commune de ce type.
+La \autoref{fig:set-spec} présente une spécification algébrique~\autocite{wirsing1990_algebraicspec} de ce type.
 Nous proposons de l'adapter au formalisme utilisé dans ce manuscrit.
 Les opérations de ce type regroupent une opération de lecture $\trm{rd}$, une opération d'ajout $\trm{add}(v)$, et une opération de suppression $\trm{rmv}(v)$ tel que $v$ est une valeur de l'ensemble $V$.
 Les valeurs de retour de l'opération de lecture sont l'ensemble des parties finies de $V$~: $\trm{Val}_{\trm{Set}\tuple*{V}} = \powerfset{V}$.
-La sémantique de ce type est précisé par la propriété de cohérence suivante~:
+La sémantique de ce type est précisé par la propriété de cohérence de l'\autoref{eq:add-win-set}.
+Chaque valeur inclue dans l'ensemble retourné par l'exécution d'une opération de lecture est ajoutée par au moins une opération du contexte de l'opération de lecture et n'est pas visible à une opération du contexte de l'opération de lecture qui la supprime.
 
 \begin{equation}\begin{split}\label{eq:add-win-set}
 \MoveEqLeft x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) =\\
@@ -1692,10 +1692,12 @@ Ils supposent donc un modèle de cohérence séquentiel dans lequel la relation 
     \centering
     \begin{align*}
     &S \in \trm{Set}\tuple*{V}\\
+    &\\
     &\trm{emp}: S\\
     &\trm{rd}: S \to \powerfset{V}\\
     &\trm{add}: S \times V \to S\\
     &\trm{rmv}: S \times V \to S\\
+    &\\
     &\trm{rd}(\trm{emp}) = \emptyset \\
     &\trm{rd}(\trm{add}(s, v)) = \set*{v} \cup \trm{rd}(s) \\
     &\trm{add}(\trm{add}(s, v), v) = \trm{add}(s, v) \tag{\small add idempotence}\\
@@ -1705,7 +1707,8 @@ Ils supposent donc un modèle de cohérence séquentiel dans lequel la relation 
     &\trm{rmv}(\trm{add}(s, v_1), v_2) = \trm{add}(\trm{rmv}(s, v_2), v_1) \tag{\small add/rmv commutativity}\\
     &\trm{rmv}(\trm{rmv}(s, v_1), v_2) = \trm{rmv}(\trm{rmv}(s, v_2), v_1) \tag{\small rmv commutativity}\\
     \end{align*}
-    \caption{Spécification algébrique du type abstrait de données usuel Ensemble.}\label{fig:set-spec}
+    \caption[Spécification algébrique du type abstrait \emph{Ensemble}]{Spécification algébrique du type abstrait de données usuel \emph{Ensemble}.
+    $\powerfset{V}$ désigne l'ensemble des parties finies de $V$.}\label{fig:set-spec}
 \end{figure}
 
 Le type abstrait de données Ensemble est spécifié pour une exécution séquentielle.
@@ -1715,7 +1718,7 @@ Les types abstraits de données qui spécifient les \acp{CRDT} doivent donc à l
 Ces types abstraits de données sont nommés \emph{types abstraits de données répliquées}~\autocite{roh_2011_rga}.
 La majorité des \acp{CRDT} sont des extensions de types abstraits de données définit pour des exécutions séquentielles.
 Ils se comportent donc de la même manière lorsqu'ils sont utilisés dans une exécution séquentielle.
-Il s'agit d'un comportement recherché car il renvoit à une sémantique usuelle pour ses utilisateur·ice·s~\autocite{preguia2018_crdt}.
+Il s'agit d'un comportement recherché car il renvoie à une sémantique usuelle pour ses utilisateur·ice·s~\autocite{preguia2018_crdt}.
 Dans ce manuscrit, nous considérons uniquement des \acp{CRDT} qui présentent ce comportement.
 
 \begin{figure}[htb]
@@ -1826,11 +1829,11 @@ Dans ce manuscrit, nous considérons uniquement des \acp{CRDT} qui présentent c
     \end{tikzpicture}
     \caption{}
 \end{subfigure}
-\caption[Impact d'ordres distincts d'intégration des messages sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la~\autoref{fig:set-conflict-example}.}\label{fig:spec-linearization}
+\caption[Impact d'ordres distincts d'intégration des opérations de modification sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la~\autoref{fig:set-conflict-example}.}\label{fig:spec-linearization}
 \end{figure}
 
 La relation de visibilité rend compte des opérations intégrées.
-Dans la \autoref{fig:set-conflict-example}, les opération $a_1$, $b_1$, et $b_2$ sont intégrées avant l'opération de lecture $a_2$.
+Dans la \autoref{fig:set-conflict-example}, les opérations $a_1$, $b_1$, et $b_2$ sont intégrées avant l'opération de lecture $a_2$.
 Étant donné que $b_1$ est visible à $b_2$, nous pouvons dire que $b_2$ a pris en compte l'effet de $b_1$.
 Elle l'a d'autant pris en compte qu'elle annule l'effet de $b_1$.
 $b_1$ devrait donc être intégrée avant $b_2$.
@@ -1844,9 +1847,9 @@ En revanche l'ajout et la suppression d'un même élément ne sont pas des opér
 Les opérations sont dites \emph{incompatibles}.
 Leurs intentions sont incompatibles et conduisent à des conflits de modification si elles sont intégrées dans des ordres distincts.
 Une sémantique doit donc définir un ordre d'intégration entre les couples d'opérations incompatibles.
-Puisque cette ordre est déterminé par la sémantique, nous disons que la résolution de conflits est déterministe.
+Puisque cet ordre est déterminé par la sémantique, nous disons que la résolution de conflits est déterministe.
 
-Contrairement aux type abstraits usuels, plusieurs sémantiques peuvent se révéler utiles et dépendre de leur domaine d'application.
+Contrairement aux types abstraits usuels, plusieurs sémantiques peuvent se révéler utiles et dépendre de leur domaine d'application.
 La littérature a par exemple proposé les sémantiques suivantes pour les ensembles répliqués~:
 
 \begin{figure}[htb]
@@ -1921,15 +1924,15 @@ La littérature a par exemple proposé les sémantiques suivantes pour les ensem
 }\label{fig:set-alt-sem}
 \end{figure}
 
-\paragraph{Un Last-Writer-Win Set (LWWSet)} \autocite{shapiro2011_comprehensive} spécifie que la dernière opération l'emporte sur les précédentes. Les opérations sont ainsi estampées par un horodatage.
+\paragraph{Un Last-Writer-Win Set (LWWSet)~\autocite{shapiro2011_comprehensive}} spécifie que la dernière opération l'emporte sur les précédentes. Les opérations sont ainsi estampées par un horodatage.
 Si deux opérations ont le même horodatage, un ordre total strict sur les identifiants des pairs peut être utilisé pour lever l'ambiguïté.
 Dans la \autoref{fig:set-alt-sem}, nous supposons qu'une première opération qui retourne-avant une seconde opération a un horodatage strictement plus petit que l'horodatage de la seconde opération.
-Pour déterminer la composition de l'ensemble retournée par l'exécution de l'opération de lecture $a_5$, nous conservons uniquement l'opération avec l'horodatage le plus grand pour chaque valeur ajoutée au moins une fois dans l'ensemble.
+Pour déterminer la composition de l'ensemble retourné par l'exécution de l'opération de lecture $a_5$, nous conservons uniquement l'opération avec l'horodatage le plus grand pour chaque valeur ajoutée au moins une fois dans l'ensemble.
 Pour les valeurs $1$ et $2$, il s'agit respectivement de l'opération $a_3$ et $b_3$.
 La valeur est présente dans l'ensemble lu si et seulement si l'opération conservée est un ajout.
-Ainsi l'ensemble retournée est un singleton qui contient la valeur $2$.
+L'ensemble lu est donc un singleton qui contient la valeur $2$.
 
-\paragraph{Un Add-Win Set (AWSet)} \autocite{shapiro_2011_crdt} spécifie que l'ajout d'un élément l'emporte toujours sur la suppression de ce même élément en parallèle.
+\paragraph{Un Add-Win Set (AWSet)~\autocite{shapiro_2011_crdt}} spécifie que l'ajout d'un élément l'emporte toujours sur la suppression de ce même élément en parallèle.
 Il est aussi connu sous le nom \emph{Observed-remove Set}~\autocite{shapiro_2011_crdt}.
 Dans la \autoref{fig:set-alt-sem}, les ajouts $b_2$ et $b_3$ ne précédent pas de suppressions et prennent l'ascendance sur les suppressions concurrentes $a_3$ et $a_4$.
 L'ensemble lu contient donc les valeurs $1$ et $2$.
@@ -1938,13 +1941,14 @@ Cette sémantique est spécifiée par l'\autoref{eq:add-win-set}.
 \paragraph{Un Remove-Win Set (RWSet)} spécifie que la suppression d'un élément l'emporte toujours sur l'ajout de cette même valeur en parallèle.
 Dans la \autoref{fig:set-alt-sem}, les suppressions $a_3$ et $a_4$ ne précédent pas d'ajouts et prennent l'ascendance sur les ajouts concurrents $b_2$ et $b_3$.
 L'ensemble lu est donc vide.
+Cette sémantique est spécifiée par l'\autoref{eq:remove-win-set}~:
 
-\begin{equation}\begin{split}
+\begin{equation}\begin{split}\label{eq:remove-win-set}
 \MoveEqLeft x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) =\\
     &\set*{v \given \exists y \in \trm{ctx}_A(x) \qsep \trm{call}(y) = \trm{add}(v) \land \nexists z \in \trm{ctx}_A(x) \qsep z \not\viseq y \land \trm{call}(z) = \trm{rmv}(v)}
 \end{split}\end{equation}
 
-\paragraph{Un Causal-Length Set (CLSet)} \autocite{yu2020_clset} traite les successions d'ajouts et de suppressions d'une même valeur comme des annulations d'ajouts et de suppressions~\autocite{2019_yu_genericundo}.
+\paragraph{Un Causal-Length Set (CLSet)~\autocite{yu2020_clset}} traite les successions d'ajouts et de suppressions d'une même valeur comme des annulations d'ajouts et de suppressions~\autocite{2019_yu_genericundo}.
 Si un ajout ou une suppression est parallèle à une opération qui concerne la même valeur, alors l'effet de cette dernière est soit équivalente à la première, ou l'une d'entre elle annule ou prévale sur l'autre.
 Dans la \autoref{fig:set-alt-sem}, les opérations $a_3$ et $b_1$ annulent l'effet de l'ajout $a_1$.
 Elles sont donc équivalentes.
@@ -1999,36 +2003,37 @@ En fonction du schéma de synchronisation choisit, les \acp{CRDT} peuvent respec
 %Les requêtes et les modificateurs prennent toujours un état comme premier paramètre.
 %Nous écrivons $S : \trm{CRDT}$.
 
-Les type abstrait de données répliquées permettent aux utilisateur·ice·s de se concentrer sur le comportement des contenus répliqués.
+Les types abstraits de données répliquées permettent aux utilisateur·ice·s de se concentrer sur le comportement des contenus répliqués.
 Les \acp{CRDT} s'appuie sur cette abstraction pour encapsuler les mécanismes de résolution de conflits.
 La réplication optimiste d'un contenu partagé requiert la synchronisation des copies du contenu.
-Les \acp{CRDT} proposent différentes stratégie de synchronisation que nous présentons dans la sous-section suivante.
+Les \acp{CRDT} proposent différentes stratégies de synchronisation que nous présentons dans la sous-section suivante.
 
 
 \subsection{Schéma de synchronisation}\label{sec:crdt-sync}
 
-Afin de converger, les pairs doivent intégrer les effets de l'ensemble des modifications effectuées sur les copies du contenu partagé.
+Afin de converger, les pairs doivent intégrer l'ensemble des modifications effectuées sur les copies du contenu partagé.
 Pour ce faire, les pairs s'échangent leurs modifications sous forme de messages.
-Lorsqu'un pair exécute une opération, il génère un message qu'il intègre à sa copie et transmet aux autre pairs.
+Lorsqu'un pair exécute une opération, il génère un message qu'il intègre à sa copie et qu'il transmet aux autre pairs.
 Les pairs intègrent à terme les messages qu'ils reçoivent.
 
-La forme des messages conditionne la manière de synchroniser les copies du contenu paratgé.
+La forme des messages conditionne la manière de synchroniser les copies du contenu partagé.
 Il existe deux principales familles de \acp{CRDT}~: les \acp{CRDT} synchronisés par opérations, et les \acp{CRDT} synchronisés par états.
 Nous présentons chaque famille de \acp{CRDT} et nous les illustrons à l'aide d'un ensemble répliqué.
 L'ensemble répliqué choisit respecte la sémantique \emph{add-win} présentée dans la \autoref{sec:crdt-spec}.
 
-Quelque soit le schéma de synchronisation choisit, les implémentations d'ensembles répliqués que nous présentons se basent sur une idée commune.
+Quel que soit le schéma de synchronisation choisit, les implémentations d'ensembles répliqués que nous présentons se basent sur une idée commune.
 Chaque ajout d'une valeur dans l'ensemble associe à cette valeur un identifiant unique.
 Si la valeur est ajoutée plusieurs fois dans l'ensemble, elle est donc associée à plusieurs identifiants.
 Une suppression ne supprime pas directement une valeur mais supprime définitivement un ensemble d'identifiants qui lui est associée.
 Une valeur est présente dans l'ensemble si elle est associée à au moins un identifiant.
-L'utilisation d'identifiants uniques est courant dans les implémentation de \acp{CRDT}~\autocite{baquero_2018_pure-op-crdt,almeida_2018_delta-crdt-revisited}.
+L'utilisation d'identifiants uniques est courant dans les implémentations de \acp{CRDT}~\autocite{baquero_2018_pure-op-crdt,almeida_2018_delta-crdt-revisited}.
 Ces identifiants sont généralement des couples dont le premier élément est l'identifiant unique du pair, et le second élément est un entier naturel qui est incrémenté avant chaque génération d'un nouvel identifiant.
-Ce second élément est un nombre séquentiel.
+Ce second élément est communément nommé \emph{nombre séquentiel}.
 Ces couples sont dénommés \emph{dots}~\autocite{baquero_2018_pure-op-crdt}.
 
 Pour décrire l'implémentation de ces ensembles répliqués, nous introduisons un formalisme inspirée des travaux de \textcite{baquero_2018_pure-op-crdt}.
-Une fois initialisé, un \ac{CRDT} peut être soumis aux événements d'entrées suivants~:
+Notre formalisme nous permet de décrire de manière unifiée les \acp{CRDT} synchronisés par opérations et les \acp{CRDT} synchronisés par états.
+Une fois initialisé, un \ac{CRDT} peut être soumis aux événements d'entrés suivants~:
 \begin{itemize}
 \item L'exécution d'une opération d'interrogation
 \item L'exécution d'une opération de modification
@@ -2036,101 +2041,185 @@ Une fois initialisé, un \ac{CRDT} peut être soumis aux événements d'entrées
 \end{itemize}
 
 Lorsqu'un pair exécute une opération d'interrogation, il évalue la valeur de retour de cette interrogation à l'aide de la fonction $\trm{eval}$.
-L'appel $\trm{eval}_i(s, x)$ donne la valeur de retour de l'exécution de l'opération d'interrogation $x$ par le pair $p_i$ sur un état $s$ du contenu partagé.
+%L'appel $\trm{eval}_i(s, x)$ donne la valeur de retour de l'exécution de l'opération d'interrogation $x$ par le pair $p_i$ sur un état $s$ du contenu partagé.
 L'exécution d'une opération de modification se déroule en trois étapes.
 Un message est d'abord généré à l'aide de la fonction $\trm{prepare}$.
-L'appel $\trm{prepare}_i(s, x)$ retourne le message généré par l'exécution de l'opération de modification $x$ par le pair $p_i$ sur l'état $s$.
+%L'appel $\trm{prepare}_i(s, x)$ retourne le message généré par l'exécution de l'opération de modification $x$ par le pair $p_i$ sur l'état $s$.
 Une fois généré, le message est intégré à la copie du pair à l'aide de la fonction $\trm{integrate}$.
-L'appel $\trm{integrate}_i(s, m)$ renvoie la mise-à-jour de l'état $s$ qui correspond à $s$ auquel a été intégré le message $m$ sur le pair $p_i$.
+%L'appel $\trm{integrate}_i(s, m)$ renvoie la mise-à-jour de l'état $s$ qui correspond à $s$ auquel a été intégré le message $m$ sur le pair $p_i$.
 Finalement, le message est laissé à la charge d'un protocole de passage de messages qui peut transmettre immédiatement ou ultérieurement le message aux autres pairs.
 L'intégration d'un message d'un autre pair s'effectue simplement à l'aide de la fonction $\trm{integrate}$.
 
-L'implémentation des fonctions $\trm{eval}$, $\trm{prepare}$, et $\trm{integrate}$, ainsi que la spécification de l'ensemble des états et de l'état initiale $s_0$ suffisent à décrire l'implémentation d'un \ac{CRDT}.
-Dans les paragraphes suivants nous détaillons les différences entre les différenets familles de \acp{CRDT}.
+L'implémentation des fonctions $\trm{eval}$, $\trm{prepare}$, et $\trm{integrate}$, ainsi que la spécification de l'ensemble des états suffisent à décrire l'implémentation d'un \ac{CRDT}.
+La \autoref{tab:crdt-impl-func} donne la signature et la sémantique de ces fonctions.
+Dans les paragraphes suivants nous détaillons les différences entre les différentes familles de \acp{CRDT}.
 
-\paragraph{Les \acp{CRDT} synchronisés par opérations}~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt} représentent les modifications effectuées sur une copie par des opérations intégrables.
+\begin{table}[htb]
+\centering
+\begin{tabular}{rp{0.7\linewidth}}
+    $\trm{eval}_i(\sigma, x)$ & Retourne la valeur de retour de l'exécution de l'opération d'interrogation $x$ par le pair $p_i$ sur l'état $\sigma$ \\
+    $\trm{prepare}_i(\sigma, x)$ & Retourne un message généré par l'exécution de l'opération de modification $x$ par le pair $p_i$ sur l'état $\sigma$ \\
+    $\trm{integrate}_i(\sigma, m)$ & Retourne la mise-à-jour de l'état $\sigma$ qui correspond à $\sigma$ auquel a été intégré le message $m$ sur le pair $p_i$\\
+\end{tabular}
+\caption[Fonctions qui permettent d'implémenter un~\ac{CRDT}]{Fonctions qui permettent d'implémenter un~\ac{CRDT}.}\label{tab:crdt-impl-func}
+\end{table}
+
+\paragraph{Les \acp{CRDT} synchronisés par opérations~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt}} représentent les modifications effectuées sur une copie par des opérations intégrables.
 Il est important de distinguer les opérations exécutées et les opérations intégrables.
-L'exécution d'une opération de modification donne lieu à la génération d'une opération intégrable qui peut être intégrée sur toute copie du contenu partagé.
+L'exécution d'une opération de modification donne lieu à la génération d'un message qui encapsule une opération intégrable.
 Par abus de langage nous pouvons parler d'opérations lorsque l'ambiguïté n'est pas possible.
-Ces opérations intégrables peuvent être intégrées sur toutes les copies sans générer de conflits.
-Ainsi les opérations générées par l'exécution de deux opérations concurrentes et incompatibles peuvent être intégrées dans un ordre quelconque.
+Ces opérations peuvent être intégrées sur toutes les copies sans générer de conflits.
+Toutefois elles ne peuvent généralement pas être intégrées dans des ordres quelconques.
+Il existe des relations de dépendances entre les opérations intégrables.
 
-Les \acp{CRDT} synchronisés par opérations exigent un protocole de passage de messages fiable~: chaque message doit être livré exactement une fois.
+Les \acp{CRDT} synchronisés par opérations exigent un protocole de passage fiable de message~: chaque message doit être livré exactement une fois.
 Cette famille de \acp{CRDT} requiert en général un ordre non-arbitraire de livraison des messages.
 Ils supposent souvent une livraison causale des messages car elle garantit une cohérence causale des copies et elle simplifie leur implémentation.
-En d'autres termes, si un pair intègre un message $x$ avant l'intégration d'un de ses propres messages $y$, alors $x$ doit toujours être intégré avant $y$ quelque soit la copie.
-En pratique, la livraison causale d'opérations est difficile et peut entraîner des ralentissement de propagation des opérations dans l'ensemble du système~\autocite{alvisi_2017_writes-dirty-secret}.
+En d'autres termes, si un pair intègre un message $x$ avant l'intégration d'un de ses propres messages $y$, alors $x$ doit toujours être intégré avant $y$ quel que soit la copie.
+En pratique, la livraison causale d'opérations est difficile et peut entraîner des ralentissements de propagation des opérations dans l'ensemble du système~\autocite{alvisi_2017_writes-dirty-secret}.
 
-Le raffinement des \acp{CRDT} synchronisés par opérations conduit à la formulation d'une sous-famille qualifiée de pure~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt}.
-Dans cette sous-famille la génération du message est indépendant de l'état de la copie.
-Le message encapsule donc simplement l'opération exécutée.
+%Le raffinement des \acp{CRDT} synchronisés par opérations conduit à la formulation d'une sous-famille qualifiée de pure~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt}.
+%Dans cette sous-famille la génération du message est indépendant de l'état de la copie.
+%Le message encapsule donc simplement l'opération exécutée.
 
-%Un \ac{CRDT} synchronisé par opérations peut être représenté comme un \ac{CRDT} équipé d'un ensemble de requêtes d'opérations $Q^{\trm{op}}$ et d'une fonction $\trm{effect}$.
-%Les requêtes d'opérations permettent de dériver une opération qui peut être jouée sur toutes les copies par l'intermédiaire de la fonction $\trm{effect}$.
-%Chaque modificateurs du \ac{CRDT} est associé à une requête d'opération qui prend les mêmes types de paramètres en entrée, mais donne une opération au lieu d'une version mis à jour de l'état.
-%La fonction $\trm{effect}$ prend respectivement un état et une opération comme premier et second paramètres, et retourne un état mis à jour.
-%Dans la littérature~\autocite{baquero_2018_pure-op-crdt}, l'ordre des paramètres de la fonction $\trm{effect}$ sont inversés, et les requêtes d'opérations sont substituées à une unique fonction nommée $\trm{prepare}$.
-%Nous avons décidé de nous écarter de ces choix pour exprimer des invariants plus concis entre les modificateurs et leurs requêtes d'opérations.
-%Pour ce faire nous utilisons des applications partielles de fonction, ainsi que des compositions de fonctions.
-%\begin{align*}
-%&\forall S \in \trm{OpCRDT} \qsep \tuple*{S, Q^{\trm{op}}, \trm{effect}}\\
-%&S \in \trm{CRDT}\\
-%&\forall m \in M \qsep \exists q^{\trm{op}} \in Q^{\trm{op}} \qsep \:\forall i \in \mathbb{I} \qsep m_i(s) = \trm{effect}_i(s) \circ q^{\trm{op}}_i(s)
-%\end{align*}
-
-\begin{figure}[tb]
+\begin{figure}[bth]
 \centering
-\begin{align*}
-&\trm{OpAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \mathbb{N}_0\\
-&s_0 \defeq \tuple*{\emptyset, 0}\\
-&\trm{eval}_i(\tuple*{m, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in m}\\
-&\trm{prepare}_i(\tuple*{m, n}, \trm{add}(v)) \defeq \tuple*{\trm{add}, v, i, n+1}\\
-&\trm{prepare}_i(\tuple*{m, n}, \trm{rmv}(v)) \defeq \tuple*{\trm{rmv}, \set*{\tuple*{v, \_, \_} \in m}}\\
+\begin{align}
+&\trm{OpAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \mathbb{N}_0 \label{eq:op-awset-state}\\
+%&s_0 \defeq \tuple*{\emptyset, 0}\\
+&\trm{eval}_i(\tuple*{t, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:op-awset-eval}\\
+&\trm{prepare}_i(\tuple*{t, n}, \trm{add}(v)) \defeq \tuple*{\trm{add}, \tuple*{v, i, n+1}} \label{eq:op-awset-prep-add}\\
+&\trm{prepare}_i(\tuple*{t, n}, \trm{rmv}(v)) \defeq \tuple*{\trm{rmv}, \set*{\tuple*{v, \_, \_} \in t}} \label{eq:op-awset-prep-rmv}\\
 &\begin{aligned}
-\MoveEqLeft\trm{integrate}_i(\tuple*{m, n}, \tuple*{\trm{add}, v, j, n''}) \defeq \tuple{m \cup \set*{\tuple*{v, j, n''}}, n'}\\
+\MoveEqLeft\trm{integrate}_i(\tuple*{m, n}, \tuple*{\trm{add}, \tuple*{v, j, n''}}) \defeq \tuple{t \cup \set*{\tuple*{v, j, n''}}, n'}\\
     &\where n' \defeq \begin{dcases}
         n'' & \when i = j\\
         n
     \end{dcases}
-\end{aligned}\\
-&\trm{integrate}_i(\tuple*{m, n}, \tuple*{\trm{rmv}, x}) \defeq \tuple*{m \sminus x, n}
-\end{align*}
+\end{aligned}\label{eq:op-awset-integr-add}\\
+&\trm{integrate}_i(\tuple*{t, n}, \tuple*{\trm{rmv}, x}) \defeq \tuple*{t \sminus x, n} \label{eq:op-awset-integr-rmv}
+\end{align}
 \caption[Implémentation d'un ensemble répliqué synchronisé par opérations]{Implémentation d'un ensemble répliqué synchronisé par opérations qui respecte la sémantique \emph{Add-Win}.
 L'intégration de la suppression d'une valeur est effectuée après l'intégration de son ajout.}\label{fig:op-add-win-set}
 \end{figure}
 
 La \autoref{fig:op-add-win-set} propose une implémentation d'un ensemble répliqué synchronisé par opérations.
-L'état est définit comme un couple dont le premier élément contient l'ensemble des valeurs associées à leur identifiant unique, et le second élément est un nombre séquentiel utilisé pour générer les identifiants uniques.
-L'association d'une valeur $v$ et d'un identifiant $\tuple*{i, n}$ est représentée par un triplet $\tuple*{v, i, n}$ où $i$ est pris dans l'ensemble $\mathbb{I}$ des identifiants des pairs, et $n$ est un entier naturel non-nul ($n \in \mathbb{N}^*$).
-L'opération intégrable d'ajout d'une valeur correspond simplement à la génération d'un nouveau triplet.
-L'opération intégrable de suppression contient l'ensemble des triplets à supprimer.
-L'intégration de l'opération d'ajout consiste simplement à ajouter le nouveau triplet et à incrémenter le nombre séquentiel si l'opération a été généré par le pair actuel.
-L'intégration de l'opération de suppression supprime les triplets qu'elle contient.
-Une opération d'ajout est intégrée dès sa réception.
-En revanche, une opération de suppression est intégrée lorsque l'ensemble des triplets qu'elle contient ont été ajoutés (et éventuellement supprimés) de l'état.
-Une opération de suppression dépend donc sur les opérations qui ajoutent les triplets qu'elle contient.
-Par exemple la suppression $\tuple*{\trm{rmv}, \set*{\tuple*{1, A, 1}, \tuple*{1, B, 1}}}$ est intégrée lorsque les ajouts $\tuple*{\trm{add}, 1, A, 1}$ et $\tuple*{\trm{add}, 1, B, 1}$ ont été préalablement intégrés.
+L'\autoref{eq:op-awset-state} précise l'ensemble des états du \ac{CRDT}.
+Un état est définit comme un couple $\tuple*{t, n}$ où $t$ contient l'ensemble des valeurs associées à leur identifiant unique et $n$ est un nombre séquentiel utilisé pour générer les identifiants uniques.
+L'association d'une valeur $v$ et d'un identifiant $\tuple*{i, n'}$ est représentée par un triplet $\tuple*{v, i, n'}$ où $i$ est pris dans l'ensemble $\mathbb{I}$ des identifiants des pairs et $n'$ est un entier naturel non-nul ($n' \in \mathbb{N}^*$).
+L'évaluation d'une opération de lecture retourne l'ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:op-awset-eval}).
+L'opération intégrable d'ajout d'une valeur correspond à un couple constitué de l'étiquette $\trm{add}$ et du triplet composé de la valeur et d'un nouvel identifiant unique (\autoref{eq:op-awset-prep-add}).
+L'identifiant unique est formé par l'identifiant du pair qui génère l'opération intégrable et de son nombre séquentiel incrémenté d'une unité.
+L'intégration d'une opération d'ajout consiste à ajouter le nouveau triplet et à incrémenter le nombre séquentiel si l'opération a été généré par le pair actuel (\autoref{eq:op-awset-integr-add}).
+L'opération intégrable de suppression contient l'ensemble des triplets à supprimer et est estamplé par l'étiquette $\trm{rmv}$ (\autoref{eq:op-awset-prep-rmv}).
+L'intégration de l'opération de suppression supprime les triplets qu'elle contient (\autoref{eq:op-awset-integr-rmv}).
+
+La \autoref{fig:op-awset-state-trans} montre les états successifs de la copie du pair $p_A$ lors de l'exécution représentée par l'exécution abstraite de la \autoref{fig:op-awset-state-trans}.
+Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivement notés $\tuple*{v, i_n}$ et $i_n$.
+Le pair $p_A$ reçoit et intègre le message généré par l'exécution de $b_1$ après l'exécution de $a_1$ et $a_2$ et avant l'exécution de $a_3$.
+
+%Une opération d'ajout est intégrée dès sa réception.
+%En revanche, une opération de suppression est intégrée lorsque l'ensemble des triplets qu'elle contient ont été ajoutés (et éventuellement supprimés) de l'état.
+%Une opération de suppression dépend donc sur les opérations qui ajoutent les triplets qu'elle contient.
+%Par exemple la suppression $\tuple*{\trm{rmv}, \set*{\tuple*{1, A, 1}, \tuple*{1, B, 1}}}$ est intégrée lorsque les ajouts $\tuple*{\trm{add}, \tuple*{1, A, 1}}$ et $\tuple*{\trm{add}, \tuple*{1, B, 1}}$ ont été préalablement intégrés.
+
+L'exécution d'une opération de suppression d'une valeur $v$ forme une opération intégrable qui contient l'ensemble des identifiants associés à $v$.
+Si une opération d'ajout de $v$ est exécutée en parallèle, un nouvel identifiant est associé à la valeur.
+Cet identifiant n'est pas inclut dans la suppression.
+Quel que soit l'ordre d'intégration de ces deux opérations, la valeur $v$ sera présente dans l'ensemble.
+L'implémentation décrite respecte donc la sémantique \emph{Add-Win}.
+
+\begin{figure}[bth]
+\centering
+\begin{tikzpicture}
+    \newcommand\hsep{1.4}
+    \newcommand\vsep{-1.2}
+    % Peers
+    \path node (A) {$p_A$}
+        to +(0,1*\vsep) node (B) {$p_B$}
+    ;
+    % Timeline ends
+    \path (6*\hsep,0) coordinate (aend)
+        to +(0,1*\vsep) coordinate (bend)
+    ;
+    % Events
+    \path (A)
+        to +(1*\hsep,0) node[
+            label={above:$\trm{add}(1)$}
+        ] (a1) {$a_1$}
+        to +(3*\hsep,0) node[
+            label={above:$\trm{rmv}(1)$}
+        ] (a2) {$a_2$}
+        to +(5*\hsep,0) node[
+            label={above:$\trm{rd} \set{1}$}
+        ] (a3) {$a_3$}
+    ;
+    \path (B)
+        to +(2*\hsep,0) node[
+            label={below:$\trm{add}(1)$}
+        ] (b1) {$b_1$}
+    ;
+    % Timelines
+    \foreach \src/\dest in {A/a1,a3/aend,B/b1,b1/bend}
+        \draw (\src) edge[timeline] (\dest);
+    % Precedence
+    \foreach \src/\dest in {a1/a2,a2/a3,b1/a3}
+        \draw[pre] (\src) to (\dest);
+\end{tikzpicture}
+\caption{Exécution abstraite qui respecte le modèle de cohérence causale.
+Le contenu répliqué est un ensemble qui respecte la sémantique \emph{Add-Win}.}\label{fig:awset-example}
+\end{figure}
+
+\begin{figure}[bth]
+\centering
+\begin{tikzpicture}
+    \newcommand\hsep{1.7}
+    % Events
+    \node (s0) {}
+        to +(0,-\hsep) node (s1) {$\tuple*{\emptyset, 0}$}
+        to +(0,-2*\hsep) node (s2) {$\tuple*{\set*{\tuple*{1,A_1}},1}$}
+        to +(0,-3*\hsep) node (s3) {$\tuple*{\emptyset,1}$}
+        to +(0,-4*\hsep) node (s4) {$\tuple*{\set*{\tuple*{1,B_1}},1}$}
+        to +(0,-5*\hsep) node (s5) {$\tuple*{\set*{\tuple*{1,B_1}},1}$}
+    ;
+    % State transitions
+    \draw[pre] (s0) to node[midway,left]{initialise} (s1);
+    \draw[pre] (s1) to %
+            node[midway,left]{exécute $a_1$} %
+            node[midway,right]{génére $\tuple*{\trm{add},\tuple*{1,A_1}}$} %
+        (s2);
+    \draw[pre] (s2) to %
+            node[midway,left]{exécute $a_2$} %
+            node[midway,right]{génére $\tuple*{\trm{rmv},\set*{A_1}}$} %
+        (s3);
+    \draw[pre] (s3) to %
+            node[midway,left]{intègre $\tuple*{\trm{add},\tuple*{1,B_1}}$} %
+        (s4);
+    \draw[pre] (s4) to %
+            node[midway,left]{exécute $a_3$} %
+            node[midway,right]{retourne $\set*{1}$} %
+        (s5);
+\end{tikzpicture}
+\caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
+Les flèches indiquent des transitions d'états.
+Elles sont étiquetées à gauche des événements qui produisent les transitions d'états.
+Lorsque l'événement correspond à l'exécution d'une opération de modification ou d'une opération d'interrogation, les flèches sont respectivement étiquetées à droite par le message généré et la valeur de retour.}\label{fig:op-awset-state-trans}
+\end{figure}
 
 
 \paragraph{Les \acp{CRDT} synchronisés par états} transmettent directement l'état mis à jour au reste des pairs.
-Lorsqu'un pair intègre un message à sa copie, il fusionne l'état contenu dans le message avec l'état actuel de sa copie.
+L'ensemble des messages et l'ensemble des états du \ac{CRDT} sont donc confondus.
+Lorsqu'un pair reçoit l'état mis à jour d'un autre pair, il le fusionne avec l'état actuel de sa copie.
+La fonction d'intégration $\trm{integrate}$ permet donc de fusionner deux états.
 Les états peuvent être fusionnés dans un ordre arbitraire et plusieurs fois sans compromettre la convergence des copies.
-La fonction de fusion $\sqcup$ est par conséquent associative, commutative, et idempotente.
-Elle correspond à la fonction d'intégration $\trm{integrate}_i = \sqcup$.
-L'ensemble des états équipé de cette fonction forme un sup-demi-treillis~\autocite{davey2002lattice}.
+La fonction d'intégration est par conséquent associative, commutative, et idempotente.
+
+L'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}.
 Nous pouvons également représenter l'ensemble des états comme un ensemble partiellement ordonné où chaque couple d'états a une borne supérieure qui correspond à la fusion des deux états.
 L'ordre partiel est représenté par $\sqsubset$.
 Chaque modification produit un état qui est supérieur ou égal à l'état sur lequel la modification a été intégrée.
 En d'autres termes, chaque modification enfle l'état tel que la fusion de l'état obtenu avec l'état précédent donne l'état obtenu.
-Ainsi si l'appel $\trm{prepare}(s_1, \_)$ donne l'état $s_2$, alors $s_1 \sqsubseteq s_2$ et $s_1 \sqcup s_2 = s_2$.
-Nous supposons que le sup-demi-treillis est borné par un unique état minimal représenté par $\bot$ qui est l'état initial du \ac{CRDT}.
-
-%\begin{align*}
-%&\forall S \in \trm{StateCRDT} \qsep \tuple*{S, \bot, \sqcup}\\
-%&S \in \trm{CRDT}\\
-%&\tuple*{S, \bot, \sqcup}\ \textit{est un sup-demi-treillis} \\
-%&\forall m \in M \:\forall s \in S\ \forall d \in \trm{dom}(m(s)) \qsep m(s)(d) \sqsubseteq s
-%\end{align*}
+Ainsi si l'appel $\trm{prepare}_i(s_1, \_)$ donne l'état $s_2$, alors $s_1 \sqsubseteq s_2$ et $s_1 \sqcup s_2 = s_2$.
 
 La propriété d'idempotence de la fusion et la propriété d'inflation d'une modification rendent les \acp{CRDT} synchronisés par états particulièrement adaptés aux systèmes de passage de messages non-fiable.
 En effet, elles permettent d'assurer la convergence à terme en dépit de la perte, du retard, ou de la duplication de messages.
@@ -2141,28 +2230,28 @@ Le coût peut être si élevé qu'un \ac{CRDT} synchronisé par opérations est 
 
 \begin{figure}[tb]
 \centering
-\begin{align*}
-&\trm{StateAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \powerfset{\mathbb{I} \times \mathbb{N}^*}\\
-&\bot \defeq \tuple*{\emptyset, \emptyset}\\
-&\trm{eval}_i(\tuple*{m, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in m}\\
+\begin{align}
+&\trm{StateAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \powerfset{\mathbb{I} \times \mathbb{N}^*} \label{eq:state-awset-state}\\
+%&\bot \defeq \tuple*{\emptyset, \emptyset}\\
+&\trm{eval}_i(\tuple*{t, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:state-awset-eval}\\
 &\begin{aligned}
-\MoveEqLeft\trm{prepare}_i(\tuple*{m, c}, \trm{add}(v)) \defeq \tuple*{m \cup \set*{\tuple*{v, i, n}},c \cup \tuple*{i, n}}\\
+\MoveEqLeft\trm{prepare}_i(\tuple*{t, c}, \trm{add}(v)) \defeq \tuple*{t \cup \set*{\tuple*{v, i, n}},c \cup \tuple*{i, n}}\\
     &\where n \defeq 1 + \max(\set*{0,n \given \tuple*{i, n} \in c})
-\end{aligned}\\
-&\trm{prepare}_i(\tuple*{m, c}, \trm{rmv}(v)) \defeq \tuple*{m \sminus \set*{\tuple*{v, \_,\_} \in m},c}\\
+\end{aligned}\label{eq:state-awset-prep-add}\\
+&\trm{prepare}_i(\tuple*{t, c}, \trm{rmv}(v)) \defeq \tuple*{t \sminus \set*{\tuple*{v, \_,\_} \in t},c} \label{eq:state-awset-prep-rmv}\\
 &\begin{aligned}
-\MoveEqLeft \tuple*{m, c} \sqcup \tuple*{m', c'} \defeq \tuple*{m'', c \cup c'}\\
+\MoveEqLeft \trm{integrate}_i(\tuple*{t, c}, \tuple*{t', c'}) \defeq \tuple*{t'', c \cup c'}\\
     &\begin{aligned}
-    \MoveEqLeft\where m'' \defeq (m \cap m')\\
-    &\cup \set*{\tuple*{v, j, n} \in m \given \tuple*{j, n} \not\in c'}\\
-    &\cup \set*{\tuple*{v', j', n'} \in m' \given \tuple*{j', n'} \not\in c}
+    \MoveEqLeft\where t'' \defeq (t \cap t')\\
+    &\cup \set*{\tuple*{v, j, n} \in t \given \tuple*{j, n} \not\in c'}\\
+    &\cup \set*{\tuple*{v', j', n'} \in t' \given \tuple*{j', n'} \not\in c}
     \end{aligned}
-\end{aligned}
-\end{align*}
+\end{aligned}\label{eq:state-awset-integr}
+\end{align}
 \caption[Implémentation d'un ensemble répliqué synchronisé par états]{Implémentation d'un ensemble répliqué synchronisé par états qui respecte la sémantique \emph{Add-Win}.}\label{fig:state-add-win-set}
 \end{figure}
 
-La \autoref{fig:state-add-win-set} présente une implémentions d'un ensemble répliqué synchronisé par états.
+La \autoref{fig:state-add-win-set} présente une implémentation d'un ensemble répliqué synchronisé par états.
 Un état consiste en un couple dont le premier élément correspond aux associations de valeurs et identifiants, et le second élément correspond à l'ensemble des identifiants générés par tout pair.
 Ce second élément est le \emph{contexte causal }~\autocite{almeida_2018_delta-crdt-revisited} du \ac{CRDT}.
 Il permet d'éviter d'ajouter ou de ré-ajouter une association qui a été supprimée.
@@ -2178,6 +2267,42 @@ Inversement un triplet n'a pas encore été ajouté dans un état si son identif
 L'ensemble des triplets contient donc les triplets présents dans chaque état et les triplets de chaque état dont l'identifiant est absent du contexte causal de l'autre état.
 En pratique le contexte causal peut être représenté par un vecteur de versions~\autocite{parker_1983_versionvector,mattern_1988_timevector}.
 
+\begin{figure}[bth]
+\centering
+\begin{tikzpicture}
+    \newcommand\hsep{1.7}
+    % Events
+    \node (s0) {}
+        to +(0,-\hsep) node (s1) {$\tuple*{\emptyset, \emptyset}$}
+        to +(0,-2*\hsep) node (s2) {$\tuple*{\set*{\tuple*{1,A_1}},\set*{A_1}}$}
+        to +(0,-3*\hsep) node (s3) {$\tuple*{\emptyset,\set*{A_1}}$}
+        to +(0,-4*\hsep) node (s4) {$\tuple*{\set*{\tuple*{1,B_1}},\set*{A_1,B_1}}$}
+        to +(0,-5*\hsep) node (s5) {$\tuple*{\set*{\tuple*{1,B_1}},\set*{A_1,B_1}}$}
+    ;
+    % State transitions
+    \draw[pre] (s0) to node[midway,left]{initialise} (s1);
+    \draw[pre] (s1) to %
+            node[midway,left]{exécute $a_1$} %
+            node[midway,right]{génére $\tuple*{\set*{\tuple*{1,A_1}},\set*{A_1}}$} %
+        (s2);
+    \draw[pre] (s2) to %
+            node[midway,left]{exécute $a_2$} %
+            node[midway,right]{génére $\tuple*{\emptyset,\set*{A_1}}$} %
+        (s3);
+    \draw[pre] (s3) to %
+            node[midway,left]{intègre $\tuple*{\set*{\tuple*{1,B_1}},\set*{B_1}}$} %
+        (s4);
+    \draw[pre] (s4) to %
+            node[midway,left]{exécute $a_3$} %
+            node[midway,right]{retourne $\set*{1}$} %
+        (s5);
+\end{tikzpicture}
+\caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
+Les flèches indiquent des transitions d'états.
+Elles sont étiquetées à gauche des événements qui produisent les transitions d'états.
+Lorsque l'événement correspond à l'exécution d'une opération de modification ou d'une opération d'interrogation, les flèches sont respectivement étiquetées à droite par le message généré et la valeur de retour.}\label{fig:state-awset-state-trans}
+\end{figure}
+
 La \autoref{fig:state-add-win-set-semilattice} présente le sup-demi-treillis de l'implémentation de la \autoref{fig:state-add-win-set}.
 Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivement notés $\tuple*{v, i_n}$ et $i_n$.
 
@@ -2188,13 +2313,13 @@ Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivem
     \newcommand\vsep{1.3}
     \node (bot) at (0,0) {$\bot$};
     \node[draw,rounded corners] (A1) at (-\hsep,\vsep) {$\set*{\tuple*{1,A_1}}, \set*{A_1}$};
-    \node[draw,rounded corners] (A2) at (\hsep,\vsep) {$\set*{\tuple*{1,A_2}}, \set*{A_2}$};
+    \node[draw,rounded corners] (A2) at (\hsep,\vsep) {$\set*{\tuple*{1,B_1}}, \set*{B_1}$};
     \node[draw,rounded corners] (A1p) at (-2*\hsep,2*\vsep) {$\emptyset, \set*{A_1}$};
-    \node[draw,rounded corners] (A2p) at (2*\hsep,2*\vsep) {$\emptyset, \set*{A_2}$};
-    \node (A1A2) at (0,2*\vsep) {$\set*{\tuple*{1,A_1}, \tuple*{1,A_2}}, \set*{A_1, A_2}$};
-    \node (A1pA2) at (-\hsep,3*\vsep) {$\set*{\tuple*{1,A_2}}, \set*{A_1,A_2}$};
-    \node (A1A2p) at (\hsep,3*\vsep) {$\set*{\tuple*{1,A_1}}, \set*{A_1,A_2}$};
-    \node (A1pA2p) at (0,4*\vsep) {$\emptyset, \set*{A_1,A_2}$};
+    \node[draw,rounded corners] (A2p) at (2*\hsep,2*\vsep) {$\emptyset, \set*{B_1}$};
+    \node (A1A2) at (0,2*\vsep) {$\set*{\tuple*{1,A_1}, \tuple*{1,B_1}}, \set*{A_1, B_1}$};
+    \node (A1pA2) at (-\hsep,3*\vsep) {$\set*{\tuple*{1,B_1}}, \set*{A_1,B_1}$};
+    \node (A1A2p) at (\hsep,3*\vsep) {$\set*{\tuple*{1,A_1}}, \set*{A_1,B_1}$};
+    \node (A1pA2p) at (0,4*\vsep) {$\emptyset, \set*{A_1,B_1}$};
     \draw (bot) to (A1);
     \draw (bot) to (A2);
     \draw (A1) to (A1p);
@@ -2209,7 +2334,7 @@ Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivem
     \draw (A1A2p) to (A1pA2p);
 \end{tikzpicture}
 \caption[Sup-demi-treillis des états de l'ensemble répliqué synchronisé par états]{Aperçu du diagramme de Hasse du sup-demi-treillis des états de l'ensemble répliqué synchronisé par états.
-L'ensemble des états représentés est restreint à une seule valeur ($1$), et deux \emph{dots} ($A_1$, $A_2$).
+L'ensemble des états représentés est restreint à une seule valeur ($1$), et deux \emph{dots} ($A_1$, $B_1$).
 Les états entourés sont irréductibles.
 }\label{fig:state-add-win-set-semilattice}
 \end{figure}
@@ -2251,24 +2376,24 @@ Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state
 
 \begin{figure}[tb]
 \centering
-\begin{align*}
-&\trm{DeltaAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \powerfset{\mathbb{I} \times \mathbb{N}^*}\\
-&\bot \defeq \tuple*{\emptyset, \emptyset}\\
-&\trm{eval}_i(\tuple*{m, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in m}\\
+\begin{align}
+&\trm{DeltaAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \powerfset{\mathbb{I} \times \mathbb{N}^*} \label{eq:delta-awset-state}\\
+%&\bot \defeq \tuple*{\emptyset, \emptyset}\\
+&\trm{eval}_i(\tuple*{t, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:delta-awset-eval}\\
 &\begin{aligned}
-\MoveEqLeft\trm{prepare}_i(\tuple*{m, c}, \trm{add}(v)) \defeq \tuple*{\tuple*{v, i, n},\set*{i, n}}\\
+\MoveEqLeft\trm{prepare}_i(\tuple*{t, c}, \trm{add}(v)) \defeq \tuple*{\tuple*{v, i, n},\set*{i, n}}\\
     &\where n \defeq 1 + \max(\set*{0,n \given \tuple*{i, n} \in c})
-\end{aligned}\\
-&\trm{prepare}_i(\tuple*{m, c}, \trm{rmv}(v)) \defeq \tuple*{\emptyset, \set*{\tuple*{i, n} \given \tuple*{v, i, n} \in m}}\\
+\end{aligned}\label{eq:delta-awset-prep-add}\\
+&\trm{prepare}_i(\tuple*{t, c}, \trm{rmv}(v)) \defeq \tuple*{\emptyset, \set*{\tuple*{i, n} \given \tuple*{v, i, n} \in t}}\label{eq:delta-awset-prep-rmv}\\
 &\begin{aligned}
-\MoveEqLeft \tuple*{m, c} \sqcup \tuple*{m', c'} \defeq \tuple*{m'', c \cup c'}\\
+\MoveEqLeft \trm{integrate}_i(\tuple*{t, c}, \tuple*{t', c'}) \defeq \tuple*{t'', c \cup c'}\\
     &\begin{aligned}
-    \MoveEqLeft\where m'' \defeq (m \cap m')\\
-    &\cup \set*{\tuple*{v, j, n} \in m \given \tuple*{j, n} \not\in c'}\\
-    &\cup \set*{\tuple*{v', j', n'} \in m' \given \tuple*{j', n'} \not\in c}
+    \MoveEqLeft\where t'' \defeq (t \cap t')\\
+    &\cup \set*{\tuple*{v, j, n} \in t \given \tuple*{j, n} \not\in c'}\\
+    &\cup \set*{\tuple*{v', j', n'} \in t' \given \tuple*{j', n'} \not\in c}
     \end{aligned}
-\end{aligned}
-\end{align*}
+\end{aligned}\label{eq:delta-awset-integr}
+\end{align}
 \caption[Implémentation d'un ensemble répliqué synchronisé par différences d'états]{Implémentation d'un ensemble répliqué synchronisé par différences d'états qui respecte la sémantique \emph{Add-Win}.}\label{fig:delta-add-win-set}
 \end{figure}
 
@@ -2277,11 +2402,12 @@ Elle est globalement identique à l'implémentation présentée dans la \autoref
 Seuls les messages générés sont distincts.
 Les messages générés sont des états irréductibles.
 
-Les \acp{CRDT} synchronisés par différences d'états conservent les avantages des \acp{CRDT} synchronisés par états tout en corrigeant leur principaux défauts.
+Les \acp{CRDT} synchronisés par différences d'états conservent les avantages des \acp{CRDT} synchronisés par états tout en corrigeant leurs principaux défauts.
 Avec un mécanisme de synchronisation adéquate, ils peuvent supporter la perte, les duplications, et l'intégration dans un ordre arbitraire des messages.
 Ils réduisent le coût de transmission puisque seuls des différences d'états sont transmis.
 
-\paragraph{} Nous avons présentés les deux principales familles de \acp{CRDT}~: les \acp{CRDT} synchronisés par opérations et les \acp{CRDT} synchronisés par états.
+
+\paragraph{} Nous avons présenté les deux principales familles de \acp{CRDT}~: les \acp{CRDT} synchronisés par opérations et les \acp{CRDT} synchronisés par états.
 Les \acp{CRDT} synchronisés par opérations exige un mécanisme de passage de message fiable et requiert l'intégration de certains messages dans un ordre spécifique au \ac{CRDT}.
 Les \acp{CRDT} synchronisés par états sont moins exigeants et supportent les mécanismes de passage de message non-fiable avec une intégration de tous les messages dans un ordre quelconque.
 Cependant, la taille des messages de certains \acp{CRDT} synchronisés par états peut être impraticable.

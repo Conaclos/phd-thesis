@@ -1423,13 +1423,13 @@ Ces deux derniers ajouts permettent d'insérer les valeurs présentes uniquement
 \MoveEqLeft \trm{prepare}_i(\tuple*{m,c}, \trm{del}(j)) \defeq%
 \begin{dcases}
     \tuple*{\emptyset,\set*{\trm{id}(p)}} & \when \card*{m} \neq 0\\
-    \bot_{\trm{Msg}} &
+    \tuple*{\emptyset,\emptyset} &
 \end{dcases}\\
 &\where p \defeq \trm{nthPos}(m, \min(j, \card*{m}))
 \end{aligned}\\
 %
 &\begin{aligned}
-\MoveEqLeft \tuple*{m,c} \sqcup \tuple*{m',c'} \defeq\\
+\MoveEqLeft \trm{integrate}_i(\tuple*{m,c}, \tuple*{m',c'}) \defeq\\
 &\langle(m \cap m') \cup%
 \set*{\tuple*{p, v} \in m \given \trm{id}(p) \not\in c'} \cup\\
 &\set*{\tuple*{p', v'} \in m' \given \trm{id}(p') \not\in c}%

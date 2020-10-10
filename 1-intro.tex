@@ -233,7 +233,7 @@ La modification hors ligne, voire la consultation hors ligne, des contenus parta
 \caption[Activité de collaboration au sein d'une infrastructure pair-à-pair]{Exemple d'une activité de collaboration au sein d'une infrastructure pair-à-pair.
 Alice, Bea, et Carol répliquent de manière optimiste un dessin.
 Elles disposent chacune d'une copie du dessin.
-\subref{fig:optimisqtic-replciation-scenario-1} Alice et Bea modifient indépendemment leur copie du dessin.
+\subref{fig:optimisqtic-replciation-scenario-1} Alice et Bea modifient indépendamment leur copie du dessin.
 Alice ajoute un carré, alors que Bea ajoute un cercle.
 Les copies des collaboratrices divergent~: les collaboratrices ont des dessins différents.
 \subref{fig:optimisqtic-replciation-scenario-2} Elles synchronisent ensuite leurs copies afin d'intégrer les modifications de chacune.
@@ -292,8 +292,8 @@ Plusieurs réunions d'organisation ont lieu avant l'évènement.
 Pour garder une trace de ces réunions et informer les bénévoles absents, les organisatrices de l'événement ont mis en place un document textuel partagé.
 Les organisatrices et les bénévoles prennent collectivement des notes durant les réunions.
 Ce document peut par exemple inclure des dates de rendez-vous pour préparer l'événement.
-Si les pairs ne sont pas capable de converger, certains bénévoles risquent de manquer des rendez-vous essentiels.
-Ce qui pourrait retarder, voire empécher, la tenue de l'événement.
+Si les pairs ne sont pas capables de converger, certains bénévoles risquent de manquer des rendez-vous essentiels.
+Ce qui pourrait retarder, voire empêcher, la tenue de l'événement.
 
 Certains pairs peuvent trouver un intérêt à compromettre le succès d'une collaboration.
 Dans le cas de l'exemple précédent, il peut s'agir d'un opposant à la tenue de l'événement.
@@ -392,13 +392,13 @@ L'utilisation de journaux authentifiés passe donc difficilement à l'échelle.
 Ils ne permettent pas de tirer pleinement avantage des protocoles de réplication optimiste et des infrastructures pair-à-pair.
 
 Certains protocoles de réplication~\autocite{feldman2010sporc,almeida_2018_delta-crdt-revisited} permettent la transmission de l'état d'une copie aux nouveaux pairs.
-L'état d'une copie occupe généralement un esapce mémoire plus faible que le journal d'opérations.
+L'état d'une copie occupe généralement un espace mémoire plus faible que le journal d'opérations.
 Le coût de transmission est ainsi plus faible et les nouveaux pairs obtiennent directement le contenu partagé.
 %Ces derniers peuvent ainsi contribuer plus rapidement sur le contenu partagé.
 Malheureusement les pairs mal-intentionnés peuvent compromettre la convergence des copies des pairs honnêtes en transmettant des états falsifiés.
-Ils peuvent par exemple transmettre un ancien état et décalrer qu'il est à jour ou ajouter des modififications qui n'ont pas été transmises aux autres pairs.
+Ils peuvent par exemple transmettre un ancien état et déclarer qu'il est à jour ou ajouter des modifications qui n'ont pas été transmises aux autres pairs.
 
-Pour réduire le coût lié à l'utilsiation de journaux authentifiés, nous proposons un protocole qui permet de tronquer un journal authentifié et d'authentifier un état à l'aide d'un journal tronqué.
+Pour réduire le coût lié à l'utilisation de journaux authentifiés, nous proposons un protocole qui permet de tronquer un journal authentifié et d'authentifier un état à l'aide d'un journal tronqué.
 La troncature d'un journal authentifié est réalisée de telle manière à ne pas compromettre la détection des équivoques des pairs mal-intentionnés.
 Pour ce faire, elle repose sur le concept de \emph{stabilité}.
 Une opération est stable dans un journal si toute opération acceptée ultérieurement dans le journal dépend sur cette opération.
@@ -414,7 +414,7 @@ Le protocole leur permet de rejeter les états falsifiés par des pairs mal-inte
 
 L'édition collaborative de texte permet à des collaborateur·ice·s géographiquement éloigné·e·s de co-rédiger un texte simultanément ou de manière différée dans le temps.
 Les collaborateur·ice·s doivent pouvoir consulter et modifier à tout moment le document textuel.
-En simultané, les latences doivent être suffisament faibles pour éviter les conflits de modification et avoir conscience de l'activités des autres collaborateur·ice·s.
+En simultané, les latences doivent être suffisamment faibles pour éviter les conflits de modification et avoir conscience de l'activités des autres collaborateur·ice·s.
 Ces dernières années, l'usage de l'édition collaborative s'est étendue à des activités de collaboration qui impliquent de nombreux rédacteur·ice·s, telle que la rpise de note pour un cours en ligne.
 L'édition collaborative de texte présente donc un défi car elle requiert à la fois une haute disponibilité, des latences basses, et un passage à l'échelle raisonnable.
 
@@ -425,7 +425,7 @@ En revanche lorsque ce seuil est dépassé, les utilisateur·ice·s remarquent l
 Elles et ils perçoivent les délais entre le moment où les modifications sont effectuées et le moment où elles sont intégrées.
 Elles et ils adoptent des stratégies pour limiter les conflits de modification~\autocite{ignat_2015_user-and-delay,ignat2014_delayeffect}.
 Ce qui les conduit à réduire leurs interactions et donc à réduire l'efficacité de leur collaboration.
-Au delà de dix utilisateur·ice·s, \emph{Etherpad} rejette des connexions.
+Au-delà de dix utilisateur·ice·s, \emph{Etherpad} rejette des connexions.
 \emph{Google Docs} expose le même comportement lorsqu'une quarantaine d'utilisateur·ice·s sont actifs~\autocite{dang2016performance}.
 
 Pour dépasser ces limitations, la communauté scientifique a proposé plusieurs protocoles de réplication optimiste qui prennent avantage des infrastructures pair-à-pair~\autocite{ahmednacer2011evaluatingcrdts,oster_2006_woot,preguica_2009_treedoc,weiss2010logoot,roh_2011_rga,andre_2013_logootsplit,nicolaescu2015yjs,briot_2016_rgasplit}.
@@ -435,9 +435,9 @@ Les protocoles s'assurent que chaque opération est intégrée exactement une fo
 Ils s'assurent également que certaines opérations sont intégrées avant d'autres.
 Par exemple l'intégration de la suppression d'un caractère doit survenir après l'intégration de l'insertion de ce caractère.
 Selon le protocole, il peut exister d'autres ordres d'intégration à respecter.
-Le respect de l'ordre d'intégration est souvent assuré par une cocuhe de livraison d'opérations.
+Le respect de l'ordre d'intégration est souvent assuré par une couche de livraison d'opérations.
 En pratique, cette couche de livraison ne prend pas en compte les ordres spécifiques d'intégration de chaque protocole de réplication~\autocite{shapiro_2011_crdt,shapiro2011_comprehensive}.
-Une livraison causale~\autocite{prakash_1997_barrierbarrier} des opérations est générlement utilisée~: si un pair intègre un ensemble d'opérations, alors cet ensemble doit être intégré sur toute copie avant l'intégration des opérations ultérieures de ce pair.
+Une livraison causale~\autocite{prakash_1997_barrierbarrier} des opérations est généralement utilisée~: si un pair intègre un ensemble d'opérations, alors cet ensemble doit être intégré sur toute copie avant l'intégration des opérations ultérieures de ce pair.
 La \autoref{fig:op-integration-order-example} donne un exemple de livraison causale et par extension d'intégration causale d'opérations lors d'une session d'édition collaborative de texte.
 
 L'intégration des opérations dans un ordre spécifique met potentiellement en attente des intégrations.
@@ -566,11 +566,11 @@ Pour développer ce protocole, le chapitre introduit la notion de stabilité et 
 %notre mécanisme pour tronquer un journal authentifié. Nous développons \emph{DynVFJC} un modèle de cohérence de donnée basé sur \acl{VFJC} qui permet de stabiliser un journal authentifié dans un groupe dont la composition évolué au cours du temps et qui peut inclure des pairs mal-intentionnés. Nous présentons également \acl{VFJCS} qui définit qu'elle partie du journal est stable.
 Nous présentons également les travaux de la littérature en relation avec notre protocole.
 
-\paragraph{Le \autoref{ch:dotted-logootsplit}} présente un état de l'art des type séquence de données répliquées.
+\paragraph{Le \autoref{ch:dotted-logootsplit}} présente un état de l'art des types séquences de données répliquées.
 Nous proposons un modèle unifié pour décrire et mieux appréhender un sous-ensemble de ces types séquence.
 A l'aide de ce modèle nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
 
-\paragraph{Le \autoref{ch:conclusion}} clôt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
+\paragraph{Le \autoref{ch:conclusion}} côlt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
 
 
 \section{Publications}
