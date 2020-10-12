@@ -307,6 +307,10 @@ La \autoref{fig:equivocation-scenario} illustre un scénario dans lequel un pair
 Les pairs honnêtes ne détectent pas l'équivoque.
 Leurs copies divergent de manière permanente.
 
+\paragraph{}Ce qui nous amène à formuler notre première question de recherche~: \textbf{Est-il possible d'assurer la convergence des copies des pairs honnêtes en présence de pairs mal-intentionnés et de conserver les propriétés offertes par les infrastructures pair-à-pair de collaboration~?}
+
+\clearpage % better layout
+
 \begin{figure}[hbt]
 \centering
 \begin{subfigure}{.5\linewidth}
@@ -370,9 +374,7 @@ Elles se synchronisent ensuite, mais elles ne détectent pas la divergence de le
 L'objectif de Mallory est atteint~: les copies de Alice et Bea demeurent divergentes.}\label{fig:equivocation-scenario}
 \end{figure}
 
-\paragraph{}Ce qui nous amène à formuler notre première question de recherche~: \textbf{Est-il possible d'assurer la convergence des copies des pairs honnêtes en présence de pairs mal-intentionnés et de conserver les propriétés offertes par les infrastructures pair-à-pair de collaboration~?}
-
-\paragraph{}De nombreux protocoles de réplication optimiste synchronisent les copies en échangeant des opérations~\autocite{baquero_2018_pure-op-crdt}.
+De nombreux protocoles de réplication optimiste synchronisent les copies en échangeant des opérations~\autocite{baquero_2018_pure-op-crdt}.
 L'opération synthétise une modification effectuée sur l'une des copies.
 Un pair mal-intentionné met en oeuvre une équivoque en générant deux opérations distinctes mais qui sont perçues comme identiques par le protocole de réplication.
 Pour détecter de telles opérations, les pairs peuvent utiliser des \emph{journaux authentifiés} d'opérations~\autocite{li_2004_sundr,mahajan_depot_2011,truong_authenticating_2012}.
