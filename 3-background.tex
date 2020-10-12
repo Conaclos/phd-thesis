@@ -260,9 +260,9 @@ Il s'agit d'un ordre partiel localement fini\footnote{Pour tout couple d'opérat
 Un protocole garantit une propriété de cohérence si et seulement si toutes les histoires qu'il peut produire vérifient cette propriété.
 Une histoire vérifie une propriété de cohérence si et seulement si ses caractéristiques (valeur de retour des opérations, ordre d'exécution, \ldots) peuvent être expliquées par l'ajout de la relation suivante~:
 
-\paragraph{Visibilité~\autocite{burckhardt_eventualconsistency_2014}.} Une relation qui rend compte de l'intégration des opérations de modification par les pairs.
+\paragraph{Visibilité~\autocite{burckhardt_eventualconsistency_2014}.} Une relation qui rend compte de l'intégration des effets des opérations de modification par les pairs.
 Si une opération de modification $x$ est visible à une opération d'interrogation $y$, alors $x$ a (éventuellement) un effet sur la valeur de retour de $y$.
-Nous disons aussi que $x$ a été intégrée à la copie avant l'exécution de l'opération $y$ sur cette même copie.
+Nous disons aussi que l'effet de $x$ a été intégré à la copie avant l'exécution de l'opération $y$ sur cette même copie.
 %Si une opération $x$ est visible à une opération $y$ alors la première a été intégrée par le pair avant l'exécution de $y$.
 Dans ce cas, nous écrivons $x \vis y$.
 La relation de visibilité n'est pas forcément transitive.
@@ -410,8 +410,8 @@ De même, l'histoire $\bullet_2$ vérifié la propriété $p_1$ ou $p_2$ puisque
 Le protocole $P$ garantit ainsi la propriété $p_1$ puisque chacune de ses histoires est associée à au moins une exécution abstraite qui la respecte.}\label{fig:hist-absexec}
 \end{figure}
 
-La relation de visibilité rend compte de l'intégration des effets des opérations de modifications par les pairs.
-En tant que tel seules les relations de visibilité dirigées d'une opération de modification vers une opération d'interrogation semblent faire sens.
+La relation de visibilité rend compte de l'intégration des effets des opérations de modification par les pairs.
+En tant que tel, seules les relations de visibilité dirigées d'une opération de modification vers une opération d'interrogation semblent faire sens.
 Dans la~\autoref{fig:vis-example} on remarque ainsi que l'effet de l'opération $b_3$ est pris en compte par l'opération de lecture $a_2$, et les effets des opérations $b_2$ et $b_3$ sont pris en compte par l'opération de lecture $a_3$.
 Notre définition de la relation de visibilité nous permet de mettre en relation tout type d'opérations.
 Dans la~\autoref{fig:vis-example} il existe ainsi une relation de visibilité entre les opérations de modification $b_2$ et $b_3$.
@@ -734,26 +734,8 @@ En revanche, nous n'avons pas rencontré de propriétés de vivacité.
 Dans le~\autoref{ch:problematic}, l'intégration à terme des modifications est une propriété de vivacité.
 Elle pourrait être traduite par la propriété de cohérence suivante~: une opération de modification est à terme visible à toute opération future d'interrogation.
 Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à toute opération future.
-
-
-
-Les concepts que nous avons précédemment introduits ne suffisent pas à caractériser cette propriété et plus largement les propriétés de vivacité.
-
-Un protocole garantit une propriété de cohérence si et seulement si chacune des exécutions abstraites qu'il peut engendrer la respecte.
-Nous ne pouvons pas savoir à quel moment une propriété de vivacité sera respectée.
-Par exemple, la propriété d'intégration à terme des opérations ne donne aucune borne sur le temps nécessaire pour la satisfaire.
-Nous ne pouvons donc pas savoir si un protocole vérifie une telle propriété en raisonnant uniquement sur des exécutions finies.
-Nous devons raisonner également sur des exécutions infinies.
-La~\autoref{def:abstract-exec} permet la description d'exécutions abstraites infinies.
-En effet, l'ensemble des opérations exécutées est dénombrable, mais peut être non-fini.
-Une exécution abstraite respecte donc une propriété de vivacité si et seulement si il existe une extension qui la respecte.
-
-% Dans le cas d'une propriété de sûreté, il est nécessaire de vérifier que la propriété est respectée en chaque point des exécutions possibles du protocole.
-%Chaque point d'une exécution peut être restreint en une exécution abstraite (bien-formée).
-%Ces exécutions abstraites correspondent à des préfixes finis de l'exécution abstraite finale.
-
-
-Nous pouvons ainsi définir la propriété d'intégration à terme que nous renommons volontiers en propriété de visibilité à terme.
+En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas viisble.
+Nous pouvons ainsi définir la propriété d'intégration à terme que nous renommons volontiers en propriété de visibilité à terme~:
 
 \begin{equation}
     %\forall x \in A\ \exists A_1 \sqsupseteq A\ \forall A_2 \sqsupset A_1, y \in A_2 \sminus A_1 \qsep x \vis y
@@ -766,10 +748,25 @@ Pour terminer la définition du modèle de cohérence à terme forte, nous défi
     \forall x, y \in A \qsep \trm{call}(x) = \trm{call}(y) = \trm{rd} \land \trm{ctx}_A(x) = \trm{ctx}_A(y) \implies \trm{rval}(x) = \trm{rval}(y)
 \end{equation}
 
-Dans ce manuscrit, la propriété de convergence forte est en général impliquée par les spécifications de types de données répliquées.
+Dans ce manuscrit, la propriété de convergence forte est impliquée par les spécifications de types de données répliquées.
 C'est le cas dans l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
 Deux opérations de lecture qui ont le même contexte ont nécessairement la même valeur de retour.
 
+Les propriétés de vivacité nous invitent à penser les futures possibles d'une exécution.
+En effet, nous devons vérifier que la propriété est vérifiable dans un futur potentiel.
+
+% Un protocole garantit une propriété de cohérence si et seulement si chacune des exécutions abstraites qu'il peut engendrer la respecte.
+% Nous ne pouvons pas savoir à quel moment une propriété de vivacité sera respectée.
+% Par exemple, la propriété d'intégration à terme des effets des opérations ne donne aucune borne sur le temps nécessaire pour la satisfaire.
+% Nous ne pouvons donc pas savoir si un protocole vérifie une telle propriété en raisonnant uniquement sur des exécutions finies.
+% Nous devons raisonner également sur des exécutions infinies.
+% La~\autoref{def:abstract-exec} permet la description d'exécutions abstraites infinies.
+% En effet, l'ensemble des opérations exécutées est dénombrable, mais peut être non-fini.
+% Une exécution abstraite respecte donc une propriété de vivacité si et seulement si il existe une extension qui la respecte.
+
+% Dans le cas d'une propriété de sûreté, il est nécessaire de vérifier que la propriété est respectée en chaque point des exécutions possibles du protocole.
+%Chaque point d'une exécution peut être restreint en une exécution abstraite (bien-formée).
+%Ces exécutions abstraites correspondent à des préfixes finis de l'exécution abstraite finale.
 
 
 \begin{definition}[Extension d'une histoire]\label{def:hist-ext}
@@ -881,13 +878,13 @@ Pour faciliter son introduction nous présentons le modèle de cohérence \acf{F
 
 \subsection{Cohérence Causale}\label{subsec:caucal-consistency}
 
-Le modèle de cohérence causale capture les relations de causalités potentielles entre les opérations et garantit que les pairs honnêtes intègrent les opérations en respectant leurs causalités.
-Si une opération $x$ cause potentiellement une opération $y$, alors tous les pairs honnêtes intègrent $x$ avant $y$.
-Les pairs honnêtes s'accordent sur l'ordre d'intégration des opérations causalement liées.
+Le modèle de cohérence causale capture les relations de causalités potentielles entre les opérations et garantit que les pairs honnêtes intègrent les effets des opérations en respectant leurs causalités.
+Si une opération $x$ cause potentiellement une opération $y$, alors tous les pairs honnêtes intègrent l'effet de $x$ avant l'effet de $y$.
+Les pairs honnêtes s'accordent sur l'ordre d'intégration des effets des opérations causalement liées.
 Les opérations qui ne sont pas causalement liées sont dites concurrentes.
 Les pairs intègrent les opérations concurrentes dans des ordres potentiellement distincts.
 %Elles peuvent être intégrées par un pair dans un ordre arbitraire.
-Par exemple si $x$ et $y$ sont deux opérations concurrentes et causent toutes deux l'opération $z$, alors un premier pair peut intégrer $x$, puis $y$, puis $z$ et un second pair peut intégrer $y$, puis $x$, puis $z$.
+Par exemple si $x$ et $y$ sont deux opérations concurrentes et causent toutes deux l'opération $z$, alors un premier pair peut intégrer l'effet de $x$, puis l'effet de $y$, puis l'effet de $z$, et un second pair peut intégrer l'effet de $y$, puis l'effet de $x$, puis l'effet de $z$.
 $x$ et $y$ doivent être intégrées avant $z$.
 
 \textcite{lamport_1978_time} a introduit la définition communément acceptée de la causalité potentielle dans le cadre d'un système de passage de messages.
@@ -902,22 +899,16 @@ $x$ et $y$ doivent être intégrées avant $z$.
 % sur lesquelles nous nous basons.
 Une opération $x$ cause potentiellement une opération $y$ si et seulement si \begin{inlinelist}
     \item $x$ \emph{retourne-avant} $y$ et $x$ a le même auteur que $y$, ou
-    \item $x$ est intégrée par l'auteur de $y$ avant l'exécution de $y$ ($x$ est visible à $y$), ou récursivement
+    \item L'effet de $x$ est intégré par l'auteur de $y$ avant l'exécution de $y$ ($x$ est visible à $y$), ou récursivement
     \item il existe une opération $x'$ tel que $x$ cause potentiellement $x'$ et $x'$ cause potentiellement $y$
 \end{inlinelist}.
 La causalité potentielle est transitive.
 
-Dans une exécution abstraite qui respecte le modèle de cohérence causale, si une opération $x$ cause potentiellement une opération $y$, alors $x$ est intégrée avant l'exécution de $y$.
+Dans une exécution abstraite qui respecte le modèle de cohérence causale, si une opération $x$ cause potentiellement une opération $y$, alors l'effet de $x$ est intégré avant l'exécution de $y$.
 Il s'ensuit que chaque relation de causalité potentielle donne lieu à une relation de visibilité.
 La relation de visibilité devient donc transitive.
-
-La \autoref{fig:vis-vs-pre-1} montre que la représentation graphique d'une exécution abstraite où la relation de visibilité est transitive peut devenir alternative.
-Lorsque la relation de visibilité est transitive, nous utilisons une représentation graphique plus lisible.
-La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont équivalentes.
-La représentation graphique de la \autoref{fig:vis-vs-pre-2} correspond à la réduction transitive de la relation de visibilité.
-Pour éviter toute ambiguïté, les relations ne sont pas étiquetées.
-
-% Pour simplifier leur représentation, nous introduisons la relation de précédence~:
+La transitivité de la relation de visibilité nous permet de définir la relation de \emph{concurrence} et la relation de \emph{précédence immédiate}.
+Ces relations simplifient l'expression de propriétés de cohérence que nous aborderons ultérieurement.
 
 % \paragraph{Précédence.}
 % La relation de précédence rend compte d'une influence potentielle d'une opération sur une autre.
@@ -942,8 +933,29 @@ Pour éviter toute ambiguïté, les relations ne sont pas étiquetées.
 % La~\autoref{fig:vis-vs-pre-1} et la~\autoref{fig:vis-vs-pre-2} décrivent la même exécution abstraite.
 % \end{remark}
 
+\paragraph{Concurrence.}
+Lorsque la relation de visibilité est transitive, nous disons que deux opérations $x$ et $y$ sont concurrentes, et nous écrivons $x \concur y$, si $x$ n'est pas visible à $y$ et $y$ n'est pas visible à $x$.
+Dans la~\autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que $a_1$ et $b_2$.
+
+\begin{equation*}
+    x \concur y \defiff x \not\vis y \land y \not\vis x
+\end{equation*}
+
+\paragraph{Précédence immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
+Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, précède immédiatement $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
+Nous disons également que $y$ succède immédiatement $y$.
+La relation de précédence immédiate correspond à la réduction transitive de la relation de visibilité.
+
+\begin{equation*}
+    x \idr y \defiff x \vis y \land \nexists z \qsep x \vis z \vis y
+\end{equation*}
+
+\paragraph{} La \autoref{fig:vis-vs-pre-1} montre que la représentation graphique d'une exécution abstraite où la relation de visibilité est transitive peut devenir difficile à appréhender.
+Lorsque la relation de visibilité est transitive, nous préférons représenter la relation de précédence immédiate.
+La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont ainsi équivalentes.
+
 % TODO: in following figure, remove a1?
-\begin{figure}[htb]
+\begin{figure}[tbh]
 \centering
 \begin{subfigure}{\linewidth}
     \centering
@@ -1038,29 +1050,11 @@ Pour éviter toute ambiguïté, les relations ne sont pas étiquetées.
 L'exécution abstraite de la \subref{fig:vis-vs-pre-2} correspond à la réduction transitive de l'exécution abstraite de la \subref{fig:vis-vs-pre-1}.}\label{fig:vis-vs-pre}
 \end{figure}
 
-
-Lorsque la relation de visibilité est transitive, nous pouvons utiliser la relation de concurrence~:
-
-\paragraph{Concurrence.}
-Lorsque la relation de visibilité est transitive, nous disons que deux opérations $x$ et $y$ sont concurrentes, et nous écrivons $x \concur y$, si $x$ n'est pas visible à $y$ et $y$ n'est pas visible à $x$.
-Dans la~\autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que $a_1$ et $b_2$.
-
-\begin{equation*}
-    x \concur y \defiff x \not\vis y \land y \not\vis x
-\end{equation*}
-
 La littérature comptent plusieurs spécifications de la cohérence causale.
 Certaines spécifications~\autocite{ahamad_1995_causal} imposent la manière de résoudre les conflits de modification.
 Similairement à~\textcite{mahajan_2011_cac}, nous pensons qu'il est préférable de séparer les garanties d'ordre entre les opérations et les garanties concernant la résolution de conflits.
 Certaines spécifications~\autocite{burckhardt_eventualconsistency_2014,viotti_consistency_2016} procèdent à cette séparation, mais ajoutent une garantie qui restreint les résultats possibles des opérations de lecture.
 Notre~\autoref{def:causal-consistency} de la cohérence causale se restreint uniquement à des garanties d'ordre.
-
-Notre définition exclut les visibilités spéculatives.
-En d'autres termes, un pair ne peut pas observer une opération qui n'a pas encore été exécutée.
-Il ne peut donc pas spéculer sur les opérations qui seront éventuellement exécutées dans le futur.
-Cette garantie est nécessaire pour construire certaines propriétés.
-Nous parlons ainsi de cohérence causale non-spéculative~\footnote{\textcite{mahajan_2011_cac} parlent de \emph{cohérence causale naturelle}.~\textcite{viotti_consistency_2016} parlent de cohérence causale temps réel.}~\autocite{mahajan_2011_cac,viotti_consistency_2016}.
-En dehors de cette section, par abus de langage, nous parlerons de cohérence causale.
 
 \begin{definition}[Cohérence causale non-spéculative~\autocite{mahajan_2011_cac}]\label{def:causal-consistency}
   Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale non-spéculative, et nous écrivons $A \in \trm{Causal}$, si et seulement si~:
@@ -1086,6 +1080,13 @@ En dehors de cette section, par abus de langage, nous parlerons de cohérence ca
   \end{equation*}
   \end{description}
 \end{definition}
+
+Notre définition exclut les visibilités spéculatives.
+En d'autres termes, un pair ne peut pas observer une opération qui n'a pas encore été exécutée.
+Il ne peut donc pas spéculer sur les opérations qui seront éventuellement exécutées dans le futur.
+Cette garantie est nécessaire pour construire certaines propriétés.
+Nous parlons ainsi de cohérence causale non-spéculative~\footnote{\textcite{mahajan_2011_cac} parlent de \emph{cohérence causale naturelle}.~\textcite{viotti_consistency_2016} parlent de cohérence causale temps réel.}~\autocite{mahajan_2011_cac,viotti_consistency_2016}.
+En dehors de cette section, par abus de langage, nous parlerons de cohérence causale.
 
 \begin{proposition}\label{th:rb-vis}
 Dans une exécution abstraite $A$ qui respecte le modèle de cohérence causale, la relation de visibilité est égale à la relation retourne-avant pour les opérations d'un même pair.
@@ -1140,9 +1141,9 @@ Un protocole peut garantir la cohérence causale avec divers mécanismes~\autoci
 Un protocole naïf pourrait~:
 
 \begin{itemize}
-    \item Inclure dans chaque opération l'ensemble des opérations intégrées par son auteur avant son exécution.
+    \item Inclure dans chaque opération $x$ l'ensemble des opérations dont les effets ont été intégrées par l'auteur de $x$ avant l'exécution de $x$.
     Cet ensemble correspond au contexte de l'opération.
-    \item Intégrer une opération après l'intégration de l'ensemble des opérations présentes dans son contexte.
+    \item Intégrer l'effet d'une opération après l'intégration des effets de l'ensemble des opérations présentes dans son contexte.
 \end{itemize}
 
 
@@ -1273,16 +1274,7 @@ Il prétend au pair $p_A$ que sa deuxième opération est $m_2$, alors qu'il pr�
 Le modèle de cohérence~\acf{FJC}~\autocite{mahajan_2011_cac,mahajan_astro_2008} propose d'affaiblir la propriété~\ref{itm:peer-linear} pour tolérer la présence de pairs mal-intentionnés.
 Cette dernière est restreinte aux pairs honnêtes.
 L'exécution abstraite de la~\autoref{fig:causal-violation} respecte ainsi le modèle de cohérence~\ac{FJC}.
-
-Lorsque deux opérations d'un pair mal-intentionné ne sont pas linéairement ordonnées par la relation de visibilité, nous parlons d'opérations \emph{non-linéaires}\footnote{\textcite{mahajan_2011_cac} parlent d'opérations \emph{non-sérialisées} (\emph{non-serial operations})}.
-Les opérations non-linéaires forment des \emph{embranchements} (\emph{forks})~\autocite{li_2004_sundr}.
-Dans l'exemple présenté, $m_2$ et $m_3$ sont deux opérations non-linéaires. Elles forment deux embranchements~: $m_1 \pre m_2 \pre a_1$ et $m_1 \pre m_3 \pre b_1$.
-
-Pour assurer la convergence des pairs honnêtes, les opérations observées par un pair honnête doivent à terme être observées par chaque pair honnête.
-Par conséquent les embranchements doivent être joints.
-Les opérations non-linéaires sont donc acceptées par les pairs honnêtes.
-Seuls les pairs honnêtes ordonnent linéairement leurs opérations.
-Dans la~\autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchements avec l'opération $a_2$.
+La \autoref{def:fjc-consistency} définit formellement le modèle de cohérence~\ac{FJC}.
 
 \begin{definition}[Cohérence \emph{\acl{FJC}} non-spéculative~\autocite{mahajan_2011_cac}]\label{def:fjc-consistency}
   Soit une exécution abstraite bien-formée $A$. $A$ respecte le modèle de cohérence \emph{\acf{FJC}} non-spéculative, et nous écrivons $A \in \trm{FJC}$, si et seulement si~:
@@ -1307,6 +1299,16 @@ Dans la~\autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchem
   \end{equation*}
   \end{description}
 \end{definition}
+
+Lorsque deux opérations d'un pair mal-intentionné ne sont pas linéairement ordonnées par la relation de visibilité, nous parlons d'opérations \emph{non-linéaires}\footnote{\textcite{mahajan_2011_cac} parlent d'opérations \emph{non-sérialisées} (\emph{non-serial operations})}.
+Les opérations non-linéaires forment des \emph{embranchements} (\emph{forks})~\autocite{li_2004_sundr}.
+Dans l'exemple présenté, $m_2$ et $m_3$ sont deux opérations non-linéaires. Elles forment deux embranchements~: $m_1 \pre m_2 \pre a_1$ et $m_1 \pre m_3 \pre b_1$.
+
+Pour assurer la convergence des pairs honnêtes, les opérations observées par un pair honnête doivent à terme être observées par chaque pair honnête.
+Par conséquent les embranchements doivent être joints.
+Les opérations non-linéaires sont donc acceptées par les pairs honnêtes.
+Seuls les pairs honnêtes ordonnent linéairement leurs opérations.
+Dans la~\autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchements avec l'opération $a_2$.
 
 \begin{proposition}\label{th:honest-rb-vis}
 Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{FJC}, la relation de visibilité est égale à la relation retourne-avant pour les opérations d'un même pair honnête.
@@ -1350,11 +1352,11 @@ Les pairs peuvent ainsi joindre des embranchements.
 Pour certains contenus répliqués, les équivoques peuvent produire des conflits de modification difficiles à identifier et à résoudre.
 %Leur résolution peut notamment produire un sur-coût [Depot?].
 De ce fait, il est souhaitable d'empêcher à terme la réalisation de nouvelles équivoques.
-Pour ce faire, les pairs qui en produisent doivent être systématiquement évincés.
+Pour ce faire, les pairs qui en produisent doivent être à terme évincés.
 Leurs opérations futures devraient donc à terme être rejetées.
 
 De manière optimiste, un pair honnête présume que les autres pairs sont honnêtes tant qu'ils ne produisent pas d'équivoques.
-Un pair honnête reconnaît qu'un pair est mal-intentionné dès lors qu'il observe deux opérations non-linéaires de ce dernier.
+Un pair reconnaît qu'un pair est mal-intentionné dès lors qu'il observe deux opérations non-linéaires de ce dernier.
 Cette observation se traduit par une jonction d'embranchements.
 Dans l'exécution abstraite $A_1$ de la \autoref{fig:provably-malicious}, le pair $p_A$ observe les opérations non-linéaires $m_2$ et $m_3$ du pair $p_M$. $p_A \in \trm{obs}_{A_1}(m_2) \cap \trm{obs}_{A_1}(m_3)$.
 Il reconnaît ainsi $p_M$ comme mal-intentionné.
@@ -1521,23 +1523,11 @@ Dans l'extension de cette exécution abstraite, $p_O$ accepte $m_4$ alors qu'il 
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
 \caption{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
-L'exécution abstraite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
+L'exécution abstraite $A_1$ respecte le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
 \end{figure}
 
 Les pairs honnêtes doivent s'assurer qu'un pair qui reconnaît un autre pair comme mal-intentionné arrête d'accepter directement les opérations de ce dernier.
 En d'autres termes, reconnaître qu'un pair est mal-intentionné devrait être responsabilisant.
-
-Pour définir cette notion de direct nous introduisons une relation construite sur la relation de visibilité~:
-
-\paragraph{Précédence immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
-Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, précède immédiatement $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
-Nous disons également que $y$ succède immédiatement $y$.
-La relation de précédence immédiate correspond à la réduction transitive de la relation de visibilité.
-
-\begin{equation*}
-    x \idr y \defiff x \vis y \land \nexists z \qsep x \vis z \vis y
-\end{equation*}
-
 Ainsi un pair honnête ou mal-intentionné ne peut exécuter une opération qui succède immédiatement l'opération d'un pair qu'il reconnaît comme mal-intentionné.
 Il s'agit de la propriété~\ref{itm:vfjc2} du modèle de cohérence \acf{VFJC} que nous présentons dans la \autoref{def:vfjc-consistency}.
 
@@ -1588,7 +1578,7 @@ Il est toutefois plus fort que le modèle de cohérence~\ac{FJC} puisqu'il n'acc
 % Chaque cercle correspond à l'ensemble des exécutions abstraites acceptées par le modèle de cohérence.}\label{fig:causal-fjc-vfjc-order}
 % \end{figure}
 
-
+\clearpage % better layout
 \section{Types de données répliquées}\label{sec:crdt}
 
 La réplication optimiste~\autocite{saito_2005_optimisticreplication} d'un contenu partagé permet d'interroger et de modifier ce dernier à tout moment.
@@ -1832,21 +1822,21 @@ Dans ce manuscrit, nous considérons uniquement des \acp{CRDT} qui présentent c
 \caption[Impact d'ordres distincts d'intégration des opérations de modification sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la~\autoref{fig:set-conflict-example}.}\label{fig:spec-linearization}
 \end{figure}
 
-La relation de visibilité rend compte des opérations intégrées.
-Dans la \autoref{fig:set-conflict-example}, les opérations $a_1$, $b_1$, et $b_2$ sont intégrées avant l'opération de lecture $a_2$.
+La relation de visibilité rend compte des opérations dont l'effet a été intégré.
+Dans la \autoref{fig:set-conflict-example}, les effets des opérations $a_1$, $b_1$, et $b_2$ sont intégrés avant l'exécution de l'opération de lecture $a_2$.
 Étant donné que $b_1$ est visible à $b_2$, nous pouvons dire que $b_2$ a pris en compte l'effet de $b_1$.
 Elle l'a d'autant pris en compte qu'elle annule l'effet de $b_1$.
-$b_1$ devrait donc être intégrée avant $b_2$.
-En revanche $a_1$ peut être intégrée avant $b_1$, entre $b_1$ et $b_2$, ou après $b_2$.
-L'ordre d'intégration des opérations peut changer la valeur retournée par $b_2$.
+L'effet de $b_1$ devrait donc être intégré avant $b_2$.
+En revanche l'effet de $a_1$ peut être intégré avant $b_1$, entre $b_1$ et $b_2$, ou après $b_2$.
+L'ordre d'intégration des effets des opérations peut changer la valeur retournée par $b_2$.
 La \autoref{fig:spec-linearization} présente ces différents ordres d'intégration.
 Nous constatons que certains ordres d'intégration distincts conduisent à des résultats identiques.
-Intuitivement, si deux opérations sont commutatives, alors elles peuvent être intégrées dans un ordre quelconque.
+Intuitivement, si deux opérations sont commutatives, alors leurs effets peuvent être intégrés dans un ordre quelconque.
 Dans le cas de l'ensemble, deux ajouts et deux suppressions d'un même élément ou d'éléments distincts sont commutatifs.
 En revanche l'ajout et la suppression d'un même élément ne sont pas des opérations commutatives.
 Les opérations sont dites \emph{incompatibles}.
-Leurs intentions sont incompatibles et conduisent à des conflits de modification si elles sont intégrées dans des ordres distincts.
-Une sémantique doit donc définir un ordre d'intégration entre les couples d'opérations incompatibles.
+Leurs intentions sont incompatibles et conduisent à des conflits de modification si leurs effets sont intégrés dans des ordres distincts.
+Une sémantique doit donc définir un ordre d'intégration des effets des couples d'opérations incompatibles.
 Puisque cet ordre est déterminé par la sémantique, nous disons que la résolution de conflits est déterministe.
 
 Contrairement aux types abstraits usuels, plusieurs sémantiques peuvent se révéler utiles et dépendre de leur domaine d'application.
