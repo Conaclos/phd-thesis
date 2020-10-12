@@ -912,7 +912,7 @@ Il s'ensuit que chaque relation de causalité potentielle donne lieu à une rela
 La relation de visibilité devient donc transitive.
 
 La \autoref{fig:vis-vs-pre-1} montre que la représentation graphique d'une exécution abstraite où la relation de visibilité est transitive peut devenir alternative.
-Lorsque la relation de visibilité est transitive, nous utilisons une représentation graphique plus liisble.
+Lorsque la relation de visibilité est transitive, nous utilisons une représentation graphique plus lisible.
 La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont équivalentes.
 La représentation graphique de la \autoref{fig:vis-vs-pre-2} correspond à la réduction transitive de la relation de visibilité.
 Pour éviter toute ambiguïté, les relations ne sont pas étiquetées.
@@ -1348,7 +1348,7 @@ Pour préserver la convergence des copies, le modèle de cohérence~\acf{VFJC}~\
 Les pairs peuvent ainsi joindre des embranchements.
 
 Pour certains contenus répliqués, les équivoques peuvent produire des conflits de modification difficiles à identifier et à résoudre.
-%Leur résolution peut notamment produire un sur-coût [CITATIION: Depot?].
+%Leur résolution peut notamment produire un sur-coût [Depot?].
 De ce fait, il est souhaitable d'empêcher à terme la réalisation de nouvelles équivoques.
 Pour ce faire, les pairs qui en produisent doivent être systématiquement évincés.
 Leurs opérations futures devraient donc à terme être rejetées.
@@ -1521,7 +1521,7 @@ Dans l'extension de cette exécution abstraite, $p_O$ accepte $m_4$ alors qu'il 
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
 \caption{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
-L'excéution abstraite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
+L'exécution abstraite $A_1$ respecte en revanche le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
 \end{figure}
 
 Les pairs honnêtes doivent s'assurer qu'un pair qui reconnaît un autre pair comme mal-intentionné arrête d'accepter directement les opérations de ce dernier.
@@ -2064,12 +2064,13 @@ Dans les paragraphes suivants nous détaillons les différences entre les diffé
 \caption[Fonctions qui permettent d'implémenter un~\ac{CRDT}]{Fonctions qui permettent d'implémenter un~\ac{CRDT}.}\label{tab:crdt-impl-func}
 \end{table}
 
+
 \paragraph{Les \acp{CRDT} synchronisés par opérations~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt}} représentent les modifications effectuées sur une copie par des opérations intégrables.
 Il est important de distinguer les opérations exécutées et les opérations intégrables.
 L'exécution d'une opération de modification donne lieu à la génération d'un message qui encapsule une opération intégrable.
 Par abus de langage nous pouvons parler d'opérations lorsque l'ambiguïté n'est pas possible.
 Ces opérations peuvent être intégrées sur toutes les copies sans générer de conflits.
-Toutefois elles ne peuvent généralement pas être intégrées dans des ordres quelconques.
+Toutefois elles ne peuvent pas être intégrées dans des ordres quelconques.
 Il existe des relations de dépendances entre les opérations intégrables.
 
 Les \acp{CRDT} synchronisés par opérations exigent un protocole de passage fiable de message~: chaque message doit être livré exactement une fois.
@@ -2100,36 +2101,12 @@ En pratique, la livraison causale d'opérations est difficile et peut entraîner
 &\trm{integrate}_i(\tuple*{t, n}, \tuple*{\trm{rmv}, x}) \defeq \tuple*{t \sminus x, n} \label{eq:op-awset-integr-rmv}
 \end{align}
 \caption[Implémentation d'un ensemble répliqué synchronisé par opérations]{Implémentation d'un ensemble répliqué synchronisé par opérations qui respecte la sémantique \emph{Add-Win}.
-L'intégration de la suppression d'une valeur est effectuée après l'intégration de son ajout.}\label{fig:op-add-win-set}
+La suppression d'une valeur doit être intégrée après l'intégration de son ajout.}\label{fig:op-add-win-set}
 \end{figure}
 
-La \autoref{fig:op-add-win-set} propose une implémentation d'un ensemble répliqué synchronisé par opérations.
-L'\autoref{eq:op-awset-state} précise l'ensemble des états du \ac{CRDT}.
-Un état est définit comme un couple $\tuple*{t, n}$ où $t$ contient l'ensemble des valeurs associées à leur identifiant unique et $n$ est un nombre séquentiel utilisé pour générer les identifiants uniques.
-L'association d'une valeur $v$ et d'un identifiant $\tuple*{i, n'}$ est représentée par un triplet $\tuple*{v, i, n'}$ où $i$ est pris dans l'ensemble $\mathbb{I}$ des identifiants des pairs et $n'$ est un entier naturel non-nul ($n' \in \mathbb{N}^*$).
-L'évaluation d'une opération de lecture retourne l'ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:op-awset-eval}).
-L'opération intégrable d'ajout d'une valeur correspond à un couple constitué de l'étiquette $\trm{add}$ et du triplet composé de la valeur et d'un nouvel identifiant unique (\autoref{eq:op-awset-prep-add}).
-L'identifiant unique est formé par l'identifiant du pair qui génère l'opération intégrable et de son nombre séquentiel incrémenté d'une unité.
-L'intégration d'une opération d'ajout consiste à ajouter le nouveau triplet et à incrémenter le nombre séquentiel si l'opération a été généré par le pair actuel (\autoref{eq:op-awset-integr-add}).
-L'opération intégrable de suppression contient l'ensemble des triplets à supprimer et est estamplé par l'étiquette $\trm{rmv}$ (\autoref{eq:op-awset-prep-rmv}).
-L'intégration de l'opération de suppression supprime les triplets qu'elle contient (\autoref{eq:op-awset-integr-rmv}).
+\clearpage % better layout
 
-La \autoref{fig:op-awset-state-trans} montre les états successifs de la copie du pair $p_A$ lors de l'exécution représentée par l'exécution abstraite de la \autoref{fig:op-awset-state-trans}.
-Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivement notés $\tuple*{v, i_n}$ et $i_n$.
-Le pair $p_A$ reçoit et intègre le message généré par l'exécution de $b_1$ après l'exécution de $a_1$ et $a_2$ et avant l'exécution de $a_3$.
-
-%Une opération d'ajout est intégrée dès sa réception.
-%En revanche, une opération de suppression est intégrée lorsque l'ensemble des triplets qu'elle contient ont été ajoutés (et éventuellement supprimés) de l'état.
-%Une opération de suppression dépend donc sur les opérations qui ajoutent les triplets qu'elle contient.
-%Par exemple la suppression $\tuple*{\trm{rmv}, \set*{\tuple*{1, A, 1}, \tuple*{1, B, 1}}}$ est intégrée lorsque les ajouts $\tuple*{\trm{add}, \tuple*{1, A, 1}}$ et $\tuple*{\trm{add}, \tuple*{1, B, 1}}$ ont été préalablement intégrés.
-
-L'exécution d'une opération de suppression d'une valeur $v$ forme une opération intégrable qui contient l'ensemble des identifiants associés à $v$.
-Si une opération d'ajout de $v$ est exécutée en parallèle, un nouvel identifiant est associé à la valeur.
-Cet identifiant n'est pas inclut dans la suppression.
-Quel que soit l'ordre d'intégration de ces deux opérations, la valeur $v$ sera présente dans l'ensemble.
-L'implémentation décrite respecte donc la sémantique \emph{Add-Win}.
-
-\begin{figure}[bth]
+\begin{figure}[tbh]
 \centering
 \begin{tikzpicture}
     \newcommand\hsep{1.4}
@@ -2163,12 +2140,23 @@ L'implémentation décrite respecte donc la sémantique \emph{Add-Win}.
     \foreach \src/\dest in {A/a1,a3/aend,B/b1,b1/bend}
         \draw (\src) edge[timeline] (\dest);
     % Precedence
-    \foreach \src/\dest in {a1/a2,a2/a3,b1/a3}
+    \foreach \src/\dest in {a1/a2,a1/b1,a2/a3,b1/a3}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
 \caption{Exécution abstraite qui respecte le modèle de cohérence causale.
 Le contenu répliqué est un ensemble qui respecte la sémantique \emph{Add-Win}.}\label{fig:awset-example}
 \end{figure}
+
+La \autoref{fig:op-add-win-set} propose une implémentation d'un ensemble répliqué synchronisé par opérations.
+L'\autoref{eq:op-awset-state} précise l'ensemble des états du \ac{CRDT}.
+Un état est définit comme un couple $\tuple*{t, n}$ où $t$ contient l'ensemble des valeurs associées à leur identifiant unique et $n$ est un nombre séquentiel utilisé pour générer les identifiants uniques.
+L'association d'une valeur $v$ et d'un identifiant $\tuple*{i, n'}$ est représentée par un triplet $\tuple*{v, i, n'}$ où $i$ est pris dans l'ensemble $\mathbb{I}$ des identifiants des pairs et $n'$ est un entier naturel non-nul ($n' \in \mathbb{N}^*$).
+L'évaluation d'une opération de lecture retourne l'ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:op-awset-eval}).
+L'opération intégrable d'ajout d'une valeur correspond à un couple constitué de l'étiquette $\trm{add}$ et du triplet composé de la valeur et d'un nouvel identifiant unique (\autoref{eq:op-awset-prep-add}).
+L'identifiant unique est formé par l'identifiant du pair qui génère l'opération intégrable et de son nombre séquentiel incrémenté d'une unité.
+L'intégration d'une opération d'ajout consiste à ajouter le nouveau triplet et à incrémenter le nombre séquentiel si l'opération a été généré par le pair actuel (\autoref{eq:op-awset-integr-add}).
+L'opération intégrable de suppression contient l'ensemble des triplets à supprimer et est estampillé par l'étiquette $\trm{rmv}$ (\autoref{eq:op-awset-prep-rmv}).
+L'intégration de l'opération de suppression supprime les triplets qu'elle contient (\autoref{eq:op-awset-integr-rmv}).
 
 \begin{figure}[bth]
 \centering
@@ -2186,11 +2174,11 @@ Le contenu répliqué est un ensemble qui respecte la sémantique \emph{Add-Win}
     \draw[pre] (s0) to node[midway,left]{initialise} (s1);
     \draw[pre] (s1) to %
             node[midway,left]{exécute $a_1$} %
-            node[midway,right]{génére $\tuple*{\trm{add},\tuple*{1,A_1}}$} %
+            node[midway,right]{génère $\tuple*{\trm{add},\tuple*{1,A_1}}$} %
         (s2);
     \draw[pre] (s2) to %
             node[midway,left]{exécute $a_2$} %
-            node[midway,right]{génére $\tuple*{\trm{rmv},\set*{A_1}}$} %
+            node[midway,right]{génère $\tuple*{\trm{rmv},\set*{A_1}}$} %
         (s3);
     \draw[pre] (s3) to %
             node[midway,left]{intègre $\tuple*{\trm{add},\tuple*{1,B_1}}$} %
@@ -2201,10 +2189,32 @@ Le contenu répliqué est un ensemble qui respecte la sémantique \emph{Add-Win}
         (s5);
 \end{tikzpicture}
 \caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
+L'ensemble répliqué utilise l'implémentation de la \autoref{fig:op-add-win-set}.}\label{fig:op-awset-state-trans}
+\end{figure}
+
+Nous prenons l'exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d'un ensemble qui utilise l'implémentation de la \autoref{fig:op-add-win-set}.
+Le pair $p_A$ exécute une première opération $a_1$ qui ajoute la valeur $1$ a l'ensemble répliqué.
+Il transmet sa modification au pair $p_B$.
+$p_B$ intègre la modification de $p_A$ et exécute ensuite l'opération $b_1$ qui ajoute de nouveau la valeur $1$ dans l'ensemble.
+Pendant ce temps, $p_A$ exécute l'opération $a_2$ qui supprime la valeur $1$.
+$p_A$ reçoit et intègre la modification de $p_B$.
+$p_A$ termine par l'exécution de l'opération de lecture $a_3$.
+La \autoref{fig:op-awset-state-trans} décrit les états successifs de la copie du pair $p_A$.
+Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivement notés $\tuple*{v, i_n}$ et $i_n$.
 Les flèches indiquent des transitions d'états.
 Elles sont étiquetées à gauche des événements qui produisent les transitions d'états.
-Lorsque l'événement correspond à l'exécution d'une opération de modification ou d'une opération d'interrogation, les flèches sont respectivement étiquetées à droite par le message généré et la valeur de retour.}\label{fig:op-awset-state-trans}
-\end{figure}
+Lorsque l'événement correspond à l'exécution d'une opération de modification ou d'une opération d'interrogation, les flèches sont respectivement étiquetées à droite par le message généré et la valeur de retour.
+
+%Une opération d'ajout est intégrée dès sa réception.
+%En revanche, une opération de suppression est intégrée lorsque l'ensemble des triplets qu'elle contient ont été ajoutés (et éventuellement supprimés) de l'état.
+%Une opération de suppression dépend donc sur les opérations qui ajoutent les triplets qu'elle contient.
+%Par exemple la suppression $\tuple*{\trm{rmv}, \set*{\tuple*{1, A, 1}, \tuple*{1, B, 1}}}$ est intégrée lorsque les ajouts $\tuple*{\trm{add}, \tuple*{1, A, 1}}$ et $\tuple*{\trm{add}, \tuple*{1, B, 1}}$ ont été préalablement intégrés.
+
+L'exécution d'une opération de suppression d'une valeur $v$ forme une opération intégrable qui contient l'ensemble des identifiants associés à $v$.
+Si une opération d'ajout de $v$ est exécutée en parallèle, un nouvel identifiant est associé à la valeur.
+Cet identifiant n'est pas inclut dans la suppression.
+Quel que soit l'ordre d'intégration de ces deux opérations, la valeur $v$ sera présente dans l'ensemble.
+L'implémentation décrite respecte donc la sémantique \emph{Add-Win}.
 
 
 \paragraph{Les \acp{CRDT} synchronisés par états} transmettent directement l'état mis à jour au reste des pairs.
@@ -2214,15 +2224,19 @@ La fonction d'intégration $\trm{integrate}$ permet donc de fusionner deux état
 Les états peuvent être fusionnés dans un ordre arbitraire et plusieurs fois sans compromettre la convergence des copies.
 La fonction d'intégration est par conséquent associative, commutative, et idempotente.
 
-L'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}.
-Nous pouvons également représenter l'ensemble des états comme un ensemble partiellement ordonné où chaque couple d'états a une borne supérieure qui correspond à la fusion des deux états.
-L'ordre partiel est représenté par $\sqsubset$.
-Chaque modification produit un état qui est supérieur ou égal à l'état sur lequel la modification a été intégrée.
-En d'autres termes, chaque modification enfle l'état tel que la fusion de l'état obtenu avec l'état précédent donne l'état obtenu.
-Ainsi si l'appel $\trm{prepare}_i(s_1, \_)$ donne l'état $s_2$, alors $s_1 \sqsubseteq s_2$ et $s_1 \sqcup s_2 = s_2$.
+Les états sont partiellement ordonnés de telle manière à ce que la fusion de deux états produisent toujours un état plus grand que les états fusionnés ou égal à l'un des états fusionnés.
+L'état obtenu est unique et minimal.
+Il s'agit de la borne supérieure des états fusionnés.
+AInsi un état fusionné avec lui même donne l'état lui-même.
+La fusion d'un état $\sigma_1$ avec un état supérieur $\sigma_2$ donne $\sigma_2$.
+Ces propriétés forment une structure algébrique connue.
+En effet, l'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}.
+Chaque modification enfle l'état actuel pour obtenir un état qui lui est supérieur ou égal.
+Ainsi si l'appel $\trm{prepare}_i(\sigma_1, \_)$ donne l'état $\sigma_2$, alors $\sigma_2$ est supérieur ou égal à $\sigma_2$ et leur fusion donne $\sigma_2$.
 
-La propriété d'idempotence de la fusion et la propriété d'inflation d'une modification rendent les \acp{CRDT} synchronisés par états particulièrement adaptés aux systèmes de passage de messages non-fiable.
-En effet, elles permettent d'assurer la convergence à terme en dépit de la perte, du retard, ou de la duplication de messages.
+La propriété d'idempotence de la fusion et la propriété d'inflation d'une modification rendent les \acp{CRDT} synchronisés par états particulièrement adaptés aux systèmes de passage de messages non-fiables.
+Elles permettent d'assurer la convergence à terme en dépit de la perte, du retard, de la duplication, ou du ré-ordonnement de messages.
+Si des pairs ne reçoivent pas un état d'un pair, il suffit qu'ils reçoivent un état ultérieur de ce pair pour obtenir les modifications incluses dans l'état qu'ils n'ont pas reçu.
 Leur manière de se synchroniser permet également au \ac{CRDT} d'être causalement cohérent.
 Sur ce point, ils sont plus avantageux que les \acp{CRDT} synchronisés par opérations.
 Lorsque la complexité spatiale d'un état est importante, les \acp{CRDT} synchronisés par états peuvent induire un coût de transmission non-négligeable.
@@ -2233,7 +2247,7 @@ Le coût peut être si élevé qu'un \ac{CRDT} synchronisé par opérations est 
 \begin{align}
 &\trm{StateAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \powerfset{\mathbb{I} \times \mathbb{N}^*} \label{eq:state-awset-state}\\
 %&\bot \defeq \tuple*{\emptyset, \emptyset}\\
-&\trm{eval}_i(\tuple*{t, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:state-awset-eval}\\
+&\trm{eval}_i(\tuple*{t, c}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:state-awset-eval}\\
 &\begin{aligned}
 \MoveEqLeft\trm{prepare}_i(\tuple*{t, c}, \trm{add}(v)) \defeq \tuple*{t \cup \set*{\tuple*{v, i, n}},c \cup \tuple*{i, n}}\\
     &\where n \defeq 1 + \max(\set*{0,n \given \tuple*{i, n} \in c})
@@ -2252,14 +2266,18 @@ Le coût peut être si élevé qu'un \ac{CRDT} synchronisé par opérations est 
 \end{figure}
 
 La \autoref{fig:state-add-win-set} présente une implémentation d'un ensemble répliqué synchronisé par états.
-Un état consiste en un couple dont le premier élément correspond aux associations de valeurs et identifiants, et le second élément correspond à l'ensemble des identifiants générés par tout pair.
-Ce second élément est le \emph{contexte causal }~\autocite{almeida_2018_delta-crdt-revisited} du \ac{CRDT}.
+L'\autoref{eq:state-awset-state} précise l'ensemble des états du \ac{CRDT}.
+Un état consiste en un couple $\tuple*{t,c}$ où $t$ est l'ensemble des valeurs associées à leur identifiant, et $c$ est l'ensemble des identifiants générés par les pairs.
+Les associations de valeurs et d'identifiants sont représentées de la même manière que celles de l'ensemble répliqué synchronisé par opérations.
+$c$ est le \emph{contexte causal }~\autocite{almeida_2018_delta-crdt-revisited} du \ac{CRDT}.
 Il permet d'éviter d'ajouter ou de ré-ajouter une association qui a été supprimée.
-Les associations de valeurs et d'identifiants consistent en des triplets.
-La suppression d'un triplet peut donc avoir lieu avant son ajout.
-L'état généré par l'ajout d'une valeur correspond à l'ajout d'un nouveau triplet et de son identifiant au contexte causal.
-L'état généré par la suppression d'une valeur ne modifie pas le contexte causal et retire les triplets correspondants.
-Le contexte causal résultant de la fusion de deux états est l'union des contextes causaux des deux états.
+%La suppression d'un triplet peut donc avoir lieu avant son ajout.
+L’évaluation d’une opération de lecture retourne l’ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:state-awset-eval}).
+L'état généré par l'ajout d'une valeur correspond à l'ajout d'un nouveau triplet et de son identifiant au contexte causal (\autoref{eq:state-awset-prep-add}).
+Le nouvel identifiant est formé par l'identifiant du pair qui exécute l'opération et le nombre séquentiel de ce pair incrémenté d'une unité.
+Le nombre séquentiel d'un pair est obtenu à partir du contexte causal.
+L'état généré par la suppression d'une valeur ne modifie pas le contexte causal et retire les triplets correspondants (\autoref{eq:state-awset-prep-rmv}).
+Le contexte causal résultant de la fusion de deux états est l'union des contextes causaux des deux états (\autoref{eq:state-awset-integr}).
 La formation de l'ensemble des triplets est un peu plus difficile.
 Nous devons veiller à ne pas ajouter des triplets supprimés et à ajouter les triplets qui ne l'ont pas encore été dans l'un des états.
 Un triplet est supprimé d'un état si son identifiant est présent dans son contexte causal.
@@ -2267,7 +2285,7 @@ Inversement un triplet n'a pas encore été ajouté dans un état si son identif
 L'ensemble des triplets contient donc les triplets présents dans chaque état et les triplets de chaque état dont l'identifiant est absent du contexte causal de l'autre état.
 En pratique le contexte causal peut être représenté par un vecteur de versions~\autocite{parker_1983_versionvector,mattern_1988_timevector}.
 
-\begin{figure}[bth]
+\begin{figure}[tbh]
 \centering
 \begin{tikzpicture}
     \newcommand\hsep{1.7}
@@ -2283,14 +2301,14 @@ En pratique le contexte causal peut être représenté par un vecteur de version
     \draw[pre] (s0) to node[midway,left]{initialise} (s1);
     \draw[pre] (s1) to %
             node[midway,left]{exécute $a_1$} %
-            node[midway,right]{génére $\tuple*{\set*{\tuple*{1,A_1}},\set*{A_1}}$} %
+            node[midway,right]{génère $\tuple*{\set*{\tuple*{1,A_1}},\set*{A_1}}$} %
         (s2);
     \draw[pre] (s2) to %
             node[midway,left]{exécute $a_2$} %
-            node[midway,right]{génére $\tuple*{\emptyset,\set*{A_1}}$} %
+            node[midway,right]{génère $\tuple*{\emptyset,\set*{A_1}}$} %
         (s3);
     \draw[pre] (s3) to %
-            node[midway,left]{intègre $\tuple*{\set*{\tuple*{1,B_1}},\set*{B_1}}$} %
+            node[midway,left]{intègre $\tuple*{\set*{\tuple*{1,A_1},\tuple*{1,B_1}},\set*{A_1,B_1}}$} %
         (s4);
     \draw[pre] (s4) to %
             node[midway,left]{exécute $a_3$} %
@@ -2298,59 +2316,62 @@ En pratique le contexte causal peut être représenté par un vecteur de version
         (s5);
 \end{tikzpicture}
 \caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
-Les flèches indiquent des transitions d'états.
-Elles sont étiquetées à gauche des événements qui produisent les transitions d'états.
-Lorsque l'événement correspond à l'exécution d'une opération de modification ou d'une opération d'interrogation, les flèches sont respectivement étiquetées à droite par le message généré et la valeur de retour.}\label{fig:state-awset-state-trans}
+L'ensemble répliqué utilise l'implémentation de la \autoref{fig:state-add-win-set}.}\label{fig:state-awset-state-trans}
 \end{figure}
 
-La \autoref{fig:state-add-win-set-semilattice} présente le sup-demi-treillis de l'implémentation de la \autoref{fig:state-add-win-set}.
-Un triplet $\tuple*{v, i, n}$ et un identifiant $\tuple*{i, n}$ sont respectivement notés $\tuple*{v, i_n}$ et $i_n$.
+Nous prenons l’exécution abstraite de la Figure \autoref{fig:awset-example} pour illustrer la réplication d’un ensemble qui utilise l’implémentation de la \autoref{fig:state-add-win-set}.
+La \autoref{fig:state-awset-state-trans} décrit les états successifs de la copie du pair $p_A$.
+La \autoref{fig:state-add-win-set-semilattice} présente le sup-demi-treillis des états de cette exécution.
+Les traits épaissis représente les transitions d'états du pair $p_A$.
+La fusion de deux états correspond à leur borne supérieure dans le sup-demi treillis.
+Ainsi la fusion des états $\tuple*{\emptyset,\set*{A_1}}$ et $\tuple*{\set*{\tuple*{1,A_1},\tuple*{1,B_1}},\set*{A_1,B_1}}$ produit l'état $\tuple*{\set*{\tuple*{1,B_1}},\set*{A_1,B_1}}$.
 
-\begin{figure}[tb]
+\begin{figure}[tbh]
 \centering
 \begin{tikzpicture}
     \newcommand\hsep{2.3}
     \newcommand\vsep{1.3}
-    \node (bot) at (0,0) {$\bot$};
-    \node[draw,rounded corners] (A1) at (-\hsep,\vsep) {$\set*{\tuple*{1,A_1}}, \set*{A_1}$};
-    \node[draw,rounded corners] (A2) at (\hsep,\vsep) {$\set*{\tuple*{1,B_1}}, \set*{B_1}$};
-    \node[draw,rounded corners] (A1p) at (-2*\hsep,2*\vsep) {$\emptyset, \set*{A_1}$};
-    \node[draw,rounded corners] (A2p) at (2*\hsep,2*\vsep) {$\emptyset, \set*{B_1}$};
-    \node (A1A2) at (0,2*\vsep) {$\set*{\tuple*{1,A_1}, \tuple*{1,B_1}}, \set*{A_1, B_1}$};
-    \node (A1pA2) at (-\hsep,3*\vsep) {$\set*{\tuple*{1,B_1}}, \set*{A_1,B_1}$};
-    \node (A1A2p) at (\hsep,3*\vsep) {$\set*{\tuple*{1,A_1}}, \set*{A_1,B_1}$};
-    \node (A1pA2p) at (0,4*\vsep) {$\emptyset, \set*{A_1,B_1}$};
-    \draw (bot) to (A1);
-    \draw (bot) to (A2);
-    \draw (A1) to (A1p);
-    \draw (A2) to (A2p);
-    \draw (A1) to (A1A2);
-    \draw (A2) to (A1A2);
-    \draw (A1p) to (A1pA2);
-    \draw (A2p) to (A1A2p);
-    \draw (A1A2) to (A1pA2);
-    \draw (A1A2) to (A1A2p);
-    \draw (A1pA2) to (A1pA2p);
-    \draw (A1A2p) to (A1pA2p);
+    \node (bot) at (0,0) {$\tuple*{\emptyset, \emptyset}$};
+    \node[draw,rounded corners] (A1) at (-\hsep,\vsep) {$\tuple*{\set*{\tuple*{1,A_1}}, \set*{A_1}}$};
+    \node[draw,rounded corners] (B1) at (\hsep,\vsep) {$\tuple*{\set*{\tuple*{1,B_1}}, \set*{B_1}}$};
+    \node[draw,rounded corners] (A1p) at (-2*\hsep,2*\vsep) {$\tuple*{\emptyset, \set*{A_1}}$};
+    %\node[draw,rounded corners] (B1p) at (2*\hsep,2*\vsep) {$\tuple*{\emptyset, \set*{B_1}}$};
+    \node (A1B1) at (0,2*\vsep) {$\tuple*{\set*{\tuple*{1,A_1}, \tuple*{1,B_1}}, \set*{A_1, B_1}}$};
+    \node (A1pB1) at (-\hsep,3*\vsep) {$\tuple*{\set*{\tuple*{1,B_1}}, \set*{A_1,B_1}}$};
+    %\node (A1B1p) at (\hsep,3*\vsep) {$\tuple*{\set*{\tuple*{1,A_1}}, \set*{A_1,B_1}}$};
+    %\node (A1pB1p) at (0,4*\vsep) {$\tuple*{\emptyset, \set*{A_1,B_1}}$};
+    \draw[ultra thick] (bot) to (A1);
+    \draw (bot) to (B1);
+    \draw[ultra thick] (A1) to (A1p);
+    %\draw (B1) to (B1p);
+    \draw (A1) to (A1B1);
+    \draw (B1) to (A1B1);
+    \draw[ultra thick] (A1p) to (A1pB1);
+    %\draw (B1p) to (A1B1p);
+    \draw (A1B1) to (A1pB1);
+    %\draw (A1B1) to (A1B1p);
+    %\draw (A1pB1) to (A1pB1p);
+    %\draw (A1B1p) to (A1pB1p);
 \end{tikzpicture}
-\caption[Sup-demi-treillis des états de l'ensemble répliqué synchronisé par états]{Aperçu du diagramme de Hasse du sup-demi-treillis des états de l'ensemble répliqué synchronisé par états.
-L'ensemble des états représentés est restreint à une seule valeur ($1$), et deux \emph{dots} ($A_1$, $B_1$).
+\caption[Aperçu d'un sup-demi-treillis d'un ensemble synchronisé par états]{Diagramme de Hasse du sup-demi-treillis des états de l'ensemble synchronisé par états de l'exécution de la \autoref{fig:awset-example}.
 Les états entourés sont irréductibles.
 }\label{fig:state-add-win-set-semilattice}
 \end{figure}
 
+\clearpage % better layout
 
 \paragraph{Les \acp{CRDT} synchronisés par différences}~\autocite{almeida_2018_delta-crdt-revisited} sont une sous-famille des \acp{CRDT} synchronisés par états.
 Ils permettent la conception de mécanismes de synchronisation plus efficaces~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles.
-Un état est irréductible si et seulement si il ne correspond pas à l'état minimal $\bot$ et il ne peut pas être obtenu par la fusion de deux états distincts.
+Un état est irréductible si et seulement si il ne peut pas être obtenu par la fusion de deux états distincts et si il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
 Dans la \autoref{fig:state-add-win-set-semilattice}, les états irréductibles sont entourés.
+L'état minimal est $\tuple*{\emptyset, \emptyset}$.
 Un état décomposé peut être obtenu par la fusion de l'ensemble de ses états irréductibles.
-%$D(s)$ représente la famille de décompositions de l'état $s$.
+Par exemple, l'état $\tuple*{\set*{\tuple*{1,B_1}}, \set*{A_1,B_1}}$ est obtenu par la fusion des deux états irréductibles $\tuple*{\emptyset, \set*{A_1}}$ et $\tuple*{\set*{\tuple*{1,B_1}}, \set*{B_1}}$.
 Au lieu de transmettre aux autres pairs un état mis à jour dans son intégralité, un pair peut transmettre la différence entre un état mis à jour et sa version précédente.
 Dans la littérature, plusieurs mécanismes de synchronisation par différences d'états prennent avantage de cette observation.
-Certains d'entre eux permettent d'assurer une cohérence causale avec un sur-coût plus faible que les mécanismes de synchronisation par état complet.
-La flexibilité de cette approche permet la conception de mécanismes de synchronisation variés et est donc adapté à un large éventail d'applications.
+Certains d'entre eux permettent d'assurer une cohérence causale avec un sur-coût plus faible que les mécanismes de synchronisation par état complet~\autocite{enes_2018_efficient-sync-state-based-crdt}.
+La flexibilité de cette approche permet la conception de mécanismes de synchronisation variés et est donc adaptée à un large éventail d'applications.
 
 Comparé aux \ac{CRDT} synchronisé par états complets, l'appel à la fonction $\trm{prepare}$ ne retourne pas l'état mis-à-jour mais une différence d'état.
 Bien que ce ne soit pas nécessaire, nous supposons que cette différence est minimale.
@@ -2358,28 +2379,17 @@ En d'autres termes nous ne pouvons trouver un autre état plus petit qui produit
 Cette propriété n'est pas requise dans la définition originale des \ac{CRDT} synchronisés par différences d'états.
 Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 
-%Un \ac{CRDT} synchronisé par différences d'états est un \ac{CRDT} synchronisé par état équipé d'un ensemble de modificateurs delta $M^\delta$.
-%Chaque modificateur est associé à un modificateur delta et peut être définit avec ce dernier.
-%Un modificateur delta retourne l'état minimal $\bot$ ou un état $e$.
-%Prenant $j$ un état irréductible qui compose $e$, la fusion de $j$ avec l'état sur lequel la modification a été appliquée doit produire une inflation.
-%Cette propriété n'est pas requise dans la définition originale des modificateurs delta.
-%Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state-based-crdt} sous le nom de modificateurs delta minimaux.
-%\begin{align*}
-%&\forall S \in \trm{DeltaCRDT} \qsep \tuple*{S, M^\delta}\\
-%&S \in \trm{StateCRDT}\\
-%&\forall m \in M \qsep \exists m^\delta \in M^\delta \qsep m(s) = s \sqcup m^\delta(s)\\
-%&\begin{aligned}
-%    \MoveEqLeft\forall s \in S \:\forall m^\delta \in M^\delta \:\forall d \in \trm{dom}(m^\delta(s))\\
-%    &\exists J \in D(m^\delta(s)(d)) \:\forall j \in J \qsep j \not\sqsubseteq s
-%\end{aligned}
-%\end{align*}
+La \autoref{fig:delta-add-win-set} présente l'implémentation d'un ensemble répliqué synchronisé par différences d'états.
+Elle est globalement identique à l'implémentation présentée dans la \autoref{fig:state-add-win-set}.
+Seuls les messages générés sont distincts.
+Les messages générés sont des états irréductibles.
 
-\begin{figure}[tb]
+\begin{figure}[bth]
 \centering
 \begin{align}
 &\trm{DeltaAWSet}\tuple*{V} \defeq \powerfset{V \times \mathbb{I} \times \mathbb{N}^*} \times \powerfset{\mathbb{I} \times \mathbb{N}^*} \label{eq:delta-awset-state}\\
 %&\bot \defeq \tuple*{\emptyset, \emptyset}\\
-&\trm{eval}_i(\tuple*{t, n}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:delta-awset-eval}\\
+&\trm{eval}_i(\tuple*{t, c}, \trm{rd}) \defeq \set*{v \given \tuple*{v, \_, \_} \in t} \label{eq:delta-awset-eval}\\
 &\begin{aligned}
 \MoveEqLeft\trm{prepare}_i(\tuple*{t, c}, \trm{add}(v)) \defeq \tuple*{\tuple*{v, i, n},\set*{i, n}}\\
     &\where n \defeq 1 + \max(\set*{0,n \given \tuple*{i, n} \in c})
@@ -2397,14 +2407,9 @@ Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state
 \caption[Implémentation d'un ensemble répliqué synchronisé par différences d'états]{Implémentation d'un ensemble répliqué synchronisé par différences d'états qui respecte la sémantique \emph{Add-Win}.}\label{fig:delta-add-win-set}
 \end{figure}
 
-La \autoref{fig:delta-add-win-set} présente l'implémentation d'un ensemble répliqué synchronisé par différences d'états.
-Elle est globalement identique à l'implémentation présentée dans la \autoref{fig:state-add-win-set}.
-Seuls les messages générés sont distincts.
-Les messages générés sont des états irréductibles.
-
 Les \acp{CRDT} synchronisés par différences d'états conservent les avantages des \acp{CRDT} synchronisés par états tout en corrigeant leurs principaux défauts.
 Avec un mécanisme de synchronisation adéquate, ils peuvent supporter la perte, les duplications, et l'intégration dans un ordre arbitraire des messages.
-Ils réduisent le coût de transmission puisque seuls des différences d'états sont transmis.
+Ils ont la capacité de réduire le coût de transmission puisque seuls des différences d'états peuvent être transmises.
 
 
 \paragraph{} Nous avons présenté les deux principales familles de \acp{CRDT}~: les \acp{CRDT} synchronisés par opérations et les \acp{CRDT} synchronisés par états.
@@ -2412,4 +2417,5 @@ Les \acp{CRDT} synchronisés par opérations exige un mécanisme de passage de m
 Les \acp{CRDT} synchronisés par états sont moins exigeants et supportent les mécanismes de passage de message non-fiable avec une intégration de tous les messages dans un ordre quelconque.
 Cependant, la taille des messages de certains \acp{CRDT} synchronisés par états peut être impraticable.
 Les \acp{CRDT} synchronisés par différences d'états corrigent ce problème.
-Au lieu de transmettre l'intégralité de l'état mis à jour, ils transmettent des différences d'états.
+Au lieu de transmettre l'intégralité de l'état mis à jour, ils peuvent transmettre des différences d'états.
+Dans le chapitre \autoref{ch:dotted-logootsplit} nous proposons un proposons un protocole synchronisé par différences d'états adapté à l'édition collaborative de texte.
