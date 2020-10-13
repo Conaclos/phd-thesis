@@ -259,15 +259,15 @@ Les modifications sont propagées en arrière plan aux autres pairs.
 %Elles sont transmises immédiatement ou ultérieurement.
 %Ce choix est laissé à la discrétion du protocole de réplication.
 Les pairs intègrent à leur copie les modifications qu'ils reçoivent.
-La~\autoref{fig:optimisqtic-replciation-scenario} illustre un scénario de réplication optimiste.
+La \autoref{fig:optimisqtic-replciation-scenario} illustre un scénario de réplication optimiste.
 
 %Le support de collaboration qui implique un grand nombre de collaborateur·ice·s augmente le risque d'apparition de latences et de comportements mal-intentionnés.
 %Ce qui nous amène à questionner le passage à l'échelle et la sécurité des protocoles de réplication optimiste de contenu partagé.
 %Nous détaillons ces aspects dans la \autoref{sec:problematic}.
 
 Les infrastructures pair-à-pair de collaboration donne plus de responsabilités aux pairs.
-Les collaborateur·ice·s peuvent davantage nuire au bon déroulement de la collaboration.
-Les infrastructures pair-à-pair permettent également l'implication d'un plus grand nombre de collaborateur·ice·s.
+Des collaborateur·ice·s peuvent davantage nuire au bon déroulement de la collaboration.
+Les infrastructures pair-à-pair permettent également la participation d'un plus grand nombre de collaborateur·ice·s.
 Ce qui nous amène à questionner la sécurité et le passage à l'échelle des protocoles de réplication optimiste.
 
 
@@ -280,7 +280,7 @@ Ce qui nous amène à questionner la sécurité et le passage à l'échelle des 
 Les infrastructures pair-à-pair de collaboration permettent aux pairs de modifier en parallèle un contenu partagé.
 Pour ce faire, les pairs répliquent le contenu partagé et modifient leur copie respective.
 La modification concurrente du contenu engendre inévitablement la divergence des copies du contenu partagé~\autocite{dourish_1995_divergence}.
-Dans la~\autoref{fig:optimisqtic-replciation-scenario}, les copies divergent avant leur synchronisation.
+Dans la \autoref{fig:optimisqtic-replciation-scenario}, les copies divergent avant leur synchronisation.
 Les protocoles de réplication optimiste sont responsables de la réconciliation de l'état des copies pour les faire converger vers un état qui intègre les modifications de chacun.
 La convergence des copies conditionne la vivacité et donc le succès d'une collaboration.
 Si deux contributeur·ice·s ont des copies qui ne sont pas capables de converger, leur vue du contenu sera différente.
@@ -572,14 +572,14 @@ Nous présentons également les travaux de la littérature en relation avec notr
 Nous proposons un modèle unifié pour décrire et mieux appréhender un sous-ensemble de ces types séquence.
 A l'aide de ce modèle nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
 
-\paragraph{Le \autoref{ch:conclusion}} côlt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
+\paragraph{Le \autoref{ch:conclusion}} clôt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
 
 
 \section{Publications}
 
 La première contribution développée au sein de ce manuscrit a fait l'objet d'une publication~\autocite{2018_elvinger_prunable-auth-log}.
-La seconde contribution présentée dans ce manuscrit n'a pas encore fait l'objet d'une publication.
-En revanche, le protocole a été implémenté dans l'éditeur collaboratif \emph{MUTE}~\autocite{2017_nicolas-mute-demo}.
+La seconde contribution présentée n'a pas encore fait l'objet d'une publication.
+En revanche, la proposition a été implémentée dans notre prototype d'éditeur collaboratif \emph{MUTE} qui est décrit dans l'une de nos publications~\autocite{2017_nicolas-mute-demo}.
 Notre dernière publication~\autocite{2019_yu_genericundo} est en lien avec nos travaux sur les type de données répliquées, mais n'est pas présentée au sein de ce manuscrit.
 Dans la suite de cette section nous référençons les articles qui ont été publiés au cours de cette thèse.
 

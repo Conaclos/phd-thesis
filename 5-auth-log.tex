@@ -79,7 +79,7 @@ Malheureusement chaque pair doit conserver l'intégralité de son journal pour \
     \item permettre à de nouveaux pairs de rejoindre la collaboration
 \end{inlinelist}.
 Les nouveaux pairs jouent les opérations enregistrées dans le journal pour obtenir le document partagé.
-La~\autoref{fig:invite-by-log} montre que les nouveaux pairs utilisent le journal pour obtenir le document partagé.
+La \autoref{fig:invite-by-log} montre que les nouveaux pairs utilisent le journal pour obtenir le document partagé.
 Pour ce faire, ils intègrent les modifications enregistrées dans le journal.
 La préservation de l'intégralité du journal engendre plusieurs problèmes~:
 
@@ -163,7 +163,7 @@ En effet, un pair mal-intentionné peut facilement falsifier un instantané du d
 Ce dernier n'a aucun moyen de vérifier l'authenticité de l'instantané.
 
 Nous proposons une approche qui permet de tronquer le journal authentifié et d'authentifier un instantané à partir du journal tronqué qui lui est associé.
-La~\autoref{fig:invite-by-snaplog} illustre cette approche.
+La \autoref{fig:invite-by-snaplog} illustre cette approche.
 
 \begin{figure}[htb]
 \centering
@@ -235,9 +235,9 @@ Ces opérations peuvent alors être supprimées du journal.
 
 Nous considérons des journaux dans lesquels les opérations ont des relations de dépendance.
 Un journal forme ainsi un graphe dirigé sans cycle.
-La~\autoref{fig:log-example} donne un exemple d'un journal.
+La \autoref{fig:log-example} donne un exemple d'un journal.
 Pour former ce sous-ensemble croissant d'opérations supprimables, les opérations futures devraient partager un préfixe commun de dépendances qui croît de manière monotone au cours de la collaboration.
-Par exemple, dans la~\autoref{fig:log-example}, si nous savons que toutes les opérations futures dépendent sur l'opération $a_4$ et que $a_4$ est suffisante à la vérification future de la cohérence du journal, alors les opérations qui précédent $a_4$ peuvent être supprimées du journal.
+Par exemple, dans la \autoref{fig:log-example}, si nous savons que toutes les opérations futures dépendent sur l'opération $a_4$ et que $a_4$ est suffisante à la vérification future de la cohérence du journal, alors les opérations qui précédent $a_4$ peuvent être supprimées du journal.
 
 \begin{figure}[htb]
 \centering
@@ -352,7 +352,7 @@ Dans la \autoref{sec:stability} nous développons le concept de stabilité et no
 %Les pairs maintiennent des journaux cohérents.
 %Lorsqu'ils ajoutent une nouvelle opération dans leur journal, ils vérifient que cette dernière ne compromet pas la cohérence de leur journal.
 %Les garanties de cohérence auxquelles nous nous intéressons concernent principalement des restrictions d'ordre sur les relations de dépendance entre les opérations.
-%Au lieu de partir de zéro, nous pouvons nous rattacher aux concepts introduits dans le~\autoref{ch:background}.
+%Au lieu de partir de zéro, nous pouvons nous rattacher aux concepts introduits dans le \autoref{ch:background}.
 %Pour ce faire, il nous suffit de créer une correspondance entre un journal et une exécution abstraite.
 %Nous parlons d'exécution abstraite associée à un journal.
 %
@@ -372,9 +372,9 @@ Dans la \autoref{sec:stability} nous développons le concept de stabilité et no
 %
 %Au lieu de présenter un nouveau formalisme graphique pour représenter un journal, nous représentons simplement l'exécution abstraite associée au journal.
 %L'opération d'observation implicite permet d'identifier le possesseur du journal.
-%La~\autoref{fig:log-example} est une exécution abstraite qui représente le journal du pair $p_B$.
+%La \autoref{fig:log-example} est une exécution abstraite qui représente le journal du pair $p_B$.
 %$\top_{\trm{vis}}$ est l'opération d'observation implicite.
-%Dans cet exemple nous utilisons la relation de précédence présentée dans la~\autoref{subsec:caucal-consistency}.
+%Dans cet exemple nous utilisons la relation de précédence présentée dans la \autoref{subsec:caucal-consistency}.
 %Dans une représentation graphique elle indique que la relation de visibilité est transitive.
 %
 %\begin{definition}[Exécution abstraite associée]
@@ -437,10 +437,10 @@ Dans la \autoref{sec:stability} nous développons le concept de stabilité et no
 %Un journal respecte un modèle de cohérence $C$ si et seulement si son exécution abstraite associée respecte $C$.
 %\end{definition}
 %
-%L'exécution abstraite de la~\autoref{fig:log-example} respecte le modèle de cohérence causale.
+%L'exécution abstraite de la \autoref{fig:log-example} respecte le modèle de cohérence causale.
 %Le journal qui lui est associé respecte donc le modèle de cohérence causale.
 %
-%Dans le~\autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
+%Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
 %Nous savions alors quels pairs sont honnêtes et lesquels sont mal-intentionnés.
 %Une exécution abstraite associée à un journal décrit en revanche la connaissance qu'a le possesseur du journal sur l'exécution.
 %Nous adoptons donc un point de vue subjectif.
@@ -487,7 +487,7 @@ $x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seul
 \end{equation*}
 \end{definition}
 
-%Dans le~\autoref{ch:background} nous avons vu que nous pouvions organiser les modèles de cohérence en hiérarchie.
+%Dans le \autoref{ch:background} nous avons vu que nous pouvions organiser les modèles de cohérence en hiérarchie.
 %Un modèle de cohérence $C$ est plus fort qu'un modèle de cohérence $C'$ si il existe au moins une exécution abstraite qui respecte $C'$ et ne respecte pas $C$.
 
 \begin{theorem}\label{th:stability-hierarchy}
@@ -528,7 +528,7 @@ Un modèle de cohérence $C$ est stabilisable, et nous écrivons $C \in \trm{Sta
 
 Nous recherchons un modèle de cohérence stabilisable qui est réaliste dans le contexte de notre travail~: il doit garantir la disponibilité en lecture et en écritures des copies, ainsi que la convergence à terme des copies.
 Nous proposons d'abord d'explorer la notion de stabilité dans le modèle de cohérence causale et le modèle de cohérence \acl{VFJC}.
-Ces deux modèles sont présentés dans le~\autoref{ch:background}.
+Ces deux modèles sont présentés dans le \autoref{ch:background}.
 Nous construisons ensuite de nouveaux modèles de cohérence qui sont stabilisables et adaptés à notre contexte.
 
 
@@ -549,9 +549,9 @@ Cette question revient à se demander quand est-ce qu'une opération ne peut plu
 
 Le modèle de cohérence causale contraint chaque pair à observer ses anciennes opérations.
 Une opération d'un pair est donc nécessairement visible à toute opération future de ce même pair.
-Par exemple, l'opération $a_1$ de la~\autoref{fig:cs-example-1} sera visible aux opérations futures de son auteur $p_A$.
+Par exemple, l'opération $a_1$ de la \autoref{fig:cs-example-1} sera visible aux opérations futures de son auteur $p_A$.
 En se basant sur cette contrainte et la transitivité de la visibilité, nous déduisons qu'une fois qu'une opération quelconque est visible à l'opération d'un pair, alors elle est également visible à toute opération future de ce même pair.
-Dans la~\autoref{fig:cs-example-1}, $a_1$ est visible à l'opération $b_1$.
+Dans la \autoref{fig:cs-example-1}, $a_1$ est visible à l'opération $b_1$.
 Puisque $b_1$ est visible à toute opération future de $p_B$, par transitivité $a_1$ l'est également.
 Pour qu'une opération soit causalement stable, il suffit donc que chaque pair observe cette dernière.
 
@@ -656,7 +656,7 @@ Soit une exécution abstraite $A$ qui respecte le modèle de cohérence causale.
 Soit $x$ une opération de $A$ qui est observée par chaque pair.
 Supposons que $x$ n'est pas causalement stable.
 Il existe donc une opération $z$ d'une extension $A'$ de $A$ qui respecte le modèle de cohérence causale tel que $z$ soit absente de $A$ et $x$ ne soit pas visible à $z$.
-D'après le~\autoref{th:future-concur}, $z$ est concurrent à $x$.
+D'après le \autoref{th:future-concur}, $z$ est concurrent à $x$.
 Nous distinguons deux cas~: soit $p$ est le pair à l'origine de $x$ ou $p$ n'est pas à l'origine de $x$.
 Dans le premier cas, la propriété~\ref{itm:peer-linear} est violée.
 $A$ ne respecte pas le modèle de cohérence causale.
@@ -664,7 +664,7 @@ Ce qui contredit l'hypothèse initiale.
 Dans le second cas, $p$ a au moins une opération $y$ de $A$ qui succède $x$.
 Puisque $A'$ respecte le modèle de cohérence causale, $y$ et $z$ sont liés par la relation de précédence.
 $y$ précède $z$ ou $z$ précède $y$.
-D'après la~\autoref{th:future-vis}, $z$ ne peut pas précéder $y$.
+D'après la \autoref{th:future-vis}, $z$ ne peut pas précéder $y$.
 Si $y$ précède $z$, alors par transitivité $x$ précède $z$.
 Ce qui n'est pas possible puisque $x$ et $z$ sont concurrents.
 Il n'existe donc pas une telle opération.
@@ -1108,7 +1108,7 @@ Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$
 
 
 %\begin{proof}
-%Nous pouvons démontrer que l'ensemble des observateurs honnêtes d'une opération sont des observateurs stables et qu'un pair honnête n'est pas un observateur stable si il n'observe pas l'opération en suivant la même structure de preuve que celle développée pour la démonstration du~\autoref{th:cs}.
+%Nous pouvons démontrer que l'ensemble des observateurs honnêtes d'une opération sont des observateurs stables et qu'un pair honnête n'est pas un observateur stable si il n'observe pas l'opération en suivant la même structure de preuve que celle développée pour la démonstration du \autoref{th:cs}.
 %Nous laissons donc cette preuve comme exercice aux lecteur·ice·s.
 %
 %Nous nous intéressons désormais aux pairs mal-intentionnés.
@@ -1117,7 +1117,7 @@ Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$
 %Pour chaque permutation des pairs non-évincés qui débute par $m$ et pour chaque pair honnête, il existe une chaîne de visibilité tel que la première opération soit $x$ ou une opération qui succède $x$, la dernière opération est observée par le pair honnête considérée, et l'auteur de la i-ème opération correspond au i-ème pair de la permutation considérée.
 %Supposons que $m$ n'est pas un observateur stable.
 %Il existe donc une extension $A'$ de $A$ et une opération $y$ de $A'$ absente de $A$ tel que $x$ n'est pas visible à $y$ et l'auteur de $y$ est $m$.
-%D'après le~\autoref{th:future-concur}, $y$ est concurrent à $x$.
+%D'après le \autoref{th:future-concur}, $y$ est concurrent à $x$.
 %Suivant~\ref{itm:bf2}, $y$ est observée par au moins un pair honnête.
 %Il existe donc une opération $z$ d'un pair honnête $h$ tel que $y$ soit visible à $z$.
 %$z$ est absente de $A$ et présente dans $A'$.
@@ -1589,7 +1589,7 @@ Puisque l'invitation $c_1$ doit être visible aux opérations de $p_B$, $p_B$ ob
 A partir de ces deux remarques nous en déduisant que seuls les pairs dont l'invitation précède ou est concurrente à une opération $x$ peuvent exécuter une opération concurrente à $x$.
 $x$ devient stable dès lors que ces pairs l'observent.
 Nous parlons d'observateurs requis.
-Nous en déduisons ainsi la stabilité causale dynamique décrite dans le~\autoref{th:dyn-cs}.
+Nous en déduisons ainsi la stabilité causale dynamique décrite dans le \autoref{th:dyn-cs}.
 
 \begin{definition}[Observateurs honnêtes requis]
 Un pair honnête est un observateur requis d'une opération $x$ si et seulement si il est invité dans une opération qui précéde ou est concurrente à $x$.
@@ -1623,7 +1623,7 @@ Dans une exécution abstraite qui respecte le modèle de cohérence causale dyna
 \end{theorem}
 
 \begin{proof}
-Le~\autoref{th:dyn-cs} est décomposable en deux implications.
+Le \autoref{th:dyn-cs} est décomposable en deux implications.
 Nous prouvons la première par contradiction.
 La seconde est triviale et peut être simplement déduite de l'explication déroulée tout au long de cette section.
 
@@ -1631,7 +1631,7 @@ Soit une opération $x$ d'une exécution abstraite $A$ qui respecte le modèle d
 $x$ est observée par l'ensemble des pairs dont l'invitation précède ou est concurrente à $x$.
 Supposions que $x$ n'est pas stable.
 Il existe donc une extension cohérente $A'$ de $A$ et une opération $y$ présente dans $A'$ et absente de $A$ tel que $x$ n'est pas visible à $y$.
-Suivant~\autoref{itm:peer-linear}, le pair à l'origine de $y$ ne peut pas avoir observé $x$.
+Suivant \autoref{itm:peer-linear}, le pair à l'origine de $y$ ne peut pas avoir observé $x$.
 Suivant l'énoncé initiale, il s'agiterait donc d'un pair qui a été invité en $x$ ou par une opération qui succède $x$.
 Or si l'auteur de $y$ est invité en $x$ ou par une opération qui succède $x$, alors il observe nécessairement $x$.
 Ce qui contredit l'hypothèse initiale.
@@ -2058,7 +2058,7 @@ Dans la section suivante nous explorons l'un de ses applications~: les journaux 
 
 Nous présentons dans cette section un protocole qui assure la convergence des copies du contenu partagé malgré la présence de l'adversaire décrit dans le \autoref{ch:problematic}.
 Il repose sur le maintien d'un journal répliqué qui est conservé tout au long de la collaboration.
-Dans la~\autoref{sec:pruned-log-protocol}, nous nous baserons sur ce protocole pour construire un protocole qui tronque les journaux et authentifie des instantanées à partir de ces derniers.
+Dans la \autoref{sec:pruned-log-protocol}, nous nous baserons sur ce protocole pour construire un protocole qui tronque les journaux et authentifie des instantanées à partir de ces derniers.
 
 Dans un premier temps nous présentons les structures de données principales nécessaires au bon fonctionnement du protocole.
 Nous présentons ensuite le protocole et des optimisations possible de ce dernier.
@@ -2800,7 +2800,7 @@ Le seul moyen d'ajouter ces messages est d'ajouter d'abord le message d'invitati
 Ainsi un message d'un invité connu qui dépend sur l'invitation non-linéaire et ne dépend pas sur des messages dont l'auteur n'est pas un invité connu doit être accepté dans le journal.
 
 
-%Dans le~\autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
+%Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
 %Nous savions alors quels pairs sont honnêtes et lesquels sont mal-intentionnés.
 %Une exécution abstraite associée à un journal décrit en revanche la connaissance qu'a le possesseur du journal sur l'exécution.
 %Nous adoptons donc un point de vue subjectif.
@@ -2846,7 +2846,7 @@ Le protocole pourrait être étendu pour supprimer les méta-données devenues i
 Deux journaux avec le même ensemble de messages, mais possédés par des pairs distincts n'ont pas forcément le même ensemble de messages stables.
 Cette différence provient du fait qu'ils ont des exécutions abstraites distinctes.
 Il peut être utile d'introduire une notion de stabilité convergente.
-Cette utilité est démontrée par le protocole que nous développons dans la~\autoref{sec:pruned-log-protocol}.
+Cette utilité est démontrée par le protocole que nous développons dans la \autoref{sec:pruned-log-protocol}.
 
 \begin{definition}[Message convergent-stable]\label{def:msg-conv-stable}
 Soit deux journaux $J_1$ et $J_2$ avec le même ensemble de messages, mais avec un possesseur distinct (et éventuellement un ordre d'ajout distinct des messages).
@@ -2863,12 +2863,12 @@ Soit deux journaux $J_1$ et $J_2$ avec le même ensemble de messages, mais avec 
 Les exécutions abstraites associées à $J_1$ et $J_2$ privées de leur opération d'observation implicite ont le même ensemble d'opérations et de relations de visibilité.
 La stabilité \emph{DynVFJC} ne repose pas sur l'ordre d'ajout.
 Une opération \emph{DynVFJC}-stable dans l'exécution abstraite associée à $J_1$ privée de son opération d'observation implicite est donc également \emph{DynVFJC}-stable dans l'exécution abstraite associée à $J_2$ privée de son opération d'observation implicite.
-D'après le~\autoref{th:op-msg-stable}, le message associé à cette opération est stable dans $J_1$ et dans $J_2$.
+D'après le \autoref{th:op-msg-stable}, le message associé à cette opération est stable dans $J_1$ et dans $J_2$.
 Il est donc également convergent-stable.
 \end{proof}
 
 Le protocole présenté permet de produire des journaux où les messages deviennent à terme stables.
-Dans la~\autoref{sec:pruned-log-protocol}, nous étendons ce protocole et nous prenons avantage de la stabilisation des messages pour tronquer le journal.
+Dans la \autoref{sec:pruned-log-protocol}, nous étendons ce protocole et nous prenons avantage de la stabilisation des messages pour tronquer le journal.
 
 
 \subsection{Cohérence du protocole}
@@ -3059,7 +3059,7 @@ Un pair considère les autres pairs comme potentiellement mal-intentionnés.
 Lorsqu'un journal tronqué est transmis à un nouveau pair, ce dernier doit pouvoir vérifier qu'il a été tronqué correctement.
 Il doit donc être capable de vérifier qu'un message affirmé stable est réellement stable.
 Similairement au possesseur du journal, il considère les autres pairs comme mal-intentionnés, ce qui inclut le possesseur du journal tronqué.
-Nous nous intéressons donc à la stabilité convergente qui a été définit dans la~\autoref{subsec:msg-stable}.
+Nous nous intéressons donc à la stabilité convergente qui a été définit dans la \autoref{subsec:msg-stable}.
 
 Déterminer avec précision la stabilité d'un message tout en passant à l'échelle est un défi difficile.
 Pour déterminer si un message $m$ est stable, le pair doit vérifier que pour chaque permutation des pairs de la collaboration il existe un chemin dans le journal qui prend source en $m$ et qui respecte un certain prédicat.

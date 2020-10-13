@@ -89,7 +89,7 @@ La signature syntaxique du type abstrait Séquences est ainsi spécifiée comme 
 Pour simplifier les illustrations, nous introduisons l'opération $\trm{ins}(n, \tuple*{v_1,\dotsc,v_k})$ qui ajoute le n-uplet de valeurs $\tuple*{v_1,\dotsc,v_k}$ avant la $n$-ème valeur.
 Cette opération revient à exécuter $k$ opérations d'insertion qui se succèdent $o_1 \pre \dotsb \pre o_k$ avec $\trm{call}(o_i) = \trm{ins}(n+i-1, v_i)$.
 Nous employons cette opération uniquement dans les illustrations.
-La~\autoref{fig:seq-example} donne un exemple d'utilisation de ces opérations et suit la spécification usuelle d'une séquence.
+La \autoref{fig:seq-example} donne un exemple d'utilisation de ces opérations et suit la spécification usuelle d'une séquence.
 
 \begin{figure}[htb]
     \newcommand*\hsep{2.4}
@@ -1169,7 +1169,7 @@ Par exemple la valeur associée à la position $\tuple{\tuple*{0, 1, 0, A_1},A_2
 &\trm{id}(\tuple*{\_, \tuple*{i, n}}) \defeq \tuple*{i, n}
 \end{split}\end{equation*}
 
-Dans le~\autoref{ch:background}, nous avons vu que les types de données répliquées pouvaient être synchronisés avec différentes approches.
+Dans le \autoref{ch:background}, nous avons vu que les types de données répliquées pouvaient être synchronisés avec différentes approches.
 Le choix du mécanisme de synchronisation précise l'implémentation du type de données.
 % talk about networks assumptions
 
@@ -1445,7 +1445,7 @@ Ce vecteur associe à chaque pair l'identifiant de la dernière valeur insérée
 D'autres positions, comme les positions \emph{LogootSplit} ne permettent pas cette optimisation.
 Le contexte causal croît linéairement au fur et à mesure de l'insertion de valeurs.
 Cependant, contrairement aux positions \emph{Logoot}, les positions \emph{LogootSplit} peuvent être agrégées.
-Dans~\autoref{subsec:dotted-logootsplit}, nous présentons un nouveau type de position qui permet à la fois de représenter efficacement le contexte causal et permet l'agrégation de positions.
+Dans \autoref{subsec:dotted-logootsplit}, nous présentons un nouveau type de position qui permet à la fois de représenter efficacement le contexte causal et permet l'agrégation de positions.
 
 
 \subsection{LogootSplit dot-ifié}\label{subsec:dotted-logootsplit}

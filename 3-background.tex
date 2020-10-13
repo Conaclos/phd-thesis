@@ -4,27 +4,27 @@
 \minitoc{}
 \bigskip
 
-Dans ce chapitre, nous introduisons les formalismes et les concepts que nous utilisons pour définir les contributions du~\autoref{ch:pruned-log} et du~\autoref{ch:dotted-logootsplit}.
+Dans ce chapitre, nous introduisons les formalismes et les concepts que nous utilisons pour définir les contributions du \autoref{ch:pruned-log} et du \autoref{ch:dotted-logootsplit}.
 
 Les infrastructures pair-à-pair de collaboration permettent à un nombre important d'individus de collaborer.
 Pour ce faire elles reposent sur des protocoles de réplication optimiste.
 Les protocoles de réplication optimiste garantissent des \emph{propriétés de cohérence} des copies aux pairs et par extension aux collaborateur·ice·s.
 La convergence des copies est l'une de ces propriétés de cohérence.
-La~\autoref{sec:consistency-spec} introduit le formalisme que nous utilisons pour décrire les propriétés de cohérence.
+La \autoref{sec:consistency-spec} introduit le formalisme que nous utilisons pour décrire les propriétés de cohérence.
 Notre formalisme étend le formalisme de~\textcite{burckhardt_eventualconsistency_2014} pour prendre en compte la présence d'un adversaire actif.
 Les protocoles de réplication garantissent souvent des ensembles communs de propriétés de cohérence.
 Pour faciliter l'appréciation de leurs similitudes, les propriétés de cohérence sont réunies sous des ensembles bien définies nommés \emph{modèle de cohérence}.
-La~\autoref{sec:consistency-spec} présente également un moyen de comparer les modèles de cohérence.
-La~\autoref{sec:causal-models} présente le modèle de cohérence causale ainsi que les modèles de cohérence sur-lesquelles nous nous reposons pour établir la contribution du~\autoref{ch:pruned-log}.
+La \autoref{sec:consistency-spec} présente également un moyen de comparer les modèles de cohérence.
+La \autoref{sec:causal-models} présente le modèle de cohérence causale ainsi que les modèles de cohérence sur-lesquelles nous nous reposons pour établir la contribution du \autoref{ch:pruned-log}.
 
 La convergence des copies est une propriété essentielle des protocoles de réplication optimiste.
-Dans le~\autoref{ch:problematic}, nous avons motivé notre intérêt pour des protocoles qui permettent la convergence des copies sans coordination.
+Dans le \autoref{ch:problematic}, nous avons motivé notre intérêt pour des protocoles qui permettent la convergence des copies sans coordination.
 De tels protocoles n'imposent pas aux pairs de dialoguer pour s'entendre sur la manière de résoudre les conflits de modification qui surviennent au cours de la collaboration.
 Ils n'ont d'autres choix que d'adopter des résolutions prédéterminées de conflit.
 Les protocoles de réplication optimiste décident en général la manière de résoudre un conflit.
 Pour faciliter la comparaison des protocoles et leur implémentation, les stratégies de résolution de conflits sont encapsulées au sein de type de données répliquées nommés \acfp{CRDT}.
 Les concepteur·ice·s d'applications peuvent ainsi utiliser des type de données prêt à l'emploi.
-La~\autoref{sec:crdt} présente ces types de données et illustre plusieurs sémantiques de résolution de conflits.
+La \autoref{sec:crdt} présente ces types de données et illustre plusieurs sémantiques de résolution de conflits.
 
 \section{Spécification de modèles de cohérence}\label{sec:consistency-spec}
 
@@ -32,14 +32,14 @@ Un protocole détermine comment un pair peut interagir de manière conforme avec
 En délimitant le périmètre d'action des pairs, le protocole garantit des propriétés de cohérence des copies.
 \textcite{burckhardt_eventualconsistency_2014} a introduit un formalisme pour décrire des propriétés de cohérence et modéliser l'exécution d'un protocole.
 Le formalisme qu'il introduit n'est pas adapté aux environnements soumis à la présence de pairs mal-intentionnés.
-Dans la~\autoref{subsec:consistency-spec-honest} nous présentons son formalisme avec quelques simplifications.
-Nous l'étendons dans la~\autoref{subsec:consistency-spec-malicious} pour permettre la description d'exécutions soumises à la présence de comportements mal-intentionnés.
+Dans la \autoref{subsec:consistency-spec-honest} nous présentons son formalisme avec quelques simplifications.
+Nous l'étendons dans la \autoref{subsec:consistency-spec-malicious} pour permettre la description d'exécutions soumises à la présence de comportements mal-intentionnés.
 
 Les propriétés de cohérence sont groupées en ensembles logiques dénommés \emph{modèles de cohérence}.
 Les modèles de cohérence sont organisés en hiérarchie de celui qui offre les garanties de cohérence les plus fortes à ceux qui offrent les garantie les plus faibles.
 
-Dans le~\autoref{ch:problematic} nous avons distingué les propriétés de sûreté des propriétés de vivacité.
-Dans la~\autoref{subsec:consistency-spec-liveness-safety} nous montrons comment reconnaître et spécifier ces deux genres de propriétés au sein du formalisme introduit.
+Dans le \autoref{ch:problematic} nous avons distingué les propriétés de sûreté des propriétés de vivacité.
+Dans la \autoref{subsec:consistency-spec-liveness-safety} nous montrons comment reconnaître et spécifier ces deux genres de propriétés au sein du formalisme introduit.
 
 %Nous motivons d'abord l'intérêt d'exprimer des garanties de cohérence et nous détaillons le formalisme introduit par \textcite{burckhardt_eventualconsistency_2014}.
 %Nous étendons ensuite ce formalisme à des environnement qui tolèrent la présence de pairs mal-intentionnés.
@@ -112,7 +112,7 @@ Elles expriment toutes des garanties qui sont offertes aux collaborateur·ice·s
 De ce fait, elles s'expriment sur les interactions des collaborateur·ice·s avec le protocole et sur les réponses que le protocole fournit aux collaborateur·ice·s.
 Les collaborateur·ice·s interagissent avec le système en exécutant des opérations.
 L'ensemble des opérations exécutées forme une \emph{histoire}.
-L'histoire de la~\autoref{fig:causal-expectation} est constituée des trois opérations de Alice (pair $p_A$) et des trois opérations de Bea (pair $p_B$).
+L'histoire de la \autoref{fig:causal-expectation} est constituée des trois opérations de Alice (pair $p_A$) et des trois opérations de Bea (pair $p_B$).
 
 Les collaborateur·ice·s exécutent des opérations de modifications pour altérer l'état du contenu partagé et exécutent des opérations d'interrogation pour observer les effets de leurs modifications.
 Nous supposons que tout type de contenu partagé est interrogé avec une unique opération $\trm{rd}$.
@@ -130,7 +130,7 @@ Pour faciliter le raisonnement sur l'ordre d'exécution des opérations d'une hi
 \paragraph{Retourne-avant~\autocite{burckhardt_eventualconsistency_2014}.} Une relation d'ordre partiel qui rend compte des opérations dont l'exécution ne coïncide pas dans le temps.
 Une opération $x$ retourne-avant une opération $y$, et nous écrivons $x \rb y$, si et seulement si l'exécution de $x$ se termine avant que l'exécution de $y$ débute.
 Si $x$ ne retourne pas avant $y$ et si $y$ ne retourne pas avant $x$, alors leur exécution coïncide.
-La~\autoref{fig:rb-example} montre un exemple de deux opérations dont l'exécution coïncide dans le temps.
+La \autoref{fig:rb-example} montre un exemple de deux opérations dont l'exécution coïncide dans le temps.
 
 \begin{figure}[ht]
 \centering
@@ -252,7 +252,7 @@ Il s'agit d'un ordre partiel localement fini\footnote{Pour tout couple d'opérat
         $b_2$ & $p_B$ & $\trm{post}(t_1)$ & \\
         $b_3$ & $p_B$ & $\trm{post}(t_2)$ & \\
     \end{tabular}
-    \caption{Caractéristiques des opérations exécutées dans l'histoire de la~\autoref{fig:causal-expectation}.
+    \caption{Caractéristiques des opérations exécutées dans l'histoire de la \autoref{fig:causal-expectation}.
     Un fil de discussion supporte une opération de lecture et une opération de modification $\trm{Op}_T = \set*{\trm{rd}} \cup \set*{\trm{post}(\trm{msg}) \given \trm{msg} \in \trm{String}}$.
     Les valeurs de retour correspondent à des ensembles de messages $\trm{Val}_T = \powerfset{\trm{String}}$. $\powerfset{\trm{String}}$ est l'ensemble des sous-ensembles finis des chaînes de caractères.}\label{tab:op-attributes}
 \end{table}
@@ -412,16 +412,16 @@ Le protocole $P$ garantit ainsi la propriété $p_1$ puisque chacune de ses hist
 
 La relation de visibilité rend compte de l'intégration des effets des opérations de modification par les pairs.
 En tant que tel, seules les relations de visibilité dirigées d'une opération de modification vers une opération d'interrogation semblent faire sens.
-Dans la~\autoref{fig:vis-example} on remarque ainsi que l'effet de l'opération $b_3$ est pris en compte par l'opération de lecture $a_2$, et les effets des opérations $b_2$ et $b_3$ sont pris en compte par l'opération de lecture $a_3$.
+Dans la \autoref{fig:vis-example} on remarque ainsi que l'effet de l'opération $b_3$ est pris en compte par l'opération de lecture $a_2$, et les effets des opérations $b_2$ et $b_3$ sont pris en compte par l'opération de lecture $a_3$.
 Notre définition de la relation de visibilité nous permet de mettre en relation tout type d'opérations.
-Dans la~\autoref{fig:vis-example} il existe ainsi une relation de visibilité entre les opérations de modification $b_2$ et $b_3$.
+Dans la \autoref{fig:vis-example} il existe ainsi une relation de visibilité entre les opérations de modification $b_2$ et $b_3$.
 Cette flexibilité nous permet de simplifier l'expression des propriétés de cohérence.
 
 Les relations précédemment définies sont suffisantes pour exprimer toutes les propriétés de cohérence auxquelles nous nous intéressons dans ce manuscrit\footnote{\textcite{burckhardt_eventualconsistency_2014} ajoute également une relation d'arriération $\trm{ar}$ à ses exécutions abstraites. Elle s'avère utile dans la définition de certains type de données répliquées. Nous l'avons délibérément omise par souci de simplification.}.
 Ces expressions peuvent parfois être peu lisibles.
 Par exemple, pour spécifier le type de retour d'une opération de lecture, il est nécessaire de prendre en compte l'ensemble des opérations de modification qui sont visibles à cette opération de lecture.
-Dans la~\autoref{fig:vis-example}, si un ajout de message textuel est visible à une opération de lecture, alors cette dernière inclut ce message dans sa valeur de retour.
-Pour faciliter l'expression de telles propriétés, nous introduisons dans la~\autoref{def:op-context} le \emph{contexte} d'une opération.
+Dans la \autoref{fig:vis-example}, si un ajout de message textuel est visible à une opération de lecture, alors cette dernière inclut ce message dans sa valeur de retour.
+Pour faciliter l'expression de telles propriétés, nous introduisons dans la \autoref{def:op-context} le \emph{contexte} d'une opération.
 Le contexte d'une opération regroupe les opérations de modifications qui lui sont visibles.
 La \autoref{tab:op-ctx-obs} donne le contexte des opérations de l'exécution abstraite de la \autoref{fig:vis-example}.
 
@@ -444,16 +444,16 @@ Le \emph{contexte} d'une opération $x$ dans une \emph{exécution abstraite} $A$
         $b_2$ & $\emptyset$ & $\set*{p_A, p_B}$ \\
         $b_3$ & $\emptyset$ & $\set*{p_A, p_B}$ \\
     \end{tabular}
-    \caption{Contexte et observateurs des opérations de l'exécution abstraite de la~\autoref{fig:vis-example}.}\label{tab:op-ctx-obs}
+    \caption{Contexte et observateurs des opérations de l'exécution abstraite de la \autoref{fig:vis-example}.}\label{tab:op-ctx-obs}
 \end{table}
 
-La spécification du type de données répliquées de la~\autoref{fig:causal-expectation} (fil de discussion) peut ainsi être exprimé par l'\autoref{eq:chat-spec}~:
+La spécification du type de données répliquées de la \autoref{fig:causal-expectation} (fil de discussion) peut ainsi être exprimé par l'\autoref{eq:chat-spec}~:
 
 \begin{equation}\label{eq:chat-spec}
     x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) = \set*{t \given \exists y \in \trm{ctx}_A(x) \qsep \trm{call}(y) = \trm{post}(t)}
 \end{equation}
 
-L'exécution abstraite de la~\autoref{fig:vis-example} respecte cette propriété de cohérence.
+L'exécution abstraite de la \autoref{fig:vis-example} respecte cette propriété de cohérence.
 L'histoire de la \autoref{fig:causal-expectation} respecte donc cette propriété de cohérence.
 
 
@@ -496,7 +496,7 @@ Sans perte de généralité, nous supposons que les pairs honnêtes exécutent l
 Les opérations exécutées sur un même pair sont donc linéairement ordonnées selon la relation \emph{retourne-avant}.
 Elles forment une énumération.
 Les opérations d'un pair honnête peuvent donc être numérotées dans l'ordre dans lequel elles sont exécutées.
-Dans la~\autoref{fig:vis-example} on observe ainsi deux énumérations $a_1 \rb a_2 \rb a_3$ et $b_1 \rb b_2 \rb b_3$.
+Dans la \autoref{fig:vis-example} on observe ainsi deux énumérations $a_1 \rb a_2 \rb a_3$ et $b_1 \rb b_2 \rb b_3$.
 Une histoire qui remplie cette condition est une \emph{histoire bien-formée}.
 La \autoref{def:wf-history-malicious} définit formellement une histoire bien-formée.
 
@@ -646,7 +646,7 @@ Par souci de concision, nous omettons de préciser qu'une histoire ou une exécu
 \end{remark}
 
 Les pairs mal-intentionnés peuvent faire coïncider dans le temps l'exécution de plusieurs opérations.
-La~\autoref{fig:no-enum-example} illustre ce scénario.
+La \autoref{fig:no-enum-example} illustre ce scénario.
 Pour pouvoir numéroter les opérations des pairs mal-intentionnés, nous utiliserons des exemples dans lesquels les pairs mal-intentionnés exécutent leurs opérations de manière séquentielle.
 %Nous suivrons cet ordre pour numéroter les opérations des pairs mal-intentionnés sauf si il gène la compréhension d'un exemple.
 
@@ -731,7 +731,7 @@ Une propriété de cohérence peut être la conjonction d'une propriété de sû
 
 Dans ce chapitre nous avons déjà rencontré plusieurs propriétés de sûreté telles que l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
 En revanche, nous n'avons pas rencontré de propriétés de vivacité.
-Dans le~\autoref{ch:problematic}, l'intégration à terme des modifications est une propriété de vivacité.
+Dans le \autoref{ch:problematic}, l'intégration à terme des modifications est une propriété de vivacité.
 Elle pourrait être traduite par la propriété de cohérence suivante~: une opération de modification est à terme visible à toute opération future d'interrogation.
 Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à toute opération future.
 En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas viisble.
@@ -760,7 +760,7 @@ En effet, nous devons vérifier que la propriété est vérifiable dans un futur
 % Par exemple, la propriété d'intégration à terme des effets des opérations ne donne aucune borne sur le temps nécessaire pour la satisfaire.
 % Nous ne pouvons donc pas savoir si un protocole vérifie une telle propriété en raisonnant uniquement sur des exécutions finies.
 % Nous devons raisonner également sur des exécutions infinies.
-% La~\autoref{def:abstract-exec} permet la description d'exécutions abstraites infinies.
+% La \autoref{def:abstract-exec} permet la description d'exécutions abstraites infinies.
 % En effet, l'ensemble des opérations exécutées est dénombrable, mais peut être non-fini.
 % Une exécution abstraite respecte donc une propriété de vivacité si et seulement si il existe une extension qui la respecte.
 
@@ -918,7 +918,7 @@ Ces relations simplifient l'expression de propriétés de cohérence que nous ab
 % \end{inlinelist}.
 % Nous disons également que $y$ succède $x$.
 % La relation de précédence correspond à la fermeture transitive de la relation de visibilité.
-% Dans la~\autoref{fig:vis-example}, $b_1$ est visible à $b_2$, et $b_2$ est visible à $a_2$.
+% Dans la \autoref{fig:vis-example}, $b_1$ est visible à $b_2$, et $b_2$ est visible à $a_2$.
 % Par conséquent, $b_1$ précède $a_2$.
 % Ce qui signifie que $b_1$ a potentiellement eu une influence sur le résultat de l'opération $a_2$.
 
@@ -930,12 +930,12 @@ Ces relations simplifient l'expression de propriétés de cohérence que nous ab
 % Nous supposons que la relation de visibilité est transitive dans les représentations graphiques qui utilisent la relation de précédence.
 % Cette hypothèse est importante car la relation de précédence est construite à partir de la relation de visibilité.
 % Elle ne permet pas de déduire de manière exhaustive la relation de visibilité.
-% La~\autoref{fig:vis-vs-pre-1} et la~\autoref{fig:vis-vs-pre-2} décrivent la même exécution abstraite.
+% La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} décrivent la même exécution abstraite.
 % \end{remark}
 
 \paragraph{Concurrence.}
 Lorsque la relation de visibilité est transitive, nous disons que deux opérations $x$ et $y$ sont concurrentes, et nous écrivons $x \concur y$, si $x$ n'est pas visible à $y$ et $y$ n'est pas visible à $x$.
-Dans la~\autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que $a_1$ et $b_2$.
+Dans la \autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que $a_1$ et $b_2$.
 
 \begin{equation*}
     x \concur y \defiff x \not\vis y \land y \not\vis x
@@ -1054,7 +1054,7 @@ La littérature comptent plusieurs spécifications de la cohérence causale.
 Certaines spécifications~\autocite{ahamad_1995_causal} imposent la manière de résoudre les conflits de modification.
 Similairement à~\textcite{mahajan_2011_cac}, nous pensons qu'il est préférable de séparer les garanties d'ordre entre les opérations et les garanties concernant la résolution de conflits.
 Certaines spécifications~\autocite{burckhardt_eventualconsistency_2014,viotti_consistency_2016} procèdent à cette séparation, mais ajoutent une garantie qui restreint les résultats possibles des opérations de lecture.
-Notre~\autoref{def:causal-consistency} de la cohérence causale se restreint uniquement à des garanties d'ordre.
+Notre \autoref{def:causal-consistency} de la cohérence causale se restreint uniquement à des garanties d'ordre.
 
 \begin{definition}[Cohérence causale non-spéculative~\autocite{mahajan_2011_cac}]\label{def:causal-consistency}
   Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale non-spéculative, et nous écrivons $A \in \trm{Causal}$, si et seulement si~:
@@ -1096,7 +1096,7 @@ Dans une exécution abstraite $A$ qui respecte le modèle de cohérence causale,
 \end{proposition}
 
 \begin{proof}
-La~\autoref{th:rb-vis} est décomposable en deux implications.
+La \autoref{th:rb-vis} est décomposable en deux implications.
 
 Procédons par contradiction.
 Soit une exécution abstraite $A$ et deux opérations $x$ et $y$ d'un même pair $p$ tel que $x$ retourne-avant $y$.
@@ -1157,12 +1157,12 @@ Malheureusement, les pairs mal-intentionnés peuvent compromettre les garanties 
 %Les pairs mal-intentionnés peuvent exposer des  comportements pour compromettre les propriétés de cohérence qu'un protocole est censé garantir aux pairs honnêtes.
 Un pair mal-intentionné peut en particulier produire une équivoque.
 Pour ce faire, il présente des opérations distinctes comme étant sa n-ème opération à des pairs différents.
-Par exemple, dans la~\autoref{fig:causal-violation} le pair mal-intentionné $p_M$ prétend au pair $p_B$ que sa deuxième opération est $m_3$, alors qu'il prétend au pair $p_A$ que sa deuxième opération est $m_2$.
+Par exemple, dans la \autoref{fig:causal-violation} le pair mal-intentionné $p_M$ prétend au pair $p_B$ que sa deuxième opération est $m_3$, alors qu'il prétend au pair $p_A$ que sa deuxième opération est $m_2$.
 $p_A$ lit ainsi les messages textuels $t_1$ et $t_2$, alors que $p_B$ lit les messages textuels $t_1$ et $t_3$.
-L'histoire de la~\autoref{fig:causal-violation} ne peut pas à la fois respecter le modèle de cohérence causale et la spécification du fil de discussion formulée dans l'\autoref{eq:chat-spec}.
-L'exécution abstraite de la~\autoref{fig:causal-violation} respecte la spécification du fil de discussion et viole donc le modèle de cohérence causale.
+L'histoire de la \autoref{fig:causal-violation} ne peut pas à la fois respecter le modèle de cohérence causale et la spécification du fil de discussion formulée dans l'\autoref{eq:chat-spec}.
+L'exécution abstraite de la \autoref{fig:causal-violation} respecte la spécification du fil de discussion et viole donc le modèle de cohérence causale.
 
-L'exécution abstraite de la~\autoref{fig:causal-violation} ne peut pas respecter le modèle de cohérence causale car $m_2$ ne peut pas être visible à $b_1$ sans violer la cohérence du contenu répliqué.
+L'exécution abstraite de la \autoref{fig:causal-violation} ne peut pas respecter le modèle de cohérence causale car $m_2$ ne peut pas être visible à $b_1$ sans violer la cohérence du contenu répliqué.
 L'exécution abstraite viole la propriété~\ref{itm:peer-linear} de visibilité linéaire par pair~: $m_2$ n'est pas visible à $m_3$.
 Il est démontrable que dans un environnement mal-intentionné, l'une des trois propriétés de la cohérence causale doit être violée pour pouvoir respecter les deux autres~\autocite{mahajan_2011_cac}.
 
@@ -1273,7 +1273,7 @@ Il prétend au pair $p_A$ que sa deuxième opération est $m_2$, alors qu'il pr�
 
 Le modèle de cohérence~\acf{FJC}~\autocite{mahajan_2011_cac,mahajan_astro_2008} propose d'affaiblir la propriété~\ref{itm:peer-linear} pour tolérer la présence de pairs mal-intentionnés.
 Cette dernière est restreinte aux pairs honnêtes.
-L'exécution abstraite de la~\autoref{fig:causal-violation} respecte ainsi le modèle de cohérence~\ac{FJC}.
+L'exécution abstraite de la \autoref{fig:causal-violation} respecte ainsi le modèle de cohérence~\ac{FJC}.
 La \autoref{def:fjc-consistency} définit formellement le modèle de cohérence~\ac{FJC}.
 
 \begin{definition}[Cohérence \emph{\acl{FJC}} non-spéculative~\autocite{mahajan_2011_cac}]\label{def:fjc-consistency}
@@ -1308,7 +1308,7 @@ Pour assurer la convergence des pairs honnêtes, les opérations observées par 
 Par conséquent les embranchements doivent être joints.
 Les opérations non-linéaires sont donc acceptées par les pairs honnêtes.
 Seuls les pairs honnêtes ordonnent linéairement leurs opérations.
-Dans la~\autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchements avec l'opération $a_2$.
+Dans la \autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchements avec l'opération $a_2$.
 
 \begin{proposition}\label{th:honest-rb-vis}
 Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{FJC}, la relation de visibilité est égale à la relation retourne-avant pour les opérations d'un même pair honnête.
@@ -1317,7 +1317,7 @@ Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{FJC}
 \end{equation*}
 \end{proposition}
 
-La preuve de la~\autoref{th:honest-rb-vis} suit la même structure que la preuve de la \autoref{th:rb-vis}.
+La preuve de la \autoref{th:honest-rb-vis} suit la même structure que la preuve de la \autoref{th:rb-vis}.
 \enquote{pair} doit être remplacé par \enquote{pair honnête} et~\ref{itm:peer-linear} par~\ref{itm:honest-linear}.
 
 \begin{proposition}\label{th:causal-fjc}
@@ -1418,7 +1418,7 @@ Le pair $p_B$ n'a pas encore observé $m_2$. Il présume que $m_3$ est une opér
 %  \end{equation*}
 %\end{definition}
 %
-%La~\autoref{def:restrict-abs-exec} introduit la notation utilisée pour dénoter la restriction d'une exécution abstraite à une opération et les opérations qui sont visibles à cette dernière.
+%La \autoref{def:restrict-abs-exec} introduit la notation utilisée pour dénoter la restriction d'une exécution abstraite à une opération et les opérations qui sont visibles à cette dernière.
 %
 %\begin{definition}[Exécution abstraite restreinte à un préfixe de visibilité]\label{def:restrict-abs-exec}
 %  Soit une opération $y$ d'une exécution abstraite $A$.
@@ -1455,25 +1455,25 @@ La \autoref{tab:known-malicious} indique pour chaque opération de la \autoref{f
         $b_2$ & $\emptyset$ \\
         $b_3$ & $\set*{p_M}$ \\
     \end{tabular}
-    \caption{Pairs reconnus mal-intentionnés dans l'exécution abstraite de la~\autoref{fig:provably-malicious} par le pair qui exécute l'opération considérée.}\label{tab:known-malicious}
+    \caption{Pairs reconnus mal-intentionnés dans l'exécution abstraite de la \autoref{fig:provably-malicious} par le pair qui exécute l'opération considérée.}\label{tab:known-malicious}
 \end{table}
 
 L'éviction d'un pair reconnu mal-intentionné ne doit pas menacer la convergence des copies des pairs honnêtes.
-Dans l'exécution abstraite $A_1$ de la~\autoref{fig:provably-malicious}, $p_A$ reconnaît $p_M$ comme mal-intentionné.
+Dans l'exécution abstraite $A_1$ de la \autoref{fig:provably-malicious}, $p_A$ reconnaît $p_M$ comme mal-intentionné.
 Cependant, $p_A$ ne peut pas systématiquement rejeter les opérations de $p_M$ sans compromettre la convergence des copies des pairs honnêtes.
 En effet, le pair $p_B$ présume encore $p_M$ comme honnête.
 Il peut donc encore accepter des opérations futures de $p_M$.
-Dans l'extension $A$ de $A_1$ de la~\autoref{fig:provably-malicious}, $p_B$ accepte ainsi $m_4$.
+Dans l'extension $A$ de $A_1$ de la \autoref{fig:provably-malicious}, $p_B$ accepte ainsi $m_4$.
 Bien que $p_A$ reconnaît que $p_M$ est mal-intentionné, il doit accepter $m_4$ pour ne pas compromettre la convergence de sa copie avec celle de $p_B$.
 Nous disons que $p_A$ a indirectement accepté $m_4$.
 
 Un pair honnête peut rejeter les opérations d'un pair qu'il reconnaît mal-intentionné si ces dernières ne sont par acceptées par un autre pair.
 $p_A$ devrait rejeter $m_4$ tant qu'elle n'est pas acceptée par $p_B$.
-Dans l'exemple de la~\autoref{fig:provably-malicious}, le pair $p_M$ est évincé une fois que $p_A$ et $p_B$ le reconnaissent tous deux comme mal-intentionné.
+Dans l'exemple de la \autoref{fig:provably-malicious}, le pair $p_M$ est évincé une fois que $p_A$ et $p_B$ le reconnaissent tous deux comme mal-intentionné.
 
 En présence d'autres pairs mal-intentionnés, il ne suffit pas que les pairs reconnaissent un pair comme mal-intentionné pour l'évincer du groupe.
 Un pair mal-intentionné peut reconnaître un autre pair comme mal-intentionné et continuer à accepter ses opérations.
-Dans l'exécution abstraite $A_1$ de la~\autoref{fig:known-colluding-malicious}, les pairs $p_A$ et $p_O$ reconnaissent que $p_M$ est mal-intentionné.
+Dans l'exécution abstraite $A_1$ de la \autoref{fig:known-colluding-malicious}, les pairs $p_A$ et $p_O$ reconnaissent que $p_M$ est mal-intentionné.
 Dans l'extension de cette exécution abstraite, $p_O$ accepte $m_4$ alors qu'il a précédemment reconnu que son auteur est mal-intentionné.
 
 \begin{figure}[htb]
@@ -1589,7 +1589,7 @@ Les protocoles de réplication optimiste sont responsables de la convergence à 
 Le maintien de la cohérence des copies doit préserver autant que possible l'intention des opérations exécutées.
 
 La conception d'un protocole de réplication n'est pas une tâche aisée~\autocite{oster2005_otisuues}.
-Il doit prendre en compte les aléas du réseau~\autoref{rotem_falalcies_2006} et résoudre les éventuels conflits engendrés par des modifications parallèles et incompatibles.
+Il doit prendre en compte les aléas du réseau \autoref{rotem_falalcies_2006} et résoudre les éventuels conflits engendrés par des modifications parallèles et incompatibles.
 Dans la \autoref{fig:set-conflict-example}, les pairs $p_A$ et $p_B$ modifient un ensemble répliqué d'entiers.
 Alors que $p_B$ ajoute puis supprime un entier dans l'ensemble, le pair $p_A$ ajoute en parallèle ce même entier dans l'ensemble.
 $p_B$ a l'intention de supprimer l'entier de l'ensemble, alors que $p_A$ a l'intention de l'ajouter à l'ensemble.
@@ -1819,7 +1819,7 @@ Dans ce manuscrit, nous considérons uniquement des \acp{CRDT} qui présentent c
     \end{tikzpicture}
     \caption{}
 \end{subfigure}
-\caption[Impact d'ordres distincts d'intégration des opérations de modification sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la~\autoref{fig:set-conflict-example}.}\label{fig:spec-linearization}
+\caption[Impact d'ordres distincts d'intégration des opérations de modification sur un ensemble répliqué]{Exécutions abstraites qui rend compte des ordres d'intégrations des opérations de l'exécution abstraite de la \autoref{fig:set-conflict-example}.}\label{fig:spec-linearization}
 \end{figure}
 
 La relation de visibilité rend compte des opérations dont l'effet a été intégré.
