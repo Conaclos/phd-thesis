@@ -1145,10 +1145,10 @@ Elle génère la position $\tuple*{\tuple*{f_A, h_A}, 2}$.
 Remarquons que les nombres prioritaires sont des entiers naturels strictement inférieur à $u$.
 $u$ est supérieur ou égal à $2$.
 
-\begin{equation*}\begin{split}
+\begin{align}
 &\trm{LogootPos}_{u\;\in\;\mathbb{N}^{> 1}} \defeq ({(\mathbb{N}_0^{< u} \times \mathbb{I})}^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I})) \times \mathbb{N}^*\\
 &\trm{id}(\tuple*{\set*{\tuple*{\_, i_k}}_{k=0}^m, \trm{n}}) \defeq \tuple*{i_m, n}
-\end{split}\end{equation*}
+\end{align}
 
 \emph{Treedoc}~\autocite{preguica_2009_treedoc} emploie une autre structure de positions.
 Il génère un ensemble densément ordonné à l'aide d'un n-uplet de \emph{bits} et de \emph{dots}.
@@ -1164,10 +1164,10 @@ Leur \emph{dot} respectif sert alors de désambiguïteur.
 Si une valeur est insérée entre ces deux valeurs, le \emph{dot} de la valeur à gauche fera partie de le n-uplets de la position nouvellement générée.
 Par exemple la valeur associée à la position $\tuple{\tuple*{0, 1, 0, A_1},A_2}$ se situe entre les deux valeurs précédentes.
 
-\begin{equation*}\begin{split}
+\begin{align}
 &\trm{TreedocPos} \defeq {({(\mathbb{I} \times \mathbb{N}^*)}^{m \in \set*{0, 1}} \times \set*{0, 1})}^{n \in \mathbb{N}_0} \times (\mathbb{I} \times \mathbb{N}^*)\\
 &\trm{id}(\tuple*{\_, \tuple*{i, n}}) \defeq \tuple*{i, n}
-\end{split}\end{equation*}
+\end{align}
 
 Dans le \autoref{ch:background}, nous avons vu que les types de données répliquées pouvaient être synchronisés avec différentes approches.
 Le choix du mécanisme de synchronisation précise l'implémentation du type de données.
@@ -1181,7 +1181,7 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
 %Le nombre séquentiel est incrémenté après chaque génération d'une nouvelle position.
 %Chaque position générée sur un pair a un nombre séquentiel distinct.
 
-\begin{align*}
+\begin{align}
 \MoveEqLeft \forall V \ \forall P \in \trm{Pos} \ \forall m: P \pto V \qsep \trm{dom}(m)\ \textit{is finite} \implies\\
 %
 &\begin{aligned}
@@ -1194,10 +1194,10 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
 &\where p \in \trm{dom}(m) \land \trm{posIndex}(m, p) = k
 \end{aligned}
 %
-\end{align*}
+\end{align}
 
 \begin{figure}[htb]
-\begin{align*}
+\begin{align}
 &\begin{aligned}
 \MoveEqLeft \forall V\ \forall P \in \trm{Pos} \qsep \trm{OpPosSeq}\tuple*{P, V} \defeq \set*{m:P \pto V} \times \powerfset{\trm{LID}_P}\\
 &\where \trm{dom}(m)\ \textit{is finite}
@@ -1244,8 +1244,8 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
 &\trm{integrate}_i(\tuple*{m, x}, \tuple*{\textbf{del}, p}) \defeq%
 \tuple*{m \sminus \set*{\tuple*{p, m(p)}}, x}
 %
-\end{align*}
-\caption{Séquence répliquée à positions densément ordonnées synchronisée par opérations}\label{fig:op-densely-id-repseq}
+\end{align}
+\caption{Implémentation générique d'une séquence à positions densément ordonnées synchronisée par opérations}\label{fig:op-densely-id-repseq}
 \end{figure}
 
 L'exécution d'une insertion ou d'une suppression se déroule en deux étapes.
@@ -1327,7 +1327,7 @@ Par exemple si le pair $p_A$ insère une valeur en début de son premier bloc, l
 Quand une valeur est insérée entre deux valeurs d'un même bloc, le bloc est divisé.
 La position générée inclut l'ensemble des n-uplets de la position qui la précède, auquel est joint un nouveau n-uplet.
 
-\begin{align*}
+\begin{align}
 &\trm{LogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}_0 \times \mathbb{Z})}^{n \in \mathbb{N}^*} \times \mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^* \times \mathbb{Z}\\
 &\trm{id}(\set*{\tuple*{\_, i_k, n_k, z_k}}_{k=0}^m) \defeq \tuple*{i_m, \tuple*{n_m, z_m}}\\
 &\begin{aligned}
@@ -1337,7 +1337,7 @@ La position générée inclut l'ensemble des n-uplets de la position qui la pré
         \tuple*{x_h, i_h, n_h, z_h}
     \end{dcases}
 \end{aligned}
-\end{align*}
+\end{align}
 
 Nous disposons de l'ensemble des concepts nécessaires à la présentation de notre séquence répliquée.
 
@@ -1351,7 +1351,7 @@ L'intégration d'une différence d'états consiste donc à la fusion de deux ét
 Les états peuvent être fusionnés dans un ordre quelconque et plusieurs fois.
 Cette synchronisation est donc parfaitement adaptée à des systèmes de passage de messages non-fiables où les messages peuvent être dupliqués et réordonnées.
 
-Les séquence répliquées à positions densément ordonnées de la littérature sont synchronisées par opérations.
+Les séquences répliquées à positions densément ordonnées de la littérature sont synchronisées par opérations.
 Les opérations doivent être intégrées dans un ordre spécifique et exactement une fois.
 Cependant, seuls les couples d'opérations qui concernent une même valeur ont un ordre d'intégration spécifique~: l'insertion d'une valeur doit être intégrée avant sa suppression.
 
@@ -1363,7 +1363,15 @@ Lorsque la séquence autorise les suppressions, des valeurs peuvent être suppri
 Si une insertion d'une valeur est intégrée après sa suppression, la valeur est alors de nouveau insérée.
 L'intention de la suppression est ainsi violée.
 Pour s'assurer qu'une valeur supprimée est définitivement supprimée, et ce même lorsque son insertion est intégrée ultérieurement, nous devons garder une trace de l'ensemble des valeurs qui ont été insérées dans la séquence.
-Nous employons un contexte causal qui inclut les identifiants unique de chaque valeur insérée dans la séquence.
+Nous employons un \emph{contexte causal}~\autocite{almeida_2018_delta-crdt-revisited} qui inclut l'identifiant unique de chaque valeur insérée dans la séquence.
+Nous définissons donc le contexte causal comme un ensemble fini d'identifiants de valeurs (\autoref{eq:cc-state}).
+Un identifiant d'une valeur correspond à un couple $\tuple*{i, l}$ où $i$ est l'identifiant du pair qui a généré l'identifiant, et $l$ est un identifiant local à ce pair.
+La fonction $\trm{lids}$ donne l'ensemble des identifiants locaux présents dans le contexte causal pour un pair donné (\autoref{eq:cc-lids}).
+
+\begin{align}
+\trm{CausalContext}\tuple*{P} &\defeq \powerfset{\mathbb{I} \times \trm{LID}_P}\label{eq:cc-state}\\
+\trm{lids}_i(c) &\defeq \set*{n \given \tuple*{i, n} \in c}\label{eq:cc-lids}
+\end{align}
 
 Lorsqu'une insertion est intégrée, nous vérifions la présence ou l'absence de l'identifiant de la valeur dans le contexte causal.
 Si l'identifiant est présent, la valeur a déjà été insérée et éventuellement été supprimée.
@@ -1376,69 +1384,66 @@ Si l'identifiant de la valeur à supprimer est présent dans le contexte causal,
 Si elle l'est nous la supprimons.
 Si l'identifiant de la valeur à supprimer est absent du contexte causal, alors nous l'ajoutons simplement au contexte causal.
 
-Nous représentons une séquence répliquée synchronisée par différences d'états par un couple dont le premier élément associe les positions aux valeurs de la séquence et le second élément est le contexte causal.
+La \autoref{fig:deltaseq} présente l'implémentation générique d'une séquence synchronisée par différences d'états.
+Nous représentons un état d'une telle séquence par un couple $\tuple*{m, c}$ où $m$ associe les positions aux valeurs de la séquence et $c$ est le contexte causal de la séquence (\autoref{eq:deltaseq-state}).
 Les messages de synchronisation sont des différences d'états.
-L'insertion d'une valeur $v$ à la position $j$ génère une position entre les positions associées aux $j-1$-ème et $j$-ème valeurs de la séquence.
-Le message d'insertion consiste donc en un couple qui contient uniquement l'association de cette nouvelle position à la valeur $v$ et un contexte causal qui contient uniquement l'identifiant unique dérivé de la position.
-La suppression de la $j$-ème valeur génère un message de suppression qui contient aucune association et un contexte causal qui contient uniquement l'identifiant de la valeur à supprimer.
+L'exécution de l'insertion d'une valeur $v$ à la position $j$ génère une position $p$ entre les positions associées aux $j-1$-ème et $j$-ème valeurs de la séquence.
+Le message d'insertion consiste donc en un couple qui contient uniquement l'association de $p$ à la valeur $v$ et un contexte causal qui contient uniquement l'identifiant unique dérivé de la position (\autoref{eq:deltaseq-ins}).
+L'exécution de la suppression de la $j$-ème valeur génère un message de suppression qui contient aucune association et un contexte causal qui contient uniquement l'identifiant de la valeur à supprimer (\autoref{eq:deltaseq-del}).
 
-La fusion d'un état $s_1$ avec un état $s_2$ produit un état $s_3$.
-Le contexte causal de $s_3$ corresponds à l'union des contextes causaux de $s_1$ et $s_2$.
-Les associations de $s_3$ correspondent à l'intersection de l'ensemble des associations de $s_1$ et de l'ensemble des associations de $s_2$, ainsi que des associations de $s_1$ et $s_2$ dont l'identifiant unique n'est pas présent respectivement dans le contexte causal de $s_2$ et le contexte causal de $s_1$.
+La fusion d'un état $\sigma_1 \defeq \tuple*{m, c}$ avec un état $\sigma_2 \defeq \tuple*{m', c'}$ produit un état $\sigma_3 \defeq \tuple*{m'', c''}$ (\autoref{eq:deltaseq-integr}).
+Le contexte causal de $\sigma_3$ corresponds à l'union des contextes causaux de $\sigma_1$ et $\sigma_2$.
+Les associations de $\sigma_3$ correspondent à l'intersection de l'ensemble des associations de $\sigma_1$ et de l'ensemble des associations de $\sigma_2$, ainsi que des associations de $\sigma_1$ et $\sigma_2$ dont l'identifiant n'est pas présent respectivement dans le contexte causal de $ \defeq \tuple*{m, c}_2$ et le contexte causal de $\sigma_1$.
 Ces deux derniers ajouts permettent d'insérer les valeurs présentes uniquement dans l'un des deux états tout en s'assurant de ne pas insérer des valeurs supprimées dans l'un des deux états.
 
-\begin{align*}
-\trm{CausalContext}\tuple*{P} &\defeq \powerfset{\mathbb{I} \times \trm{LID}_P}\\
-\trm{lids}_i(c) &\defeq \set*{n \given \tuple*{i, n} \in c}
-\end{align*}
-
-\begin{align*}
-&\begin{aligned}
-\MoveEqLeft\forall V\ \forall P \in \trm{Pos} \qsep \trm{DeltaSeq}\tuple*{P, V} \defeq \set*{m: P \pto V} \times \powerfset{\mathbb{I} \times \trm{LID}_P}\\
-&\where \trm{dom}(m)\ \textit{is finite}
-\end{aligned}\\
-%
-&\begin{aligned}
-\MoveEqLeft \trm{eval}_i(\tuple*{m, c}, \trm{rd}) \defeq \set*{v_k}_{k=0}^{k=\card*{m} - 1}\\
-& \where \tuple*{p_k, v_k} \in m\\
-& \where p_k \defeq \trm{nthPos}(m, k)
-\end{aligned}\\
-%
-&\begin{aligned}
-\MoveEqLeft \trm{prepare}_i(\tuple*{m,c}, \trm{ins}(j, v)) \defeq%
-\tuple*{\set*{\tuple*{p, v}}, \set*{\trm{id}(p)}}\\
-&\where p \defeq \trm{pick}_i(l, u, \trm{lids}_i(c))\\
-&\where l \defeq \begin{dcases}
-  \bot_P & \when k = 0\\
-  \trm{nthPos}(m, k - 1) &
-\end{dcases}\\
-&\where u \defeq \begin{dcases}
-  \top_P & \when k = \card*{m}\\
-  \trm{nthPos}(m, k) &
-\end{dcases}\\
-&\where k \defeq \min(j, \card*{m})
-\end{aligned}\\
-%
-&\begin{aligned}
-\MoveEqLeft \trm{prepare}_i(\tuple*{m,c}, \trm{del}(j)) \defeq%
-\begin{dcases}
-    \tuple*{\emptyset,\set*{\trm{id}(p)}} & \when \card*{m} \neq 0\\
-    \tuple*{\emptyset,\emptyset} &
-\end{dcases}\\
-&\where p \defeq \trm{nthPos}(m, \min(j, \card*{m}))
-\end{aligned}\\
-%
-&\begin{aligned}
-\MoveEqLeft \trm{integrate}_i(\tuple*{m,c}, \tuple*{m',c'}) \defeq\\
-&\langle(m \cap m') \cup%
-\set*{\tuple*{p, v} \in m \given \trm{id}(p) \not\in c'} \cup\\
-&\set*{\tuple*{p', v'} \in m' \given \trm{id}(p') \not\in c}%
-, c \cup c' \rangle
-\end{aligned}
-\end{align*}
+\begin{figure}[htb]
+    \centering
+    \begin{align}
+    &\begin{aligned}
+    \MoveEqLeft\forall V\ \forall P \in \trm{Pos} \qsep \trm{DeltaSeq}\tuple*{P, V} \defeq \set*{m: P \pto V} \times \powerfset{\mathbb{I} \times \trm{LID}_P}\\
+    &\where \trm{dom}(m)\ \textit{is finite}
+    \end{aligned}\label{eq:deltaseq-state}\\
+    %
+    &\begin{aligned}
+    \MoveEqLeft \trm{eval}_i(\tuple*{m, c}, \trm{rd}) \defeq \set*{v_k}_{k=0}^{k=\card*{m} - 1}\\
+    & \where \tuple*{p_k, v_k} \in m\\
+    & \where p_k \defeq \trm{nthPos}(m, k)
+    \end{aligned}\label{eq:deltaseq-eval}\\
+    %
+    &\begin{aligned}
+    \MoveEqLeft \trm{prepare}_i(\tuple*{m,c}, \trm{ins}(j, v)) \defeq%
+    \tuple*{\set*{\tuple*{p, v}}, \set*{\trm{id}(p)}}\\
+    &\where p \defeq \trm{pick}_i(l, u, \trm{lids}_i(c))\\
+    &\where l \defeq \begin{dcases}
+    \bot_P & \when k = 0\\
+    \trm{nthPos}(m, k - 1) &
+    \end{dcases}\label{eq:deltaseq-ins}\\
+    &\where u \defeq \begin{dcases}
+    \top_P & \when k = \card*{m}\\
+    \trm{nthPos}(m, k) &
+    \end{dcases}\\
+    &\where k \defeq \min(j, \card*{m})
+    \end{aligned}\\
+    %
+    &\begin{aligned}
+    \MoveEqLeft \trm{prepare}_i(\tuple*{m,c}, \trm{del}(j)) \defeq%
+    \begin{dcases}
+        \tuple*{\emptyset,\set*{\trm{id}(p)}} & \when \card*{m} \neq 0\\
+        \tuple*{\emptyset,\emptyset} &
+    \end{dcases}\\
+    &\where p \defeq \trm{nthPos}(m, \min(j, \card*{m}))
+    \end{aligned}\label{eq:deltaseq-del}\\
+    %
+    &\begin{aligned}
+    \MoveEqLeft \trm{integrate}_i(\tuple*{m,c}, \tuple*{m',c'}) \defeq \tuple*{m'',c \cup c'}\\
+        &\where m'' \defeq (m \cap m') \cup \set*{\tuple*{p, v} \in m, \tuple*{p', v'} \in m' \given \trm{id}(p) \not\in c', \trm{id}(p') \not\in c}
+    \end{aligned}\label{eq:deltaseq-integr}
+    \end{align}
+    \caption{Implémentation générique d'une séquence synchronisée par différences}\label{fig:deltaseq}
+\end{figure}
 
 Les protocoles de synchronisation par différences d'états assurent généralement le modèle de cohérence causal.
-Le protocole de réplication peut utiliser cette garantie pour représenter plus efficacement le contexte causal pour certains type de positions.
+Le protocole de réplication peut utiliser cette garantie pour représenter plus efficacement le contexte causal pour certains types de positions.
 Une position \emph{Logoot} utilise un nombre séquentiel comme identifiant local.
 De ce fait, le contexte causal peut être efficacement représenté par un vecteur de versions~\autocite{parker_1983_versionvector,mattern_1988_timevector}.
 Ce vecteur associe à chaque pair l'identifiant de la dernière valeur insérée par le pair correspondant.
@@ -1468,7 +1473,7 @@ Ces positiosn sont donc \emph{dot}-ifiées.
 Deux positions sont agréables, si et seulement si \begin{inlinelist}\item elles divergent uniquement par leur identifiant local (le nombre séquentiel du dernier n-uplet), et \item elles ont des identifiants locaux contiguës\end{inlinelist}.
 Le nombre séquentiel joue à la fois le rôle t'identifiant local et d'indice de bloc.
 
-\begin{align*}
+\begin{align}
 &\trm{DottedLogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}^*)}^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^*)\\
 &\begin{aligned}
     \MoveEqLeft \trm{agg}(\set*{\tuple*{x_k, i_k, n_k}}_{k=0}^m) \defeq \set*{a_h}_{h=0}^m\\
@@ -1477,7 +1482,7 @@ Le nombre séquentiel joue à la fois le rôle t'identifiant local et d'indice d
         \tuple*{x_h, i_h, n_h}
     \end{dcases}
 \end{aligned}
-\end{align*}
+\end{align}
 
 La \autoref{fig:dottedlogootsplit} correspond à la séquence \emph{Dotted LogootSPlit} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic}.
 Le pair $p_A$ commence par une insertion contiguës de plusieurs caractères.
@@ -1521,7 +1526,7 @@ Une position agréable à $\textsf{'\textit{y}'}$ ne peut être généré étant
 \subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 \end{figure}
 
-Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu sup-demi-treilli des états de la séquence obtenue dans la \autoref{fig:dottedlogootsplit}.
+Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu du sup-demi-treilli des états de la séquence obtenue dans la \autoref{fig:dottedlogootsplit}.
 %Étant donné que les positions sont omises dans le diagramme, il est valide pour tout type de positions \emph{dot}-ifiées.
 
 \begin{figure}[!ht]

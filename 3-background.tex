@@ -734,7 +734,7 @@ En revanche, nous n'avons pas rencontré de propriétés de vivacité.
 Dans le \autoref{ch:problematic}, l'intégration à terme des modifications est une propriété de vivacité.
 Elle pourrait être traduite par la propriété de cohérence suivante~: une opération de modification est à terme visible à toute opération future d'interrogation.
 Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à toute opération future.
-En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas viisble.
+En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas visible.
 Nous pouvons ainsi définir la propriété d'intégration à terme que nous renommons volontiers en propriété de visibilité à terme~:
 
 \begin{equation}
@@ -752,8 +752,10 @@ Dans ce manuscrit, la propriété de convergence forte est impliquée par les sp
 C'est le cas dans l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
 Deux opérations de lecture qui ont le même contexte ont nécessairement la même valeur de retour.
 
-Les propriétés de vivacité nous invitent à penser les futures possibles d'une exécution.
-En effet, nous devons vérifier que la propriété est vérifiable dans un futur potentiel.
+Parce que les propriétés de vivacité décrivent quelque chose qui devrait survenir, elles invitent à penser les futurs possibles d'une exécution.
+Une propriété de vivacité peut alors être exprimée comme un prédicat qui doit être vérifié dans un ou plusieurs futurs possibles de l'exécution.
+Les propriétés de vivacités ne peuvent pas être vérifiés indépendamment des autres propriétés de sûreté.
+Si une propriété de vivacité est vérifiée dans un futur donné nous devons nous assurer que ce futur vérifie les autres propriétés de sûreté et de vivacité considérées.
 
 % Un protocole garantit une propriété de cohérence si et seulement si chacune des exécutions abstraites qu'il peut engendrer la respecte.
 % Nous ne pouvons pas savoir à quel moment une propriété de vivacité sera respectée.
@@ -768,59 +770,8 @@ En effet, nous devons vérifier que la propriété est vérifiable dans un futur
 %Chaque point d'une exécution peut être restreint en une exécution abstraite (bien-formée).
 %Ces exécutions abstraites correspondent à des préfixes finis de l'exécution abstraite finale.
 
-
-\begin{definition}[Extension d'une histoire]\label{def:hist-ext}
-Une histoire $H'$ est une extension d'une histoire $H$, et nous écrivons $H' \sqsupset H$, si et seulement si~:
-\begin{itemize}
-  \item Les opérations de $H$ correspondent à un sous-ensemble fini des opérations de $H'$. $H$ est donc une histoire finie.
-
-  \begin{equation*}
-    H \subset H' \land H \textit{est finie}
-  \end{equation*}
-
-  \item Si l'opération $y$ est incluse dans $H$, alors toutes les opérations de $H'$ qui retournent-avant $y$ sont également incluses dans $H$.
-  \begin{equation*}
-    y \in H \land x \rb_{H'} y \implies x \in H
-  \end{equation*}
-  
-  \item Les relations \emph{retourne-avant} sont conservées.
-  \begin{equation*}
-    x, y \in H \land x \rb_{H'} y \iff x \rb_{H} y
-  \end{equation*}
-  
-  \item Les caractéristiques des opérations (pair, appel, valeur de retour) sont conservées.
-\end{itemize}
-\end{definition}
-
-
-\begin{definition}[Extension d'une exécution abstraite]\label{def:wf-abstract-exec-prefix}
-Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'une exécution abstraite (bien-formée ou mal-formée) $A \defeq \tuple*{H,\trm{vis}}$, et nous écrivons $A' \sqsupset A$, si et seulement si~:
-\begin{itemize}
-  \item L'histoire $H'$ de $A'$ est une extension de l'histoire $H$ de $A$~:
-
-  \begin{equation*}
-    H' \sqsupset H
-  \end{equation*}
-
-  \item Les relations de visibilité sont conservées.
-
-  \begin{equation*}
-    x, y \in A \land x \vis_{A'} y \iff x \vis_{A} y
-  \end{equation*}
-\end{itemize}
-\end{definition}
-
-
-\begin{definition}[Extension cohérente]\label{def:consistent-extension}
-Si une extension $A'$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ respecte le modèle de cohérence $C$, alors par souci de concision nous écrivons $A' \sqsupset_C A$.
-$A$ ne respecte pas nécessairement le modèle de cohérence $C$.
-\begin{equation*}
-A' \sqsupset_C A \defiff A' \sqsupset A \land A' \in C
-\end{equation*}
-\end{definition}
-
-% SPECIFIER SEC as an example
-
+La classification des propriétés de cohérence en propriétés de vivacité et en propriétés de sûreté permet de mieux apprécier les garanties que représente le respect de telles propriétés.
+Les propriétés de cohérences sont généralement réunies au sein de \emph{modèles de cohérence}.
 
 \subsection{Ordre des Modèles de cohérence}\label{subsec:consistency-spec-hier}
 
@@ -1107,33 +1058,6 @@ Le deuxième cas contredit la propriété~\ref{itm:peer-linear} qui assure une v
 
 La deuxième implication est naturellement déduite de la propriété~\ref{itm:vtns2}.
 \end{proof}
-
-\begin{proposition}\label{th:future-vis}
-Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
-Une opération incluse dans $A'$ et absente de $A$ ne peut pas être visible à une opération de $A$.
-\begin{equation*}
-    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies y \not\vis x
-\end{equation*}
-\end{proposition}
-
-\begin{proof}
-Procédons par déduction.
-Soit $x$ une opération de $A$ et $y$ une opération de $A'$ absente de $A$.
-$A'$ est une extension de $A$.
-Par conséquent, $y$ ne retourne pas avant $x$.
-$A$ et $A'$ respectent le modèle de cohérence \ac{VTNS}.
-D'après~\ref{itm:vtns2}, si une opération ne retourne pas avant une seconde opération, alors cette dernière ne peut pas être visible à la première.
-$y$ ne peut donc pas être visible à $x$.
-\end{proof}
-
-\begin{corollary}\label{th:future-concur}
-Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
-Soit une opération $x$ de $A$ et une opération $y$ de $A'$ absente de $A$.
-Si $x$ n'est pas visible à $y$ alors $y$ est concurrent à $x$.
-\begin{equation*}
-    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies x \not\vis y \implies x \concur y
-\end{equation*}
-\end{corollary}
 
 % \textcite{mahajan_2011_cac} ont montré qu'un protocole toujours-disponible et à convergence unidirectionnelle peut garantir la cohérence causale non-spéculative en l'absence de pairs mal-intentionnés.
 
@@ -1463,7 +1387,7 @@ Dans l'exécution abstraite $A_1$ de la \autoref{fig:provably-malicious}, $p_A$ 
 Cependant, $p_A$ ne peut pas systématiquement rejeter les opérations de $p_M$ sans compromettre la convergence des copies des pairs honnêtes.
 En effet, le pair $p_B$ présume encore $p_M$ comme honnête.
 Il peut donc encore accepter des opérations futures de $p_M$.
-Dans l'extension $A$ de $A_1$ de la \autoref{fig:provably-malicious}, $p_B$ accepte ainsi $m_4$.
+Dans l'exécution abstraite $A$ de la \autoref{fig:provably-malicious}, $p_B$ accepte ainsi $m_4$.
 Bien que $p_A$ reconnaît que $p_M$ est mal-intentionné, il doit accepter $m_4$ pour ne pas compromettre la convergence de sa copie avec celle de $p_B$.
 Nous disons que $p_A$ a indirectement accepté $m_4$.
 
@@ -1474,7 +1398,7 @@ Dans l'exemple de la \autoref{fig:provably-malicious}, le pair $p_M$ est évinc�
 En présence d'autres pairs mal-intentionnés, il ne suffit pas que les pairs reconnaissent un pair comme mal-intentionné pour l'évincer du groupe.
 Un pair mal-intentionné peut reconnaître un autre pair comme mal-intentionné et continuer à accepter ses opérations.
 Dans l'exécution abstraite $A_1$ de la \autoref{fig:known-colluding-malicious}, les pairs $p_A$ et $p_O$ reconnaissent que $p_M$ est mal-intentionné.
-Dans l'extension de cette exécution abstraite, $p_O$ accepte $m_4$ alors qu'il a précédemment reconnu que son auteur est mal-intentionné.
+Dans l'exécution abstraite $A$ de la \autoref{fig:known-colluding-malicious}, $p_O$ accepte $m_4$ alors qu'il a précédemment reconnu que son auteur est mal-intentionné.
 
 \begin{figure}[htb]
 \centering
@@ -1948,37 +1872,6 @@ En suivant le même principe on constate que $a_2$ et $b_3$ sont équivalentes.
 $a_4$ annule l'effet de $a_2$ et $b_3$.
 L'ensemble lu est donc un singleton qui contient la valeur $1$.
 
-%\begin{equation}\begin{split}
-%\MoveEqLeft\forall v \qsep x \in A \land x = \trm{add}(v) \implies\\
-%    &\trm{cl}(x) \defeq \max(\set*{1 + \trm{cl}(y) \given y \vis x \land \trm{call}(y) = \trm{rmv}(v)})
-%\end{split}\end{equation}
-%
-%\begin{equation}\begin{split}
-%\MoveEqLeft\forall v \qsep x \in A \land x = \trm{rmv}(v) \implies\\
-%    &\trm{cl}(x) \defeq \max(\set*{1 + \trm{cl}(y) \given y \vis x \land \trm{call}(y) = \trm{add}(v)})
-%\end{split}\end{equation}
-%
-%\begin{equation}\begin{split}
-%\MoveEqLeft x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) =\\
-%    &\set*{v \given \exists y \in \trm{ctx}_A(x) \qsep \trm{call}(y) = \trm{add}(v) \land \nexists z \in \trm{ctx}_A(x) \qsep \trm{call}(z) = \trm{rmv}(v) \land \trm{cl}(z) > \trm{cl}(y)}
-%\end{split}\end{equation}
-
-
-%Les \acp{CRDT} sont des types abstraits de données qui peuvent être répliqués et modifiés en parallèle par un ensemble de pairs.
-%Chaque pair modifie et interroge sa copie sans se coordonner au préalable avec les autres pairs.
-%Les copies sont donc toujours disponibles.
-%La modification parallèle des copies conduit nécessairement à leur divergence.
-%Chaque pair partage à terme ses modifications et appliques les modifications qu'il reçoit des autres pairs.
-%Les modifications parallèles sont intégrées de telle manière à ce qu'il ne résulte aucun conflit et que deux copies convergent si elles appliquent le même ensemble de modifications.
-%Les copies respectent donc une convergence forte~\autocite{shapiro_2011_crdt}.
-%Deux pairs peuvent donc appliquer des modifications parallèles dans un ordre différent et converger.
-
-%La majorité des \acp{CRDT} sont des extensions de types abstraits de données définit pour des exécutions séquentielles.
-%Ils se comportent donc de la même manière lorsqu'ils sont utilisés dans une exécution séquentielle.
-%Les extensions définissent qu'elles sont les effets de l'application de modifications parallèles.
-
-%Certains types abstraits de données spécifiés pour les exécutions séquentielles peuvent avoir une extension intuitive. C'est le cas par exemple du type abstrait de donnée Compteur. Pour d'autres types, il peut être plus complexe de spécifier un comportement intuitif lors de modifications concurrentes.
-
 \paragraph{} Alors que les types abstraits usuels supposent le respect d'un modèle de cohérence séquentiel, les types abstraits de données répliquées respectent des modèles de cohérence plus faibles.
 Les \acp{CRDT} respectent par conception la propriété de convergence forte.
 Cette dernière est impliquée par leur sémantique.
@@ -2183,7 +2076,7 @@ L'ensemble répliqué utilise l'implémentation de la \autoref{fig:op-add-win-se
 \end{figure}
 
 Nous prenons l'exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d'un ensemble qui utilise l'implémentation de la \autoref{fig:op-add-win-set}.
-Le pair $p_A$ exécute une première opération $a_1$ qui ajoute la valeur $1$ a l'ensemble répliqué.
+Le pair $p_A$ exécute une première opération $a_1$ qui ajoute la valeur $1$ à l'ensemble répliqué.
 Il transmet sa modification au pair $p_B$.
 $p_B$ intègre la modification de $p_A$ et exécute ensuite l'opération $b_1$ qui ajoute de nouveau la valeur $1$ dans l'ensemble.
 Pendant ce temps, $p_A$ exécute l'opération $a_2$ qui supprime la valeur $1$.
@@ -2369,7 +2262,7 @@ En d'autres termes nous ne pouvons trouver un autre état plus petit qui produit
 Cette propriété n'est pas requise dans la définition originale des \ac{CRDT} synchronisés par différences d'états.
 Elle a été introduire ultérieurement~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 
-La \autoref{fig:delta-add-win-set} présente l'implémentation d'un ensemble répliqué synchronisé par différences d'états.
+La \autoref{fig:delta-awset} présente l'implémentation d'un ensemble répliqué synchronisé par différences d'états.
 Elle est globalement identique à l'implémentation présentée dans la \autoref{fig:state-add-win-set}.
 Seuls les messages générés sont distincts.
 Les messages générés sont des états irréductibles.
@@ -2394,8 +2287,16 @@ Les messages générés sont des états irréductibles.
     \end{aligned}
 \end{aligned}\label{eq:delta-awset-integr}
 \end{align}
-\caption[Implémentation d'un ensemble répliqué synchronisé par différences d'états]{Implémentation d'un ensemble répliqué synchronisé par différences d'états qui respecte la sémantique \emph{Add-Win}.}\label{fig:delta-add-win-set}
+\caption[Implémentation d'un ensemble répliqué synchronisé par différences d'états]{Implémentation d'un ensemble répliqué synchronisé par différences d'états qui respecte la sémantique \emph{Add-Win}.}\label{fig:delta-awset}
 \end{figure}
+
+Nous prenons de nouveau l'exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d'un ensemble qui utilise l'implémentation de la \autoref{fig:delta-awset}.
+Le pair $p_A$ a exactement les mêmes transitions d'états que l'ensemble synchronisé par états complets.
+Il génère les mêmes messages qui correspondent à des états irréductibles.
+La \autoref{fig:state-awset-state-trans} représente donc les état successifs de la copie du pair $p_A$.
+Dans cet exemple, le pair $p_B$ transmet à $p_A$ l'état $\tuple*{\set*{\tuple*{1,A_1},\tuple*{1,B_1}},\set*{A_1,B_1}}$.
+La synchronisation par différences offre à $p_B$ plus de liberté.
+Un autre protocole de synchronisation pourrait envoyer l'état irréductible $\tuple*{\set*{\tuple*{1,B_1}},\set*{B_1}}$.
 
 Les \acp{CRDT} synchronisés par différences d'états conservent les avantages des \acp{CRDT} synchronisés par états tout en corrigeant leurs principaux défauts.
 Avec un mécanisme de synchronisation adéquate, ils peuvent supporter la perte, les duplications, et l'intégration dans un ordre arbitraire des messages.

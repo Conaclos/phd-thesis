@@ -2,15 +2,14 @@
 \chapter{Journaux authentifiés tronqués}\label{ch:pruned-log}
 
 \minitoc{}
-\bigskip
+\clearpage
 
-
-La réplication optimiste d'un contenu et la modification concurrente de ce contenu conduit à la divergence des copies du contenu.
-Les protocoles de réplication optimiste s'assurent que à terme les copies convergent.
+Dans le \autoref{ch:problematic} nous avons vu que la réplication optimiste d'un contenu et la modification concurrente de ce contenu conduit à la divergence des copies du contenu.
+Les protocoles de réplication sont responsables de la convergence des copies.
 La convergence des copies des pairs est une propriété essentielle d'un système collaboratif.
 Si deux copies ne sont pas capables de converger, la vue du contenu peut diverger entre deux pairs.
 Les pairs ne disposent pas du même contexte pour collaborer.
-Ce qui peut conduire à des incompréhensions, voire à l'échec de la collaboration.
+Ce qui peut conduire à des incompréhensions et à l'échec de la collaboration.
 
 Un individu peut trouver un intérêt à perturber, voire compromettre le succès d'une collaboration.
 Nous nous intéressons en particulier à un individu qui cherche à compromettre la convergence des copies.
@@ -22,14 +21,14 @@ La présence de pairs mal-intentionnés représente un défi.
 Ils peuvent exposer des comportements mal-intentionnés difficiles à détecter et déjouer.
 Ils peuvent en particulier produire des \emph{équivoques}.
 Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identique par le protocole de réplication.
-Les copies des pairs honnêtes divergent donc de manière permanente sans qu'ils s'en rendent compte.
+Les copies des pairs honnêtes divergent alors de manière permanente sans qu'ils s'en rendent compte.
 
-Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications qui ont été faites sur le contenu, les pairs peuvent maintenir des journaux authentifiés.
+Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs peuvent maintenir des journaux authentifiés.
 Un journal contient l'ensemble des modifications qu'un pair a intégrées à sa copie.
 La préservation de la totalité d'un journal authentifié implique un coût de stockage important.
-Ce coût est particulièrement notable lorsqu'un pair rejoint la collaboration et qu'il a besoin de l'ensemble du journal pour débuter à contribuer.
+Ce coût est particulièrement notable lorsqu'un pair rejoint la collaboration et qu'il a besoin de l'ensemble du journal pour commencer à contribuer.
 L'utilisation de journaux complets passent donc difficilement à l'échelle.
-
+ 
 Une manière de réduire ce coût est de conserver seulement les opérations les plus récentes.
 Ces opérations forment un suffixe du journal original.
 Nous disons que le journal est tronqué.
@@ -443,7 +442,7 @@ Dans la \autoref{sec:stability} nous développons le concept de stabilité et no
 %Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
 %Nous savions alors quels pairs sont honnêtes et lesquels sont mal-intentionnés.
 %Une exécution abstraite associée à un journal décrit en revanche la connaissance qu'a le possesseur du journal sur l'exécution.
-%Nous adoptons donc un point de vue subjectif.
+%Nous adoptons donc un point de vue d'un pair.
 %Le pair ne sait pas si un pair donné est honnête ou mal-intentionné.
 %Le pair pourrait faire confiance à un ensembles de pairs qu'il considère honnête.
 %Nous préférons prendre une approche plus pessimiste : un pair honnête considère que tout autre pair est potentiellement mal-intentionné.
@@ -470,11 +469,88 @@ Dans un journal, une opération stable est une opération qui est une dépendanc
 Puisque l'acceptation d'une opération est conditionnée par le modèle de cohérence utilisé, la stabilité l'est également.
 Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
 Au lieu de définir la stabilité d'une opération sur un journal, nous définissons la stabilité sur une exécution abstraite.
-Une exécution abstraite est suffisamment général pour représenter une exécution abstraite globale ou un journal.
+Une exécution abstraite est suffisamment général pour représenter une exécution ou un journal.
 Lorsqu'une exécution abstraite représente un journal, nous parlons d'exécution abstraite associé au journal.
 Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir l'exécution abstraite associée d'un journal.
 De ce fait, nos contributions peuvent être utilisées dans des contextes variés, au-delà du périmètre dans lequel nous les employons.
 Pour simplifier la compréhension nous utilisons dans les exemples des exécutions abstraites qui ne sont pas forcément associées à des journaux.
+
+\begin{definition}[Extension d'une histoire]\label{def:hist-ext}
+Une histoire $H'$ est une extension d'une histoire $H$, et nous écrivons $H' \sqsupset H$, si et seulement si~:
+\begin{itemize}
+    \item Les opérations de $H$ correspondent à un sous-ensemble fini des opérations de $H'$. $H$ est donc une histoire finie.
+
+    \begin{equation*}
+    H \subset H' \land H \textit{est finie}
+    \end{equation*}
+
+    \item Si l'opération $y$ est incluse dans $H$, alors toutes les opérations de $H'$ qui retournent-avant $y$ sont également incluses dans $H$.
+    \begin{equation*}
+    y \in H \land x \rb_{H'} y \implies x \in H
+    \end{equation*}
+    
+    \item Les relations \emph{retourne-avant} sont conservées.
+    \begin{equation*}
+    x, y \in H \land x \rb_{H'} y \iff x \rb_{H} y
+    \end{equation*}
+    
+    \item Les caractéristiques des opérations (pair, appel, valeur de retour) sont conservées.
+\end{itemize}
+\end{definition}
+
+
+\begin{definition}[Extension d'une exécution abstraite]\label{def:wf-abstract-exec-prefix}
+Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'une exécution abstraite (bien-formée ou mal-formée) $A \defeq \tuple*{H,\trm{vis}}$, et nous écrivons $A' \sqsupset A$, si et seulement si~:
+\begin{itemize}
+    \item L'histoire $H'$ de $A'$ est une extension de l'histoire $H$ de $A$~:
+
+    \begin{equation*}
+    H' \sqsupset H
+    \end{equation*}
+
+    \item Les relations de visibilité sont conservées.
+
+    \begin{equation*}
+    x, y \in A \land x \vis_{A'} y \iff x \vis_{A} y
+    \end{equation*}
+\end{itemize}
+\end{definition}
+
+
+% \begin{definition}[Extension cohérente]\label{def:consistent-extension}
+% Si une extension $A'$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ respecte le modèle de cohérence $C$, alors par souci de concision nous écrivons $A' \sqsupset_C A$.
+% $A$ ne respecte pas nécessairement le modèle de cohérence $C$.
+% \begin{equation*}
+% A' \sqsupset_C A \defiff A' \sqsupset A \land A' \in C
+% \end{equation*}
+% \end{definition}
+
+\begin{proposition}\label{th:future-vis}
+Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
+Une opération incluse dans $A'$ et absente de $A$ ne peut pas être visible à une opération de $A$.
+\begin{equation*}
+    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies y \not\vis x
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Procédons par déduction.
+Soit $x$ une opération de $A$ et $y$ une opération de $A'$ absente de $A$.
+$A'$ est une extension de $A$.
+Par conséquent, $y$ ne retourne pas avant $x$.
+$A$ et $A'$ respectent le modèle de cohérence \ac{VTNS}.
+D'après~\ref{itm:vtns2}, si une opération ne retourne pas avant une seconde opération, alors cette dernière ne peut pas être visible à la première.
+$y$ ne peut donc pas être visible à $x$.
+\end{proof}
+
+\begin{corollary}\label{th:future-concur}
+Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
+Soit une opération $x$ de $A$ et une opération $y$ de $A'$ absente de $A$.
+Si $x$ n'est pas visible à $y$ alors $y$ est concurrent à $x$.
+\begin{equation*}
+    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies x \not\vis y \implies x \concur y
+\end{equation*}
+\end{corollary}
 
 Dans une exécution abstraite, une opération est stable une fois qu'elle est visible à toute opération future.
 Nous définissons la stabilité à l'aide du concept d'extension introduit dans la \autoref{subsec:consistency-spec-liveness-safety} du \autoref{ch:background}.
@@ -483,7 +559,7 @@ Nous définissons la stabilité à l'aide du concept d'extension introduit dans 
 Soit une opération $x$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ qui respecte un modèle de cohérence $C$.
 $x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seulement si il n'existe pas une opération $y$ d'une extension $A'$ de $A$ tel que $A'$ respecte $C$, $y$ est absente de $A$, et $x$ n'est pas visible à $y$.
 \begin{equation*}
-  \trm{stable}_A^C(x) \defiff \forall A' \sqsupset_C A\ \forall y \in A' \sminus A \qsep x \vis y
+  \trm{stable}_A^C(x) \defiff \forall A' \sqsupset A \qsep A' \in C \implies \forall y \in A' \sminus A \qsep x \vis y
 \end{equation*}
 \end{definition}
 
@@ -491,7 +567,7 @@ $x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seul
 %Un modèle de cohérence $C$ est plus fort qu'un modèle de cohérence $C'$ si il existe au moins une exécution abstraite qui respecte $C'$ et ne respecte pas $C$.
 
 \begin{theorem}\label{th:stability-hierarchy}
-Soit deux modèles de cohérence $C$ et $C'$ tel que $C$ est plus fort\footnote{Toutes les exécutions abstraites qui respectent $C$, respectent également $C'$. En d'autres termes, il existe au moins une exécution abstraite qui respecte $C'$ et ne respecte pas $C$.} que $C'$.
+Soit deux modèles de cohérence $C$ et $C'$ tel que $C$ est plus fort que $C'$.
 Si une opération d'une exécution abstraite $A$ est $C'$-stable, alors elle est également $C$-stable.
 \begin{equation*}
     C \subset C' \land \trm{stable}_A^{C'}(x) \implies \trm{stable}_A^{C}(x)
@@ -520,11 +596,11 @@ $x$ est $C$-stabilisable dans $A$ si et seulement si il existe une extension de 
 $A$ garantit la propriété de vivacité $\trm{Stabilisable}_C$ si et seulement si toute opération de $A$ est $C$-stabilisable.
 Un modèle de cohérence $C$ est stabilisable, et nous écrivons $C \in \trm{Stabilisable}$, si et seulement si toutes opérations de toutes les exécutions abstraites correctes et finies de $C$ sont $C$-stabilisables.
 \begin{align*}
-    A \in \trm{Stabilisable}_C &\defiff \forall x \in A \:\exists A' \sqsupset_C A \qsep \trm{stable}_{A'}^C(x)\\
+    A \in \trm{Stabilisable}_C &\defiff \forall x \in A \:\exists A' \sqsupset A \qsep A' \in C \land \trm{stable}_{A'}^C(x)\\
     C \in \trm{Stabilisable} &\defiff \forall A \in C \qsep A \textit{est finie} \implies A \in \trm{Stabilisable}_C
 \end{align*}
 \end{definition}
-% TODO: vérifier si on peut remplacer \sqsupset_C par \sqsupseteq_C
+% TODO: vérifier si on peut remplacer \sqsupset par \sqsupseteq_C
 
 Nous recherchons un modèle de cohérence stabilisable qui est réaliste dans le contexte de notre travail~: il doit garantir la disponibilité en lecture et en écritures des copies, ainsi que la convergence à terme des copies.
 Nous proposons d'abord d'explorer la notion de stabilité dans le modèle de cohérence causale et le modèle de cohérence \acl{VFJC}.
@@ -535,14 +611,14 @@ Nous construisons ensuite de nouveaux modèles de cohérence qui sont stabilisab
 \subsection{Stabilité Causale}\label{subsec:cs}
 
 \textcite{baquero_2018_pure-op-crdt} ont introduit la stabilité causale comme un moyen de réduire la taille d'un journal.
-La stabilité causale leur permet de supprimer les méta-données des opérations qui ne sont plus nécessaires au maintien de la cohérence de la copie et du journal d'un pair.
+La stabilité causale permet de supprimer les méta-données des opérations qui ne sont plus nécessaires au maintien de la cohérence de la copie et du journal d'un pair.
 Leurs journaux respectent une variante du modèle de cohérence causale qui ne correspond pas exactement à celle introduite dans ce manuscrit.
 %Le maintien de la cohérence d'un journal nécessite la connaissance des dépendances des opérations.
-Ils remarquent que la connaissance des dépendances d'une opération n'est plus nécessaire une fois que toute opération reçue ultérieurement dépend sur cette opération.
+Ils remarquent que la connaissance des dépendances d'une opération n'est plus nécessaire une fois que toute opération reçue ultérieurement dépend de cette opération.
 
-Leur définition de la stabilité causale se place du point de vue subjectif d'un pair.
+Leur définition de la stabilité causale se place du point de vue d'un pair.
 Dans ce manuscrit, nous avons défini la stabilité sur une exécution abstraite.
-Cette abstraction nous permet de raisonner autant d'un point de vue global, lorsque l'exécution abstraite explique une exécution, que d'un point de vue subjectif, lorsque l'exécution abstraite est associée à un journal.
+Cette abstraction nous permet de raisonner autant d'un point de vue global, lorsque l'exécution abstraite explique une exécution, que d'un point de vue d'un pair, lorsque l'exécution abstraite est associée à un journal.
 
 Pour définir la stabilité causale nous devons nous demander quand est-ce qu'une opération devient nécessairement visible à toute opération future.
 Cette question revient à se demander quand est-ce qu'une opération ne peut plus être en concurrence avec une opération future.
@@ -1416,11 +1492,11 @@ Dans une application cette opération pourrait se traduire par la génération d
 Pour simplifier, nous supposons qu'une invitation est unique.
 Un même pair ne peut pas être invité plusieurs fois.
 Cette contrainte permet en particulier d'éviter les invitations en concurrence qui sont sources d'une complexité supplémentaire.
-
 En pratique, nous pouvons assurer l'unicité d'une invitation en incluant un identifiant unique qui désignera le pair qui rejoint la collaboration via cette invitation.
-En découplant l'identité des pairs et des collaborateur·ice·s, un collaborateur ou une collaboratrice peut être invité·e plusieurs fois.
-Il peut alors être associé à plusieurs pairs si il existe plusieurs invitations.
-Dans ce cas, les pairs sont des entités abstraites~: plusieurs pairs peuvent correspondre à un même appareil.
+
+% En découplant l'identité des pairs et des collaborateur·ice·s, un collaborateur ou une collaboratrice peut être invité·e plusieurs fois.
+% Il peut alors être associé à plusieurs pairs si il existe plusieurs invitations.
+% Dans ce cas, les pairs sont des entités abstraites~: plusieurs pairs peuvent correspondre à un même appareil.
 
 L'héritage des observations par un nouveau pair est assuré par une propriété de cohérence qui oblige un pair à observer l'opération dans laquelle il est invité.
 Toutes les opérations d'un pair doivent donc succéder à une opération qui l'invite.
@@ -1750,20 +1826,21 @@ La \autoref{def:svfjc-consistency} définit ce nouveau modèle de cohérence que
 
 \begin{definition}[Invités connus]\label{def:known-invited}
 Soit une opération $y$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{Invitation}.
-Nous disons que le pair $p$ est connu en tant que invité en $x$ si et seulement si $x$ est une invitation qui invite $p$ ou il existe une invitation qui invite $p$  et précède $x$.
-$\trm{invited}_A(y)$ désigne l'ensemble des pairs qui sont connu en tant que invité en $x$.
+Nous disons que le pair $p$ est un invité connu en $y$ si et seulement si $y$ est une invitation qui invite $p$ ou il existe une invitation qui invite $p$ et est visible à $y$.
+$\trm{invited}_A(y)$ désigne l'ensemble des pairs invités connus en $y$.
 \begin{equation*}
     \trm{invited}_A(y) \defeq \set*{p \in \trm{Peers} \given \exists x \in A \qsep x \viseq y \land \trm{call}(x) = \trm{invite}(p)}
 \end{equation*}
 \end{definition}
 
-\begin{definition}[Observateurs d'une invitation]\label{def:invitation-obs}
+\begin{definition}[Observateurs connus d'une invitation]\label{def:invitation-obs}
 Soit une opération $z$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{Invitation}.
-Nous disons que le pair $p$ est un observateur de l'invitation d'un pair $q$ en $z$ si et seulement si $p$ a exécutée une opération tel que l'invitation de $q$ lui est visible et elle est visible à $x$.
-$\trm{invitationObs}_A(z, q)$ désigne l'ensemble des observateurs de l'invitation de $q$ en $z$.
-\begin{equation*}
-    \trm{invitationObs}_A(z, q) \defeq \set*{p \in \trm{Peers} \given \exists x, y \in A \qsep x \viseq y \viseq z \land \trm{call}(x) = \trm{invite}(q)}
-\end{equation*}
+Nous disons que le pair $p$ est un observateur connu en $z$ de l'invitation d'un pair $q$ si et seulement si $p$ a exécuté une opération tel que l'invitation de $q$ lui est visible et elle est visible à $z$.
+$\trm{invitationObs}_A(z, q)$ désigne l'ensemble des observateurs connus en $z$ de l'invitation de $q$.
+\begin{equation*}\begin{split}
+    \MoveEqLeft\trm{invitationObs}_A(z, q) \defeq\\
+    &\set*{p \in \trm{Peers} \given \exists x, y \in A \qsep x \viseq y \viseq z \land \trm{call}(x) = \trm{invite}(q) \land \trm{peer}(y) = p}
+\end{split}\end{equation*}
 \end{definition}
 
 \begin{definition}[DynVFJC]\label{def:svfjc-consistency}
@@ -1790,7 +1867,7 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence \emph{D
   \end{description}
 \end{definition}
 
-Lorsqu'un pair honnête est invité dans un embranchement rejeté par les autres pairs et qu'il contribue sur cet embranchement, il est de manière permanente, exclut par les autres pairs honnêtes.
+Lorsqu'un pair est invité dans un embranchement rejeté par les autres pairs et qu'il contribue sur cet embranchement, il est de manière permanente, exclut par les autres pairs honnêtes.
 Pour respecter notre définition initiale de la stabilité au sein d'une exécution abstraite, nous considérons un tel pair comme mal-intentionné.
 
 Un collaborateur ou une collaboratrice attaché·e à un tel pair pourrait détecter cette exclusion.
@@ -1822,7 +1899,7 @@ Si l'ensemble des pairs invités sont honnêtes, alors une opération $x$ est st
 Autrement, une opération $x$ est stable si et seulement si pour chaque énumération de $n$ pairs issues du produit cartésien des permutations des pairs mal-intentionnés invités par les pairs honnêtes invités, il existe une chaîne de visibilité de $n$ opérations tel que la première opération succède ou est égale à $x$, pour les $j$ premières opérations ($j$ peut être nul) le i-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou un pair reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $j$ est différent de $n$ alors la $(j+1)$-ème opération de la chaîne invite le $(j+1)$-ème pair de l'énumération.
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{stable}_A^{\trm{DynVFJC}}(x_0) \iff\\
-    &\trm{rqHonestObs}_A(x) \subseteq \trm{obs}_A(x_0) \:\land \\
+    &\trm{rqHonestObs}_A(x_0) \subseteq \trm{obs}_A(x_0) \:\land \\
     &\forall \tuple*{p_1, \dotsc, p_n} \in \trm{Perm}(\trm{InvitedMalicious}_A) \times \trm{InvitedHonest}_A
     \:\exists j \in 0 \ldotp\ldotp n \\
     & \exists x_0 \viseq \dotsb \viseq x_n \qsep
@@ -2061,7 +2138,7 @@ Il repose sur le maintien d'un journal répliqué qui est conservé tout au long
 Dans la \autoref{sec:pruned-log-protocol}, nous nous baserons sur ce protocole pour construire un protocole qui tronque les journaux et authentifie des instantanées à partir de ces derniers.
 
 Dans un premier temps nous présentons les structures de données principales nécessaires au bon fonctionnement du protocole.
-Nous présentons ensuite le protocole et des optimisations possible de ce dernier.
+Nous présentons ensuite le protocole et des optimisations possibles de ce dernier.
 Finalement nous montrons que le protocole produit des journaux dans lesquels nous pouvons identifier des messages stables.
 
 
@@ -2803,7 +2880,7 @@ Ainsi un message d'un invité connu qui dépend sur l'invitation non-linéaire e
 %Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
 %Nous savions alors quels pairs sont honnêtes et lesquels sont mal-intentionnés.
 %Une exécution abstraite associée à un journal décrit en revanche la connaissance qu'a le possesseur du journal sur l'exécution.
-%Nous adoptons donc un point de vue subjectif.
+%Nous adoptons donc un point de vue d'un pair.
 %Le pair ne sait pas si un pair donné est honnête ou mal-intentionné.
 %Le pair pourrait faire confiance à un ensembles de pairs qu'il considère honnête.
 %Nous préférons prendre une approche plus pessimiste : un pair honnête considère que tout autre pair est potentiellement mal-intentionné.
