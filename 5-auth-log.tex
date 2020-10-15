@@ -7,8 +7,7 @@
 Dans le \autoref{ch:problematic} nous avons vu que la réplication optimiste d'un contenu et la modification concurrente de ce contenu conduit à la divergence des copies du contenu.
 Les protocoles de réplication sont responsables de la convergence des copies.
 La convergence des copies des pairs est une propriété essentielle d'un système collaboratif.
-Si deux copies ne sont pas capables de converger, la vue du contenu peut diverger entre deux pairs.
-Les pairs ne disposent pas du même contexte pour collaborer.
+Si les copies des pairs ne sont pas capables de converger, les pairs ne disposent pas du même contexte pour collaborer.
 Ce qui peut conduire à des incompréhensions et à l'échec de la collaboration.
 
 Un individu peut trouver un intérêt à perturber, voire compromettre le succès d'une collaboration.
@@ -20,77 +19,16 @@ Les pairs qui ne sont pas sous le contrôle de l'adversaire sont qualifiés d'\e
 La présence de pairs mal-intentionnés représente un défi.
 Ils peuvent exposer des comportements mal-intentionnés difficiles à détecter et déjouer.
 Ils peuvent en particulier produire des \emph{équivoques}.
-Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identique par le protocole de réplication.
+Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identiques par le protocole de réplication.
 Les copies des pairs honnêtes divergent alors de manière permanente sans qu'ils s'en rendent compte.
 
-Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs peuvent maintenir des journaux authentifiés.
-Un journal contient l'ensemble des modifications qu'un pair a intégrées à sa copie.
-La préservation de la totalité d'un journal authentifié implique un coût de stockage important.
-Ce coût est particulièrement notable lorsqu'un pair rejoint la collaboration et qu'il a besoin de l'ensemble du journal pour commencer à contribuer.
-L'utilisation de journaux complets passent donc difficilement à l'échelle.
- 
-Une manière de réduire ce coût est de conserver seulement les opérations les plus récentes.
-Ces opérations forment un suffixe du journal original.
-Nous disons que le journal est tronqué.
-La troncature du journal permet à l'adversaire de la collaboration de mener de nouvelles attaques en vue de faire diverger les copies des pairs honnêtes.
-La suppression de modification du journal peut en effet compromettre la détection d'équivoques.
-Pouvons-nous concevoir un protocole qui permet la troncature du journal sans compromettre la convergence des copies~?
+Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs répliquent un \emph{journal authentifié}.
+Chaque pair possède un journal dans lequel il enregistre l'ensemble des modifications qu'il intègre à sa copie du contenu partagé.
+Une modification est accompagnée d'une signature cryptographique qui permet de s'assurer de son authenticité.
+Un pair mal-intentionné ne peut donc pas prétendre qu'une modification a été effectuée par un pair honnête.
+Un journal authentifié contient uniquement des modifications authentiques.
 
-Une observation importante est que toutes les modifications ne sont pas nécessaires à la détection des équivoques et au maintien de la cohérence du journal.
-En posant des contraintes sur l'acceptation des modifications dans le journal nous pouvons construire un préfixe croissant de modifications du journal qui ne sont plus nécessaires au maintien de la cohérence du journal et à la détection d'équivoques.
-
-La suppression de modifications du journal se base sur le concept de stabilité que nous développons dans la \autoref{sec:stability}.
-La \autoref{sec:protocole-overview} donne un aperçu du protocole à journaux tronqué que nous présentons dans la \autoref{sec:full-log-protocol} et la \autoref{sec:pruned-log-protocol}.
-
-%Un pair honnête ne peut pas tronquer son journal de manière arbitraire sans menacer la cohérence future de son journal ou la convergence de son journal avec journaux des autres pairs honnêtes.
-%La cohérence d'un journal est conservée en vérifiant systématiquement les opérations qui sont reçues.
-
-%Un journal ne peut être arbitrairement tronqué sans menacer la cohérence future du journal ou sa convergence avec les autres journaux.
-%Une opération est ajoutée dans un journal cohérent, si elle ne rend pas ce dernier incohérent.
-%Cette vérification requiert la présence d'un certain nombre d'opérations qui dépendent du modèle de cohérence considéré.
-%Par exemple, pour vérifier une opération dans un journal qui respecte le modèle de cohérence PRAM (ou FIFO), seule l'opération précédente du même auteur est requise.
-%Si des opérations nécessaires à la vérification d'une opération sont manquantes, l'opération ne peut être vérifiée.
-%L'opération doit donc être rejetée ou intégrée dans le journal avec le risque de le rendre incohérent.
-%Pour conserver un journal cohérent, le rejet semble donc le choix le plus judicieux.
-%Cependant, elle peut conduire à une divergence permanente des journaux.
-%Certains journaux peuvent avoir vérifié et intégré des opérations, e d'autres peuvent les avoir rejetées parce qu'elles ne peuvent pas être vérifiées.
-%
-%Afin de maintenir un journal cohérent et convergent, les pairs doivent conserver les opérations nécessaires à la vérification de toutes nouvelles opérations.
-%Pour supprimer des opérations nous devons donc rencontrer deux conditions~: les opérations nécessaires à la vérification d'une opération devraient représenter un sous-ensemble du journal, et la collaboration devrait progresser de telle manière qu'un préfixe croissant d'opérations n'est plus nécessaire pour vérifier toutes nouvelles opérations.
-%Ces deux contraintes peuvent être atteintes en utilisant un modèle de cohérence.
-%Un modèle de cohérence restreint la manière dont peuvent être mises en relation deux opérations.
-%La concurrence entre opérations joue un rôle important dans la détermination des opérations qui peuvent être ôtées du journal.
-%Nous disons qu'une opération est stable une fois qu'il n'est plus possible d'intégrer dans le journal une opération qui lui est concurrente.
-%
-%Dans un premier temps nous explorons la stabilisation de journaux de manière itératif. dans un second temps, nous utilisant la notion de stabilité pour définir qu'elle partie d'un journal peut être tronquée sans menacer sa cohérence future ou sa convergence avec les autres journaux.
-
-
-\section{Aperçu}\label{sec:protocole-overview}
-
-La convergence à terme des copies est une propriété essentielle des infrastructures pair-à-pair de collaboration.
-Des pairs mal-intentionnés peuvent trouver un intérêt à compromettre la convergence des copies des pairs honnêtes.
-Pour empêcher de tels scénarios, les pairs honnêtes peuvent maintenir un journal authentifié et répliqué.
-Ils enregistrent l'ensemble de leurs modifications dans leur journal respectif.
-Les pairs synchronisent leurs journaux afin de récupérer et intégrer sur leur copie les modifications de chacun.
-
-Malheureusement chaque pair doit conserver l'intégralité de son journal pour \begin{inlinelist}
-    \item vérifier la cohérence du journal lors de l'ajout d'une nouvelle opération
-    \item permettre à de nouveaux pairs de rejoindre la collaboration
-\end{inlinelist}.
-Les nouveaux pairs jouent les opérations enregistrées dans le journal pour obtenir le document partagé.
-La \autoref{fig:invite-by-log} montre que les nouveaux pairs utilisent le journal pour obtenir le document partagé.
-Pour ce faire, ils intègrent les modifications enregistrées dans le journal.
-La préservation de l'intégralité du journal engendre plusieurs problèmes~:
-
-\paragraph{Passage à l'échelle.} Au fur et à mesure de la progression de la collaboration les journaux contiennent de plus en plus d'entrées.
-La préservation des journaux et leur transmission sur le réseau sont donc de plus en plus coûteuses.
-
-\paragraph{Vie Privée.} La préservation du journal dans son intégralité expose l'historique de la collaboration depuis son commencement.
-Bien que certaines applications requièrent cette historique pour fournir des fonctionnalités, telle que la visualisation interactive de l'évolution d'un document, il peut être intéressant d'offrir plus de liberté sur quelles données doivent être conservées et quelles données doivent être supprimées.
-
-\bigskip
-
-\begin{figure}[htb]
+\begin{figure}[hbt]
 \centering
 \begin{subfigure}{0.49\linewidth}
     \centering
@@ -151,18 +89,79 @@ Carol veut rejoindre la collaboration.
 \subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal et construit le dessin à partir du journal.}\label{fig:invite-by-log}
 \end{figure}
 
-Un journal enregistre l'ensemble des modifications qui ont été jouées sur un document partagé.
-Le document correspond à la somme des modifications effectuées.
-Un document est donc souvent plus petit que le journal qui lui est attaché.
-Certaines applications prennent avantage de cette observation.
-Au lieu de transmettre un journal à un nouveau pair, elles transmettent un instantané du document.
+Les pairs doivent préserver l'intégralité de leur journal pour \begin{inlinelist}
+\item détecter les équivoques
+\item permettre à un pair de rejoindre la collaboration
+\end{inlinelist}.
+Un pair qui rejoint la collaboration a en effet besoin du journal pour obtenir l'état actuel du contenu partagé.
+Il obtient cet état en intégrant sur sa copie vierge du contenu partagé chaque modification enregistrée dans le journal.
+La \autoref{fig:invite-by-log} illustre la transmission d'un journal authentifié à un pair qui rejoint la collaboration.
+La préservation de l'intégralité du journal engendre plusieurs problèmes~:
 
-Notre contexte ne nous permet pas d'adopter cette approche.
-En effet, un pair mal-intentionné peut facilement falsifier un instantané du document avant de la transmettre à un nouveau pair.
-Ce dernier n'a aucun moyen de vérifier l'authenticité de l'instantané.
+\paragraph{Passage à l'échelle.} Au fur et à mesure de la progression de la collaboration les journaux contiennent de plus en plus d'entrées.
+La préservation des journaux et leur transmission aux pairs qui rejoignent la collaboration sont donc de plus en plus coûteuses.
 
-Nous proposons une approche qui permet de tronquer le journal authentifié et d'authentifier un instantané à partir du journal tronqué qui lui est associé.
+\paragraph{Vie Privée.} La préservation du journal dans son intégralité expose l'historique de la collaboration depuis son commencement.
+Bien que certaines applications requièrent cette historique pour fournir des fonctionnalités, telle que la visualisation interactive de l'évolution d'un contenu, il peut être intéressant d'offrir plus de liberté sur quelles données doivent être conservées et quelles données doivent être supprimées.
+
+\paragraph{} Pour répondre à ces deux problématiques nous effectuons deux observations~:
+\begin{itemize}
+    \item Toutes les modifications ne sont pas forcément nécessaires à la détection d'équivoques.
+    \item L'occupation mémoire de la copie du contenu partagé est généralement plus fiable que celle du journal.
+\end{itemize}
+
+Nous proposons ainsi deux mécanismes~:
+
+\paragraph{Troncature du journal.} Au lieu de préserver l'intégralité du journal, seules les modifications nécessaires à la détection d'équivoques pourraient être conservées.
+Pour supprimer une modification du journal nous devons nous assurer qu'elle n'est pas nécessaire à la détection des équivoques futures.
+Pour ce faire, nous utilisons des journaux authentifiés dans lesquels chaque modification déclare des dépendances sur d'autres modifications.
+Les dépendances sont déclarées de telle manière à résister aux équivoques.
+En d'autres termes, si un pair mal-intentionné effectue une équivoque en générant deux modifications $x$ et $y$ et qu'une modification $z$ déclare dépendre de $x$, alors nous considérons qu'il n'est pas possible de prétendre que $z$ dépend de $y$.
+Un journal forme ainsi un graphe dirigé sans cycle.
+Nous contraignons l'acceptation des modifications dans un journal de telle manière à ce que les modifications acceptées ultérieurement partagent un ensemble croissant de dépendances.
+Nous déterminons cet ensemble à l'aide du concept de \emph{stabilité}.
+Au sein d'un journal, une modification devient stable une fois que toutes les modification ajoutées ultérieurement dans le journal dépendent de cette modification.
+Nous proposons un protocole qui permet de supprimer un sous-ensemble des modifications stables.
+Lorsque des modifications sont supprimées du journal nous disons que le journal est \emph{tronqué}.
+La \autoref{fig:log-example} donne un exemple d'un journal et d'une version tronquée de ce journal.
+
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}
+    \newcommand*\hsep{2}
+    \path node (a1) {$a_1$}
+        to +(\hsep,0) node (a2) {$a_2$}
+        to +(2*\hsep,0) node (b1) {$b_1$}
+        to +(3*\hsep,0) node (a3) {$a_3$}
+        to +(4*\hsep,0) node (b2) {$b_2$}
+        to +(5*\hsep,0) node (a4) {$a_4$}
+    ;
+    % Dependency
+    \foreach \src/\dest in {a1/a2,b1/a3,a3/b2,b2/a4}
+        \draw[pre] (\src) to node[above,sloped](\src\dest){\footnotesize dep} (\dest);
+    \draw[vis,bend right=30] (a1) to node[below,sloped]{\footnotesize dep} (b1);
+    \draw[vis,bend left=30] (a2) to node[above,sloped]{\footnotesize dep} (a3);
+    % pruned
+    \node[draw,dashed,fit=(b2) (b2a4) (a4)]{};
+\end{tikzpicture}
+\caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.
+L'arrangement horizontal des opérations traduit leur ordre d'ajout dans le journal.
+Ainsi les opérations ont été ajoutées dans l'ordre suivant~: $a_1$, $a_2$, $b_1$, $a_3$, $b_2$, $a_4$.
+Un arc dirigé entre deux modifications se traduit par  \enquote{est une dépendance de}.
+La partie entourée correspond à une version tronquée de ce journal.
+}\label{fig:log-example}
+\end{figure}
+
+\paragraph{Transmission d'un état authentifiable.} Au lieu de récupérer un journal dans son intégralité, un pair qui rejoint une collaboration pourrait récupérer l'état actuel d'une copie du contenu partagé.
+Un pair mal-intentionné peut construire un état de toutes pièces avant de le transmettre à un pair qui rejoint la collaboration.
+Le nouveau pair n'a aucun moyen de décider si l'état qu'il reçoit est authentique ou falsifié.
+Pour s'assurer de l'authenticité d'un état nous proposons un protocole qui permet d'authentifier un état à partir d'un journal tronqué.
+Lorsqu'un pair rejoint la collaboration il récupère un état ainsi que le journal tronqué qui lui est associé.
 La \autoref{fig:invite-by-snaplog} illustre cette approche.
+
+\paragraph{} Nous développons d'abord le concept de stabilité dans la \autoref{sec:stability}.
+Dans la \autoref{sec:full-log-protocol}, nous présentons un protocole qui protége la convergence des copies à l'aide de journaux intégrales.
+Nous nous basons sur ce protocole pour présenter dans la \autoref{sec:pruned-log-protocol} un protocole qui permet de tronquer un journal et d'authentifier un état à partir d'un journal tronqué.
 
 \begin{figure}[htb]
 \centering
@@ -218,71 +217,146 @@ La \autoref{fig:invite-by-snaplog} illustre cette approche.
     \end{tikzpicture}
     \caption{}\label{fig:invite-by-snaplog-2}
 \end{subfigure}
-\caption[Transmission d'un journal tronqué et d'un instantané à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
+\caption[Transmission d'un journal tronqué et d'un état à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
 Ils utilisent un journal authentifié pour assurer la convergence des copies des pairs honnêtes.
 Carol veut rejoindre la collaboration.
-\subref{fig:invite-by-log-1} Alice envoie un instantané de l'état actuel du dessin, ainsi qu'une version tronquée de son journal authentifié.
+\subref{fig:invite-by-log-1} Alice envoie l'état actuel de sa copie du dessin, ainsi qu'une version tronquée de son journal authentifié.
 \subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal tronqué.
-Elle vérifie également l'authenticité de l'instantané à partir du journal tronqué.}\label{fig:invite-by-snaplog}
+Elle vérifie également l'authenticité de l'état reçu à partir du journal tronqué.}\label{fig:invite-by-snaplog}
 \end{figure}
 
-Un journal ne peut pas être tronqué de manière arbitraire.
-Un pair doit conserver suffisamment d'opérations pour maintenir la cohérence de son journal.
-Avant d'ajouter une opération dans son journal, il vérifie que l'ajout de cette dernière ne compromet pas la cohérence de son journal.
-Au cours de la collaboration, un sous-ensemble croissant d'opérations du journal ne devraient plus être nécessaires à la vérification de la cohérence du journal.
-Ces opérations peuvent alors être supprimées du journal.
 
-Nous considérons des journaux dans lesquels les opérations ont des relations de dépendance.
-Un journal forme ainsi un graphe dirigé sans cycle.
-La \autoref{fig:log-example} donne un exemple d'un journal.
-Pour former ce sous-ensemble croissant d'opérations supprimables, les opérations futures devraient partager un préfixe commun de dépendances qui croît de manière monotone au cours de la collaboration.
-Par exemple, dans la \autoref{fig:log-example}, si nous savons que toutes les opérations futures dépendent sur l'opération $a_4$ et que $a_4$ est suffisante à la vérification future de la cohérence du journal, alors les opérations qui précédent $a_4$ peuvent être supprimées du journal.
 
-\begin{figure}[htb]
-\centering
-\begin{tikzpicture}
-    \newcommand*\hsep{1.5}
-    \newcommand*\vsep{-1.2}
-    % Peers
-    \path node (A) {$p_A$}
-        to +(0,\vsep) node (B) {$p_B$}
-    ;
-    % Events
-    \path (A)
-        to +(\hsep,0) node (a1) {$a_1$}
-        to +(2*\hsep,0) node (a2) {$a_2$}
-        to +(4*\hsep,0) node (a3) {$a_3$}
-        to +(5*\hsep,0) node (a4) {$a_4$}
-    ;
-    \path (B)
-        to +(3*\hsep,0) node (b1) {$b_1$}
-        to +(6*\hsep,0) node (b2) {$\top_{\trm{vis}}$}
-    ;
-    % Timelines
-    \path (6.5*\hsep,0) coordinate (aend)
-        to +(0,\vsep) coordinate (bend)
-    ;
-    \foreach \src/\dest in {A/a1,B/b1,b1/b2,a4/aend,b2/bend}
-        \draw[timeline] (\src) to (\dest);
-    % Visibility
-    \foreach \src/\dest in {a1/a2,a2/a3,a3/a4,a2/b1,b1/a4,a4/b2}
-        \draw[pre] (\src) to (\dest);
-\end{tikzpicture}
-\caption[Représentation d'un journal]{Exemple d'un journal.
-L'arrangement horizontal des opérations traduit leur ordre d'ajout dans le journal.
-Ainsi les opérations ont été ajoutées dans l'ordre suivant~: $a_1$, $a_2$, $b_1$, $a_3$, $a_4$.
-L'opération $\top_{\trm{vis}}$ est un peu particulière.
-Son auteur $p_B$ correspond au possesseur du journal.
-Les arcs dirigés mettent en évidence les dépendances immédiates des opérations.
-Par exemple, $a_2$ est une dépendance immédiate de $a_3$ et $b_1$.
-}\label{fig:log-example}
-\end{figure}
+% Une manière de réduire ce coût est de conserver seulement les opérations les plus récentes.
+% Ces opérations forment un suffixe du journal original.
+% Nous disons que le journal est tronqué.
+% La troncature du journal permet à l'adversaire de la collaboration de mener de nouvelles attaques en vue de faire diverger les copies des pairs honnêtes.
+% La suppression de modification du journal peut en effet compromettre la détection d'équivoques.
+% Pouvons-nous concevoir un protocole qui permet la troncature du journal sans compromettre la convergence des copies~?
 
-Lorsqu'une opération est une dépendance de toutes opérations futures, nous disons que cette opération est stable.
-Un journal est stabilisable lorsqu'il a un préfixe d'opérations stable qui peut croître au cours de la collaboration.
-Pour ce faire, nous devons contraindre l'acceptation des opérations au sein d'un journal de telle manière à ce qu'une opération soit stable une fois qu'un certain nombre de conditions sont rencontrées.
+% Une observation importante est que toutes les modifications ne sont pas nécessaires à la détection des équivoques et au maintien de la cohérence du journal.
+% En posant des contraintes sur l'acceptation des modifications dans le journal nous pouvons construire un préfixe croissant de modifications du journal qui ne sont plus nécessaires au maintien de la cohérence du journal et à la détection d'équivoques.
 
-Dans la \autoref{sec:stability} nous développons le concept de stabilité et nous recherchons un modèle de cohérence stabilisable en présence de pairs mal-intentionnés.
+% La suppression de modifications du journal se base sur le concept de stabilité que nous développons dans la \autoref{sec:stability}.
+% La \autoref{sec:protocole-overview} donne un aperçu du protocole à journaux tronqué que nous présentons dans la \autoref{sec:full-log-protocol} et la \autoref{sec:pruned-log-protocol}.
+
+%Un pair honnête ne peut pas tronquer son journal de manière arbitraire sans menacer la cohérence future de son journal ou la convergence de son journal avec journaux des autres pairs honnêtes.
+%La cohérence d'un journal est conservée en vérifiant systématiquement les opérations qui sont reçues.
+
+%Un journal ne peut être arbitrairement tronqué sans menacer la cohérence future du journal ou sa convergence avec les autres journaux.
+%Une opération est ajoutée dans un journal cohérent, si elle ne rend pas ce dernier incohérent.
+%Cette vérification requiert la présence d'un certain nombre d'opérations qui dépendent du modèle de cohérence considéré.
+%Par exemple, pour vérifier une opération dans un journal qui respecte le modèle de cohérence PRAM (ou FIFO), seule l'opération précédente du même auteur est requise.
+%Si des opérations nécessaires à la vérification d'une opération sont manquantes, l'opération ne peut être vérifiée.
+%L'opération doit donc être rejetée ou intégrée dans le journal avec le risque de le rendre incohérent.
+%Pour conserver un journal cohérent, le rejet semble donc le choix le plus judicieux.
+%Cependant, elle peut conduire à une divergence permanente des journaux.
+%Certains journaux peuvent avoir vérifié et intégré des opérations, e d'autres peuvent les avoir rejetées parce qu'elles ne peuvent pas être vérifiées.
+%
+%Afin de maintenir un journal cohérent et convergent, les pairs doivent conserver les opérations nécessaires à la vérification de toutes nouvelles opérations.
+%Pour supprimer des opérations nous devons donc rencontrer deux conditions~: les opérations nécessaires à la vérification d'une opération devraient représenter un sous-ensemble du journal, et la collaboration devrait progresser de telle manière qu'un préfixe croissant d'opérations n'est plus nécessaire pour vérifier toutes nouvelles opérations.
+%Ces deux contraintes peuvent être atteintes en utilisant un modèle de cohérence.
+%Un modèle de cohérence restreint la manière dont peuvent être mises en relation deux opérations.
+%La concurrence entre opérations joue un rôle important dans la détermination des opérations qui peuvent être ôtées du journal.
+%Nous disons qu'une opération est stable une fois qu'il n'est plus possible d'intégrer dans le journal une opération qui lui est concurrente.
+%
+%Dans un premier temps nous explorons la stabilisation de journaux de manière itératif. dans un second temps, nous utilisant la notion de stabilité pour définir qu'elle partie d'un journal peut être tronquée sans menacer sa cohérence future ou sa convergence avec les autres journaux.
+
+
+% \section{Aperçu}\label{sec:protocole-overview}
+
+% La convergence à terme des copies est une propriété essentielle des infrastructures pair-à-pair de collaboration.
+% Des pairs mal-intentionnés peuvent trouver un intérêt à compromettre la convergence des copies des pairs honnêtes.
+% Pour empêcher de tels scénarios, les pairs honnêtes peuvent maintenir un journal authentifié et répliqué.
+% Ils enregistrent l'ensemble de leurs modifications dans leur journal respectif.
+% Les pairs synchronisent leurs journaux afin de récupérer et intégrer sur leur copie les modifications de chacun.
+
+% Chaque pair doit conserver l'intégralité de son journal pour \begin{inlinelist}
+%     \item vérifier la cohérence du journal lors de l'ajout d'une nouvelle opération
+%     \item permettre à de nouveaux pairs de rejoindre la collaboration
+% \end{inlinelist}.
+% Les nouveaux pairs jouent les opérations enregistrées dans le journal pour obtenir le document partagé.
+% La \autoref{fig:invite-by-log} montre que les nouveaux pairs utilisent le journal pour obtenir le document partagé.
+% Pour ce faire, ils intègrent les modifications enregistrées dans le journal.
+% La préservation de l'intégralité du journal engendre plusieurs problèmes~:
+
+% \paragraph{Passage à l'échelle.} Au fur et à mesure de la progression de la collaboration les journaux contiennent de plus en plus d'entrées.
+% La préservation des journaux et leur transmission aux pairs qui rejoignent la collaboration sont donc de plus en plus coûteuses.
+
+% \paragraph{Vie Privée.} La préservation du journal dans son intégralité expose l'historique de la collaboration depuis son commencement.
+% Bien que certaines applications requièrent cette historique pour fournir des fonctionnalités, telle que la visualisation interactive de l'évolution d'un document, il peut être intéressant d'offrir plus de liberté sur quelles données doivent être conservées et quelles données doivent être supprimées.
+
+% \bigskip
+
+% Un journal enregistre l'ensemble des modifications qui ont été intégrées à un contenu partagé.
+% Un contenu est souvent plus petit que le journal qui lui est attaché.
+% Certaines applications prennent avantage de cette observation.
+% Au lieu de transmettre un journal à un nouveau pair, elles transmettent un instantané du document.
+
+% Notre contexte ne nous permet pas d'adopter cette approche.
+% En effet, un pair mal-intentionné peut facilement falsifier un instantané du document avant de la transmettre à un nouveau pair.
+% Ce dernier n'a aucun moyen de vérifier l'authenticité de l'instantané.
+
+% Nous proposons une approche qui permet de tronquer le journal authentifié et d'authentifier un instantané à partir du journal tronqué qui lui est associé.
+% La \autoref{fig:invite-by-snaplog} illustre cette approche.
+
+% Un journal ne peut pas être tronqué de manière arbitraire.
+% Un pair doit conserver suffisamment d'opérations pour maintenir la cohérence de son journal.
+% Avant d'ajouter une opération dans son journal, il vérifie que l'ajout de cette dernière ne compromet pas la cohérence de son journal.
+% Au cours de la collaboration, un sous-ensemble croissant d'opérations du journal ne devraient plus être nécessaires à la vérification de la cohérence du journal.
+% Ces opérations peuvent alors être supprimées du journal.
+
+% Nous considérons des journaux dans lesquels les opérations ont des relations de dépendance.
+% Un journal forme ainsi un graphe dirigé sans cycle.
+% La \autoref{fig:log-example} donne un exemple d'un journal.
+% Pour former ce sous-ensemble croissant d'opérations supprimables, les opérations futures devraient partager un préfixe commun de dépendances qui croît de manière monotone au cours de la collaboration.
+% Par exemple, dans la \autoref{fig:log-example}, si nous savons que toutes les opérations futures dépendent sur l'opération $a_4$ et que $a_4$ est suffisante à la vérification future de la cohérence du journal, alors les opérations qui précédent $a_4$ peuvent être supprimées du journal.
+
+% \begin{figure}[hbt]
+% \centering
+% \begin{tikzpicture}
+%     \newcommand*\hsep{1.5}
+%     \newcommand*\vsep{-1.2}
+%     % Peers
+%     \path node (A) {$p_A$}
+%         to +(0,\vsep) node (B) {$p_B$}
+%     ;
+%     % Events
+%     \path (A)
+%         to +(\hsep,0) node (a1) {$a_1$}
+%         to +(2*\hsep,0) node (a2) {$a_2$}
+%         to +(4*\hsep,0) node (a3) {$a_3$}
+%         to +(5*\hsep,0) node (a4) {$a_4$}
+%     ;
+%     \path (B)
+%         to +(3*\hsep,0) node (b1) {$b_1$}
+%         to +(6*\hsep,0) node (b2) {$\top_{\trm{vis}}$}
+%     ;
+%     % Timelines
+%     \path (6.5*\hsep,0) coordinate (aend)
+%         to +(0,\vsep) coordinate (bend)
+%     ;
+%     \foreach \src/\dest in {A/a1,B/b1,b1/b2,a4/aend,b2/bend}
+%         \draw[timeline] (\src) to (\dest);
+%     % Visibility
+%     \foreach \src/\dest in {a1/a2,a2/a3,a3/a4,a2/b1,b1/a4,a4/b2}
+%         \draw[pre] (\src) to (\dest);
+% \end{tikzpicture}
+% \caption[Représentation d'un journal]{Exemple d'un journal.
+% L'arrangement horizontal des opérations traduit leur ordre d'ajout dans le journal.
+% Ainsi les opérations ont été ajoutées dans l'ordre suivant~: $a_1$, $a_2$, $b_1$, $a_3$, $a_4$.
+% L'opération $\top_{\trm{vis}}$ est un peu particulière.
+% Son auteur $p_B$ correspond au possesseur du journal.
+% Les arcs dirigés mettent en évidence les dépendances immédiates des opérations.
+% Par exemple, $a_2$ est une dépendance immédiate de $a_3$ et $b_1$.
+% }\label{fig:log-example}
+% \end{figure}
+
+% Lorsqu'une opération est une dépendance de toutes opérations futures, nous disons que cette opération est stable.
+% Un journal est stabilisable lorsqu'il a un préfixe d'opérations stable qui peut croître au cours de la collaboration.
+% Pour ce faire, nous devons contraindre l'acceptation des opérations au sein d'un journal de telle manière à ce qu'une opération soit stable une fois qu'un certain nombre de conditions sont rencontrées.
+
+% Dans la \autoref{sec:stability} nous développons le concept de stabilité et nous recherchons un modèle de cohérence stabilisable en présence de pairs mal-intentionnés.
 
 %\section{Journaux}
 %
@@ -489,7 +563,7 @@ Une histoire $H'$ est une extension d'une histoire $H$, et nous écrivons $H' \s
     y \in H \land x \rb_{H'} y \implies x \in H
     \end{equation*}
     
-    \item Les relations \emph{retourne-avant} sont conservées.
+    \item Les relations \emph{retourne-avant} sont inchangées.
     \begin{equation*}
     x, y \in H \land x \rb_{H'} y \iff x \rb_{H} y
     \end{equation*}
@@ -508,7 +582,7 @@ Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'
     H' \sqsupset H
     \end{equation*}
 
-    \item Les relations de visibilité sont conservées.
+    \item Les relations de visibilité sont inchangées.
 
     \begin{equation*}
     x, y \in A \land x \vis_{A'} y \iff x \vis_{A} y
@@ -1930,7 +2004,8 @@ Autrement, une opération $x$ est stable si et seulement si pour chaque énumér
             label={$\trm{invite}(p_M)$}
         ] (a2) {$a_2$}
         to +(3*\hsep,0) node[stable,
-                label={below:\scriptsize dvfjcs}
+                label={below:\scriptsize dvfjcs},
+                label={$\trm{invite}(p_B)$}
             ] (a3) {$a_3$}
         to +(5*\hsep,0) node[
             label={$\trm{invite}(p_G)$}
@@ -1945,7 +2020,7 @@ Autrement, une opération $x$ est stable si et seulement si pour chaque énumér
         to +(5*\hsep,0) node (b1) {$b_1$}
     ;
     % Timelines
-    \path (6.5*\hsep,0) coordinate (aend)
+    \path (6*\hsep,0) coordinate (aend)
         to +(0,\vsep) coordinate (mend)
         to +(0,2*\vsep) coordinate (bend)
         to +(0,3*\vsep) coordinate (gend)
