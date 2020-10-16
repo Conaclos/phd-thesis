@@ -4,7 +4,7 @@
 \minitoc{}
 \clearpage
 
-Dans le \autoref{ch:problematic} nous avons vu que la réplication optimiste d'un contenu et la modification concurrente de ce contenu conduit à la divergence des copies du contenu.
+Dans le \autoref{ch:problematic} nous avons vu que la réplication optimiste d'un contenu et la modification concurrente de ce contenu conduisent à la divergence des copies du contenu.
 Les protocoles de réplication sont responsables de la convergence des copies.
 La convergence des copies des pairs est une propriété essentielle d'un système collaboratif.
 Si les copies des pairs ne sont pas capables de converger, les pairs ne disposent pas du même contexte pour collaborer.
@@ -22,10 +22,10 @@ Ils peuvent en particulier produire des \emph{équivoques}.
 Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identiques par le protocole de réplication.
 Les copies des pairs honnêtes divergent alors de manière permanente sans qu'ils s'en rendent compte.
 
-Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs répliquent un \emph{journal authentifié}.
+Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs peuvent répliquer un \emph{journal authentifié}.
 Chaque pair possède un journal dans lequel il enregistre l'ensemble des modifications qu'il intègre à sa copie du contenu partagé.
 Une modification est accompagnée d'une signature cryptographique qui permet de s'assurer de son authenticité.
-Un pair mal-intentionné ne peut donc pas prétendre qu'une modification a été effectuée par un pair honnête.
+Un pair mal-intentionné ne peut donc pas prétendre qu'une de ses modifications a été effectuée par un pair honnête.
 Un journal authentifié contient uniquement des modifications authentiques.
 
 \begin{figure}[hbt]
@@ -90,7 +90,7 @@ Carol veut rejoindre la collaboration.
 \end{figure}
 
 Les pairs doivent préserver l'intégralité de leur journal pour \begin{inlinelist}
-\item détecter les équivoques
+\item détecter les équivoques et
 \item permettre à un pair de rejoindre la collaboration
 \end{inlinelist}.
 Un pair qui rejoint la collaboration a en effet besoin du journal pour obtenir l'état actuel du contenu partagé.
@@ -98,8 +98,8 @@ Il obtient cet état en intégrant sur sa copie vierge du contenu partagé chaqu
 La \autoref{fig:invite-by-log} illustre la transmission d'un journal authentifié à un pair qui rejoint la collaboration.
 La préservation de l'intégralité du journal engendre plusieurs problèmes~:
 
-\paragraph{Passage à l'échelle.} Au fur et à mesure de la progression de la collaboration les journaux contiennent de plus en plus d'entrées.
-La préservation des journaux et leur transmission aux pairs qui rejoignent la collaboration sont donc de plus en plus coûteuses.
+\paragraph{Passage à l'échelle.} Au fur et à mesure de la progression de la collaboration, les journaux contiennent de plus en plus de modifications.
+La préservation de l'intégralité d'ub journal et leur transmission aux pairs qui rejoignent la collaboration sont donc de plus en plus coûteuses.
 
 \paragraph{Vie Privée.} La préservation du journal dans son intégralité expose l'historique de la collaboration depuis son commencement.
 Bien que certaines applications requièrent cette historique pour fournir des fonctionnalités, telle que la visualisation interactive de l'évolution d'un contenu, il peut être intéressant d'offrir plus de liberté sur quelles données doivent être conservées et quelles données doivent être supprimées.
@@ -117,10 +117,10 @@ Pour supprimer une modification du journal nous devons nous assurer qu'elle n'es
 Pour ce faire, nous utilisons des journaux authentifiés dans lesquels chaque modification déclare des dépendances sur d'autres modifications.
 Les dépendances sont déclarées de telle manière à résister aux équivoques.
 En d'autres termes, si un pair mal-intentionné effectue une équivoque en générant deux modifications $x$ et $y$ et qu'une modification $z$ déclare dépendre de $x$, alors nous considérons qu'il n'est pas possible de prétendre que $z$ dépend de $y$.
-Un journal forme ainsi un graphe dirigé sans cycle.
-Nous contraignons l'acceptation des modifications dans un journal de telle manière à ce que les modifications acceptées ultérieurement partagent un ensemble croissant de dépendances.
+Les modifications et leurs dépendances forment ainsi un graphe dirigé sans cycle.
+Nous contraignons l'acceptation de modifications dans un journal de telle manière à ce que les modifications acceptées ultérieurement partagent un ensemble croissant de dépendances.
 Nous déterminons cet ensemble à l'aide du concept de \emph{stabilité}.
-Au sein d'un journal, une modification devient stable une fois que toutes les modification ajoutées ultérieurement dans le journal dépendent de cette modification.
+Au sein d'un journal, une modification devient \emph{stable} une fois que toutes les modifications acceptées ultérieurement dans le journal dépendent de cette modification.
 Nous proposons un protocole qui permet de supprimer un sous-ensemble des modifications stables.
 Lorsque des modifications sont supprimées du journal nous disons que le journal est \emph{tronqué}.
 La \autoref{fig:log-example} donne un exemple d'un journal et d'une version tronquée de ce journal.
@@ -537,43 +537,27 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 \subsection{Généralités}\label{subsec:general-stability}
 
 Dans la littérature~\autocite{baquero_2018_pure-op-crdt, shapiro_2011_crdt,birman_1991_causalmulticast}, la stabilité désigne souvent un prédicat qui une fois vrai le reste pour toujours.
-Dans ce manuscrit, nous disons qu'une opération est stable une fois qu'il n'est plus possible d'accepter une opération qui lui est concurrente.
-Dans un journal, une opération stable est une opération qui est une dépendance de toute opération qui est ultérieurement acceptée dans le journal.
+Dans ce manuscrit, nous disons qu'une modification est stable au sein d'un journal lorsqu'elle devient une dépendance de toutes les modifications qui sont ultérieurement acceptées dans le journal.
+Pour permettre la stabilisation de modifications, les pairs devraient accepter les modifications dans leur journal sous certaines conditions.
+Par exemple, si une modification est acceptée au sein d'un journal seulement si elle dépend de toutes les modifications déjà présentes dans le journal, alors toutes les modifications enregistrées dans le journal sont stables.
+Notre objectif est de trouver des contraintes d'acceptation qui permettent à terme la stabilisation de toute modification et qui sont adaptées à la réplication optimiste et à la présence de pairs mal-intentionnés.
 
-Puisque l'acceptation d'une opération est conditionnée par le modèle de cohérence utilisé, la stabilité l'est également.
-Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
-Au lieu de définir la stabilité d'une opération sur un journal, nous définissons la stabilité sur une exécution abstraite.
-Une exécution abstraite est suffisamment général pour représenter une exécution ou un journal.
-Lorsqu'une exécution abstraite représente un journal, nous parlons d'exécution abstraite associé au journal.
-Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir l'exécution abstraite associée d'un journal.
-De ce fait, nos contributions peuvent être utilisées dans des contextes variés, au-delà du périmètre dans lequel nous les employons.
+Au lieu de circonscrire nos contributions à des journaux, nous décrivons ces contraintes et le concept de stabilité dans un modèle plus général.
+Pour éviter l'introduction d'un nouveau modèle, nous réutilisons le concept d'exécution abstraite définit dans le \autoref{ch:background}.
+Une exécution abstraite est suffisamment générale pour représenter une exécution ou un journal.
+Lorsqu'une exécution abstraite représente un journal, nous parlons d'exécution abstraite associée à un journal.
+Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir à partir d'un journal son exécution abstraite associée.
 Pour simplifier la compréhension nous utilisons dans les exemples des exécutions abstraites qui ne sont pas forcément associées à des journaux.
 
-\begin{definition}[Extension d'une histoire]\label{def:hist-ext}
-Une histoire $H'$ est une extension d'une histoire $H$, et nous écrivons $H' \sqsupset H$, si et seulement si~:
-\begin{itemize}
-    \item Les opérations de $H$ correspondent à un sous-ensemble fini des opérations de $H'$. $H$ est donc une histoire finie.
+Les contraintes d'acceptation d'une modification au sein d'un journal se traduisent par des propriétés de cohérence sur les opérations au sein d'une exécution abstraite.
+Nous recherchons un modèle de cohérence qui puisse être respecté par un protocole de réplication optimiste qui tolère la présence de pairs mal-intentionnés et permet la stabilisation d'opérations.
+Le modèle de cohérence doit donc être compatible avec le modèle de cohérence à terme forte.
+Il doit permettre aux pairs honnêtes de toujours exécuter une opération.
 
-    \begin{equation*}
-    H \subset H' \land H \textit{est finie}
-    \end{equation*}
+Pour définir la stabilité au sein d'une exécution abstraite, nous introduisons dans la \autoref{def:abstract-exec-extension} le concept d'extension d'une exécution abstraite.
+Cette définition se repose sur le concept d'extension d'une histoire introduit dans la \autoref{subsec:consistency-spec-liveness-safety} du \autoref{ch:background}.
 
-    \item Si l'opération $y$ est incluse dans $H$, alors toutes les opérations de $H'$ qui retournent-avant $y$ sont également incluses dans $H$.
-    \begin{equation*}
-    y \in H \land x \rb_{H'} y \implies x \in H
-    \end{equation*}
-    
-    \item Les relations \emph{retourne-avant} sont inchangées.
-    \begin{equation*}
-    x, y \in H \land x \rb_{H'} y \iff x \rb_{H} y
-    \end{equation*}
-    
-    \item Les caractéristiques des opérations (pair, appel, valeur de retour) sont conservées.
-\end{itemize}
-\end{definition}
-
-
-\begin{definition}[Extension d'une exécution abstraite]\label{def:wf-abstract-exec-prefix}
+\begin{definition}[Extension d'une exécution abstraite]\label{def:abstract-exec-extension}
 Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'une exécution abstraite (bien-formée ou mal-formée) $A \defeq \tuple*{H,\trm{vis}}$, et nous écrivons $A' \sqsupset A$, si et seulement si~:
 \begin{itemize}
     \item L'histoire $H'$ de $A'$ est une extension de l'histoire $H$ de $A$~:
@@ -590,44 +574,10 @@ Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'
 \end{itemize}
 \end{definition}
 
-
-% \begin{definition}[Extension cohérente]\label{def:consistent-extension}
-% Si une extension $A'$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ respecte le modèle de cohérence $C$, alors par souci de concision nous écrivons $A' \sqsupset_C A$.
-% $A$ ne respecte pas nécessairement le modèle de cohérence $C$.
-% \begin{equation*}
-% A' \sqsupset_C A \defiff A' \sqsupset A \land A' \in C
-% \end{equation*}
-% \end{definition}
-
-\begin{proposition}\label{th:future-vis}
-Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
-Une opération incluse dans $A'$ et absente de $A$ ne peut pas être visible à une opération de $A$.
-\begin{equation*}
-    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies y \not\vis x
-\end{equation*}
-\end{proposition}
-
-\begin{proof}
-Procédons par déduction.
-Soit $x$ une opération de $A$ et $y$ une opération de $A'$ absente de $A$.
-$A'$ est une extension de $A$.
-Par conséquent, $y$ ne retourne pas avant $x$.
-$A$ et $A'$ respectent le modèle de cohérence \ac{VTNS}.
-D'après~\ref{itm:vtns2}, si une opération ne retourne pas avant une seconde opération, alors cette dernière ne peut pas être visible à la première.
-$y$ ne peut donc pas être visible à $x$.
-\end{proof}
-
-\begin{corollary}\label{th:future-concur}
-Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
-Soit une opération $x$ de $A$ et une opération $y$ de $A'$ absente de $A$.
-Si $x$ n'est pas visible à $y$ alors $y$ est concurrent à $x$.
-\begin{equation*}
-    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies x \not\vis y \implies x \concur y
-\end{equation*}
-\end{corollary}
-
 Dans une exécution abstraite, une opération est stable une fois qu'elle est visible à toute opération future.
-Nous définissons la stabilité à l'aide du concept d'extension introduit dans la \autoref{subsec:consistency-spec-liveness-safety} du \autoref{ch:background}.
+Puisque l’acceptation d’une opération est conditionnée par le modèle de cohérence, la stabilité l'est également.
+Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
+Le \autoref{th:stability-hierarchy} met en perspective le concept de stabilité et de force d'un modèle de cohérence.
 
 \begin{definition}[Opération stable]\label{def:stable}
 Soit une opération $x$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ qui respecte un modèle de cohérence $C$.
@@ -637,8 +587,6 @@ $x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seul
 \end{equation*}
 \end{definition}
 
-%Dans le \autoref{ch:background} nous avons vu que nous pouvions organiser les modèles de cohérence en hiérarchie.
-%Un modèle de cohérence $C$ est plus fort qu'un modèle de cohérence $C'$ si il existe au moins une exécution abstraite qui respecte $C'$ et ne respecte pas $C$.
 
 \begin{theorem}\label{th:stability-hierarchy}
 Soit deux modèles de cohérence $C$ et $C'$ tel que $C$ est plus fort que $C'$.
@@ -788,6 +736,44 @@ Il existe en effet une extension causale de \subref{fig:wf-example-1}, l'exécut
 }\label{fig:cs-example}
 \end{figure}
 
+
+
+
+
+% \begin{definition}[Extension cohérente]\label{def:consistent-extension}
+% Si une extension $A'$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ respecte le modèle de cohérence $C$, alors par souci de concision nous écrivons $A' \sqsupset_C A$.
+% $A$ ne respecte pas nécessairement le modèle de cohérence $C$.
+% \begin{equation*}
+% A' \sqsupset_C A \defiff A' \sqsupset A \land A' \in C
+% \end{equation*}
+% \end{definition}
+
+\begin{proposition}\label{th:future-vis}
+Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
+Une opération incluse dans $A'$ et absente de $A$ ne peut pas être visible à une opération de $A$.
+\begin{equation*}
+    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies y \not\vis x
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Procédons par déduction.
+Soit $x$ une opération de $A$ et $y$ une opération de $A'$ absente de $A$.
+$A'$ est une extension de $A$.
+Par conséquent, $y$ ne retourne pas avant $x$.
+$A$ et $A'$ respectent le modèle de cohérence \ac{VTNS}.
+D'après~\ref{itm:vtns2}, si une opération ne retourne pas avant une seconde opération, alors cette dernière ne peut pas être visible à la première.
+$y$ ne peut donc pas être visible à $x$.
+\end{proof}
+
+\begin{corollary}\label{th:future-concur}
+Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
+Soit une opération $x$ de $A$ et une opération $y$ de $A'$ absente de $A$.
+Si $x$ n'est pas visible à $y$ alors $y$ est concurrent à $x$.
+\begin{equation*}
+    A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies x \not\vis y \implies x \concur y
+\end{equation*}
+\end{corollary}
 
 \begin{theorem}\label{th:cs}
 Dans une exécution abstraite qui respecte le modèle de cohérence causale, une opération $x$ est causalement stable si et seulement si elle est observée par chaque pair.

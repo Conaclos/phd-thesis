@@ -732,30 +732,75 @@ Une propriété de cohérence peut être la conjonction d'une propriété de sû
 Dans ce chapitre nous avons déjà rencontré plusieurs propriétés de sûreté telles que l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
 En revanche, nous n'avons pas rencontré de propriétés de vivacité.
 Dans le \autoref{ch:problematic}, l'intégration à terme des modifications est une propriété de vivacité.
-Elle pourrait être traduite par la propriété de cohérence suivante~: une opération de modification est à terme visible à toute opération future d'interrogation.
-Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à toute opération future.
-En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas visible.
-Nous pouvons ainsi définir la propriété d'intégration à terme que nous renommons volontiers en propriété de visibilité à terme~:
+Elle stipule qu'une modification est à terme intégrée par tous les pairs.
+
+Parce que les propriétés de vivacité décrivent quelque chose qui devrait survenir, elles nous invitent à penser l'exécution d'un protocole comme une succession infinie d'événements qui se déroule dans le temps.
+Une histoire peut décrit les opérations exécutées sur l'intégralité ou une partie d'une exécution.
+Elle décrit une partie d'une exécution lorsqu'elle enregistre l'ensembles des opérations exécutées depuis le commencement de l'exécution jusqu'à un temps donnée.
+Une histoire peut évoluer vers plusieurs histoires hypothétiques dans lesquelles de nouvelles opérations ont été exécutées.
+Par abus de langage nous parlons d'\emph{opérations futures}.
+Ces histoires hypothétiques sont des \emph{extensions de l'histoire}.
+La \autoref{def:hist-ext} définit formellement l'extension d'une histoire.
+
+\begin{definition}[Extension d'une histoire]\label{def:hist-ext}
+Une histoire $H'$ est une extension d'une histoire $H$, et nous écrivons $H' \sqsupset H$, si et seulement si~:
+\begin{itemize}
+    \item Les opérations de $H$ correspondent à un sous-ensemble fini des opérations de $H'$. $H$ est donc une histoire finie.
+
+    \begin{equation*}
+    H \subset H' \land H \textit{est finie}
+    \end{equation*}
+
+    \item Si l'opération $y$ est incluse dans $H$, alors toutes les opérations de $H'$ qui retournent-avant $y$ sont également incluses dans $H$.
+    \begin{equation*}
+    y \in H \land x \rb_{H'} y \implies x \in H
+    \end{equation*}
+    
+    \item Les relations \emph{retourne-avant} sont inchangées.
+    \begin{equation*}
+    x, y \in H \land x \rb_{H'} y \iff x \rb_{H} y
+    \end{equation*}
+    
+    \item Les caractéristiques des opérations (pair, appel, valeur de retour) sont conservées.
+\end{itemize}
+\end{definition}
+
+Une propriété de vivacité peut alors être exprimée comme un prédicat qui doit être vérifié dans l'histoire considérée ou dans une ou plusieurs de ses extensions.
+Une propriété de vivacité ne peut pas être vérifiée indépendamment des autres propriétés de cohérence considérées.
+Seules les extensions de l'histoire qui respectent les autres propriétés de cohérence doivent être considérées.
+
+L'intégration à terme des modifications pourrait ainsi être traduite par~: une opération de modification est à terme visible à une infinité d'opérations d'interrogation.
+Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à une infinité d'opérations.
+En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas visible~:
 
 \begin{equation}
     %\forall x \in A\ \exists A_1 \sqsupseteq A\ \forall A_2 \sqsupset A_1, y \in A_2 \sminus A_1 \qsep x \vis y
     \forall x \in A \qsep \set*{y \in A \given x \not\vis y} \textit{est fini}
 \end{equation}
 
-Pour terminer la définition du modèle de cohérence à terme forte, nous définissons également la propriété de sûreté de convergence forte~:
+% L'intégration à terme des modifications pourrait ainsi être traduite par~: une opération de modification est à terme visible à toute opération future d'interrogation.
+% Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à toute opération future.
+% Certaines propriétés de vivacité peuvent être exprimer sans le concept d'extension d'une histoire.
+% La propriété d'intégration à terme en fait partie et peut être exprimée comme suit~: pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas visible.
+% Nous la renommons volontiers en propriété de visibilité à terme~:
 
-\begin{equation}
-    \forall x, y \in A \qsep \trm{call}(x) = \trm{call}(y) = \trm{rd} \land \trm{ctx}_A(x) = \trm{ctx}_A(y) \implies \trm{rval}(x) = \trm{rval}(y)
-\end{equation}
+% Elle pourrait être traduite par la propriété de cohérence suivante~: une opération de modification est à terme visible à toute opération future d'interrogation.
+% Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à toute opération future.
+% En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas visible.
+% Nous pouvons ainsi définir la propriété d'intégration à terme que nous renommons volontiers en propriété de visibilité à terme~:
 
-Dans ce manuscrit, la propriété de convergence forte est impliquée par les spécifications de types de données répliquées.
-C'est le cas dans l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
-Deux opérations de lecture qui ont le même contexte ont nécessairement la même valeur de retour.
+% Pour terminer la définition du modèle de cohérence à terme forte, nous définissons également la propriété de sûreté de convergence forte~:
 
-Parce que les propriétés de vivacité décrivent quelque chose qui devrait survenir, elles invitent à penser les futurs possibles d'une exécution.
-Une propriété de vivacité peut alors être exprimée comme un prédicat qui doit être vérifié dans un ou plusieurs futurs possibles de l'exécution.
-Les propriétés de vivacités ne peuvent pas être vérifiés indépendamment des autres propriétés de sûreté.
-Si une propriété de vivacité est vérifiée dans un futur donné nous devons nous assurer que ce futur vérifie les autres propriétés de sûreté et de vivacité considérées.
+% \begin{equation}
+%     \forall x, y \in A \qsep \trm{call}(x) = \trm{call}(y) = \trm{rd} \land \trm{ctx}_A(x) = \trm{ctx}_A(y) \implies \trm{rval}(x) = \trm{rval}(y)
+% \end{equation}
+
+% Dans ce manuscrit, la propriété de convergence forte est impliquée par les spécifications de types de données répliquées.
+% C'est le cas dans l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
+% Deux opérations de lecture qui ont le même contexte ont nécessairement la même valeur de retour.
+
+% Les propriétés de vivacités ne peuvent pas être vérifiés indépendamment des autres propriétés de sûreté.
+% Si une propriété de vivacité est vérifiée dans un futur donné nous devons nous assurer que ce futur vérifie les autres propriétés de sûreté et de vivacité considérées.
 
 % Un protocole garantit une propriété de cohérence si et seulement si chacune des exécutions abstraites qu'il peut engendrer la respecte.
 % Nous ne pouvons pas savoir à quel moment une propriété de vivacité sera respectée.
@@ -819,15 +864,51 @@ Dans la \autoref{sec:causal-models} nous présentons des modèles de cohérence.
 \section{Modèles de cohérence et causalité}\label{sec:causal-models}
 
 Dans cette section nous présentons plusieurs modèles de cohérence.
-Nous décrivons d'abord le modèle de cohérence causale.
+Nous décrivons d'abord le modèle de cohérence à terme forte qui a été abordé informellement dans le \autoref{ch:problematic}.
+Nous décrivons ensuite le modèle de cohérence causale.
 Les modèles de cohérence que nous présentons dans la suite de ce manuscrit ne reposent pas directement sur le modèle de cohérence causale.
 Cependant, il s'agit d'un classique de la littérature des systèmes distribués.
 En outre, sa description nous permet d'illustrer l'utilisation du formalisme présenté dans la \autoref{sec:consistency-spec} et sa compréhension conditionne la compréhension des modèles de cohérence que nous abordons par la suite.
 Nous décrivons également le modèle de cohérence \acf{VFJC} sur-lequel nous reposons pour établir la contribution du \autoref{ch:pruned-log}.
 Pour faciliter son introduction nous présentons le modèle de cohérence \acf{FJC}.
 
+\subsection{Cohérence à terme forte}\label{subsec:strong-eventual-consistency}
 
-\subsection{Cohérence Causale}\label{subsec:caucal-consistency}
+Le modèle de cohérence à terme est le modèle le plus faible qu'un protocole de réplication doit respecter~\autocite{saito_2005_optimisticreplication,burckhardt_eventualconsistency_2014}.
+Dans ce manuscrit nous considérons un modèle de cohérence avec une propriété de convergence plus forte.
+Il s'agit du modèle de cohérence à terme forte~\autocite{shapiro_2011_crdt,burckhardt_eventualconsistency_2014}.
+Nous avons motivé ce choix dans le \autoref{ch:problematic}.
+La \autoref{def:strong-eventual-consistency} définit ce modèle.
+Elle reprend la propriété de visibilité à terme définit dans la \autoref{subsec:consistency-spec-liveness-safety}.
+
+\begin{definition}[Cohérence à terme forte]\label{def:strong-eventual-consistency}
+    Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence à terme forte si et seulement si~:
+
+    \begin{description}
+    \item[\namedlabel{itm:eventual-vis}{EC1} (visibilité à terme)]
+    Les effets des opérations de modification sont à terme intégrées par les pairs (honnêtes).
+    \begin{equation*}
+        \forall x \in A \qsep \set*{y \in A \given x \not\vis y} \textit{est fini}
+    \end{equation*}
+
+    \item[\namedlabel{itm:strong-conv}{EC2} (Convergence forte)]
+    Les copies des pairs (honnêtes) convergent.
+    \begin{equation*}
+        \forall x, y \in A \qsep \trm{call}(x) = \trm{call}(y) = \trm{rd} \land \trm{ctx}_A(x) = \trm{ctx}_A(y) \implies \trm{rval}(x) = \trm{rval}(y)
+    \end{equation*}
+    \end{description}
+\end{definition}
+
+Dans ce manuscrit, la propriété de convergence forte est impliquée par les spécifications de types de données répliquées.
+C'est le cas dans l'\autoref{eq:chat-spec} qui spécifie le fil de discussion.
+Deux opérations de lecture qui ont le même contexte ont nécessairement la même valeur de retour.
+
+L'ensemble des modèles de cohérence que nous abordons dans les sous-sections suivantes sont compatibles avec le modèle de cohérence à terme forte.
+Un protocole peut assurer l'un ou plusieurs de ces modèles ainsi que le modèle de cohérence à terme forte.
+\textcite{mahajan_2011_cac} a prouvé cette compatibilité.
+
+
+\subsection{Cohérence causale}\label{subsec:caucal-consistency}
 
 Le modèle de cohérence causale capture les relations de causalités potentielles entre les opérations et garantit que les pairs honnêtes intègrent les effets des opérations en respectant leurs causalités.
 Si une opération $x$ cause potentiellement une opération $y$, alors tous les pairs honnêtes intègrent l'effet de $x$ avant l'effet de $y$.
@@ -1513,7 +1594,7 @@ Les protocoles de réplication optimiste sont responsables de la convergence à 
 Le maintien de la cohérence des copies doit préserver autant que possible l'intention des opérations exécutées.
 
 La conception d'un protocole de réplication n'est pas une tâche aisée~\autocite{oster2005_otisuues}.
-Il doit prendre en compte les aléas du réseau \autoref{rotem_falalcies_2006} et résoudre les éventuels conflits engendrés par des modifications parallèles et incompatibles.
+Il doit prendre en compte les aléas du réseau \autocite{rotem_falalcies_2006} et résoudre les éventuels conflits engendrés par des modifications parallèles et incompatibles.
 Dans la \autoref{fig:set-conflict-example}, les pairs $p_A$ et $p_B$ modifient un ensemble répliqué d'entiers.
 Alors que $p_B$ ajoute puis supprime un entier dans l'ensemble, le pair $p_A$ ajoute en parallèle ce même entier dans l'ensemble.
 $p_B$ a l'intention de supprimer l'entier de l'ensemble, alors que $p_A$ a l'intention de l'ajouter à l'ensemble.
