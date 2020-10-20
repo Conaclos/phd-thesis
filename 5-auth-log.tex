@@ -538,7 +538,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 
 Dans la littérature~\autocite{baquero_2018_pure-op-crdt, shapiro_2011_crdt,birman_1991_causalmulticast}, la stabilité désigne souvent un prédicat qui une fois vrai le reste pour toujours.
 Dans ce manuscrit, nous disons qu'une modification est stable au sein d'un journal lorsqu'elle devient une dépendance de toutes les modifications qui sont ultérieurement acceptées dans le journal.
-Pour permettre la stabilisation de modifications, les pairs devraient accepter les modifications dans leur journal sous certaines conditions.
+Pour permettre la stabilisation de modifications, les pairs doivent accepter les modifications dans leur journal sous certaines conditions.
 Par exemple, si une modification est acceptée au sein d'un journal seulement si elle dépend de toutes les modifications déjà présentes dans le journal, alors toutes les modifications enregistrées dans le journal sont stables.
 Notre objectif est de trouver des contraintes d'acceptation qui permettent à terme la stabilisation de toute modification et qui sont adaptées à la réplication optimiste et à la présence de pairs mal-intentionnés.
 
@@ -548,14 +548,14 @@ Une exécution abstraite est suffisamment générale pour représenter une exéc
 Lorsqu'une exécution abstraite représente un journal, nous parlons d'exécution abstraite associée à un journal.
 Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir à partir d'un journal son exécution abstraite associée.
 Pour simplifier la compréhension nous utilisons dans les exemples des exécutions abstraites qui ne sont pas forcément associées à des journaux.
-
 Les contraintes d'acceptation d'une modification au sein d'un journal se traduisent par des propriétés de cohérence sur les opérations au sein d'une exécution abstraite.
-Nous recherchons un modèle de cohérence qui puisse être respecté par un protocole de réplication optimiste qui tolère la présence de pairs mal-intentionnés et permet la stabilisation d'opérations.
-Le modèle de cohérence doit donc être compatible avec le modèle de cohérence à terme forte.
-Il doit permettre aux pairs honnêtes de toujours exécuter une opération.
 
-Pour définir la stabilité au sein d'une exécution abstraite, nous introduisons dans la \autoref{def:abstract-exec-extension} le concept d'extension d'une exécution abstraite.
-Cette définition se repose sur le concept d'extension d'une histoire introduit dans la \autoref{subsec:consistency-spec-liveness-safety} du \autoref{ch:background}.
+% Nous recherchons un modèle de cohérence qui puisse être respecté par un protocole de réplication optimiste qui tolère la présence de pairs mal-intentionnés et permet la stabilisation d'opérations.
+% Le modèle de cohérence doit donc être compatible avec le modèle de cohérence à terme forte.
+% Il doit permettre aux pairs honnêtes de toujours exécuter une opération.
+
+Pour définir la stabilité au sein d'une exécution abstraite, la \autoref{def:abstract-exec-extension} introduit le concept d'extension d'une exécution abstraite.
+Cette définition repose sur le concept d'extension d'une histoire introduit dans la \autoref{subsec:consistency-spec-liveness-safety} du \autoref{ch:background}.
 
 \begin{definition}[Extension d'une exécution abstraite]\label{def:abstract-exec-extension}
 Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'une exécution abstraite (bien-formée ou mal-formée) $A \defeq \tuple*{H,\trm{vis}}$, et nous écrivons $A' \sqsupset A$, si et seulement si~:
@@ -574,9 +574,18 @@ Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'
 \end{itemize}
 \end{definition}
 
+% \begin{definition}[Extension cohérente]\label{def:consistent-extension}
+% Si une extension $A'$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ respecte le modèle de cohérence $C$, alors par souci de concision nous écrivons $A' \sqsupset_C A$.
+% $A$ ne respecte pas nécessairement le modèle de cohérence $C$.
+% \begin{equation*}
+% A' \sqsupset_C A \defiff A' \sqsupset A \land A' \in C
+% \end{equation*}
+% \end{definition}
+
 Dans une exécution abstraite, une opération est stable une fois qu'elle est visible à toute opération future.
 Puisque l’acceptation d’une opération est conditionnée par le modèle de cohérence, la stabilité l'est également.
 Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
+La \autoref{def:stable} définit formellement la stabilité.
 Le \autoref{th:stability-hierarchy} met en perspective le concept de stabilité et de force d'un modèle de cohérence.
 
 \begin{definition}[Opération stable]\label{def:stable}
@@ -610,9 +619,9 @@ Ce qui contredit l'hypothèse initiale.
 
 Nous souhaitons qu'au cours de l'exécution un ensemble croissant d'opérations deviennent stables.
 En d'autres termes, toute opération devrait à terme devenir stable.
-Cette attente peut être exprimée comme une propriété de vivacité.
+La \autoref{def:stabilisable} exprime cette attente sous la forme d'une propriété de vivacité.
 
-\begin{definition}[Opération stabilisable]
+\begin{definition}[Opération stabilisable]\label{def:stabilisable}
 Soit une opération $x$ d'une exécution abstraite $A$ qui respecte un modèle de cohérence $C$.
 $x$ est $C$-stabilisable dans $A$ si et seulement si il existe une extension de $A$ dans laquelle $x$ est $C$-stable.
 $A$ garantit la propriété de vivacité $\trm{Stabilisable}_C$ si et seulement si toute opération de $A$ est $C$-stabilisable.
@@ -624,13 +633,13 @@ Un modèle de cohérence $C$ est stabilisable, et nous écrivons $C \in \trm{Sta
 \end{definition}
 % TODO: vérifier si on peut remplacer \sqsupset par \sqsupseteq_C
 
-Nous recherchons un modèle de cohérence stabilisable qui est réaliste dans le contexte de notre travail~: il doit garantir la disponibilité en lecture et en écritures des copies, ainsi que la convergence à terme des copies.
+Nous recherchons un modèle de cohérence stabilisable qui est réaliste dans le contexte de notre travail~: il doit garantir la disponibilité en lecture et en écritures des copies, ainsi que la convergence à terme des copies en présence de pairs mal-intentionnés.
 Nous proposons d'abord d'explorer la notion de stabilité dans le modèle de cohérence causale et le modèle de cohérence \acl{VFJC}.
 Ces deux modèles sont présentés dans le \autoref{ch:background}.
 Nous construisons ensuite de nouveaux modèles de cohérence qui sont stabilisables et adaptés à notre contexte.
 
 
-\subsection{Stabilité Causale}\label{subsec:cs}
+\subsection{Stabilité causale}\label{subsec:cs}
 
 \textcite{baquero_2018_pure-op-crdt} ont introduit la stabilité causale comme un moyen de réduire la taille d'un journal.
 La stabilité causale permet de supprimer les méta-données des opérations qui ne sont plus nécessaires au maintien de la cohérence de la copie et du journal d'un pair.
@@ -652,6 +661,7 @@ En se basant sur cette contrainte et la transitivité de la visibilité, nous d�
 Dans la \autoref{fig:cs-example-1}, $a_1$ est visible à l'opération $b_1$.
 Puisque $b_1$ est visible à toute opération future de $p_B$, par transitivité $a_1$ l'est également.
 Pour qu'une opération soit causalement stable, il suffit donc que chaque pair observe cette dernière.
+Le \autoref{th:cs} définit formellement la stabilité causale.
 
 \begin{figure}[htb]
 \centering
@@ -736,20 +746,20 @@ Il existe en effet une extension causale de \subref{fig:wf-example-1}, l'exécut
 }\label{fig:cs-example}
 \end{figure}
 
+\begin{theorem}\label{th:cs}
+Dans une exécution abstraite qui respecte le modèle de cohérence causale, une opération $x$ est causalement stable si et seulement si elle est observée par chaque pair.
+%\begin{equation*}
+%    \trm{isStable}_A^{\trm{Causal}}(x) \iff \forall p \in \trm{Peers} \exists y \in A \qsep \trm{peer}(y) = p \land (x = y \lor x \pre y)
+%\end{equation*}
+\begin{equation*}
+    \trm{stable}_A^{\trm{Causal}}(x) \iff \trm{Peers} = \trm{obs}_A(x)
+\end{equation*}
+\end{theorem}
 
-
-
-
-% \begin{definition}[Extension cohérente]\label{def:consistent-extension}
-% Si une extension $A'$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ respecte le modèle de cohérence $C$, alors par souci de concision nous écrivons $A' \sqsupset_C A$.
-% $A$ ne respecte pas nécessairement le modèle de cohérence $C$.
-% \begin{equation*}
-% A' \sqsupset_C A \defiff A' \sqsupset A \land A' \in C
-% \end{equation*}
-% \end{definition}
+Pour nous aider dans la démonstration de ce théorème nous introduisons la \autoref{th:future-vis} et le \autoref{th:future-concur}.
 
 \begin{proposition}\label{th:future-vis}
-Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
+Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul} du modèle de cohérence causale.
 Une opération incluse dans $A'$ et absente de $A$ ne peut pas être visible à une opération de $A$.
 \begin{equation*}
     A, A' \in (C1 \cup C2) \land A' \sqsupset A \land y \in A'\sminus A \land x \in A \implies y \not\vis x
@@ -761,13 +771,13 @@ Procédons par déduction.
 Soit $x$ une opération de $A$ et $y$ une opération de $A'$ absente de $A$.
 $A'$ est une extension de $A$.
 Par conséquent, $y$ ne retourne pas avant $x$.
-$A$ et $A'$ respectent le modèle de cohérence \ac{VTNS}.
+$A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
 D'après~\ref{itm:vtns2}, si une opération ne retourne pas avant une seconde opération, alors cette dernière ne peut pas être visible à la première.
 $y$ ne peut donc pas être visible à $x$.
 \end{proof}
 
 \begin{corollary}\label{th:future-concur}
-Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul}.
+Soit une extension $A'$ d'une exécution abstraite $A$ tel que $A$ et $A'$ respectent les propriétés~\ref{itm:vis-trans} et~\ref{itm:vis-non-specul} du modèle de cohérence causale.
 Soit une opération $x$ de $A$ et une opération $y$ de $A'$ absente de $A$.
 Si $x$ n'est pas visible à $y$ alors $y$ est concurrent à $x$.
 \begin{equation*}
@@ -775,43 +785,36 @@ Si $x$ n'est pas visible à $y$ alors $y$ est concurrent à $x$.
 \end{equation*}
 \end{corollary}
 
-\begin{theorem}\label{th:cs}
-Dans une exécution abstraite qui respecte le modèle de cohérence causale, une opération $x$ est causalement stable si et seulement si elle est observée par chaque pair.
-%\begin{equation*}
-%    \trm{isStable}_A^{\trm{Causal}}(x) \iff \forall p \in \trm{Peers} \exists y \in A \qsep \trm{peer}(y) = p \land (x = y \lor x \pre y)
-%\end{equation*}
-\begin{equation*}
-    \trm{stable}_A^{\trm{Causal}}(x) \iff \trm{Peers} = \trm{obs}_A(x)
-\end{equation*}
-\end{theorem}
+\begin{proof}[Démonstration du \autoref{th:cs}]
+Le théorème est décomposable en deux implications que nous démontrons par contradiction.
+Soit une opération $x$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence causale.
 
-\begin{proof}
-Le \autoref{th:cs} est décomposable en deux implications que nous démontrons par contradiction.
-
-Soit une exécution abstraite $A$ qui respecte le modèle de cohérence causale.
-Soit $x$ une opération de $A$ qui est observée par chaque pair.
+\textbf{Démontrons $\trm{Peers} = \trm{obs}_A(x) \implies \trm{stable}_A^{\trm{Causal}}(x)$.}
 Supposons que $x$ n'est pas causalement stable.
-Il existe donc une opération $z$ d'une extension $A'$ de $A$ qui respecte le modèle de cohérence causale tel que $z$ soit absente de $A$ et $x$ ne soit pas visible à $z$.
+Il existe donc une extension causale $A'$ de $A$ ($A' \sqsupset A \land A' \in \trm{Causal}$) dans laquelle $x$ n'est pas visible à une opération $z$ de $A'$ absente de $A$ ($z \in A' \sminus A \land x \not\vis z$).
 D'après le \autoref{th:future-concur}, $z$ est concurrent à $x$.
-Nous distinguons deux cas~: soit $p$ est le pair à l'origine de $x$ ou $p$ n'est pas à l'origine de $x$.
+Nous désignons par $p$ le pair quia exécuté $z$.
+Nous distinguons deux cas~: \begin{inlinelist}
+    \item $p$ a exécuté $x$
+    \item $p$ n'a pas exécuté $x$
+\end{inlinelist}
 Dans le premier cas, la propriété~\ref{itm:peer-linear} est violée.
-$A$ ne respecte pas le modèle de cohérence causale.
-Ce qui contredit l'hypothèse initiale.
-Dans le second cas, $p$ a au moins une opération $y$ de $A$ qui succède $x$.
-Puisque $A'$ respecte le modèle de cohérence causale, $y$ et $z$ sont liés par la relation de précédence.
-$y$ précède $z$ ou $z$ précède $y$.
-D'après la \autoref{th:future-vis}, $z$ ne peut pas précéder $y$.
-Si $y$ précède $z$, alors par transitivité $x$ précède $z$.
-Ce qui n'est pas possible puisque $x$ et $z$ sont concurrents.
-Il n'existe donc pas une telle opération.
+$A'$ ne respecte pas le modèle de cohérence causale.
+Ce qui contredit une hypothèse initiale.
+Dans le second cas, $x$ est visible à au moins une opération $y$ de $A$ exécuté par $p$.
+Puisque $A'$ respecte la propriété~\ref{itm:peer-linear} du modèle de cohérence causale, $y$ et $z$ sont liés par la relation de visibilité.
+D'après la \autoref{th:future-vis}, $y$ est visible à $z$.
+Par transitivité $x$ est visible à $z$.
+Ce qui contredit une déduction précédente.
 
-Supposons qu'il existe une opération causalement stable $x$ qui n'a pas été observée par un pair $p$.
-Les opérations de $p$ précédent ou sont concurrentes à $x$.
-D'après le modèle de cohérence causale, le pair $p$ est seulement tenu de produire une précédence linéaire des opérations qu'il exécute.
-Seules ses opérations passées, ainsi que les opérations qui les précédent sont tenus de précéder sa prochaine opération.
+\textbf{Démontrons $\trm{stable}_A^{\trm{Causal}}(x) \implies \trm{Peers} = \trm{obs}_A(x)$.}
+Supposons qu'il existe une opération causalement stable $x$ qui n'a pas été observée par un pair $p$ ($p \not\in \trm{obs}_A(x)$).
+Les éventuelles opérations de $p$ sont visibles ou sont concurrentes à $x$.
+D'après le modèle de cohérence causale, le pair $p$ est seulement tenu de produire une visibilité linéaire des opérations qu'il exécute.
+Seules ses opérations passées, ainsi que les opérations qui leurs sont visibles sont tenues d'être visible à sa prochaine opération.
 Ces dernières n'incluent pas l'opération $x$.
 Il peut donc exister une opération $y$ de $p$ tel que $x$ ne précède pas $y$.
-Ce qui rentre en contradiction avec l'hypothèse de départ.
+Ce qui rentre en contradiction avec une hypothèse initiale.
 \end{proof}
 
 
@@ -833,9 +836,9 @@ Dans la section suivante nous nous intéressons à la stabilité au sein d'un mo
 
 \subsection{Stabilité \acl{VFJC}}\label{subsec:vfjcs}
 
-Le modèle de cohérence~\acf{VFJC} offre des garanties de convergence et de disponibilité en présence de pairs mal-intentionnés.
+Le modèle de cohérence~\acf{VFJC} offre des garanties de convergence et de disponibilité en présence de pairs mal-intentionnés~\autocite{mahajan_2011_cac}.
 Pour ce faire, il relâche une contrainte de cohérence et autorise ainsi la présence d'opérations non-linéaires dans une exécution abstraite.
-Une opération est non-linéaire si une autre opération lui est concurrente et qu'elles sont toutes deux du même auteur.
+Une opération est non-linéaire si une autre opération lui est concurrente et qu'elles sont toutes deux exécutées par le même pair.
 Seuls les pairs mal-intentionnés peuvent être les auteurs d'opérations non-linéaires.
 Dans la \autoref{fig:vfjc-malicious-obs}, $m_1$ et $m_2$ sont des opérations non-linéaires.
 Les opérations non-linéaires forment des embranchements.
@@ -885,24 +888,25 @@ Pour autant, dans l'extension de $A_1$, $p_M$ exécute une opération $m_2$ conc
 \caption[Opérations non-linéaires]{Exécution abstraite qui explique la modification d'un contenu partagé par un pair mal-intentionné $p_M$, ainsi que deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjc-malicious-obs}
 \end{figure}
 
-Cependant, et contrairement au modèle de cohérence \acl{FJC}, le modèle de cohérence \acl{VFJC} contraint l'acceptation d'opérations non-linéaires.
+Cependant le modèle de cohérence \acl{VFJC} contraint l'acceptation d'opérations non-linéaires.
 En effet, les pairs ne peuvent pas accepter directement les opérations qu'ils reconnaissent comme non-linéaires.
 Le seul moyen qu'ils ont d'accepter une opération non-linéaire est de l'accepter indirectement par l'acceptation d'une opération linéaire.
 Dans la \autoref{fig:vfjc-malicious-obs}, $p_A$ reconnaît $m_2$ comme une opération non-linéaire.
 Il accepte indirectement $m_2$ par l'acceptation de l'opération $b_1$.
 le pair $p_B$ ne reconnaît pas encore $m_2$ comme non-linéaire, il peut donc l'accepter directement.
 
-Cette contrainte a une implication intéressante~: si il existe une chaîne de visibilité $x \viseq y \viseq z$, alors il n'est pas possible d'exécuter une opération qui succède $z$ et succède immédiatement une opération $w$ concurrente à $x$ et dont l'auteur est l'auteur de $y$.
-En effet, il est démontrable que $w$ et $y$ sont des opérations non-linéaires et qu'en tant que tel $w$ ne peut pas être acceptée directement.
-Dans l'exécution abstraite $A_1$ de la \autoref{fig:vfjc-malicious-obs}, si nous considérons la chaîne de visibilité $a_1 \viseq m_1 \viseq a_2$, nous pouvons en conclure qu'il ne peut y avoir une extension de $A_1$ dans laquelle il existe une opération $a_3$ qui succède $a_2$ et succède immédiatement une opération $m_2$ concurrente à $a_1$.
-De même si nous considérons la chaîne $m_1 \viseq m_1 \viseq a_2$, nous pouvons en conclure qu'il ne peut y avoir une extension de $A_1$ dans laquelle il existe une opération $a_3$ qui succède $a_2$ et succède immédiatement une opération $m_2$ concurrente à $m_1$.
+Cette contrainte a une implication intéressante~: si il existe une chaîne de visibilité $x \viseq y \viseq z$ et une opération $w$ concurrente à $x$ et non-linéaire avec $y$, alors $w$ ne peut pas être immédiatement visible à toute opération future de l'auteur de $z$ ne peuvent.
+Dans l'exécution abstraite $A_1$ de la \autoref{fig:vfjc-malicious-obs}, si nous considérons la chaîne de visibilité $a_1 \viseq m_1 \viseq a_2$, nous pouvons en conclure qu'il ne peut y avoir une extension de $A_1$ dans laquelle une opération $m_2$ concurrente à $a_1$ et non-linéaire à $m_1$ est immédiatement visible à une opération $a_3$.
+De même si nous considérons la chaîne $m_1 \viseq m_1 \viseq a_2$, nous pouvons en conclure qu'il ne peut y avoir une extension de $A_1$ dans laquelle $m_2$ est non-linéaire à $m_1$ et immédiatement visible à une opération $a_3$.
 
 Une opération $x$ devient stable lorsqu'il n'est plus possible d'exécuter une opération qui lui est concurrente.
 En présence d'un seul pair mal-intentionné $p_M$, nous déduisons qu'une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations concurrentes à $x$ de $p_M$.
-Suivant les observations précédentes, il suffit donc que chaque pair honnête observe au moins une opération de $p_M$ qui succède (ou est égale à) $x$ pour rejeter toute opération concurrente à $x$ de $p_M$.
-Dans la \autoref{fig:vfjcs-one-malicious-1}, les pairs honnêtes $p_A$ et $p_B$ observent l'opération $m_1$ de $p_M$ qui succède ou est égale à $a_1$ et $m_1$.
+Pour rejeter toute opération concurrente à $x$ de $p_M$, chaque pair honnête doit observer au moins une opération de $p_M$ tel que $x$ est visible ou est égale à cette opération.
+Dans la \autoref{fig:vfjcs-one-malicious-1}, les pairs honnêtes $p_A$ et $p_B$ observent l'opération $m_1$ de $p_M$.
+$a_1$ est visible à $m_1$.
 $a_1$ et $m_1$ sont donc vfjc-stables.
-Dans la \autoref{fig:vfjcs-one-malicious-2}, le pair honnête $p_A$ observe l'opération $m_2$ de $p_M$ qui succède $a_1$, et le pair honnête $p_B$ observe l'opération $m_1$ de $p_M$ qui succède $a_1$.
+Dans la \autoref{fig:vfjcs-one-malicious-2}, le pair honnête $p_A$ observe l'opération $m_2$ de $p_M$, et le pair honnête $p_B$ observe l'opération $m_1$ de $p_M$.
+$a_1$ est visible à $m_1$ et $m_2$
 $a_1$ est donc vfjc-stable.
 Dans la \autoref{fig:vfjc-malicious-obs}, aucune opération est vfjc-stable.
 
@@ -1029,6 +1033,7 @@ C'est pour cette raison que la chaîne $m_2 \idr g_2$ est acceptée par $p_A$.
 En revanche, pour l'énumération $\tuple*{p_G, p_M}$, il existe la chaîne $g_1 \vis m_1$ qui succède $a_1$ et est observée par $p_A$.
 Une chaîne $g_3 \idr m_3$ avec $g_3$ concurrent à $a_1$ ne peut donc pas être acceptée par $p_A$.
 Nous pouvons également remarquer que si il existe une chaîne pour l'énumération $\tuple*{p_G, p_M}$, il en existe également pour les sous-énumérations $\tuple*{p_G}$ et $\tuple*{p_M}$.
+En réalité toute chaîne de visibilité tel que les opérations entre la $i$-ème et la $i+1$-ème opération (la $i$-ème opération est visible à chacune de ces opérations qui sont elle-mêmes visible à la $i+1$-ème opération) ont pour chacune pour auteur l'un des auteurs des $k$-ème opérations avec $k \leq i$.
 
 \begin{proposition}
 Soit une opération $x$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{VFJC}.
@@ -1521,54 +1526,47 @@ Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$
 Le modèle de cohérence \ac{VFJC} est stabilisable.
 \end{theorem}
 
-\subsection{Stabilité Causale Dynamique}\label{subsec:dcs}
+\subsection{Stabilité causale dynamique}\label{subsec:dcs}
 
-Dans la section précédente, nous avons montré qu'une opération, au sein d'une exécution abstraite qui respecte le modèle de cohérence causale ou le modèle de cohérence \ac{VFJC} pouvait devenir stable.
+Dans les sections précédentes, nous avons montré qu'une opération, au sein d'une exécution abstraite qui respecte le modèle de cohérence causale ou le modèle de cohérence \ac{VFJC} peut à terme devenir stable.
 Dans le cas d'une exécution abstraite qui respecte le modèle de cohérence causale, tous les pairs doivent observer une opération pour que cette dernière soit stable.
-C'est une condition particulièrement forte qui peut être difficile à atteindre lorsque le nombre de pairs qui joignent à terme une collaboration est significatif.
-En pratique cette condition est d'autant plus forte qu'elle rend inutilisable la stabilité à moins de restreindre le groupe de pairs à un petit nombre de pairs connus.
+Dans le cas d'une exécution abstraite qui respecte le modèle de cohérence \ac{VFJC}, le concours de tous les pairs à l'exception des pairs évincés à terme est nécessaire pour stabiliser une opération.
+%Ces conditions sont particulièrement fortes et peuvent être difficile à atteindre lorsque le nombre de pairs qui joignent à terme une collaboration est significatif.
+En pratique ces conditions rendent inutilisable la stabilité à moins de restreindre le groupe de pairs à un petit nombre de pairs connus.
 %Ce qui revient à empêcher de nouveaux pairs de joindre la collaboration après un certain temps.
+Si nous considérons un ensemble (dénombrable) infini de pairs, un pair qui n'a pas encore exécuté une opération peut toujours exécuter une opération concurrente à toute opération déjà exécutée.
+Dans cette section nous définissons le modèle de cohérence causale dynamique qui invalide cette capacité et repose sur le modèle de cohérence causale.
+Il permet de stabiliser des opérations avec le concours d'un sous-ensemble de pairs.
 
-Au cours du temps, les pairs joignent et quittent la collaboration.
-la composition du groupe de pairs varie tout au long de la collaboration~: le groupe est dynamique.
-A un instant donné il y a donc un ensemble de pairs qui ont joint la collaboration et un ensemble complémentaire de pairs qui n'ont pas encore joint la collaboration.
+Au cours du temps, les pairs joignent la collaboration.
+La composition du groupe de pairs varie tout au long de la collaboration~: le groupe est dynamique.
+A un instant donné il y a donc un ensemble de pairs qui a joint la collaboration et un ensemble complémentaire de pairs qui n'a pas encore joint la collaboration.
+Nous introduisons une opération d'invitation pour suivre l'évolution de la composition du groupe.
 
-Pour joindre une collaboration, un pair doit d'abord récupérer le journal d'un autre pair de la collaboration.
-Il peut alors constituer sa copie du contenu répliqué et commencer à contribuer.
-Il fait sien le journal récupéré.
-Il hérite ainsi des observations du pair qui lui a transmis le journal.
+Nous restreignons la capacité d'un nouveau pair à exécuter des opérations concurrentes à d'autres en introduisant une contrainte supplémentaire.
+Un pair hérite des observations du pair qui l'invite.
+Si un pair observe une opération $x$, alors le pair qu'il invite par la suite observe également $x$.
+$x$ est alors visible à toute opération exécutée par le pair invité.
+Le pair invité ne peut pas exécuter une opération concurrente à $x$.
 
-L'ensemble de ses opérations succèdent les opérations présentes dans son journal.
-Un pair qui transmet son journal à un nouveau pair sait donc que ce nouveau pair ne peut exécuter des opérations concurrentes aux opérations du journal.
-Il peut partager cette information aux autres pairs du groupe.
+Du point de vue d'un protocole, l'héritage des observations d'un pair peut traduire la transmission du journal des modifications ou de l'état de la copie.
+L'état de la copie du pair invité devient équivalente à celle du pair qui l'invite.
+Les opérations qu'il exécute sont donc potentiellement influencées par les modifications qui ont amenées à la constitution de cet état.
 
-A un instant donné, un pair a une vue partielle de la composition du groupe.
-Cependant, il sait que si l'un des pairs qu'il connaît transmet son journal à un nouveau pair, alors ce dernier hérite des observations du premier.
-Nous reposons sur cette constatation pour définir un nouveau modèle de cohérence et la stabilité qui lui est associée.
+Pour simplifier, nous supposons qu'une opération d'invitation invite un seul pair et qu'un pair ne peut pas être invité plusieurs fois.
+Cette dernière simplification permet d'éviter en particulier les invitations concurrentes qui sont la source d'une complexité supplémentaire pour définir la stabilité.
+L'invitation d'un pair est visible à toutes les opérations de ce pair.
+Seul le pair qui initie la collaboration s'invite lui-même dans sa première opération.
+La \autoref{def:invitation-consistency} regroupe ces contraintes au sein du modèle de cohérence \emph{Invitation}.
+La \autoref{def:dyn-causal-consistency} présente le modèle de cohérence causale dynamique qui correspond à la conjonction du modèle de cohérence causale et du modèle de cohérence \emph{Invitation}.
 
-Du point de vue du modèle de cohérence, la transmission d'un journal à un nouveau pair est mis en évidence par une opération d'invitation.
-Chaque invitation invite un seul pair.
-Dans une application cette opération pourrait se traduire par la génération d'un lien hypertexte pour inviter un nouveau collaborateur.
-Pour simplifier, nous supposons qu'une invitation est unique.
-Un même pair ne peut pas être invité plusieurs fois.
-Cette contrainte permet en particulier d'éviter les invitations en concurrence qui sont sources d'une complexité supplémentaire.
-En pratique, nous pouvons assurer l'unicité d'une invitation en incluant un identifiant unique qui désignera le pair qui rejoint la collaboration via cette invitation.
-
-% En découplant l'identité des pairs et des collaborateur·ice·s, un collaborateur ou une collaboratrice peut être invité·e plusieurs fois.
-% Il peut alors être associé à plusieurs pairs si il existe plusieurs invitations.
-% Dans ce cas, les pairs sont des entités abstraites~: plusieurs pairs peuvent correspondre à un même appareil.
-
-L'héritage des observations par un nouveau pair est assuré par une propriété de cohérence qui oblige un pair à observer l'opération dans laquelle il est invité.
-Toutes les opérations d'un pair doivent donc succéder à une opération qui l'invite.
-Seul le pair qui initie la collaboration déroge à cet invariant pour sa première opération.
-Sa première opération est une invitation qui l'invite lui-même.
-Elle précède toute opération de tout pair.
-Si la relation de visibilité est transitive, alors cette opération est l'opération minimale de l'ordre formé par la visibilité.
-
-La \autoref{def:invitation-consistency} formalise le modèle de cohérence \emph{Invitation}. La \autoref{def:dyn-causal-consistency} présente le modèle de cohérence causale dynamique qui correspond à la conjonction du modèle de cohérence causale et du modèle de cohérence \emph{Invitation}.
-
-Dans les représentations graphiques, les opérations d'invitations sont explicitement relevés.
-Si l'appel d'une opération n'est pas spécifié nous considérons qu'il s'agit d'un appel qui ne correspond pas à une invitation.
+% Pour joindre une collaboration et commencer à contribuer, un pair doit constituer l'état actuel du contenu répliqué.
+% Pour ce faire, il est aidé par un pair qui fait déjà partie de la collaboration.
+% Nous disons que le nouveau pair est invité.
+% Dans un protocole à base de journaux authentifiés, un pair peut transmettre son journal pour inviter un pair.
+% Le pair invité intègre l'ensemble des modifications enregistrées dans le journal sur un état vierge pour constituer sa copie du contenu répliqué.
+% L'état de la copie du pair invité est ainsi identique à l'état du pair qui l'invite.
+% Les deux copies intègrent le même ensemble de modifications.
 
 \begin{definition}[Invitation]\label{def:invitation-consistency}
 Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence Invitation, et nous écrivons $A \in \trm{Invitation}$, si et seulement si~:
@@ -1706,28 +1704,30 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale
     \caption{}\label{fig:dyn-causal-example-2}
 \end{subfigure}
 \caption[Stabilité causale dynamique]{L'exécution abstraite \subref{fig:dyn-causal-example-1} respecte le modèle de cohérence causale dynamique.
-Les opérations DynCausal-stables (dcs) dont encadrées.
+Les opérations DynCausal-stables (dcs) sont encadrées.
 L'exécution abstraite \subref{fig:dyn-causal-example-2} ne respecte pas le modèle de cohérence causale dynamique.
-En effet, $b_1$ ne succède pas une opération qui invite son auteur $p_B$.
-La propriété~\ref{itm:rq-invite} est violée.}\label{fig:dyn-causal-example}
+La propriété~\ref{itm:rq-invite} est violée.
+En effet, il n'existe pas une opération qui invite $p_B$ et qui soit visible à $b_1$.}\label{fig:dyn-causal-example}
 \end{figure}
+
+% Dans les représentations graphiques, les opérations d'invitations sont explicitement relevés.
+% Si l'appel d'une opération n'est pas spécifié nous considérons qu'il s'agit d'un appel qui ne correspond pas à une invitation.
 
 Le modèle de cohérence causale dynamique est plus fort que le modèle de cohérence causale.
 Les remarques qui ont aidées à définir la stabilité causale s'appliquent également pour la stabilité causale dynamique.
 Lorsqu'un pair observe une opération, il ne peut plus exécuter d'opérations concurrentes à cette dernière.
 
-Si un pair invite dans le futur un nouveau pair alors ce dernier hérite de l'ensemble des observations actuelles du pair qui l'invite.
+Si un pair invite un nouveau pair, alors ce dernier hérite de l'ensemble des observations du pair qui l'invite.
 Dans la \autoref{fig:dyn-causal-example-1}, le pair honnête invite $p_B$ en $c_1$.
 A ce moment, $p_C$ observe $c_1$, $a_2$, et $a_1$.
 Puisque l'invitation $c_1$ doit être visible aux opérations de $p_B$, $p_B$ observe nécessairement $c_1$, $a_2$, et $a_1$.
 
-
-A partir de ces deux remarques nous en déduisant que seuls les pairs dont l'invitation précède ou est concurrente à une opération $x$ peuvent exécuter une opération concurrente à $x$.
+A partir de ces deux remarques nous en déduisant que seuls les pairs dont l'invitation est visible ou est concurrente à une opération $x$ peuvent exécuter une opération concurrente à $x$.
 $x$ devient stable dès lors que ces pairs l'observent.
 Nous parlons d'observateurs requis.
-Nous en déduisons ainsi la stabilité causale dynamique décrite dans le \autoref{th:dyn-cs}.
+La \autoref{def:honest-rq-obs} définit formellement les observateurs requis d'une opération.
 
-\begin{definition}[Observateurs honnêtes requis]
+\begin{definition}[Observateurs honnêtes requis]\label{def:honest-rq-obs}
 Un pair honnête est un observateur requis d'une opération $x$ si et seulement si il est invité dans une opération qui précéde ou est concurrente à $x$.
 \begin{equation*}
     \trm{rqHonestObs}_A(x) \defeq \set*{q \in \trm{Honest} \given \exists y \in A \qsep \trm{call}(y) = \trm{invite}(q) \land x \nviseq y}
@@ -1749,7 +1749,9 @@ Un pair honnête est un observateur requis d'une opération $x$ si et seulement 
     \caption[Observateurs requis]{observateurs requis et observateurs des opérations de l'exécution abstraite de la \autoref{fig:dyn-causal-example-1}.}\label{tab:rq-obs}
 \end{table}
 
-
+Nous en déduisons ainsi la stabilité causale dynamique décrite dans le \autoref{th:dyn-cs}.
+La \autoref{tab:rq-obs} indique les observateurs et les observateurs requis des opérations de la \autoref{fig:dyn-causal-example-1}.
+A partir de ces informations nous pouvons conclure les opérations $a_1$ et $a_2$ sont stables.
 
 \begin{theorem}\label{th:dyn-cs}
 Dans une exécution abstraite qui respecte le modèle de cohérence causale dynamique, une opération $x$ est stable si les observateurs requis de $x$ sont inclus dans les observateurs de $x$.
@@ -1759,18 +1761,26 @@ Dans une exécution abstraite qui respecte le modèle de cohérence causale dyna
 \end{theorem}
 
 \begin{proof}
-Le \autoref{th:dyn-cs} est décomposable en deux implications.
+L'équivalence est décomposable en deux implications.
 Nous prouvons la première par contradiction.
 La seconde est triviale et peut être simplement déduite de l'explication déroulée tout au long de cette section.
+Soit une exécution abstraite $A$ qui respecte le modèle de cohérence causale dynamique.
+Soit une opération $x$ de $A$.
 
-Soit une opération $x$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence causale dynamique.
-$x$ est observée par l'ensemble des pairs dont l'invitation précède ou est concurrente à $x$.
+\textbf{Démontrons $\trm{rqHonestObs}_A(x) \subseteq \trm{obs}_A(x) \implies \trm{stable}_A^{\trm{DynCausal}}(x)$.}
+$x$ est observée par l'ensemble de ses observateurs requis.
+Chacun d'entre eux est invité dans une opération qui est visible ou est concurrente à $x$.
 Supposions que $x$ n'est pas stable.
-Il existe donc une extension cohérente $A'$ de $A$ et une opération $y$ présente dans $A'$ et absente de $A$ tel que $x$ n'est pas visible à $y$.
-Suivant \autoref{itm:peer-linear}, le pair à l'origine de $y$ ne peut pas avoir observé $x$.
-Suivant l'énoncé initiale, il s'agiterait donc d'un pair qui a été invité en $x$ ou par une opération qui succède $x$.
-Or si l'auteur de $y$ est invité en $x$ ou par une opération qui succède $x$, alors il observe nécessairement $x$.
-Ce qui contredit l'hypothèse initiale.
+Il existe donc une extension $A'$ de $A$ tel que $A'$ respecte le modèle de cohérence causale dynamique et $x$ n'est pas visible à une opération $y$ de $A' \sminus A$.
+Nous distinguons deux cas.
+Si l'auteur de $y$ est un observateur requis de $x$, alors $x$ est visible à une opération incluse dans $A$ de l'auteur de $y$.
+Suivant la propriété~\ref{itm:peer-linear}, cette opération est visible à $y$.
+Par transitivité, $x$ est visible à $y$.
+Ce qui contredit une hypothèse.
+Si l'auteur de $y$ n'est pas un observateur requis, alors il est invité en $x$ ou dans une opération $z$ tel que $x$ est visible à $z$.
+Suivant la propriété~\ref{itm:peer-linear}, $x$ ou $z$ est visible à $y$.
+Par transitivité, $x$ est visible à $y$.
+Ce qui contredit une hypothèse.
 \end{proof}
 
 
@@ -1787,11 +1797,12 @@ Le modèle de cohérence causale dynamique est donc stabilisable.
 
 Pour être réaliste nous devrions également prendre en compte les pairs qui quittent une collaboration.
 Par simplicité nous ne les prenons pas un compte.
-Nous remarquons toutefois qu'un tel mécanisme pourrait être implémenté avec un mécanisme qui ressemble à l'éviction de pairs mal-intentionnés.
+Les pairs pourraient quitter une collaboration à l'aide d'une opération dédiée à cet effet.
+Le pair serait alors évincé.
 
 Le modèle de cohérence causale dynamique permet à des opérations de devenir stable dans un contexte où le groupe de pairs évolue au cours de la collaboration.
 Similairement au modèle de cohérence causale, il ne tolère pas la présence de pairs mal-intentionnés.
-Dans la section suivante nous tentons de définir un nouveau modèle de cohérence basé sur les modèles de cohérence \acs{VFJC} et \emph{Invitation} pour définir une stabilité adaptée aux groupes dynamiques.
+Dans la section suivante nous proposons de définir un nouveau modèle de cohérence basé sur les modèles de cohérence \acs{VFJC} et \emph{Invitation} pour définir une stabilité adaptée aux groupes dynamiques.
 
 
 \subsection{Stabilité~\acl{VFJC} Dynamique}\label{subsec:dvfjcs}
