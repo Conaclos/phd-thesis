@@ -2313,9 +2313,9 @@ Nous obtenons ainsi les définitions suivantes~:
     &\trm{prepare}_i(\tuple*{t}, \trm{ack}) \defeq \tuple*{\trm{ack}}\\
     &\trm{prepare}_i(\tuple*{t}, \trm{invite}(q)) \defeq \tuple*{\trm{invite}, q}\\
     &\trm{prepare}_i(\tuple*{t}, o) \defeq \trm{prepare}_i(t, o)\\
-    &\trm{integrate}(\tuple*{t}, \tuple*{\trm{ack}}) \defeq \tuple*{t}\\
-    &\trm{integrate}(\tuple*{t}, \tuple*{\trm{invite}, q}) \defeq \tuple*{t}\\
-    &\trm{integrate}(\tuple*{t}, m) \defeq \trm{integrate}(t, m)
+    &\trm{integrate}_i(\tuple*{t}, \tuple*{\trm{ack}}) \defeq \tuple*{t}\\
+    &\trm{integrate}_i(\tuple*{t}, \tuple*{\trm{invite}, q}) \defeq \tuple*{t}\\
+    &\trm{integrate}_i(\tuple*{t}, m) \defeq \trm{integrate}_i(t, m)
 \end{align*}
 
 L'exécution d'une opération d'interrogation par un pair $p_i$ est simplement exécutée sur le contenu de type $T$.
@@ -2345,13 +2345,6 @@ Tout message est augmenté des méta-données suivantes~:
     \item[$\trm{sig}_m$:] la signature cryptographique de $m$
 \end{description}
 
-L'identifiant d'un pair est un couple constitué d'une clef publique et d'un \emph{hash}.
-Le \emph{hash} correspond au \emph{hash} du message qui invite le pair.
-Nous expliquons dans le paragraphe suivant comment le \emph{hash} d'un message est calculé.
-Le mécanisme de hachage utilisé résiste aux \emph{collisions}\footnote{L'adversaire n'a pas les ressources nécessaires pour produire deux messages avec le même \emph{hash}.} et aux \emph{préimages}\footnote{L'adversaire n'a pas les ressources nécessaires pour produire un message avec un \emph{hash} donné.}.
-Chaque message d'invitation invite donc un unique pair.
-$\trm{Peers}$ est l'ensemble des identifiants des pairs.
-
 Un pair honnête produit une séquence de messages avec des numéros contigus qui débutent à $1$.
 Le numéro d'un message $m$ correspond donc au nombre de messages générés ($m$ inclut) par son auteur $\trm{peer}_m$.
 Un message $m$ est identifié par un n-uplet dénoté $\trm{id}(m)$ composé de l'identifiant du pair qui est à son origine, son numéro, et son \emph{hash} $h(m)$.
@@ -2363,9 +2356,9 @@ Un message $m$ est identifié par un n-uplet dénoté $\trm{id}(m)$ composé de 
 Le \emph{hash} permet de distinguer deux messages transmis par le même pair avec le même numéro, mais qui divergent par leur contenu ou leurs dépendances.
 Seuls les pairs mal-intentionnés sont à l'origine de tels messages.
 Le \emph{hash} d'un message est calculé sur l'ensemble du message et de ses méta-données, à l'exception de sa signature.
-Nous supposons que la \emph{fonction de hash} utilisée résiste aux \emph{collisions} et aux \emph{préimages}.
+Nous supposons que la \emph{fonction de hash} utilisée résiste aux \emph{collisions}\footnote{L'adversaire n'a pas les ressources nécessaires pour produire deux messages avec le même \emph{hash}.} et aux \emph{préimages}\footnote{L'adversaire n'a pas les ressources nécessaires pour produire un message avec un \emph{hash} donné.}.
 
-Un message $m$ dépend directement et indirectement sur un ensemble de messages.
+Un message $m$ dépend directement et indirectement d'un ensemble de messages.
 Un message déclare ses dépendances directes et éventuellement des dépendances indirectes\footnote{Nous exploitons cette flexibilité pour optimiser certaines vérifications au sein du protocole présenté.}.
 $\trm{deps}_m$ correspond à l'ensemble des identifiants des dépendances déclarées de $m$.
 
@@ -2376,6 +2369,18 @@ Cette fonction récursive termine étant donné que le journal est un graphe dir
 \begin{equation*}
     \trm{ctx}_J(m) \defeq \set*{ x \given \exists y \in J \qsep \trm{id}(y) \in \trm{deps}_m \land x \in \set*{y} \cup \trm{ctx}_J(y)}
 \end{equation*}
+
+Les collaborateur·ice·s disposent d'un couple de clefs asymétriques.
+Ils conservent leur clef privée et publient leur clef publique.
+Une clef publique permet d'identifier un·e collaborateur·ice.
+Un·e collaborateur·ice peut être associé·e à plusieurs pairs.
+Chaque pair peut par exemple être un appareil distinct.
+L'identifiant d'un pair est un couple constitué d'une clef publique et d'un \emph{hash}.
+Le \emph{hash} permet de distinguer deux pairs qui disposent de la même clef publique.
+Pour s'assurer que le pair est invité une unique fois, le \emph{hash} est généré à partir d'une partie du contenu du message d'invitation et de ses méta-données.
+Ce \emph{hash} est calculé sur l'ensemble des méta-données du message d'invitation à l'exception de sa signature et sur la clef publique du pair.
+Nous supposons que la \emph{fonction de hash} utilisée résiste aux \emph{collisions} et aux \emph{préimages}.
+$\trm{Peers}$ est l'ensemble des identifiants des pairs.
 
 
 \subsubsection{Structures de données dépendantes}
