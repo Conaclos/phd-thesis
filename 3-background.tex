@@ -252,7 +252,7 @@ Il s'agit d'un ordre partiel localement fini\footnote{Pour tout couple d'opérat
         $b_2$ & $p_B$ & $\trm{post}(t_1)$ & \\
         $b_3$ & $p_B$ & $\trm{post}(t_2)$ & \\
     \end{tabular}
-    \caption{Caractéristiques des opérations exécutées dans l'histoire de la \autoref{fig:causal-expectation}.
+    \caption[Caractéristiques des opérations exécutées dans l'histoire de la \autoref{fig:causal-expectation}]{Caractéristiques des opérations exécutées dans l'histoire de la \autoref{fig:causal-expectation}.
     Un fil de discussion supporte une opération de lecture et une opération de modification $\trm{Op}_T = \set*{\trm{rd}} \cup \set*{\trm{post}(\trm{msg}) \given \trm{msg} \in \trm{String}}$.
     Les valeurs de retour correspondent à des ensembles de messages $\trm{Val}_T = \powerfset{\trm{String}}$. $\powerfset{\trm{String}}$ est l'ensemble des sous-ensembles finis des chaînes de caractères.}\label{tab:op-attributes}
 \end{table}
@@ -633,7 +633,8 @@ La \autoref{fig:wf-example} donne un exemple d'exécution abstraite mal-formée 
     \end{tikzpicture}
     \caption{}\label{fig:wf-example-2}
 \end{subfigure}
-\caption{Soit un groupe de pairs composé d'un pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.
+\caption[Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée]{Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée.
+Soit un groupe de pairs composé d'un pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.
 L'exécution abstraite \subref{fig:wf-example-1} n'est pas bien-formée.
 L'opération $m_1$ est uniquement observée par un pair mal-intentionné $p_M$.
 L'exécution abstraite \subref{fig:wf-example-2} est bien-formée.

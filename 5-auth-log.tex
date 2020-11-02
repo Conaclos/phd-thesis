@@ -2462,12 +2462,13 @@ Nous pouvons ainsi préciser le prédicat $\trm{linear}_J(m)$.
 
 %\begin{equation*}
 %    \trm{nonLinear}_J(m) = \trm{peer}_m \in \trm{knownMalicious}_J \lor
-%    \:\exists x \in J \qsep \trm{peer}_x = \trm{peer}_m \land \trm{seq}_x = \trm{seq}_m
+%    \:\exists x \in J \qsep \trm{peer}_x = \trm{peer}_m \land \trm{num}_x = \trm{num}_m
 %\end{equation*}
 
-\begin{equation*}
-\trm{linear}_J(m) \defeq \trm{peer}_m \not\in \trm{knownMalicious}_J \land (\trm{peer}_m \in \trm{invited}_J \implies \trm{num}_m = \trm{vv}_J(\trm{peer}_m) + 1)
-\end{equation*}
+\begin{equation*}\begin{split}
+    \MoveEqLeft\trm{linear}_J(m) \defeq\\
+    &\trm{peer}_m \not\in \trm{knownMalicious}_J \land (\trm{peer}_m \in \trm{invited}_J \implies \trm{num}_m = \trm{vv}_J(\trm{peer}_m) + 1)
+\end{split}\end{equation*}
 
 Nous disposons des structures de données nécessaires à la description du protocole.
 
@@ -2543,7 +2544,7 @@ Il permet de s'assurer que le message concerne le contenu partagé considéré.
 Nous supposons que les pairs connaissent l'identifiant du contenu partagé.
 
 \begin{equation*}
-    \trm{sig} \defeq sign_i(\trm{contentId} \parallel \trm{peer}_m \parallel \trm{seq}_m \parallel \trm{deps}_m \parallel m)
+    \trm{sig} \defeq sign_i(\trm{contentId} \parallel \trm{peer}_m \parallel \trm{num}_m \parallel \trm{deps}_m \parallel m)
 \end{equation*}
 
 Le message est finalement transmis à l'ensemble des pairs.
@@ -2624,7 +2625,7 @@ Ainsi nous devons vérifier si $m$ dépend d'une invitation seulement lorsque so
 
 %Le pair s'assure que chaque auteur de chaque dépendance et que l'auteur de $m$ sont des invités connus dans le journal $J$.
 %Pour vérifier cette condition, l'auteur de $m$ doit s'assurer que son message est accepté dans des journaux qui ont accepté l'invitation des auteurs de ses dépendances.
-%Pour ce faire, il doit avoir préalablement produit un message qui dépend sur ces invitations.
+%Pour ce faire, il doit avoir préalablement produit un message qui dépend de ces invitations.
 %Nous reparlons de ce point dans l'étape de traitement d'un message bien-formé.
 %
 %\begin{equation*}
@@ -2637,7 +2638,7 @@ Finalement, le pair doit s'assurer que l'auteur du message $m$ et les auteurs de
 %\begin{equation*}\begin{split}
 %    &(\trm{deps}_m \cup \set*{\trm{id}(m)}) \cap \trm{knownMalicious}_W \neq \emptyset \implies\\
 %    &\forall \tuple*{\trm{p}, \_, \_} \in \trm{deps}_m \cup \set*{\trm{id}(m)} \\
-%    &\nexists x, y \in \trm{ctx}_W(m) \qsep x \neq y \land p = \trm{peer}_x = \trm{peer}_y \land \trm{seq}_x = \trm{seq}_y
+%    &\nexists x, y \in \trm{ctx}_W(m) \qsep x \neq y \land p = \trm{peer}_x = \trm{peer}_y \land \trm{num}_x = \trm{num}_y
 %\end{split}\end{equation*}
 
 \begin{equation}\label{eq:honest-verif}
@@ -2677,18 +2678,18 @@ $m$ est ajouté dans le journal après avoir ajouté ces messages en attente dan
 Les messages en attente qui sont ajoutés dans le journal sont supprimés de l'ensemble $\trm{pending}$.
 
 \begin{equation*}
-    \trm{pending}' \assign \trm{pending} \lappend \begin{dcases}
-        \emptyset & \when \trm{accepted}(m)\\
-        \set*{m}
-    \end{dcases} \sminus \begin{dcases}
-        \trm{ctx}_{\trm{pending}}(m) & \when \trm{accepted}(m)\\
+    \trm{J}' \assign \trm{J} \lappend \begin{dcases}
+        \trm{ctx}_{\trm{pending}}(m) \lappend \set*{m} & \when \trm{accepted}(m)\\
         \emptyset
     \end{dcases}
 \end{equation*}
 
 \begin{equation*}
-    \trm{J}' \assign \trm{J} \lappend \begin{dcases}
-        \trm{ctx}_{\trm{pending}}(m) \lappend \set*{m} & \when \trm{accepted}(m)\\
+    \trm{pending}' \assign \trm{pending} \lappend \begin{dcases}
+        \emptyset & \when \trm{accepted}(m)\\
+        \set*{m}
+    \end{dcases} \sminus \begin{dcases}
+        \trm{ctx}_{\trm{pending}}(m) & \when \trm{accepted}(m)\\
         \emptyset
     \end{dcases}
 \end{equation*}
@@ -2805,6 +2806,7 @@ Nous pouvons ainsi définir la relation suivante~:
 
 \paragraph{Dépendance.} Une relation qui rend compte des dépendances directes et indirectes entre les messages d'un journal.
 Un message $x$ est une dépendance d'un message $z$, et nous écrivons $x \dep z$, si et seulement si $x$ est une dépendance déclarée de $z$ ou si il existe une dépendance $y$ de $z$ tel que $x$ est une dépendance de $y$.
+Cette relation est transitive.
 \begin{equation*}
     x \dep z \defiff \trm{id}(x) \in \trm{deps}_z \lor \exists y \qsep x \dep y \dep z
 \end{equation*}
@@ -2870,9 +2872,9 @@ Toute opération de $A$ est visible ou égale à l'opération d'observation impl
 \end{definition}
 
 
-\begin{claim}\label{th:rb-linear-order}
+\begin{remark}
 La relation \emph{retourne-avant} de l'exécution abstraite associée à un journal est une énumération.
-\end{claim}
+\end{remark}
 % A prouver?
 
 \begin{proposition}
@@ -2880,7 +2882,7 @@ L'exécution abstraite associée à un journal est bien-formée.
 \end{proposition}
 
 \begin{proof}
-Suivant l'\autoref{th:rb-linear-order}, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (mal-intentionné ou honnête) est une énumération.
+Suivant la remarque précédente, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (mal-intentionné ou honnête) est une énumération.
 Par conséquent, la propriété~\ref{itm:bf1} est respectée.
 
 Toute opération de $A$ est visible ou égale à l'opération d'observation implicite $\top_{\trm{vis}}$.
@@ -2974,7 +2976,7 @@ L'exécution abstraite associée respecte la propriété d'opération d'invitati
 
 L'exécution abstraite associée respecte la propriété d'invitation exigée.
 
-Lorsqu'un pair vérifié qu'un message $m$ est bien-formé il vérifie que $m$ dépend directement ou indirectement sur un message qui invite l'auteur de $m$.
+Lorsqu'un pair vérifie qu'un message $m$ est bien-formé il vérifie que $m$ dépend directement ou indirectement sur un message qui invite l'auteur de $m$.
 Pour s'assurer que ses propres messages dépendent sur un message qui l'invite un pair s'invite lui-même lorsqu'il initie la collaboration et vérifie que le journal contient une invitation qui l'invite lorsqu'il rejoint une collaboration existante.
 Puisqu'un message déclare les dépendances de l'ensemble $\trm{max}_J$ et que $\trm{max}_J$ correspond aux éléments maximaux du journal, les messages du pair dépendent toujours sur le message qui l'invite.
 
@@ -2988,14 +2990,14 @@ L'exécution abstraite associée respecte la propriété d'opération d'invitati
 
 Lorsqu'un pair initie une collaboration il exécute une première opération qui l'invite lui-même.
 Le message produit est donc un message d'invitation qui invite son auteur.
-Tout message ultérieur du pair dépend sur ce premier message.
+Tout message ultérieur du pair dépend de ce premier message.
 Une collaboration est identifiée par le \emph{hash} du premier message.
 Si un pair rejoint une collaboration, il s'assure que le premier message qu'il accepte dans son journal a un \emph{hash} égal à l'identifiant de la collaboration.
 Tout message ultérieur du pair dépend donc sur ce premier message.
 Il nous reste à montrer que tout message reçu et livré dépend également sur ce premier message.
-Un pair s'assure que tout message d'un autre pair dépend sur un message qui invite ce dernier.
+Un pair s'assure que tout message d'un autre pair dépend d'un message qui invite ce dernier.
 Cette contrainte doit être respectée autant par les messages linéaires que les messages non-linéaires.
-Par transitivité, tout message d'invitation dépend sur le premier message d'invitation.
+Par transitivité, tout message d'invitation dépend du premier message d'invitation.
 
 Nous démontrons finalement que l'exécution abstraite associée respecte la propriété de rejet d'invitations non-linéaires.
 Une invitation non-linéaire ne peut pas être acceptée immédiatement dans le journal.
@@ -3003,7 +3005,7 @@ Elle est donc mis en attente.
 De fait, le nouvel invité n'est pas inclut dans l'ensemble $\trm{invited}_J$ qui contient l'ensemble des pairs invités par des messages du journal.
 Or tout message dont l'auteur ou dont l'auteur d'une dépendance indirecte ou directe n'est pas un invité connu du journal est mis en attente.
 Le seul moyen d'ajouter ces messages est d'ajouter d'abord le message d'invitation.
-Ainsi un message d'un invité connu qui dépend sur l'invitation non-linéaire et ne dépend pas sur des messages dont l'auteur n'est pas un invité connu doit être accepté dans le journal.
+Ainsi un message d'un invité connu qui dépend de l'invitation non-linéaire et ne dépend pas sur des messages dont l'auteur n'est pas un invité connu doit être accepté dans le journal.
 
 
 %Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
@@ -3025,7 +3027,7 @@ Ainsi un message d'un invité connu qui dépend sur l'invitation non-linéaire e
 \subsection{Stabilité des messages du journal}\label{subsec:msg-stable}
 
 \begin{definition}[Message stable]
-Dans un journal $J$, un message $m$ est stable si et seulement si tout message ajouté ultérieurement à $J$ dépend sur $m$.
+Dans un journal $J$, un message $m$ est stable si et seulement si tout message ajouté ultérieurement à $J$ dépend de $m$.
 \end{definition}
 
 \begin{theorem}[Opération et message stables]\label{th:op-msg-stable}
@@ -3229,7 +3231,7 @@ Nous pouvons donc construire l'état observé par l'auteur de $m$ en intégrant 
 \begin{remark}
 $I$ ne peut pas intégrer des messages sur-lesquels $m$ ne dépend pas.
 En effet, seuls des messages stables sont supprimés de $J$ et donc intégré à $I$.
-Par définition si un message est stable, alors tout message ajouté ultérieurement dans le journal $J$ dépend sur ce message.
+Par définition si un message est stable, alors tout message ajouté ultérieurement dans le journal $J$ dépend de ce message.
 \end{remark}
 
 L'instantané $I$ et ses structures de données dépendantes sont copiées.
@@ -3327,7 +3329,7 @@ Les dépendances indirectes qui sont déclarés comme dépendance sont bien-déf
 
 Le message $m$ qui a été utilisé pour stabiliser et tronquer le journal est conservé dans la variable $\trm{ref}_I$.
 
-Un message du possesseur du journal dépend sur l'ensemble des messages d'un préfixe du journal.
+Un message du possesseur du journal dépend de l'ensemble des messages d'un préfixe du journal.
 Si un tel message est stable, alors un préfixe du journal est stable.
 Un pair teste uniquement la stabilité de ses messages.
 
@@ -3374,7 +3376,7 @@ Il doit faire partie des pairs invités connus en $J_i$.
     p_i \in \trm{invited}_{J_i}
 \end{equation*}
 
-Si un message d'un pair honnête est présent dans le journal tronqué et dépend sur l'invitation qui invite $p_i$, alors le pair est assuré d'avoir une copie et un journal cohérent.
+Si un message d'un pair honnête est présent dans le journal tronqué et dépend de l'invitation qui invite $p_i$, alors le pair est assuré d'avoir une copie et un journal cohérent.
 
 % Pour la cohérence toute invitation peut faire l'affaire
 % En revanche il faut faire attention au invités dans des embranchements
@@ -3401,7 +3403,7 @@ Septennat le fait qu'il soit reconnu mal-intentionné de manière stable impliqu
 
 Comme tout autre message du journal, un message d'invitation ne peut être supprimé du journal si les messages qui dépendent sur ce message ne deviennent pas stables.
 Pour devenir stable, le pair invité dans l'invitation doit participer à leur stabilisation.
-Il est donc toujours possible de vérifier que le premier message d'un pair honnête (nombre séquentiel égal à $1$) dépend sur son invitation.
+Il est donc toujours possible de vérifier que le premier message d'un pair honnête (nombre séquentiel égal à $1$) dépend de son invitation.
 En revanche pour un pair reconnu mal-intentionné, il est possible que cette vérification ne puisse plus l'être.
 Nous retombons dans le même schéma que celui présente dans le paragraphe précédent.
 
@@ -3455,7 +3457,7 @@ Dans ce cas, l'état observé par le pair qui exécute une invitation peut être
 Nous avons proposé une approximation pour déterminer si un message est stable dans un journal.
 Cette approximation écarte la spécificité des invitations.
 Leur prise en compte n'est pas insurmontable.
-En effet, en plus des cas évoqués, nous pourrions également avancer d'un pas dans la séquence des permutations des pairs si le pair courant est invité dans un message qui dépend sur le message courant.
+En effet, en plus des cas évoqués, nous pourrions également avancer d'un pas dans la séquence des permutations des pairs si le pair courant est invité dans un message qui dépend du message courant.
 Pour éviter des parcours redondants dans le journal, le pair peut conserver l'ensemble des pairs invités dans un message qui précède ou qui est concurrent au message courant.
 
 La stabilisation d'un message requiert le concourt de l'ensemble des pairs qui ne sont pas reconnus mal-intentionnés.
