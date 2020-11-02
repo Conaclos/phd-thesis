@@ -2466,7 +2466,7 @@ Nous pouvons ainsi préciser le prédicat $\trm{linear}_J(m)$.
 %\end{equation*}
 
 \begin{equation*}
-\trm{linear}_J(m) \defeq \trm{peer}_m \not\in \trm{knownMalicious}_J \implies \trm{num}_m = \trm{vv}_J(\trm{peer}_m) + 1
+\trm{linear}_J(m) \defeq \trm{peer}_m \not\in \trm{knownMalicious}_J \land (\trm{peer}_m \in \trm{invited}_J \implies \trm{num}_m = \trm{vv}_J(\trm{peer}_m) + 1)
 \end{equation*}
 
 Nous disposons des structures de données nécessaires à la description du protocole.
@@ -2656,7 +2656,7 @@ Similairement au journal, l'ordre de l'ensemble $\trm{pending}$ correspond à l'
 Le journal étendu $W$ correspond au journal $J$ auquel a été ajouté les messages de l'ensemble $\trm{pending}$ dans leur ordre d'apparition.
 Ce journal est virtuel, il n'a pas d'existence propre.
 En revanche les structures de données dépendantes de $W$ sont concrètes.
-Elles sont mises-à-jour de la même manière que celles du journal $J$.
+Elles sont mises à jour de la même manière que celles du journal $J$.
 
 \begin{equation*}
     W \defeq J \lappend \trm{pending}
@@ -2669,7 +2669,7 @@ Nous détaillons ce cas ci-après.
 
 \begin{equation*}\begin{split}
     \MoveEqLeft\trm{accepted}(m) \defiff\\
-    &J \neq \emptyset \implies \trm{linear}_J(m) \land \forall x \in \trm{ctx}_{\trm{pending}}(m) \qsep \trm{peer}_x, \trm{peer}_m \in \trm{knownInvited}_J
+    &J \neq \emptyset \implies \trm{linear}_J(m) \land \forall x \in \trm{ctx}_{\trm{pending}}(m) \qsep \trm{peer}_x, \trm{peer}_m \in \trm{invited}_J
 \end{split}\end{equation*}
 
 Lorsqu'un message $m$ est accepté dans le journal, l'ensemble de ses dépendances en attente sont également acceptés dans le journal.
