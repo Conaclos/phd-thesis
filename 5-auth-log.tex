@@ -147,7 +147,7 @@ La \autoref{fig:log-example} donne un exemple d'un journal et d'une version tron
 \caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.
 L'arrangement horizontal des opérations traduit leur ordre d'ajout dans le journal.
 Ainsi les opérations ont été ajoutées dans l'ordre suivant~: $a_1$, $a_2$, $b_1$, $a_3$, $b_2$, $a_4$.
-Un arc dirigé entre deux modifications se traduit par  \enquote{est une dépendance de}.
+Un arc dirigé entre deux modifications se traduit par \enquote{est une dépendance de}.
 La partie entourée correspond à une version tronquée de ce journal.
 }\label{fig:log-example}
 \end{figure}
@@ -2325,9 +2325,25 @@ L'exécution d'une opération d'interrogation par un pair $p_i$ est simplement e
 \end{equation*}
 
 Tout type de données répliquées peut ainsi être augmenté pour être adapté à notre protocole.
-Avant de nous intéresser à ce protocole, nous décrivons les structures de données qu'il utilise.
+Pour illustrer notre protocole nous utilisons l'un des types de données répliquées les plus simple~: un ensemble répliqué synchronisé par opérations dans lequel des valeurs peuvent seulement être ajoutées~\autocite{baquero_2018_pure-op-crdt}.
+La \autoref{fig:op-gset} présente son implémentation.
 
-\subsubsection{Journaux de messages}
+\begin{figure}[bth]
+\centering
+\begin{align}
+&\trm{OpGSet}\tuple*{V} \defeq \powerfset{V} \label{eq:op-gset-state}\\
+%&s_0 \defeq \tuple*{\emptyset, 0}\\
+&\trm{eval}_i(\sigma, \trm{rd}) \defeq \sigma \label{eq:op-gset-eval}\\
+&\trm{prepare}_i(\sigma, \trm{add}(v)) \defeq \tuple*{\trm{add}, v} \label{eq:op-gset-prep-add}\\
+&\trm{integrate}_i(\sigma, \tuple*{\trm{add}, v}) \defeq \sigma \cup \set*{v} \label{eq:op-gset-integr-add}
+\end{align}
+\caption[Implémentation d'un ensemble sans suppression répliqué synchronisé par opérations]{Implémentation d'un ensemble répliqué sans suppression synchronisé par opérations.}\label{fig:op-gset}
+\end{figure}
+
+Avant de décrire notre protocole, nous décrivons les structures de données qu'il utilise.
+Le protocole utilise en particulier un journal de messages.
+
+\subsubsection{Journal de messages}
 
 L'exécution d'une opération de modification sur le contenu partagé dérive un message qui synthétise son effet.
 Les pairs échangent et intègrent les messages qu'ils produisent pour synchroniser leurs copies.
@@ -2382,6 +2398,60 @@ Ce \emph{hash} est calculé sur l'ensemble des méta-données du message d'invit
 Nous supposons que la \emph{fonction de hash} utilisée résiste aux \emph{collisions} et aux \emph{préimages}.
 $\trm{Peers}$ est l'ensemble des identifiants des pairs.
 
+Nous représentons un journal à l'aide d'un graphe dirigé et linéarisé.
+Un sommet correspond à un message et un arc dirigé indique que sa source est une dépendance déclarée de sa destination.
+Par exemple, dans le journal de la \autoref{fig:log-example-2}, $a_1$ est une dépendance déclarée de $a_2$.
+Les messages sont horizontalement arrangés sur une ligne.
+Cette arrangement traduit leur ordre d'ajout dans le journal.
+Si un message est ajouté avant un autre message, alors le premier se trouve à gauche du second.
+Par exemple, le message $a_1$ est ajouté avant le message $a_2$.
+La \autoref{tab:msg-metadata} indique le contenu et certaines méta-données des message du journal de \autoref{fig:log-example-2}.
+Les désignations des messages sont construites sur leurs identifiants.
+Ainsi le premier message ajouté dans le journal avec pour auteur $p_i$ et numéro $k$ a pour désignation $i_k$.
+$a_1$ est donc un message généré par le pair $p_A$ avec un numéro égal à $1$.
+Les messages $m_1$ et $m_1'$ sont générés par $p_M$ avec un numéro égal à $1$.
+
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}
+    \newcommand*\hsep{1.8}
+    \path node (a1) {$a_1$}
+        to +(\hsep,0) node (a2) {$a_2$}
+        to +(2*\hsep,0) node (b1) {$b_1$}
+        to +(3*\hsep,0) node (m1) {$m_1$}
+        to +(4*\hsep,0) node (a3) {$a_3$}
+        to +(5*\hsep,0) node (m1p) {$m_1'$}
+        to +(6*\hsep,0) node (b2) {$b_2$}
+        to +(7*\hsep,0) node (b3) {$b_3$}
+    ;
+    % Dependency
+    \foreach \src/\dest in {a1/a2,a2/b1,b1/m1,m1/a3,m1p/b2,b2/b3}
+        \draw[pre] (\src) to (\dest);
+    \draw[vis,bend right=25] (b1) to (m1p);
+    \draw[vis,bend left=25] (a3) to (b3);
+\end{tikzpicture}
+\caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.}\label{fig:log-example-2}
+\end{figure}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{ccccc}
+        message $m$ & contenu de $m$ & $\trm{peer}_m$ & $\trm{num}_m$ & $\trm{deps}_m$ \\
+        \toprule
+        $a_1$ & $\tuple*{\trm{invite}, p_A}$ & $p_A$ & $1$ & $\emptyset$ \\
+        $a_2$ & $\tuple*{\trm{invite}, p_B}$ & $p_A$ & $2$ & $\set*{a_1}$ \\
+        $b_1$ & $\tuple*{\trm{invite}, p_M}$ & $p_B$ & $1$ & $\set*{a_2}$ \\
+        $m_1$ & $\tuple*{\trm{add}, 1}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
+        $a_3$ & $\tuple*{\trm{ack}}$ & $p_A$ & $3$ & $\set*{m_1}$ \\
+        $m_1'$ & $\tuple*{\trm{add}, 2}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
+        $b_2$ & $\tuple*{\trm{add}, 3}$ & $p_B$ & $2$ & $\set*{m_1'}$ \\
+        $b_3$ & $\tuple*{\trm{add}, 4}$ & $p_B$ & $3$ & $\set*{a_3,b_2}$ \\
+    \end{tabular}
+    \caption{Contenu et des méta-données des messages de la \autoref{fig:log-example-2}}\label{tab:msg-metadata}
+\end{table}
+
+Le journal de messages est la structure de données principale de notre protocole.
+Lorsqu'il est mis à jour d'autres structures de données que nous qualifions de \emph{dépendantes} sont également mises à jour.
 
 \subsubsection{Structures de données dépendantes}
 
@@ -2396,7 +2466,7 @@ cette intégration permet d'obtenir une version mise-à-jour de $S$ notée $S'$.
 Les messages d'un journal et leurs relations de dépendances forment un graphe dirigé acyclique.
 Nous dénotons par $\trm{max}_J$, l'ensemble des messages maximaux de $J$.
 C'est-à-dire, des messages qui ne sont pas déclarés comme dépendance d'un autre message du journal.
-Lorsqu'un message $m$ est ajouté dans le journal, l'ensemble est simplement mis à jour en ajoutant $m$ et en retirant de l'ensemble les messages qui sont des dépendances déclarées de $m$.
+Lorsqu'un message $m$ est ajouté dans le journal, l'ensemble est simplement mis à jour en ajoutant $m$ et en retirant les messages qui sont des dépendances déclarées de $m$.
 
 \begin{equation*}
     \trm{max}_{J'} \assign \set*{m} \cup \set*{x \in \trm{max}_J \given \trm{id}(x) \not\in \trm{deps}_m}
@@ -2427,7 +2497,7 @@ $\trm{vv}_J(p)$ retourne le numéro associé au pair $p$.
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{vv}_{J'} \assign \set*{\tuple{p, \_} \in \trm{vv}_J \given p \neq \trm{peer}_m}\\
 &\cup \begin{dcases}
-        \set*{\tuple{q, 0}} & \when m = \tuple{\trm{invite}, q}\\
+        \set*{\tuple{q, 0}} & \when m = \tuple{\trm{invite}, q} \land \trm{peer}_m \neq q\\
         \emptyset &
     \end{dcases}\\
 &\cup \begin{dcases}
@@ -2471,6 +2541,44 @@ Nous pouvons ainsi préciser le prédicat $\trm{linear}_J(m)$.
 \end{split}\end{equation*}
 
 Nous disposons des structures de données nécessaires à la description du protocole.
+Le \autoref{tab:data-structure-update} présente l'évolution des structures de données dépendantes du journal de la \autoref{fig:log-example-2}.
+
+\begin{table}[ht]
+    \begin{subtable}{\linewidth}
+    \centering
+    \begin{tabular}{cccccc}
+        ajout du message & $S$ & $max_J$ & $\trm{knownMalicious}_J$ \\
+        \toprule
+        & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+        $a_1$ & $\emptyset$ & $\set*{a_1}$ & $\emptyset$ \\
+        $a_2$ & $\emptyset$ & $\set*{a_2}$ & $\emptyset$ \\
+        $b_1$ & $\emptyset$ & $\set*{b_1}$ & $\emptyset$ \\
+        $m_1$ & $\set*{1}$ & $\set*{m_1}$ & $\emptyset$ \\
+        $a_3$ & $\set*{1}$ & $\set*{a_3}$ & $\emptyset$ \\
+        $m_1'$ & $\set*{1,2}$ & $\set*{a_3,m_1'}$ & $\set*{p_M}$ \\
+        $b_2$ & $\set*{1,2,3}$ & $\set*{a_3,b_2}$ & $\set*{p_M}$ \\
+        $b_3$ & $\set*{1,2,3,4}$ & $\set*{b_3}$ & $\set*{p_M}$ \\
+    \end{tabular}
+    \end{subtable}
+    \par\medskip
+    \begin{subtable}{\linewidth}
+    \centering
+    \begin{tabular}{ccc}
+        ajout du message & $\trm{vv}_J$ & $\trm{invited}_J$ \\
+        \toprule
+        & $\emptyset$ & $\emptyset$\\
+        $a_1$ & $\set*{\tuple*{p_A, 1}}$ & $\set*{p_A}$ \\
+        $a_2$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 0}}$ & $\set*{p_A,p_B}$ \\
+        $b_1$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 1}, \tuple*{p_M, 0}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $m_1$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $a_3$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $m_1'$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $b_2$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 2}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $b_3$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 3}}$ & $\set*{p_A,p_B,p_M}$ \\
+    \end{tabular}
+    \end{subtable}
+    \caption[Exemple de mises-à-jours de structures de données dépendantes d'un' journal]{Mises-à-jours successives des structures de données dépendantes du journal $J$ après l'ajout successif des messages du \autoref{tab:msg-metadata}.}\label{tab:data-structure-update}
+\end{table}
 
 
 \subsection{Description du protocole}
