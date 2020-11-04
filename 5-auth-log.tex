@@ -2630,6 +2630,8 @@ L'union de deux ensembles ordonnés n'est pas commutatif.
 
 Cet ajout met à jour l'ensemble des structures de données dépendantes du journal.
 C'est le cas notamment de la copie $S$ qui intègre alors le message $m$.
+
+Le calcul du \emph{hash} de $m$ nécessite ses méta-données.
 Dans les paragraphes suivants nous détaillons la construction des méta-données du message $m$.
 
 Le pair se renseigne comme auteur du message.
@@ -2648,7 +2650,7 @@ Le premier message a donc un numéro égal à $1$.
     &\trm{ctr}' \assign \trm{ctr} + 1
 \end{align*}
 
-Un pair déclare comme dépendances les messages les plus récents du journal.
+Un pair déclare comme dépendances les messages les plus récents du journal qui ne sont pas des dépendances d'autres messages du journal.
 
 \begin{equation*}
     \trm{deps}_m \assign \set*{\trm{id}(x) \given x \in \trm{max}_J}
@@ -2657,15 +2659,29 @@ Un pair déclare comme dépendances les messages les plus récents du journal.
 Le pair $p_i$ signe son message à l'aide de la fonction $\trm{sign}$.
 L'appel $\trm{sign}_i(\trm{data}_1 \parallel \trm{data}_2)$ concatène $\trm{data}_1$ et $\trm{data}_2$ puis signe le résultat avec la clef privée du pair $p_i$.
 Le contenu du message ainsi que ses méta-données sont signés.
-L'identifiant du contenu $\trm{contentId}$ est également signé.
-Il permet de s'assurer que le message concerne le contenu partagé considéré.
-Nous supposons que les pairs connaissent l'identifiant du contenu partagé.
+% L'identifiant du contenu $\trm{contentId}$ est également signé.
+% Il permet de s'assurer que le message concerne le contenu partagé considéré.
+% Nous supposons que les pairs connaissent l'identifiant du contenu partagé.
+% L'identifiant du contenu correspond à l'identifiant de l'auteur du premier message de la collaboration.
+
+% \begin{equation*}
+%     \trm{sig}_m \defeq sign_i(\trm{contentId} \parallel \trm{peer}_m \parallel \trm{num}_m \parallel \trm{deps}_m \parallel m)
+% \end{equation*}
 
 \begin{equation*}
-    \trm{sig}_m \defeq sign_i(\trm{contentId} \parallel \trm{peer}_m \parallel \trm{num}_m \parallel \trm{deps}_m \parallel m)
+    \trm{sig}_m \defeq sign_i(\trm{peer}_m \parallel \trm{num}_m \parallel \trm{deps}_m \parallel m)
 \end{equation*}
 
 Le message est finalement transmis à l'ensemble des pairs.
+
+$m$ dépend transitivement sur l'ensemble des messages du journal $J$.
+Ce message donne aux autres pair une preuve que l'auteur de $m$ connaît les pairs invités en $m$ et dans ses dépendances.
+$\trm{ackInvited}$ enregistre les pairs que $p_i$ reconnaît.
+Nous utilisons cette information lors de la livraison d'un message.
+
+\begin{equation*}
+    \trm{ackInvited} \assign \trm{invited}_{J'}
+\end{equation*}
 
 
 \subsubsection{Livraison d'un message}
@@ -2687,7 +2703,7 @@ Le message est finalement transmis à l'ensemble des pairs.
 
 
 Les pairs s'échangent leurs messages sur un \emph{réseau asynchrone corrompu} par l'adversaire.
-L'adversaire peut par exemple altérer, réordonner, omettre, et dupliquer des messages.
+L'adversaire peut altérer, réordonner, omettre, retarder, et dupliquer des messages.
 Pour simplifier la description du protocole et nous concentrer sur ses points les plus importants, nous supposons qu'une couche réseau assure que \begin{inlinelist}\item un message est livré exactement une fois, et que \item l'ensemble des dépendances d'un message sont préalablement livrés\end{inlinelist}.
 Les messages des pairs honnêtes sont à terme tous livrés par cette couche réseau.
 
@@ -2707,15 +2723,21 @@ Un pair effectue plusieurs vérifications pour s'assurer qu'un message est bien-
 Il s'assure que le message $m$ est authentique, c'est-à-dire que le message a bien été signé par le pair qui est déclaré comme son auteur.
 Pour ce faire, il dispose de la clef publique de chaque pair, du message et de ses méta-données, ainsi que de l'identifiant du contenu partagé.
 
-Si le message $m$ est une invitation qui invite son propre auteur alors il s'agit de la première opération du journal.
-%Son \emph{hash} correspond à l'identifiant du contenu partagé.
+% L'identifiant de l'auteur du premier message du journal doit correspondre à l'identifiant du contenu partagé.
+
+% \begin{equation*}
+%     J = \emptyset \iff \trm{peer}_m = \trm{contentId}
+% \end{equation*}
+
+Si $m$ est le premier message du journal, alors il s'agit d'une invitation qui invite son propre auteur.
+Si le message $m$ est une invitation qui invite son propre auteur, alors il s'agit de la première opération du journal.
 
 \begin{equation*}
-    m = \tuple*{\trm{invite}, \trm{peer}_m} \iff J = \emptyset %\land h(m) = \trm{contentId}
+    J = \emptyset \iff m = \tuple*{\trm{invite}, \trm{peer}_m}
 \end{equation*}
 
 Si le message $m$ est une invitation, alors l'identifiant du pair est correctement généré.
-En d'autres termes, il s'agit d'un couple dont le premier élément est une clef publique et le second élément est le \emph{hash} des méta-données du message.
+En d'autres termes, il s'agit d'un couple dont le premier élément est une clef publique et le second élément est un \emph{hash} obtenu à partir de la clef publique et les méta-données du message à l'exception de sa signature.
 
 Le pair s'assure que les dépendances déclarées du message $m$ sont des messages bien-formés.
 Les messages bien-formés sont soit présent dans le journal $J$ ou en attente.
@@ -2788,10 +2810,10 @@ Nous détaillons ce cas ci-après.
 
 \begin{equation*}\begin{split}
     \MoveEqLeft\trm{accepted}(m) \defiff\\
-    &J \neq \emptyset \implies \trm{linear}_J(m) \land \forall x \in \trm{ctx}_{\trm{pending}}(m) \qsep \trm{peer}_x, \trm{peer}_m \in \trm{invited}_J
+    &J = \emptyset \lor (\trm{linear}_J(m) \land \forall x \in \trm{ctx}_{\trm{pending}}(m) \qsep \trm{peer}_x, \trm{peer}_m \in \trm{invited}_J)
 \end{split}\end{equation*}
 
-Lorsqu'un message $m$ est accepté dans le journal, l'ensemble de ses dépendances en attente sont également acceptés dans le journal.
+Lorsqu'un message $m$ est accepté dans le journal, l'ensemble de ses dépendances en attente sont également acceptées dans le journal.
 $m$ est ajouté dans le journal après avoir ajouté ces messages en attente dans l'ordre dans lequel ils apparaissent dans $\trm{pending}$.
 Les messages en attente qui sont ajoutés dans le journal sont supprimés de l'ensemble $\trm{pending}$.
 
@@ -2813,38 +2835,94 @@ Les messages en attente qui sont ajoutés dans le journal sont supprimés de l'e
 \end{equation*}
 
 La mise-à-jour du journal est en réalité un peu plus complexe que l'équation présentée ci-dessus.
-En effet, si le journal est mis à jour de la sorte, il peut conduire à la génération de messages mal-formés.
-Un pair honnête doit uniquement générer des messages bien-formés.
-Pour respecter cette invariant, le protocole exécute dans certains cas des opérations d'acquiescement avant et après l'ajout de ces messages.
-Nous expliquons dans les deux paragraphes suivants dans quels cas ces opérations sont exécutées.
+En effet, le protocole exécute dans certains cas une opération d'acquiescement avant l'ajout d'un message et de ses dépendances en attente.
+Nous expliquons dans les deux paragraphes suivants dans quels cas cette exécution se produit.
 
-Nous avons précédemment fait remarquer qu'un message bien-formé ne peut pas déclarer un message non-linéaire comme dépendance.
-Nous devons donc nous assurer qu'à l'issue de ces ajouts de messages dans le journal, l'ensemble des messages les plus récents $\trm{max}_J'$ ne contient pas le message d'un pair reconnu mal-intentionné dans $J$.
-Pour s'en assurer le protocole exécute une opération d'acquiescement avant ces ajouts.
+\emph{Cas 1.} Un pair honnête doit uniquement générer des messages bien-formés.
+Lorsqu'un pair génère un nouveau message $m$, il déclare comme dépendances de ce message les messages les plus récents du journal ($\trm{deps}_m \assign \trm{max}_J$).
+Pour être bien-formé, ce message ne doit pas déclarer une dépendance sur un message dont l'auteur est reconnu mal-intentionné dans le journal.
+Il se peut que l'acceptation immédiate d'un message dans le journal conduise à l'ajout de messages en attente qui sont non-linéaire avec l'un des messages les plus récents du journal.
+Un ou plusieurs auteurs de messages les plus récents du journal peuvent donc être reconnu mal-intentionnés à l'issue de l'ajout dans le journal de messages en attente.
+Si l'ajout d'un message et de ses dépendances en attente conduit à cette situation, alors le protocole exécute une opération d'acquiescement avant leurs ajouts.
+Pour simplifier, le protocole peut exécuter systématiquement uen opération d'acquiescement si un message est ajouté avec des dépendances en attente.
 
-%Si nous n'effectuons pas cette vérification, le pair pourrait produire des messages mal-formés.
-%Si l'ensemble $\trm{max}_J'$ contient un tel message, alors le possesseur du journal doit exécuter une opération avant ces ajouts.
-%Puisque nous ne pouvons pas demander aux collaborateur·ices de modifier sur demande le contenu partagé, le protocole exécute lui même des opérations d'acquiescement.
+% Pour éviter la génération de messages mal-formés, le protocole exécute donc une opération d'acquiescement avant l'ajout immédiat d'un message et de ses dépendances en attente.
+% cette exécution n'a lieu si et seulement si au moins un message en attente est accepté dans le journal.
 
-Un message qui dépend directement ou indirectement d'un message dont l'auteur n'est pas un invité connu du journal $J$ est mis en attente.
+\emph{Cas 2.} Un message qui dépend directement ou transitivement d'un message dont l'auteur n'est pas un invité connu du journal $J$ n'est pas accepté immédiatement dans le journal.
+Il est mis en attente.
 Pour accepter les messages d'un nouvel invité, il est nécessaire qu'au moins un invité connu du journal accepte l'invitation de ce nouveau pair.
-Pour s'assurer qu'un de ses messages ne soit pas mis en attente, un pair doit donc s'assurer que les invitations des auteurs des dépendances de ce message soient des invités connus dans les autres journaux.
+Pour s'assurer qu'un de ses messages ne soit pas mis en attente, un pair $p_i$ doit donc s'assurer que les invitations des auteurs des dépendances de ce message soient des invités connus dans les autres journaux.
 Pour ce faire, il donne une preuve d'observation de l'invitation d'un pair avant d'accepter les messages de ce pair.
-Si l'ajout de messages dans le journal modifie l'ensemble des invités connus ($\trm{invited}_{J'} \sminus \trm{invited}_J \neq \emptyset$), alors le pair exécute une opération d'acquiescement après leurs ajouts pour donner une preuve d'observation de l'invitation.
+Si l'auteur de $m$ ou de l'une de ses dépendances en attente n'est pas reconnu par $p_i$ ($p \not\in \trm{ackInvited}$), alors le protocole exécute une opération d'acquiescement avant l'ajout de $m$ et de ses dépendances en attente.
 
 
 \subsubsection{Initialisation}
 
+La copie $S$ du contenu partagé est initialisée à un état déterminé par le protocole de réplication.
+Les autres structures de données sont initialisées comme suit.
+
+\begin{align*}
+&J \assign \emptyset\\
+&\trm{vv}_J \assign \emptyset\\
+&\trm{max}_J \assign \emptyset\\
+&\trm{knownMalicious}_J \assign \emptyset\\
+\end{align*}
+
 Un pair peut initier une nouvelle collaboration ou en rejoindre une existante.
-Pour initier une nouvelle collaboration, il exécute une première opération qui l'invite.
-il obtient ainsi son identifiant de pair pour cette nouvelle collaboration.
-Le \emph{hash} de ce premier message correspond à l'identifiant du contenu partagé.
-Pour rejoindre une collaboration, un nouveau pair peut récupérer le journal d'un autre pair déjà présent dans la collaboration.
-Il demande à sa couche réseau de lui livrer les messages dans l'ordre dans lequel ils ont été ajoutés dans le journal récupéré.
+
+\paragraph{Initier une collaboration.}
+Pour initier une nouvelle collaboration, un pair exécute une première opération qui l'invite.
+% Il génère ainsi le premier message $m$ du journal et son identifiant de pair.
+% Son identifiant de pair correspond également à l'identifiant du contenu partagé $\trm{contentId}$.
+
+% \begin{equation*}
+%     \trm{contentId} \assign \trm{peer}_m
+% \end{equation*}
+
+\paragraph{Rejoindre une collaboration.}
+Pour rejoindre une collaboration, un pair doit d'abord se faire inviter par un pair déjà présent dans la collaboration.
+Il récupère son identifiant de pair $p_i$.
+% Il récupère son identifiant de pair $p_i$ et l'identifiant $\trm{contentId}$ de la collaboration.
+Il récupère un journal qui inclut le message qui l'invite.
+Ce journal peut être celui du pair qui l'invite ou d'un autre pair.
+
+Le nouveau pair demande à sa couche réseau de lui livrer les messages dans l'ordre dans lequel ils ont été ajoutés dans le journal récupéré.
+Il suit les étapes de la livraison d'un message à quelques exceptions près.
+En effet, le pair ne peut pas exécuter d'opérations tant qu'il ne fait pas parti des invités connu de son propre journal.
+Autrement il produit des messages mal-formés.
+Or, lorsqu'un message est livré, le protocole peut être amené à exécuter une opération d'acquiescement avant l'ajout d'un message dans le journal.
+L'exécution de cette opération se produit si et seulement si \begin{inlinelist}
+\item l'ajout de messages dans le journal conduit à la présence d'une opération non-linéaire parmi les messages les plus récents du journal, ou si
+\item un message dont l'auteur n'est pas reconnu par le pair est ajouté dans le journal.
+\end{inlinelist}
+Le premier cas ne devrait jamais survenir.
+Le pair s'assure que ce cas n'est jamais rencontré.
+Il peut simplement vérifier qu'à l'issue de l'ajout de messages dans le journal, il n'y a pas de messages d'un pair reconnu mal-intentionné dans les messages les plus récents du journal.
+
+\begin{equation*}
+    x \in \trm{max}_J \implies \trm{peer}_x \not\in \trm{knownMalicious}_J
+\end{equation*}
+
+Pour le second cas, il n'exécute pas d'opérations d'acquiescement jusqu'à ce qu'il rencontre le message qui l'invite.
+Lorsqu'il ajoute le message qui l'invite, il initialise $\trm{ackInvited}$ avec les invités connus de son journal.
+Inviter un pair le force donc a se reconnaître lui-même et à reconnaître les pairs invités dans les dépendances de son invitation.
+
+\begin{equation*}
+    \trm{ackInvited} \assign \trm{invited}_J
+\end{equation*}
+
+Une fois son invitation ajouté dans son journal, le pair exécute uen opération d'acquiescement lorsqu'il rencontre le deuxième cas.
+
 Il s'assure ainsi que le journal récupéré a été correctement formé.
-L'ajout des messages dans le journal met également à jour l'état de sa copie.
+L'ajout des messages dans le journal met également à jour l'état de sa copie et des structures dépendantes du journal.
 Il construit ainsi l'état du contenu partagé.
+
 En dernier lieu, il s'assure que le journal contient un message qui l'invite.
+
+\begin{equation*}
+    p_i \in \trm{invited}_J
+\end{equation*}
 
 
 \subsection{Optimisations}
