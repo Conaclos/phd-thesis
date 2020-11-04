@@ -2258,7 +2258,7 @@ Nous présentons ensuite le protocole et des optimisations possibles de ce derni
 Finalement nous montrons que le protocole produit des journaux dans lesquels nous pouvons identifier des messages stables.
 
 
-\subsection{Structures de données}
+\subsection{Structures de données}\label{subsec:full-log-data-structures}
 
 Un protocole repose sur des structures de données.
 Nous détaillons dans cette sous-section la structure principale sur laquelle repose notre protocole~: un journal.
@@ -2584,7 +2584,7 @@ Le \autoref{tab:data-structure-update} présente l'évolution des structures de 
 \subsection{Description du protocole}
 
 Un pair maintient un journal des messages qu'il transmet et qui lui sont livrés.
-Nous avons décrit dans la sous-section précédente les structures de données principales qui sont mis à jour lorsqu'un message est accepté dans le journal.
+Nous avons décrit dans la \autoref{subsec:full-log-data-structures} les structures de données principales qui sont mis à jour lorsqu'un message est accepté dans le journal.
 Au cours de l'exécution d'un protocole, un pair est soumis à une succession d'événements qui font évoluer son état.
 Nous modélisons les pairs honnêtes comme des automates d'entrées-sorties soumis aux entrées suivantes~:
 \begin{itemize}
@@ -2619,6 +2619,10 @@ Le pair $p_i$ dérive d'abord un message $m$ à partir de l'opération $o$.
 \end{equation*}
 
 Le message $m$ obtenu est ajouté dans le journal $J$.
+L'opérateur $\trm{\lappend}$ permet d'unir deux ensembles ordonnés.
+L'union conserve l'ordre respectif de chaque ensemble et produit un ordre entre les éléments du premier ensemble et les éléments du second ensemble.
+Les éléments du premier ensemble sont plus petit que les éléments du second ensemble.
+L'union de deux ensembles ordonnés n'est pas commutatif.
 
 \begin{equation*}
     J' \assign J \lappend \set*{m}
@@ -2627,6 +2631,12 @@ Le message $m$ obtenu est ajouté dans le journal $J$.
 Cet ajout met à jour l'ensemble des structures de données dépendantes du journal.
 C'est le cas notamment de la copie $S$ qui intègre alors le message $m$.
 Dans les paragraphes suivants nous détaillons la construction des méta-données du message $m$.
+
+Le pair se renseigne comme auteur du message.
+
+\begin{equation*}
+    \trm{peer}_m \assign p_i
+\end{equation*}
 
 Un pair génère des messages avec un numéro unique et contigu au numéro du message qu'il a précédemment généré.
 Pour ce faire, il maintient un compteur $\trm{ctr}$ qu'il incrémente pour chaque nouveau message qu'il produit.
@@ -2652,7 +2662,7 @@ Il permet de s'assurer que le message concerne le contenu partagé considéré.
 Nous supposons que les pairs connaissent l'identifiant du contenu partagé.
 
 \begin{equation*}
-    \trm{sig} \defeq sign_i(\trm{contentId} \parallel \trm{peer}_m \parallel \trm{num}_m \parallel \trm{deps}_m \parallel m)
+    \trm{sig}_m \defeq sign_i(\trm{contentId} \parallel \trm{peer}_m \parallel \trm{num}_m \parallel \trm{deps}_m \parallel m)
 \end{equation*}
 
 Le message est finalement transmis à l'ensemble des pairs.
@@ -2765,7 +2775,7 @@ Similairement au journal, l'ordre de l'ensemble $\trm{pending}$ correspond à l'
 Le journal étendu $W$ correspond au journal $J$ auquel a été ajouté les messages de l'ensemble $\trm{pending}$ dans leur ordre d'apparition.
 Ce journal est virtuel, il n'a pas d'existence propre.
 En revanche les structures de données dépendantes de $W$ sont concrètes.
-Elles sont mises à jour de la même manière que celles du journal $J$.
+Elles sont mis à jour de la même manière que celles du journal $J$.
 
 \begin{equation*}
     W \defeq J \lappend \trm{pending}
