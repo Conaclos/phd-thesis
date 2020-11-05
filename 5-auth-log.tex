@@ -2417,23 +2417,22 @@ Les messages $m_1$ et $m_1'$ sont générés par $p_M$ avec un numéro égal à 
     \newcommand*\hsep{1.5}
     \path node (a1) {$a_1$}
         to +(\hsep,0) node (a2) {$a_2$}
-        to +(2*\hsep,0) node (b1) {$b_1$}
-        to +(3*\hsep,0) node (a3) {$a_3$}
-        to +(4*\hsep,0) node (m1) {$m_1$}
-        to +(5*\hsep,0) node (a4) {$a_4$}
-        to +(6*\hsep,0) node (m1p) {$m_1'$}
-        to +(7*\hsep,0) node (b2) {$b_2$}
-        to +(8*\hsep,0) node (a5) {$a_5$}
-        to +(9*\hsep,0) node (c1) {$c_1$}
-        to +(10*\hsep,0) node (b3) {$b_3$}
+        to +(2*\hsep,0) node (a3) {$a_3$}
+        to +(3*\hsep,0) node (m1) {$m_1$}
+        to +(4*\hsep,0) node (a4) {$a_4$}
+        to +(5*\hsep,0) node (m1p) {$m_1'$}
+        to +(6*\hsep,0) node (b1) {$b_1$}
+        to +(7*\hsep,0) node (a5) {$a_5$}
+        to +(8*\hsep,0) node (c1) {$c_1$}
+        to +(9*\hsep,0) node (b2) {$b_2$}
     ;
     % Dependency
-    \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/b2,b2/a5,c1/b3}
+    \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b1,b1/a5,c1/b2}
         \draw[pre] (\src) to (\dest);
-    \draw[vis,bend right=22] (b1) to (m1p);
-    \draw[vis,bend left=22] (a4) to (a5);
-    \draw[vis,bend right=22] (m1p) to (c1);
-    \draw[vis,bend left=22] (a5) to (b3);
+    \draw[vis,bend right=24] (a3) to (m1p);
+    \draw[vis,bend left=24] (a4) to (a5);
+    \draw[vis,bend right=24] (m1p) to (c1);
+    \draw[vis,bend left=32] (a5) to (b2);
 \end{tikzpicture}
 \caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.}\label{fig:log-example-2}
 \end{figure}
@@ -2444,16 +2443,15 @@ Les messages $m_1$ et $m_1'$ sont générés par $p_M$ avec un numéro égal à 
         message $m$ & contenu de $m$ & $\trm{peer}_m$ & $\trm{num}_m$ & $\trm{deps}_m$ \\
         \toprule
         $a_1$ & $\tuple*{\trm{invite}, p_A}$ & $p_A$ & $1$ & $\emptyset$ \\
-        $a_2$ & $\tuple*{\trm{invite}, p_B}$ & $p_A$ & $2$ & $\set*{a_1}$ \\
-        $b_1$ & $\tuple*{\trm{invite}, p_M}$ & $p_B$ & $1$ & $\set*{a_2}$ \\
-        $a_3$ & $\tuple*{\trm{ack}}$ & $p_A$ & $3$ & $\set*{b_1}$ \\
+        $a_2$ & $\tuple*{\trm{invite}, p_M}$ & $p_A$ & $2$ & $\set*{a_1}$ \\
+        $a_3$ & $\tuple*{\trm{invite}, p_B}$ & $p_A$ & $3$ & $\set*{a_2}$ \\
         $m_1$ & $\tuple*{\trm{add}, 1}$ & $p_M$ & $1$ & $\set*{a_3}$ \\
         $a_4$ & $\tuple*{\trm{ack}}$ & $p_A$ & $4$ & $\set*{m_1}$ \\
         $m_1'$ & $\tuple*{\trm{invite}, p_C}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
-        $b_2$ & $\tuple*{\trm{add}, 2}$ & $p_B$ & $2$ & $\set*{m_1'}$ \\
-        $a_5$ & $\tuple*{\trm{ack}}$ & $p_A$ & $5$ & $\set*{a_4,b_2}$ \\
+        $b_1$ & $\tuple*{\trm{add}, 2}$ & $p_B$ & $1$ & $\set*{m_1'}$ \\
+        $a_5$ & $\tuple*{\trm{ack}}$ & $p_A$ & $5$ & $\set*{a_4,b_1}$ \\
         $c_1$ & $\tuple*{\trm{add}, 3}$ & $p_C$ & $1$ & $\set*{m_1'}$ \\
-        $b_3$ & $\tuple*{\trm{add}, 4}$ & $p_B$ & $3$ & $\set*{a_5,c_1}$ \\
+        $b_2$ & $\tuple*{\trm{add}, 4}$ & $p_B$ & $2$ & $\set*{a_5,c_1}$ \\
     \end{tabular}
     \caption{Contenu et méta-données des messages de la \autoref{fig:log-example-2}}\label{tab:msg-metadata}
 \end{table}
@@ -2560,18 +2558,17 @@ Le \autoref{tab:data-structure-update} présente l'évolution des structures de 
     \begin{tabular}{cccccc}
         ajout du message & $S$ & $max_J$ & $\trm{knownMalicious}_J$ \\
         \toprule
-        %& $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+        & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
         $a_1$ & $\emptyset$ & $\set*{a_1}$ & $\emptyset$ \\
         $a_2$ & $\emptyset$ & $\set*{a_2}$ & $\emptyset$ \\
-        $b_1$ & $\emptyset$ & $\set*{b_1}$ & $\emptyset$ \\
         $a_3$ & $\emptyset$ & $\set*{a_3}$ & $\emptyset$ \\
         $m_1$ & $\set*{1}$ & $\set*{m_1}$ & $\emptyset$ \\
         $a_4$ & $\set*{1}$ & $\set*{a_4}$ & $\emptyset$ \\
         $m_1'$ & $\set*{1}$ & $\set*{a_3,m_1'}$ & $\set*{p_M}$ \\
-        $b_2$ & $\set*{1,2}$ & $\set*{a_3,b_2}$ & $\set*{p_M}$ \\
+        $b_1$ & $\set*{1,2}$ & $\set*{a_3,b_1}$ & $\set*{p_M}$ \\
         $a_5$ & $\set*{1,2}$ & $\set*{a_5}$ & $\set*{p_M}$ \\
         $c_1$ & $\set*{1,2,3}$ & $\set*{a_5,c_1}$ & $\set*{p_M}$ \\
-        $b_3$ & $\set*{1,2,3,4}$ & $\set*{b_3}$ & $\set*{p_M}$ \\
+        $b_2$ & $\set*{1,2,3,4}$ & $\set*{b_2}$ & $\set*{p_M}$ \\
     \end{tabular}
     \end{subtable}
     \par\smallskip
@@ -2580,18 +2577,17 @@ Le \autoref{tab:data-structure-update} présente l'évolution des structures de 
     \begin{tabular}{ccc}
         ajout du message & $\trm{vv}_J$ & $\trm{invited}_J$ \\
         \toprule
-        %& $\emptyset$ & $\emptyset$\\
+        & $\emptyset$ & $\emptyset$\\
         $a_1$ & $\set*{\tuple*{p_A, 1}}$ & $\set*{p_A}$ \\
-        $a_2$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 0}}$ & $\set*{p_A,p_B}$ \\
-        $b_1$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 1}, \tuple*{p_M, 0}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $a_3$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}, \tuple*{p_M, 0}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $m_1$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $a_4$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $m_1'$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 1}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
-        $b_2$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 2}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
-        $a_5$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 2}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
-        $c_1$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 2},\tuple*{p_C, 1}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
-        $b_3$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 3}, \tuple*{p_C, 1}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
+        $a_2$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_M, 0}}$ & $\set*{p_A,p_M}$ \\
+        $a_3$ & $\set*{\tuple*{p_A, 3},\tuple*{p_M, 0},\tuple*{p_B, 0}}$ & $\set*{p_A,p_M,p_B}$ \\
+        $m_1$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_M, 1}, \tuple*{p_B, 0}}$ & $\set*{p_A,p_M,p_B}$ \\
+        $a_4$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_M, 1}, \tuple*{p_B, 0}}$ & $\set*{p_A,p_M,p_B}$ \\
+        $m_1'$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 0}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_M,p_B,p_C}$ \\
+        $b_1$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 1}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_M,p_B,p_C}$ \\
+        $a_5$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 1}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_M,p_B,p_C}$ \\
+        $c_1$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 1},\tuple*{p_C, 1}}$ & $\set*{p_A,p_M,p_B,p_C}$ \\
+        $b_2$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 2}, \tuple*{p_C, 1}}$ & $\set*{p_A,p_M,p_B,p_C}$ \\
     \end{tabular}
     \end{subtable}
     \caption[Exemple de mises-à-jours de structures de données dépendantes d'un' journal]{Mises-à-jours successives des structures de données dépendantes du journal $J$ après l'ajout successif des messages du \autoref{tab:msg-metadata}.}\label{tab:data-structure-update}
@@ -2960,8 +2956,8 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
             \node[draw, dashed, label=left:$J$, fit=(a1)](J){};
         \end{tikzpicture}}
     to +(-5,\vsepevt) node[
-        label={above:\textbf{(2) Exécute $\trm{invite}(p_B)$}},
-        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B}$}
+        label={above:\textbf{(2) Exécute $\trm{invite}(p_M)$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
@@ -2973,129 +2969,126 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
             \node[draw, dashed, label=left:$J$, fit=(a1) (a2)]{};
         \end{tikzpicture}}
     to +(3,0) node[
-        label={above:\textbf{(3) Livre $b_2 = \tuple*{\trm{invite},p_M}$}},
-        label={below:$\trm{ackInvited} = \set*{p_A,p_B} \quad \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+        label={above:\textbf{(3) Exécute $\trm{invite}(p_B)$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
-                to +(2*\hsep,0) node (b1) {$b_1$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/b1}
+            \foreach \src/\dest in {a1/a2,a2/a3}
                 \draw[pre] (\src) to (\dest);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (b1)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3)]{};
         \end{tikzpicture}}
     to +(3,\vsepevt) node[
         label={above:\textbf{(4) Livre $m_1 = \tuple*{\trm{add},1}$}},
-        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
-                to +(2*\hsep,0) node (b1) {$b_1$}
-                to +(3*\hsep,0) node (a3) {$a_3$}
-                to +(4*\hsep,0) node (m1) {$m_1$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
+                to +(3*\hsep,0) node (m1) {$m_1$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1}
                 \draw[pre] (\src) to (\dest);
             % Label
             \node[draw, dashed, label=left:$J$, fit=(a1) (m1)]{};
         \end{tikzpicture}}
     to +(0,2*\vsepevt) node[
         label={above:\textbf{(5) Livre $m_1' = \tuple*{\trm{invite},p_C}$}},
-        label={below:$\trm{ackInvited} = \set*{p_A,p_B,p_M} \quad \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+        label={below:$\trm{ackInvited} = \set*{p_A,p_M,p_B} \quad \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
-                to +(2*\hsep,0) node (b1) {$b_1$}
                 to +(3*\hsep,0) node (a3) {$a_3$}
                 to +(4*\hsep,0) node (m1) {$m_1$}
                 to +(6*\hsep,0) node (m1p) {$m_1'$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1}
                 \draw[pre] (\src) to (\dest);
-            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            \draw[vis,bend right=17] (a3) to coordinate(a3m1p) (m1p);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (m1)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (m1)]{};
             \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1p)]{};
         \end{tikzpicture}}
     to +(0,3*\vsepevt) node[
-        label={above:\textbf{(5) Livre $c_1 = \tuple*{\trm{add},3}$}},
-        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+        label={above:\textbf{(6) Livre $c_1 = \tuple*{\trm{add},3}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
-                to +(2*\hsep,0) node (b1) {$b_1$}
-                to +(3*\hsep,0) node (a3) {$a_3$}
-                to +(4*\hsep,0) node (m1) {$m_1$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
+                to +(3*\hsep,0) node (m1) {$m_1$}
                 to +(5*\hsep,0) node (a4) {$a_4$}
-                to +(6*\hsep,0) node (m1p) {$m_1'$}
-                to +(7*\hsep,0) node (c1) {$c_1$}
+                to +(5*\hsep,0) node (m1p) {$m_1'$}
+                to +(6*\hsep,0) node (c1) {$c_1$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/c1}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/c1}
                 \draw[pre] (\src) to (\dest);
-            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            \draw[vis,bend right=17] (a3) to coordinate(a3m1p) (m1p);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (m1)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (m1)]{};
             \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1p) (c1)]{};
         \end{tikzpicture}}
     to +(0,4*\vsepevt) node[
         label={above:\textbf{(7) Livre $b_2 = \tuple*{\trm{add},2}$}},
-        label={below:$\trm{ackInvited} = \set*{p_A,p_B,p_M} \quad \trm{invited}_J = \set*{p_A,p_B,p_M,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+        label={below:$\trm{ackInvited} = \set*{p_A,p_M,p_B} \quad \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
-                to +(2*\hsep,0) node (b1) {$b_1$}
-                to +(3*\hsep,0) node (a3) {$a_3$}
-                to +(4*\hsep,0) node (m1) {$m_1$}
-                to +(5*\hsep,0) node (a4) {$a_4$}
-                to +(6*\hsep,0) node (m1p) {$m_1'$}
-                to +(7*\hsep,0) node (b2) {$b_2$}
-                to +(8*\hsep,0) node (c1) {$c_1$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
+                to +(3*\hsep,0) node (m1) {$m_1$}
+                to +(4*\hsep,0) node (a4) {$a_4$}
+                to +(5*\hsep,0) node (m1p) {$m_1'$}
+                to +(6*\hsep,0) node (b2) {$b_2$}
+                to +(7*\hsep,0) node (c1) {$c_1$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/b2}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b2}
                 \draw[pre] (\src) to (\dest);
-            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            \draw[vis,bend right=17] (a3) to coordinate(a3m1p) (m1p);
             \draw[vis,bend right=28] (m1p) to coordinate(m1pc1) (c1);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (m1pc1) (b2)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (m1pc1) (b2)]{};
             \node[draw, dashed, label=right:$\trm{pending}$, fit=(c1)]{};
         \end{tikzpicture}}
     to +(0,5*\vsepevt) node[
-        label={above:\textbf{(7) Livre $b_3 = \tuple*{\trm{add},4}$}},
-        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B,p_M} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+        label={above:\textbf{(8) Livre $b_3 = \tuple*{\trm{add},4}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
-                to +(2*\hsep,0) node (b1) {$b_1$}
-                to +(3*\hsep,0) node (a3) {$a_3$}
-                to +(4*\hsep,0) node (m1) {$m_1$}
-                to +(5*\hsep,0) node (a4) {$a_4$}
-                to +(6*\hsep,0) node (m1p) {$m_1'$}
-                to +(7*\hsep,0) node (b2) {$b_2$}
-                to +(8*\hsep,0) node (a5) {$a_5$}
-                to +(9*\hsep,0) node (c1) {$c_1$}
-                to +(10*\hsep,0) node (b3) {$b_3$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
+                to +(3*\hsep,0) node (m1) {$m_1$}
+                to +(4*\hsep,0) node (a4) {$a_4$}
+                to +(5*\hsep,0) node (m1p) {$m_1'$}
+                to +(6*\hsep,0) node (b2) {$b_2$}
+                to +(7*\hsep,0) node (a5) {$a_5$}
+                to +(8*\hsep,0) node (c1) {$c_1$}
+                to +(9*\hsep,0) node (b3) {$b_3$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/b2,b2/a5,c1/b3}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b2,b2/a5,c1/b3}
                 \draw[pre] (\src) to (\dest);
-            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            \draw[vis,bend right=21] (a3) to coordinate(a3m1p) (m1p);
             \draw[vis,bend left=21] (a4) to coordinate(a4a5) (a5);
             \draw[vis,bend right=21] (m1p) to coordinate(m1pc1) (c1);
             \draw[vis,bend left=28] (a5) to coordinate(a5b3) (b3);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (a4a5) (m1pc1) (a5b3) (b3)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (a4a5) (m1pc1) (a5b3) (b3)]{};
         \end{tikzpicture}}
         ;
     %\draw[pre,bend right=20] (start) to node[midway,left]{initialise} (exec1.170);
     %\draw[pre,bend right=20] (exec1.190) to node[midway,left]{exécute} (exec2.170);
 \end{tikzpicture}
-\caption[Exemple du journal d'un pair]{Exemple du journal du pair $p_A$.}\label{fig:full-log-protocol}
+\caption[Exemple d'exécution du protocole à journaux complets]{Exemple d'exécution du protocole à journaux complets.
+Le protocole est exécuté par le pair $p_A$.
+Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol}
 \end{figure}
 
 \clearpage
