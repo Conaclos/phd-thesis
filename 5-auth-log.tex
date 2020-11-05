@@ -2364,7 +2364,7 @@ Tout message est augmenté des méta-données suivantes~:
 Un pair honnête produit une séquence de messages avec des numéros contigus qui débutent à $1$.
 Le numéro d'un message $m$ correspond donc au nombre de messages générés ($m$ inclut) par son auteur $\trm{peer}_m$.
 Un message $m$ est identifié par un n-uplet dénoté $\trm{id}(m)$ composé de l'identifiant du pair qui est à son origine, son numéro, et son \emph{hash} $h(m)$.
-
+%
 \begin{equation*}
     \trm{id}(m) \defeq \tuple*{\trm{peer}_m, \trm{num}_m, h(m)}
 \end{equation*}
@@ -2381,7 +2381,7 @@ $\trm{deps}_m$ correspond à l'ensemble des identifiants des dépendances décla
 Nous définissons la fonction $\trm{ctx}_J(m)$ pour extraire le sous-journal qui inclut uniquement l'ensemble des dépendances directes et transitives de $m$ dans le journal $J$.
 Ce sous-journal n'inclut pas $m$.
 Cette fonction récursive termine étant donné que le journal est un graphe dirigé fini sans cycle et que chaque appel récursif passe en paramètre un message qui correspond à une dépendance déclarée du message passé en paramètre de l'appel courant.
-
+%
 \begin{equation*}
     \trm{ctx}_J(m) \defeq \set*{ x \given \exists y \in J \qsep \trm{id}(y) \in \trm{deps}_m \land x \in \set*{y} \cup \trm{ctx}_J(y)}
 \end{equation*}
@@ -2395,7 +2395,7 @@ L'identifiant d'un pair est un couple constitué d'une clef publique et d'un \em
 Le \emph{hash} permet de distinguer deux pairs qui disposent de la même clef publique.
 Pour s'assurer que le pair est invité une unique fois, le \emph{hash} est généré à partir d'une partie du contenu du message d'invitation et de ses méta-données.
 Ce \emph{hash} est calculé sur l'ensemble des méta-données du message d'invitation à l'exception de sa signature et sur la clef publique du pair.
-Nous supposons que la \emph{fonction de hash} utilisée résiste aux \emph{collisions} et aux \emph{préimages}.
+Nous supposons que la \emph{fonction de hash} résiste aux \emph{collisions} et aux \emph{préimages}.
 $\trm{Peers}$ est l'ensemble des identifiants des pairs.
 
 Nous représentons un journal à l'aide d'un graphe dirigé et linéarisé.
@@ -2414,25 +2414,30 @@ Les messages $m_1$ et $m_1'$ sont générés par $p_M$ avec un numéro égal à 
 \begin{figure}[hbt]
 \centering
 \begin{tikzpicture}
-    \newcommand*\hsep{1.8}
+    \newcommand*\hsep{1.5}
     \path node (a1) {$a_1$}
         to +(\hsep,0) node (a2) {$a_2$}
         to +(2*\hsep,0) node (b1) {$b_1$}
-        to +(3*\hsep,0) node (m1) {$m_1$}
-        to +(4*\hsep,0) node (a3) {$a_3$}
-        to +(5*\hsep,0) node (m1p) {$m_1'$}
-        to +(6*\hsep,0) node (b2) {$b_2$}
-        to +(7*\hsep,0) node (b3) {$b_3$}
+        to +(3*\hsep,0) node (a3) {$a_3$}
+        to +(4*\hsep,0) node (m1) {$m_1$}
+        to +(5*\hsep,0) node (a4) {$a_4$}
+        to +(6*\hsep,0) node (m1p) {$m_1'$}
+        to +(7*\hsep,0) node (b2) {$b_2$}
+        to +(8*\hsep,0) node (a5) {$a_5$}
+        to +(9*\hsep,0) node (c1) {$c_1$}
+        to +(10*\hsep,0) node (b3) {$b_3$}
     ;
     % Dependency
-    \foreach \src/\dest in {a1/a2,a2/b1,b1/m1,m1/a3,m1p/b2,b2/b3}
+    \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/b2,b2/a5,c1/b3}
         \draw[pre] (\src) to (\dest);
-    \draw[vis,bend right=25] (b1) to (m1p);
-    \draw[vis,bend left=25] (a3) to (b3);
+    \draw[vis,bend right=22] (b1) to (m1p);
+    \draw[vis,bend left=22] (a4) to (a5);
+    \draw[vis,bend right=22] (m1p) to (c1);
+    \draw[vis,bend left=22] (a5) to (b3);
 \end{tikzpicture}
 \caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.}\label{fig:log-example-2}
 \end{figure}
-
+%
 \begin{table}[ht]
     \centering
     \begin{tabular}{ccccc}
@@ -2441,13 +2446,16 @@ Les messages $m_1$ et $m_1'$ sont générés par $p_M$ avec un numéro égal à 
         $a_1$ & $\tuple*{\trm{invite}, p_A}$ & $p_A$ & $1$ & $\emptyset$ \\
         $a_2$ & $\tuple*{\trm{invite}, p_B}$ & $p_A$ & $2$ & $\set*{a_1}$ \\
         $b_1$ & $\tuple*{\trm{invite}, p_M}$ & $p_B$ & $1$ & $\set*{a_2}$ \\
-        $m_1$ & $\tuple*{\trm{add}, 1}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
-        $a_3$ & $\tuple*{\trm{ack}}$ & $p_A$ & $3$ & $\set*{m_1}$ \\
-        $m_1'$ & $\tuple*{\trm{add}, 2}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
-        $b_2$ & $\tuple*{\trm{add}, 3}$ & $p_B$ & $2$ & $\set*{m_1'}$ \\
-        $b_3$ & $\tuple*{\trm{add}, 4}$ & $p_B$ & $3$ & $\set*{a_3,b_2}$ \\
+        $a_3$ & $\tuple*{\trm{ack}}$ & $p_A$ & $3$ & $\set*{b_1}$ \\
+        $m_1$ & $\tuple*{\trm{add}, 1}$ & $p_M$ & $1$ & $\set*{a_3}$ \\
+        $a_4$ & $\tuple*{\trm{ack}}$ & $p_A$ & $4$ & $\set*{m_1}$ \\
+        $m_1'$ & $\tuple*{\trm{invite}, p_C}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
+        $b_2$ & $\tuple*{\trm{add}, 2}$ & $p_B$ & $2$ & $\set*{m_1'}$ \\
+        $a_5$ & $\tuple*{\trm{ack}}$ & $p_A$ & $5$ & $\set*{a_4,b_2}$ \\
+        $c_1$ & $\tuple*{\trm{add}, 3}$ & $p_C$ & $1$ & $\set*{m_1'}$ \\
+        $b_3$ & $\tuple*{\trm{add}, 4}$ & $p_B$ & $3$ & $\set*{a_5,c_1}$ \\
     \end{tabular}
-    \caption{Contenu et des méta-données des messages de la \autoref{fig:log-example-2}}\label{tab:msg-metadata}
+    \caption{Contenu et méta-données des messages de la \autoref{fig:log-example-2}}\label{tab:msg-metadata}
 \end{table}
 
 Le journal de messages est la structure de données principale de notre protocole.
@@ -2458,16 +2466,17 @@ Lorsqu'il est mis à jour d'autres structures de données que nous qualifions de
 Le journal $J$ et la copie $S$ du contenu partagé d'un pair $p_i$ sont conservés en étroite synchronisation.
 Lorsqu'un message $m$ est accepté dans le journal, $m$ est intégré à la copie $S$.
 cette intégration permet d'obtenir une version mise-à-jour de $S$ notée $S'$.
-
+%
 \begin{equation*}
     S' \assign \trm{integrate}_i(S, m)
 \end{equation*}
 
 Les messages d'un journal et leurs relations de dépendances forment un graphe dirigé acyclique.
 Nous dénotons par $\trm{max}_J$, l'ensemble des messages maximaux de $J$.
-C'est-à-dire, des messages qui ne sont pas déclarés comme dépendance d'un autre message du journal.
+En d'autres termes, ces messages ne sont pas déclarés comme dépendance d'un message du journal.
 Lorsqu'un message $m$ est ajouté dans le journal, l'ensemble est simplement mis à jour en ajoutant $m$ et en retirant les messages qui sont des dépendances déclarées de $m$.
-
+Initialement cet ensemble est vide.
+%
 \begin{equation*}
     \trm{max}_{J'} \assign \set*{m} \cup \set*{x \in \trm{max}_J \given \trm{id}(x) \not\in \trm{deps}_m}
 \end{equation*}
@@ -2481,7 +2490,8 @@ $\trm{knownMalicious}_J$ est l'ensemble des pairs reconnus mal-intentionnés dan
 A chaque fois qu'un message non-linéaire est ajouté au journal, l'ensemble est mis à jour.
 Le prédicat $\trm{linear}_J(m)$ nous informe si le message est linéaire avec les messages déjà présents dans $J$.
 Le calcul du prédicat $\trm{linear}_J(m)$ est détaillé ci-après.
-
+$\trm{knownMalicious}_J$ est initialisé avec un ensemble vide.
+%
 \begin{equation*}
     \trm{knownMalicious}_{J'} \assign \trm{knownMalicious}_J \cup \begin{dcases}
         \emptyset & \when \trm{linear}_J(m)\\
@@ -2493,7 +2503,8 @@ Nous notons $\trm{vv}_J$ un vecteur de versions~\autocite{parker_1983_versionvec
 Le numéro associé à un pair est initialisé à $0$ lorsque son invitation est ajouté dans le journal.
 Lorsqu'un pair est reconnu mal-intentionné son association est supprimée du vecteur de versions.
 $\trm{vv}_J(p)$ retourne le numéro associé au pair $p$.
-
+Le vecteur de versions est initialement vide.
+%
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{vv}_{J'} \assign \set*{\tuple{p, \_} \in \trm{vv}_J \given p \neq \trm{peer}_m}\\
 &\cup \begin{dcases}
@@ -2508,7 +2519,7 @@ $\trm{vv}_J(p)$ retourne le numéro associé au pair $p$.
 
 Nous notons $\trm{invited}_J$, l'ensemble des pairs invités par les messages du journal $J$.
 Il est déduit des deux structures de données dépendantes précédentes.
-
+%
 \begin{equation*}
     \trm{invited}_{J} = \set*{p \given \tuple{p, \_} \in \trm{vv}_J} \cup \trm{knownMalicious}_J
 \end{equation*}
@@ -2520,27 +2531,27 @@ Il est déduit des deux structures de données dépendantes précédentes.
 %    \end{dcases}
 %\end{equation*}
 
-Un message bien-formé $m$ est non-linéaire avec un autre message d'un journal $J$ si il créée un embranchement ou si son auteur est déjà reconnu mal-intentionné dans $J$.
+Un message bien-formé $m$ est non-linéaire avec un message d'un journal $J$ si il créée un embranchement ou si son auteur est déjà reconnu mal-intentionné dans $J$.
 En effet, un message bien-formé ne peut pas joindre des embranchements dont son auteur est à l'origine.
 $m$ fait donc partie d'un embranchement et est non-linéaire avec les messages des autres embranchements.
-
+%
 Un message bien-formé dépend d'une suite de message du même auteur avec des numéros contigus.
 L'ajout du message $m$ dans $J$ créée donc un nouvel embranchement si et seulement si il existe un autre message dans le journal du même auteur avec le même numéro.
 Si l'auteur du message est déjà reconnu mal-intentionné, alors le message $m$ est forcément non-linéaire avec au moins un message du journal.
 Autrement, le message $m$ est non-linéaire si son numéro n'est pas contigu avec celui du précédent message du même pair.
 Nous pouvons ainsi préciser le prédicat $\trm{linear}_J(m)$.
-
+%
 %\begin{equation*}
 %    \trm{nonLinear}_J(m) = \trm{peer}_m \in \trm{knownMalicious}_J \lor
 %    \:\exists x \in J \qsep \trm{peer}_x = \trm{peer}_m \land \trm{num}_x = \trm{num}_m
 %\end{equation*}
+%
+\begin{equation*}
+\trm{linear}_J(m) \defeq
+\trm{peer}_m \not\in \trm{knownMalicious}_J \land (\trm{peer}_m \in \trm{invited}_J \implies \trm{num}_m = \trm{vv}_J(\trm{peer}_m) + 1)
+\end{equation*}
 
-\begin{equation*}\begin{split}
-    \MoveEqLeft\trm{linear}_J(m) \defeq\\
-    &\trm{peer}_m \not\in \trm{knownMalicious}_J \land (\trm{peer}_m \in \trm{invited}_J \implies \trm{num}_m = \trm{vv}_J(\trm{peer}_m) + 1)
-\end{split}\end{equation*}
-
-Nous disposons des structures de données nécessaires à la description du protocole.
+Nous disposons des structures de données pour décrire notre protocole.
 Le \autoref{tab:data-structure-update} présente l'évolution des structures de données dépendantes du journal de la \autoref{fig:log-example-2}.
 
 \begin{table}[ht]
@@ -2549,37 +2560,43 @@ Le \autoref{tab:data-structure-update} présente l'évolution des structures de 
     \begin{tabular}{cccccc}
         ajout du message & $S$ & $max_J$ & $\trm{knownMalicious}_J$ \\
         \toprule
-        & $\emptyset$ & $\emptyset$ & $\emptyset$ \\
+        %& $\emptyset$ & $\emptyset$ & $\emptyset$ \\
         $a_1$ & $\emptyset$ & $\set*{a_1}$ & $\emptyset$ \\
         $a_2$ & $\emptyset$ & $\set*{a_2}$ & $\emptyset$ \\
         $b_1$ & $\emptyset$ & $\set*{b_1}$ & $\emptyset$ \\
+        $a_3$ & $\emptyset$ & $\set*{a_3}$ & $\emptyset$ \\
         $m_1$ & $\set*{1}$ & $\set*{m_1}$ & $\emptyset$ \\
-        $a_3$ & $\set*{1}$ & $\set*{a_3}$ & $\emptyset$ \\
-        $m_1'$ & $\set*{1,2}$ & $\set*{a_3,m_1'}$ & $\set*{p_M}$ \\
-        $b_2$ & $\set*{1,2,3}$ & $\set*{a_3,b_2}$ & $\set*{p_M}$ \\
+        $a_4$ & $\set*{1}$ & $\set*{a_4}$ & $\emptyset$ \\
+        $m_1'$ & $\set*{1}$ & $\set*{a_3,m_1'}$ & $\set*{p_M}$ \\
+        $b_2$ & $\set*{1,2}$ & $\set*{a_3,b_2}$ & $\set*{p_M}$ \\
+        $a_5$ & $\set*{1,2}$ & $\set*{a_5}$ & $\set*{p_M}$ \\
+        $c_1$ & $\set*{1,2,3}$ & $\set*{a_5,c_1}$ & $\set*{p_M}$ \\
         $b_3$ & $\set*{1,2,3,4}$ & $\set*{b_3}$ & $\set*{p_M}$ \\
     \end{tabular}
     \end{subtable}
-    \par\medskip
+    \par\smallskip
     \begin{subtable}{\linewidth}
     \centering
     \begin{tabular}{ccc}
         ajout du message & $\trm{vv}_J$ & $\trm{invited}_J$ \\
         \toprule
-        & $\emptyset$ & $\emptyset$\\
+        %& $\emptyset$ & $\emptyset$\\
         $a_1$ & $\set*{\tuple*{p_A, 1}}$ & $\set*{p_A}$ \\
         $a_2$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 0}}$ & $\set*{p_A,p_B}$ \\
         $b_1$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 1}, \tuple*{p_M, 0}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $m_1$ & $\set*{\tuple*{p_A, 2}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $a_3$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $m_1'$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $b_2$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 2}}$ & $\set*{p_A,p_B,p_M}$ \\
-        $b_3$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 3}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $a_3$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}, \tuple*{p_M, 0}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $m_1$ & $\set*{\tuple*{p_A, 3}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $a_4$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 1}, \tuple*{p_M, 1}}$ & $\set*{p_A,p_B,p_M}$ \\
+        $m_1'$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 1}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
+        $b_2$ & $\set*{\tuple*{p_A, 4}, \tuple*{p_B, 2}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
+        $a_5$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 2}, \tuple*{p_C, 0}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
+        $c_1$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 2},\tuple*{p_C, 1}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
+        $b_3$ & $\set*{\tuple*{p_A, 5}, \tuple*{p_B, 3}, \tuple*{p_C, 1}}$ & $\set*{p_A,p_B,p_M,p_C}$ \\
     \end{tabular}
     \end{subtable}
     \caption[Exemple de mises-à-jours de structures de données dépendantes d'un' journal]{Mises-à-jours successives des structures de données dépendantes du journal $J$ après l'ajout successif des messages du \autoref{tab:msg-metadata}.}\label{tab:data-structure-update}
 \end{table}
-
+ 
 
 \subsection{Description du protocole}
 
@@ -2844,7 +2861,7 @@ Pour être bien-formé, ce message ne doit pas déclarer une dépendance sur un 
 Il se peut que l'acceptation immédiate d'un message dans le journal conduise à l'ajout de messages en attente qui sont non-linéaire avec l'un des messages les plus récents du journal.
 Un ou plusieurs auteurs de messages les plus récents du journal peuvent donc être reconnu mal-intentionnés à l'issue de l'ajout dans le journal de messages en attente.
 Si l'ajout d'un message et de ses dépendances en attente conduit à cette situation, alors le protocole exécute une opération d'acquiescement avant leurs ajouts.
-Pour simplifier, le protocole peut exécuter systématiquement uen opération d'acquiescement si un message est ajouté avec des dépendances en attente.
+Pour simplifier, le protocole exécute systématiquement une opération d'acquiescement avant l'ajout d'un message qui a au moins une dépendance en attente.
 
 % Pour éviter la génération de messages mal-formés, le protocole exécute donc une opération d'acquiescement avant l'ajout immédiat d'un message et de ses dépendances en attente.
 % cette exécution n'a lieu si et seulement si au moins un message en attente est accepté dans le journal.
@@ -2924,6 +2941,164 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
     p_i \in \trm{invited}_J
 \end{equation*}
 
+
+\subsection{Exemple d'une exécution du protocole}
+
+\clearpage
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}[every node/.style={}]
+    \newcommand*\hsep{1.4}
+    \newcommand*\vsepevt{-3.5}
+    \path (0,0)
+    to +(-5,0) node[
+        label={above:\textbf{(1) Initialise}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A}$}
+    ]{\begin{tikzpicture}
+            \node (a1) {$a_1$};
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1)](J){};
+        \end{tikzpicture}}
+    to +(-5,\vsepevt) node[
+        label={above:\textbf{(2) Exécute $\trm{invite}(p_B)$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2}
+                \draw[pre] (\src) to (\dest);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a2)]{};
+        \end{tikzpicture}}
+    to +(3,0) node[
+        label={above:\textbf{(3) Livre $b_2 = \tuple*{\trm{invite},p_M}$}},
+        label={below:$\trm{ackInvited} = \set*{p_A,p_B} \quad \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (b1) {$b_1$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/b1}
+                \draw[pre] (\src) to (\dest);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (b1)]{};
+        \end{tikzpicture}}
+    to +(3,\vsepevt) node[
+        label={above:\textbf{(4) Livre $m_1 = \tuple*{\trm{add},1}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (b1) {$b_1$}
+                to +(3*\hsep,0) node (a3) {$a_3$}
+                to +(4*\hsep,0) node (m1) {$m_1$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1}
+                \draw[pre] (\src) to (\dest);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (m1)]{};
+        \end{tikzpicture}}
+    to +(0,2*\vsepevt) node[
+        label={above:\textbf{(5) Livre $m_1' = \tuple*{\trm{invite},p_C}$}},
+        label={below:$\trm{ackInvited} = \set*{p_A,p_B,p_M} \quad \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (b1) {$b_1$}
+                to +(3*\hsep,0) node (a3) {$a_3$}
+                to +(4*\hsep,0) node (m1) {$m_1$}
+                to +(6*\hsep,0) node (m1p) {$m_1'$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1}
+                \draw[pre] (\src) to (\dest);
+            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (m1)]{};
+            \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1p)]{};
+        \end{tikzpicture}}
+    to +(0,3*\vsepevt) node[
+        label={above:\textbf{(5) Livre $c_1 = \tuple*{\trm{add},3}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B,p_M}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (b1) {$b_1$}
+                to +(3*\hsep,0) node (a3) {$a_3$}
+                to +(4*\hsep,0) node (m1) {$m_1$}
+                to +(5*\hsep,0) node (a4) {$a_4$}
+                to +(6*\hsep,0) node (m1p) {$m_1'$}
+                to +(7*\hsep,0) node (c1) {$c_1$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/c1}
+                \draw[pre] (\src) to (\dest);
+            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (m1)]{};
+            \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1p) (c1)]{};
+        \end{tikzpicture}}
+    to +(0,4*\vsepevt) node[
+        label={above:\textbf{(7) Livre $b_2 = \tuple*{\trm{add},2}$}},
+        label={below:$\trm{ackInvited} = \set*{p_A,p_B,p_M} \quad \trm{invited}_J = \set*{p_A,p_B,p_M,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (b1) {$b_1$}
+                to +(3*\hsep,0) node (a3) {$a_3$}
+                to +(4*\hsep,0) node (m1) {$m_1$}
+                to +(5*\hsep,0) node (a4) {$a_4$}
+                to +(6*\hsep,0) node (m1p) {$m_1'$}
+                to +(7*\hsep,0) node (b2) {$b_2$}
+                to +(8*\hsep,0) node (c1) {$c_1$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/b2}
+                \draw[pre] (\src) to (\dest);
+            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            \draw[vis,bend right=28] (m1p) to coordinate(m1pc1) (c1);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (m1pc1) (b2)]{};
+            \node[draw, dashed, label=right:$\trm{pending}$, fit=(c1)]{};
+        \end{tikzpicture}}
+    to +(0,5*\vsepevt) node[
+        label={above:\textbf{(7) Livre $b_3 = \tuple*{\trm{add},4}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_B,p_M} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (b1) {$b_1$}
+                to +(3*\hsep,0) node (a3) {$a_3$}
+                to +(4*\hsep,0) node (m1) {$m_1$}
+                to +(5*\hsep,0) node (a4) {$a_4$}
+                to +(6*\hsep,0) node (m1p) {$m_1'$}
+                to +(7*\hsep,0) node (b2) {$b_2$}
+                to +(8*\hsep,0) node (a5) {$a_5$}
+                to +(9*\hsep,0) node (c1) {$c_1$}
+                to +(10*\hsep,0) node (b3) {$b_3$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/b1,b1/a3,a3/m1,m1/a4,m1p/b2,b2/a5,c1/b3}
+                \draw[pre] (\src) to (\dest);
+            \draw[vis,bend right=17] (b1) to coordinate(b1m1p) (m1p);
+            \draw[vis,bend left=21] (a4) to coordinate(a4a5) (a5);
+            \draw[vis,bend right=21] (m1p) to coordinate(m1pc1) (c1);
+            \draw[vis,bend left=28] (a5) to coordinate(a5b3) (b3);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (b1m1p) (a4a5) (m1pc1) (a5b3) (b3)]{};
+        \end{tikzpicture}}
+        ;
+    %\draw[pre,bend right=20] (start) to node[midway,left]{initialise} (exec1.170);
+    %\draw[pre,bend right=20] (exec1.190) to node[midway,left]{exécute} (exec2.170);
+\end{tikzpicture}
+\caption[Exemple du journal d'un pair]{Exemple du journal du pair $p_A$.}\label{fig:full-log-protocol}
+\end{figure}
+
+\clearpage
 
 \subsection{Optimisations}
 
