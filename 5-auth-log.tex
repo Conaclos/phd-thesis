@@ -137,17 +137,18 @@ La \autoref{fig:log-example} donne un exemple d'un journal et d'une version tron
         to +(5*\hsep,0) node (a4) {$a_4$}
     ;
     % Dependency
-    \foreach \src/\dest in {a1/a2,b1/a3,a3/b2,b2/a4}
-        \draw[pre] (\src) to node[above,sloped](\src\dest){\footnotesize dep} (\dest);
-    \draw[vis,bend right=30] (a1) to node[below,sloped]{\footnotesize dep} (b1);
-    \draw[vis,bend left=30] (a2) to node[above,sloped]{\footnotesize dep} (a3);
+    \foreach \src/\dest in {a1/a2,b1/a3,a3/b2}
+        \draw[pre] (\src) to (\dest);
+    \draw[pre] (b2) to coordinate(b2a4) (a4);
+    \draw[pre,bend right=30] (a1) to (b1);
+    \draw[pre,bend left=30] (a2) to (a3);
     % pruned
     \node[draw,dashed,fit=(b2) (b2a4) (a4)]{};
 \end{tikzpicture}
 \caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.
 L'arrangement horizontal des opérations traduit leur ordre d'ajout dans le journal.
 Ainsi les opérations ont été ajoutées dans l'ordre suivant~: $a_1$, $a_2$, $b_1$, $a_3$, $b_2$, $a_4$.
-Un arc dirigé entre deux modifications se traduit par \enquote{est une dépendance de}.
+Un arc dirigé entre deux modifications se traduit par \enquote{est une dépendance déclarée de}.
 La partie entourée correspond à une version tronquée de ce journal.
 }\label{fig:log-example}
 \end{figure}
@@ -746,7 +747,7 @@ Il existe en effet une extension causale de \subref{fig:wf-example-1}, l'exécut
 }\label{fig:cs-example}
 \end{figure}
 
-\begin{theorem}\label{th:cs}
+\begin{theorem}[Stabilité causale]\label{th:cs}
 Dans une exécution abstraite qui respecte le modèle de cohérence causale, une opération $x$ est causalement stable si et seulement si elle est observée par chaque pair.
 %\begin{equation*}
 %    \trm{isStable}_A^{\trm{Causal}}(x) \iff \forall p \in \trm{Peers} \exists y \in A \qsep \trm{peer}(y) = p \land (x = y \lor x \pre y)
@@ -1775,7 +1776,7 @@ Nous en déduisons ainsi la stabilité causale dynamique décrite dans le \autor
 La \autoref{tab:rq-obs} indique les observateurs et les observateurs requis des opérations de la \autoref{fig:dyn-causal-example-1}.
 A partir de ces informations nous pouvons conclure les opérations $a_1$ et $a_2$ sont stables.
 
-\begin{theorem}\label{th:dyn-cs}
+\begin{theorem}[Stabilité causale dynamique]\label{th:dyn-cs}
 Dans une exécution abstraite qui respecte le modèle de cohérence causale dynamique, une opération $x$ est stable si les observateurs requis de $x$ sont inclus dans les observateurs de $x$.
 \begin{equation*}
     \trm{stable}_A^{\trm{DynCausal}}(x) \iff \trm{rqHonestObs}_A(x) \subseteq \trm{obs}_A(x)
@@ -2008,7 +2009,7 @@ $\trm{InvitedHonest}_A$ et $\trm{InvitedMalicious}_A$ sont respectivement les pa
 \end{align*}
 \end{definition}
 
-\begin{theorem}\label{th:svfjc-stability}
+\begin{theorem}[Stabilité \emph{DynVFJC}]\label{th:svfjc-stability}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{DynVFJC}.
 Si l'ensemble des pairs invités sont honnêtes, alors une opération $x$ est stable si et seulement si les observateurs honnêtes requis observent $x$.
 Autrement, une opération $x$ est stable si et seulement si pour chaque énumération de $n$ pairs issues du produit cartésien des permutations des pairs mal-intentionnés invités par les pairs honnêtes invités, il existe une chaîne de visibilité de $n$ opérations tel que la première opération succède ou est égale à $x$, pour les $j$ premières opérations ($j$ peut être nul) le i-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou un pair reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $j$ est différent de $n$ alors la $(j+1)$-ème opération de la chaîne invite le $(j+1)$-ème pair de l'énumération.
@@ -2940,14 +2941,28 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
 
 \subsection{Exemple d'une exécution du protocole}
 
+Pour illustrer le protocole à journaux complets, nous prenons une exécution dans laquelle quatre pairs modifient un ensemble répliqué.
+Les pairs $p_A$, $p_B$, et $p_C$ sont honnêtes.
+Le pair $p_M$ est un pair mal-intentionné.
+Le protocole est exécuté par les pairs honnêtes.
+La \autoref{fig:full-log-protocol-peer-a} et la \autoref{fig:full-log-protocol-peer-b} présentent respectivement l'évolution de l'état journal du pair $p_A$ et l'évolution de l'état journal du pair $p_B$.
+Elles présentent également l'évolution de l'état de certaines structures de données.
+Ces structures de données devraient suffire à appréhender l'évolution de l'état du journal.
+Nous avons précédemment présenté dans la \autoref{fig:log-example-2} le journal que construit le pair $p_A$.
+L'évolution de l'état des autres structures de données de l'exécution du protocole par le pair $p_A$ peut donc être suivi dans le \autoref{tab:data-structure-update}.
+Le contenu des messages et leurs méta-données pertinentes sont présentés dans le \autoref{tab:known-malicious}.
+
+Nous détaillons l'évolution de l'état du journal du pair $p_A$ et l'évolution de l'état du journal du pair $p_B$ dans les deux paragraphes qui suivent.
+Nous supposons que tous les messages livrés sont correctement signés.
+
 \clearpage
 \begin{figure}[hbt]
 \centering
 \begin{tikzpicture}[every node/.style={}]
     \newcommand*\hsep{1.4}
-    \newcommand*\vsepevt{-3.5}
+    \newcommand*\vsepevt{-3.6}
     \path (0,0)
-    to +(-5,0) node[
+    to +(-4,0) node[
         label={above:\textbf{(1) Initialise}},
         label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A}$}
     ]{\begin{tikzpicture}
@@ -2955,7 +2970,7 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
             % Label
             \node[draw, dashed, label=left:$J$, fit=(a1)](J){};
         \end{tikzpicture}}
-    to +(-5,\vsepevt) node[
+    to +(4,0) node[
         label={above:\textbf{(2) Exécute $\trm{invite}(p_M)$}},
         label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M}$}
     ]{\begin{tikzpicture}
@@ -2968,7 +2983,7 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
             % Label
             \node[draw, dashed, label=left:$J$, fit=(a1) (a2)]{};
         \end{tikzpicture}}
-    to +(3,0) node[
+    to +(-4,\vsepevt) node[
         label={above:\textbf{(3) Exécute $\trm{invite}(p_B)$}},
         label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
@@ -2982,7 +2997,7 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
             % Label
             \node[draw, dashed, label=left:$J$, fit=(a1) (a3)]{};
         \end{tikzpicture}}
-    to +(3,\vsepevt) node[
+    to +(4,\vsepevt) node[
         label={above:\textbf{(4) Livre $m_1 = \tuple*{\trm{add},1}$}},
         label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
@@ -2999,7 +3014,7 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
         \end{tikzpicture}}
     to +(0,2*\vsepevt) node[
         label={above:\textbf{(5) Livre $m_1' = \tuple*{\trm{invite},p_C}$}},
-        label={below:$\trm{ackInvited} = \set*{p_A,p_M,p_B} \quad \trm{invited}_J = \set*{p_A,p_M,p_B}$}
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
                 to +(\hsep,0) node (a2) {$a_2$}
@@ -3023,12 +3038,11 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
                 to +(\hsep,0) node (a2) {$a_2$}
                 to +(2*\hsep,0) node (a3) {$a_3$}
                 to +(3*\hsep,0) node (m1) {$m_1$}
-                to +(5*\hsep,0) node (a4) {$a_4$}
                 to +(5*\hsep,0) node (m1p) {$m_1'$}
                 to +(6*\hsep,0) node (c1) {$c_1$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/c1}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1p/c1}
                 \draw[pre] (\src) to (\dest);
             \draw[vis,bend right=17] (a3) to coordinate(a3m1p) (m1p);
             % Label
@@ -3036,7 +3050,7 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
             \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1p) (c1)]{};
         \end{tikzpicture}}
     to +(0,4*\vsepevt) node[
-        label={above:\textbf{(7) Livre $b_2 = \tuple*{\trm{add},2}$}},
+        label={above:\textbf{(7) Livre $b_1 = \tuple*{\trm{add},2}$}},
         label={below:$\trm{ackInvited} = \set*{p_A,p_M,p_B} \quad \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
@@ -3045,20 +3059,20 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
                 to +(3*\hsep,0) node (m1) {$m_1$}
                 to +(4*\hsep,0) node (a4) {$a_4$}
                 to +(5*\hsep,0) node (m1p) {$m_1'$}
-                to +(6*\hsep,0) node (b2) {$b_2$}
+                to +(6*\hsep,0) node (b1) {$b_1$}
                 to +(7*\hsep,0) node (c1) {$c_1$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b2}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b1}
                 \draw[pre] (\src) to (\dest);
             \draw[vis,bend right=17] (a3) to coordinate(a3m1p) (m1p);
             \draw[vis,bend right=28] (m1p) to coordinate(m1pc1) (c1);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (m1pc1) (b2)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (m1pc1) (b1)]{};
             \node[draw, dashed, label=right:$\trm{pending}$, fit=(c1)]{};
         \end{tikzpicture}}
     to +(0,5*\vsepevt) node[
-        label={above:\textbf{(8) Livre $b_3 = \tuple*{\trm{add},4}$}},
+        label={above:\textbf{(8) Livre $b_2 = \tuple*{\trm{add},4}$}},
         label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
     ]{\begin{tikzpicture}
             \path node (a1) {$a_1$}
@@ -3067,41 +3081,247 @@ En dernier lieu, il s'assure que le journal contient un message qui l'invite.
                 to +(3*\hsep,0) node (m1) {$m_1$}
                 to +(4*\hsep,0) node (a4) {$a_4$}
                 to +(5*\hsep,0) node (m1p) {$m_1'$}
-                to +(6*\hsep,0) node (b2) {$b_2$}
+                to +(6*\hsep,0) node (b1) {$b_1$}
                 to +(7*\hsep,0) node (a5) {$a_5$}
                 to +(8*\hsep,0) node (c1) {$c_1$}
-                to +(9*\hsep,0) node (b3) {$b_3$}
+                to +(9*\hsep,0) node (b2) {$b_2$}
             ;
             % Dependency
-            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b2,b2/a5,c1/b3}
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b1,b1/a5,c1/b2}
                 \draw[pre] (\src) to (\dest);
             \draw[vis,bend right=21] (a3) to coordinate(a3m1p) (m1p);
             \draw[vis,bend left=21] (a4) to coordinate(a4a5) (a5);
             \draw[vis,bend right=21] (m1p) to coordinate(m1pc1) (c1);
-            \draw[vis,bend left=28] (a5) to coordinate(a5b3) (b3);
+            \draw[vis,bend left=28] (a5) to coordinate(a5b2) (b2);
             % Label
-            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (a4a5) (m1pc1) (a5b3) (b3)]{};
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1p) (a4a5) (m1pc1) (a5b2) (b2)]{};
         \end{tikzpicture}}
         ;
     %\draw[pre,bend right=20] (start) to node[midway,left]{initialise} (exec1.170);
     %\draw[pre,bend right=20] (exec1.190) to node[midway,left]{exécute} (exec2.170);
 \end{tikzpicture}
-\caption[Exemple d'exécution du protocole à journaux complets]{Exemple d'exécution du protocole à journaux complets.
-Le protocole est exécuté par le pair $p_A$.
-Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol}
+\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_A$]{Exemple d'exécution du protocole à journaux complets par un pair $p_A$.
+Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-a}
+\end{figure}
+
+
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}[every node/.style={}]
+    \newcommand*\hsep{1.4}
+    \newcommand*\vsepevt{-3.6}
+    \path (0,0)
+    to +(-4,0) node[
+        label={above:\textbf{(1) Initialise}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B}$}
+    ]{\begin{tikzpicture}
+        \path node (a1) {$a_1$}
+            to +(\hsep,0) node (a2) {$a_2$}
+            to +(2*\hsep,0) node (a3) {$a_3$}
+        ;
+        % Dependency
+        \foreach \src/\dest in {a1/a2,a2/a3}
+            \draw[pre] (\src) to (\dest);
+        % Label
+        \node[draw, dashed, label=left:$J$, fit=(a1) (a3)]{};
+    \end{tikzpicture}}
+    to +(4,0) node[
+        label={above:\textbf{(2) Livre $m_1' = \tuple*{\trm{invite},p_C}$}},
+        label={[text width=12em]below:$\trm{ackInvited} = \set*{p_A,p_M,p_B}$ $\trm{invited}_J = \set*{p_A,p_M,p_B,p_C}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
+                to +(3*\hsep,0) node (m1p) {$m_1'$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1p}
+                \draw[pre] (\src) to (\dest);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (m1p)]{};
+        \end{tikzpicture}}
+    to +(0,\vsepevt) node[
+        label={above:\textbf{(3) Livre $m_1 = \tuple*{\trm{add},1}$}},
+        label={below:$\trm{ackInvited} = \set*{p_A,p_M,p_B} \quad \trm{invited}_J = \set*{p_A,p_M,p_B,p_C}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(3*\hsep,0) node (a3) {$a_3$}
+                to +(4*\hsep,0) node (m1p) {$m_1'$}
+                to +(6*\hsep,0) node (m1) {$m_1$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1p}
+                \draw[pre] (\src) to (\dest);
+            \draw[vis,bend right=17] (a3) to coordinate(a3m1) (m1);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1) (m1p)]{};
+            \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1)]{};
+        \end{tikzpicture}}
+    to +(0,2*\vsepevt) node[
+        label={above:\textbf{(4) Exécute $\trm{add}(3)$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B,p_C}$}
+    ]{\begin{tikzpicture}
+            \path node (a1) {$a_1$}
+                to +(\hsep,0) node (a2) {$a_2$}
+                to +(2*\hsep,0) node (a3) {$a_3$}
+                to +(3*\hsep,0) node (m1p) {$m_1'$}
+                to +(4*\hsep,0) node (b1) {$b_1$}
+                to +(5*\hsep,0) node (m1) {$m_1$}
+            ;
+            % Dependency
+            \foreach \src/\dest in {a1/a2,a2/a3,a3/m1p,m1p/b1}
+                \draw[pre] (\src) to (\dest);
+            \draw[vis,bend right=17] (a3) to coordinate(a3m1) (m1);
+            % Label
+            \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1) (b1)]{};
+            \node[draw, dashed, label=right:$\trm{pending}$, fit=(m1)]{};
+        \end{tikzpicture}}
+    to +(0,3*\vsepevt) node[
+        label={above:\textbf{(5) Livre $a_4 = \tuple*{\trm{ack}}$ (6) Livre $a_5 = \tuple*{\trm{ack}}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+    ]{\begin{tikzpicture}
+        \path node (a1) {$a_1$}
+            to +(\hsep,0) node (a2) {$a_2$}
+            to +(2*\hsep,0) node (a3) {$a_3$}
+            to +(3*\hsep,0) node (m1p) {$m_1'$}
+            to +(4*\hsep,0) node (b1) {$b_1$}
+            to +(5*\hsep,0) node (m1) {$m_1$}
+            to +(6*\hsep,0) node (a4) {$a_4$}
+            to +(7*\hsep,0) node (a5) {$a_5$}
+        ;
+        % Dependency
+        \foreach \src/\dest in {a1/a2,a2/a3,a3/m1p,m1p/b1,m1/a4,a4/a5}
+            \draw[pre] (\src) to (\dest);
+        \draw[vis,bend right=17] (a3) to coordinate(a3m1) (m1);
+        \draw[vis,bend left=17] (b1) to coordinate(b1a5) (a5);
+        % Label
+        \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1) (b1a5) (a5)]{};
+    \end{tikzpicture}}
+    to +(0,4*\vsepevt) node[
+        label={above:\textbf{(7) Livre $c_1 = \tuple*{\trm{add},2}$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+    ]{\begin{tikzpicture}
+        \path node (a1) {$a_1$}
+            to +(\hsep,0) node (a2) {$a_2$}
+            to +(2*\hsep,0) node (a3) {$a_3$}
+            to +(3*\hsep,0) node (m1p) {$m_1'$}
+            to +(4*\hsep,0) node (b1) {$b_1$}
+            to +(5*\hsep,0) node (m1) {$m_1$}
+            to +(6*\hsep,0) node (a4) {$a_4$}
+            to +(7*\hsep,0) node (a5) {$a_5$}
+            to +(8*\hsep,0) node (c1) {$c_1$}
+        ;
+        % Dependency
+        \foreach \src/\dest in {a1/a2,a2/a3,a3/m1p,m1p/b1,m1/a4,a4/a5}
+            \draw[pre] (\src) to (\dest);
+        \draw[vis,bend right=17] (a3) to coordinate(a3m1) (m1);
+        \draw[vis,bend left=17] (b1) to coordinate(b1a5) (a5);
+        \draw[vis,bend left=17] (m1p) to coordinate(m1pc1) (c1);
+        % Label
+        \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1) (m1pc1) (c1)]{};
+    \end{tikzpicture}}
+    to +(0,5*\vsepevt) node[
+        label={above:\textbf{(8) Exécute $\trm{add}(4)$}},
+        label={below:$\trm{ackInvited} = \trm{invited}_J = \set*{p_A,p_M,p_B,p_C} \quad \trm{knownMalicious}_J = \set*{p_M}$}
+    ]{\begin{tikzpicture}
+        \path node (a1) {$a_1$}
+            to +(\hsep,0) node (a2) {$a_2$}
+            to +(2*\hsep,0) node (a3) {$a_3$}
+            to +(3*\hsep,0) node (m1p) {$m_1'$}
+            to +(4*\hsep,0) node (b1) {$b_1$}
+            to +(5*\hsep,0) node (m1) {$m_1$}
+            to +(6*\hsep,0) node (a4) {$a_4$}
+            to +(7*\hsep,0) node (a5) {$a_5$}
+            to +(8*\hsep,0) node (c1) {$c_1$}
+            to +(9*\hsep,0) node (b2) {$b_2$}
+        ;
+        % Dependency
+        \foreach \src/\dest in {a1/a2,a2/a3,a3/m1p,m1p/b1,m1/a4,a4/a5,c1/b2}
+            \draw[pre] (\src) to (\dest);
+        \draw[vis,bend right=17] (a3) to coordinate(a3m1) (m1);
+        \draw[vis,bend left=17] (b1) to coordinate(b1a5) (a5);
+        \draw[vis,bend left=17] (m1p) to coordinate(m1pc1) (c1);
+        \draw[vis,bend right=28] (a5) to coordinate(a5b2) (b2);
+        % Label
+        \node[draw, dashed, label=left:$J$, fit=(a1) (a3m1) (m1pc1) (b2)]{};
+    \end{tikzpicture}}
+    ;
+\end{tikzpicture}
+\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
+Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-b}
 \end{figure}
 
 \clearpage
 
+Le pair $p_A$ initie la collaboration (1).
+Il exécute ainsi une première operation qui l'invite lui-même.
+Cette exécution génère un message $a_1 \defeq \tuple*{\trm{invite}, p_A}$.
+Le pair invite ensuite le pair $p_M$ (2) et le pair $p_B$ (3) et génère ainsi les messages $a_2 \defeq tuple*{\trm{invite}, p_M}$ et $a_3 \defeq tuple*{\trm{invite}, p_B}$.
+Il livre le message bien-formé $m_1$ (4).
+Il est accepté immédiatement dans le journal $J$.
+$p_A$ livre ensuite le message bien-formé $m_1'$ (5).
+$m_1'$ n'est pas linéaire avec au moins un message du journal $\neg \trm{linear}_J(m_1')$.
+En l'occurrence, il est non-linéaire avec le message $m_1$.
+$m_1'$ est donc mis en attente.
+$p_A$ livre le message bien-formé $c_1$ (6).
+Il s'agit d'un message linéaire dans $J$.
+Cependant, son auteur n'est pas un invité reconnu dans $J$ ($p_C \not\in \trm{invited}_J$).
+$c_1$ est donc mis en attente.
+$p_A$ livre le message bien-formé $b_2$ (7).
+Il est accepté immédiatement dans le journal.
+Étant donné qu'il dépend sur le message en attente $m_1'$, ce dernier est également accepté dan sle journal.
+Avant ces ajouts, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_4 \defeq \tuple*{ack}$.
+Cette exécution permet d'éviter d'avoir le message non-linéaire $m_1$ parmi les messages maximaux du journal.
+L'ajout de $m_1'$ dans le journal implique la reconnaissance de $p_M$ comme un pair mal-intentionné.
+Toute livraison ultérieure d'un message bien-formé de $p_M$ sera systématiquement mis en attente.
+$p_C$ est désormais un invité connu dans $J$.
+En revanche, il n'est pas reconnu par $p_A$ étant donné que le pair n'a pas généré un message qui dépend transitivement sur le message qui invite $p_C$.
+Finalement, $p_A$ livre le message bien-formé $b_3$ (8).
+$b_3$ est accepté immédiatement dans le journal.
+Puisqu'il dépend sur le message en attente $c_1$, ce dernier est également accepté dans le journal.
+L'auteur de $c_1$ n'est pas un invité reconnu par $p_A$.
+Avant d'ajouter $c_1$ et $b_3$, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_5 \defeq \tuple*{\trm{ack}}$.
+
+\bigskip
+
+Le pair $p_B$ récupère un journal dans lequel il est invité (1).
+Il livre le message bien-formé $m_1' \defeq \tuple*{\trm{invite}, p_C}$ (2).
+Le message est accepté immédiatement dans le journal.
+L'ajout du message dans le journal met à jour les invités connus du journal $J$.
+$p_C$ est un invité connu.
+En revanche il n'est pas encore reconnu par $p_B$.
+$p_B$ livre ensuite $m_1 \defeq \tuple*{\trm{add}, 1}$ (3).
+$m_1$ est non-linéaire avec un message du journal.
+Il est donc mis en attente.
+$p_B$ exécute une opération qui donne lieu à la génération du message $b_1 \defeq = \tuple*{\trm{add}, 3}$.
+Il reconnaît que $p_C$ est invité.
+Il livre ensuite les messages bien-formés $a_4$ (5) et $a_5$ (6).
+Ces deux messages sont acceptés immédiatement dans le journal.
+$a_4$ dépend sur le message en attente $m_1$.
+$m_1$ est donc ajouté dans le journal avant l'ajout de $a_4$.
+L'ajout de $m_1$ et $a_4$ n'aboutit pas à la présence d'un message non-linéaire parmi les messages maximaux du journal.
+Le protocole n'exécute donc pas uen opération d'acquiescement avant ces ajouts.
+$p_B$ livre le message bien-formé et linéaire $c_1$.
+L'auteur de $c_1$ est un invité connu du journal.
+$c_1$ est donc accepté immédiatement dans le journal.
+Puisque l'auteur de $c_1$ est reconnu par $p_B$ ($p_C \in \trm{ackInvited}$), le protocole n'exécute pas d'operation d'acquiescement avant l'ajout du message.
+Finalement, $p_B$ exécute une opération qui génère le message $b_2 \defeq \tuple*{\trm{add},4}$
+
+\clearpage
+
+
 \subsection{Optimisations}
+
+Nous présentons dans cette sous-section des optimisations du protocole à journaux complets.
 
 En pratique l'opération d'invitation et le message d'invitation pourraient contenir uniquement la clef publique du collaborateur ou de la collaboratrice invité·e.
 L'identifiant du pair correspondrait alors au \emph{hash} du message.
-Notre approche permet d'avoir des opérations d'invitations avec une signature identique à celle présentée dans les modèles de cohérence correspondant.
+Notre approche permet d'avoir des opérations d'invitations avec une signature identique à celle présentée dans la \autoref{sec:stability}.
 
 Pour être bien-formé, un message $m$ doit être linéaire et doit dépendre d'un message d'invitation qui invite l'auteur de $m$.
 Dans le protocole que nous avons présenté, ces deux vérifications requièrent le parcours du journal (\autoref{eq:linear-verif} et \autoref{eq:invit-verif}).
-Nous pouvons réduire ces vérifications à une simple vérification sur les dépendances déclarées.
+Nous pouvons réduire ces vérifications à une simple vérification sur les dépendances déclarées du message.
 Pour ce faire, lorsqu'un pair génère un nouveau message il inclut toujours son précédent message comme dépendance déclarée et à défaut le message qui l'invite.
 Pour être bien-formé un message doit inclure cette dépendance déclarée.
 Ainsi si le message à un numéro égal à $1$, il doit inclure une dépendance déclarée qui invite son auteur.
@@ -3113,29 +3333,6 @@ Autrement, le message doit inclure une dépendance déclarée du même auteur av
     x = \trm{invite}(\trm{peer}_m)
     \end{dcases}
 \end{equation*}
-
-
-%Nous notons $\trm{last}_J$ qui associe à chaque pair $p$ le dernier message $\trm{last}_J[p]$ qui concerne  $p$.
-%Il peut s'agir du message qui l'invite ou d'un message dont il est l'auteur.
-%Les pairs reconnus mal-intentionnés n'ont pas d'associations.
-%Lorsqu'un message $m$ est ajouté à $J$, nous obtenons une version mise-à-jour de $\trm{last}_J$, notée $\trm{last}_J'$.
-%
-%\begin{equation*}\begin{split}
-%\MoveEqLeft\trm{last}_J' \assign \set*{\tuple{p, \_} \in \trm{last}_J \given p \neq \trm{peer}_m}\\ 
-%&\cup \begin{dcases}
-%        \set*{\tuple{q, m}} & \when m = \tuple{\trm{invite}, q}\\
-%        \emptyset &
-%    \end{dcases}\\
-%&\cup \begin{dcases}
-%        \set*{\tuple{\trm{peer}_m, m}} & \when \trm{linear}_J(m)\\
-%        \emptyset &
-%    \end{dcases}
-%\end{split}\end{equation*}
-%
-%\begin{equation*}\begin{split}
-%\MoveEqLeft\trm{linear}_J(m) \defeq \trm{peer}_m \not\in \trm{knownMalicious}_J \land\\
-%    &\bigl(\trm{peer}_m \in \trm{dom}(\trm{last}_J) \implies \trm{id}(\trm{last}_J[\trm{peer}_m]) \in \trm{deps}_m\bigr)
-%\end{split}\end{equation*}
 
 Pour être bien-formé, un message $m$ ne doit pas reconnaître comme mal-intentionné son auteur ou l'auteur d'une de ses dépendances déclarées.
 Cette vérification requiert le parcours du journal (\autoref{eq:honest-verif}).
@@ -3153,24 +3350,23 @@ Un pair accepte dans son journal des messages bien-formés et sous des condition
 De ce fait les messages du journal et leurs relations respectent des contraintes.
 Dans cette section nous introduisons une correspondance entre journaux et exécutions abstraites.
 Une exécution abstraite est l'abstraction que nous avons utilisée pour définir les modèles de cohérence et le concept de stabilité.
-Nous montrons alors que l'exécution abstraite associée à un journal respecte le modèle de cohérence \acl{VFJC} Dynamique.
+Nous montrons alors que l'exécution abstraite associée à un journal respecte notre modèle de cohérence \acl{VFJC} Dynamique.
 
 Nous avons précédemment défini un journal comme un ensemble ordonné.
 L'ordre entre les messages correspond à l'ordre d'ajout des messages dans le journal.
 Pour faciliter la mise en correspondance du journal avec une exécution abstraite, nous définissons dans cette sous-section un journal comme un n-uplet $\tuple*{E, \trm{owner}, \trm{ao}}$ tel que~:
 \begin{itemize}
-    \item $E$ est l'ensemble dénombrable des messages du journal
-    \item $\trm{owner} \in \trm{Honest}$ est le pair honnête qui maintient le journal
+    \item $E$ est l'ensemble dénombrable des messages du journal.
+    \item $\trm{owner} \in \trm{Honest}$ est le pair honnête qui maintient le journal.
     \item $\trm{ao} \subseteq E \times E$ est l'ordre dans lequel les messages ont été ajoutés dans le journal.
-    Il s'agit d'un ordre total strict localement fini
+    Il s'agit d'un ordre total strict localement fini.
 \end{itemize}
 
-Lorsqu'un pair déclare des dépendances sur l'un de ses messages,, cette dernière dépend récursivement sur les dépendances de ses dépendances.
-Nous pouvons ainsi définir la relation suivante~:
+Lorsqu'un pair déclare des dépendances sur l'un de ses messages, ce dernier dépend sur les dépendances de ses dépendances.
+Nous pouvons ainsi définir la relation transitive suivante~:
 
 \paragraph{Dépendance.} Une relation qui rend compte des dépendances directes et indirectes entre les messages d'un journal.
 Un message $x$ est une dépendance d'un message $z$, et nous écrivons $x \dep z$, si et seulement si $x$ est une dépendance déclarée de $z$ ou si il existe une dépendance $y$ de $z$ tel que $x$ est une dépendance de $y$.
-Cette relation est transitive.
 \begin{equation*}
     x \dep z \defiff \trm{id}(x) \in \trm{deps}_z \lor \exists y \qsep x \dep y \dep z
 \end{equation*}
@@ -3192,13 +3388,16 @@ Il en va de même au sein d'une exécution abstraite~: les relations de \emph{vi
 Cette correspondance n'est pas suffisante.
 Lorsqu'un pair honnête ajoute un message dans son journal, il l'observe.
 Cette observation devrait être exposée au sein de l'exécution abstraite associée au journal.
-Pour ce faire, une exécution abstraite associée inclut une opération supplémentaire~: l'opération d'observation implicite.
+Pour ce faire, une exécution abstraite associée inclut une opération supplémentaire~: \emph{l'opération d'observation implicite}.
 L'opération d'observation implicite a pour auteur le possesseur du journal et toutes les autres opérations lui sont visibles.
 
+La \autoref{def:exec-abs-log} définit l'exécution abstraite associée à un journal.
+La \autoref{fig:exec-abs-log-example} donne un exemple d'exécution abstraite associée à un journal.
+$\top_{\trm{vis}}$ est l'opération d'observation implicite.
 
-\begin{definition}[Exécution abstraite associée à un journal]
+\begin{definition}[Exécution abstraite associée à un journal]\label{def:exec-abs-log}
 Pour tout journal $J \defeq \tuple*{\_, \trm{owner}, \trm{ao}}$, il existe une unique histoire associée $H \defeq \tuple*{\_, \trm{peer}, \trm{call}, \trm{rval}, \trm{rb}}$ et une unique exécution abstraite associée $A \defeq \tuple*{H, \trm{vis}}$.
-L'histoire $H$ est munit d'une opération exécutée particulière $\top_{\trm{vis}}$ que nous nommons opération d'observation implicite.
+L'histoire $H$ est munie d'une opération exécutée particulière $\top_{\trm{vis}}$ que nous nommons opération d'observation implicite.
 Il existe entre les messages du journal $J$ et les opérations exécutées de l'exécution abstraite $A$ privé de l'opération d'observation implicite $\top_{\trm{vis}}$ une correspondance un-à-un (une bijection).
 Pour un message $x_J$ nous notons $x_A$ l'opération exécutée correspondante.
 L'histoire $H$ et l'exécution abstraite $A$ sont construites à partir de cette correspondance tel que~·
@@ -3235,26 +3434,93 @@ Toute opération de $A$ est visible ou égale à l'opération d'observation impl
 \end{itemize}
 \end{definition}
 
-
-\begin{remark}
-La relation \emph{retourne-avant} de l'exécution abstraite associée à un journal est une énumération.
-\end{remark}
-% A prouver?
-
-\begin{proposition}
+\begin{proposition}\label{th:wf-abs-exec-log}
 L'exécution abstraite associée à un journal est bien-formée.
 \end{proposition}
 
+\begin{lemma}\label{th:rb-enum}
+La relation \emph{retourne-avant} de l'exécution abstraite associée à un journal est une énumération.
+\end{lemma}
+
 \begin{proof}
-Suivant la remarque précédente, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (mal-intentionné ou honnête) est une énumération.
+Si un message $x_J$ est ajouté avant un message $y_J$ dans le journal $J$ alors l'opération $x_A$ associée à $x_J$ retourne-avant l'opération $y_A$ associée à $y_J$ dans l'exécution abstraite $A$ associée à $J$.
+L'opération d'observation implicite est la seule opération qui n'est pas associée à un message.
+Par définition toute les autres opérations retourne-avant l'opération d'observation implicite.
+La relation retourne-avant est donc une énumération.
+\end{proof}
+
+\begin{proof}[Démonstration de la \autoref{th:wf-abs-exec-log}.]
+Suivant le \autoref{th:rb-enum}, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (mal-intentionné ou honnête) est une énumération.
 Par conséquent, la propriété~\ref{itm:bf1} est respectée.
 
 Toute opération de $A$ est visible ou égale à l'opération d'observation implicite $\top_{\trm{vis}}$.
 L'auteur de cette dernière est le possesseur du journal.
 Il est par définition honnête.
-Par conséquent, toutes les opérations, y compris les opérations émises par des pairs mal-intentionnées, sont observées par au moins un pair honnête.
-La propriété~\ref{itm:bf2} est donc satisfaite.
+Par conséquent, toutes les opérations, y compris les opérations des pairs mal-intentionnées, sont observées par au moins un pair honnête.
+La propriété~\ref{itm:bf2} est satisfaite.
 \end{proof}
+
+
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}
+    \newcommand*\hsep{2.1}
+    \newcommand*\vsep{-1.5}
+    % Peers
+    \path node (A) {$p_A$}
+        to +(0,\vsep) node (M) {$p_M$}
+        to +(0,2*\vsep) node (B) {$p_B$}
+        to +(0,3*\vsep) node (C) {$p_C$}
+    ;
+    % Events
+    \path (A)
+        to +(0.5*\hsep,0) node[
+                label=above:$\trm{invite(p_A)}$
+            ] (a1) {$a_1$}
+        to +(1.5*\hsep,0) node[
+                label=above:$\trm{invite(p_M)}$
+            ] (a2) {$a_2$}
+        to +(2.5*\hsep,0) node[
+             label=above:$\trm{invite(p_B)}$
+            ] (a3) {$a_3$}
+        to +(3.5*\hsep,0) node (a4) {$a_3$}
+        to +(5*\hsep,0) node (a5) {$a_3$}
+        to +(6.5*\hsep,0) node (top) {$\top_{\trm{vis}}$}
+    ;
+    \path (M)
+        to +(3*\hsep,0) node (m1) {$m_1$}
+        to +(4*\hsep,0) node[
+                label=above:$\trm{invite(p_C)}$
+            ] (m1p) {$m_1'$}
+    ;
+    \path (B)
+        to +(4.5*\hsep,0) node (b1) {$b_1$}
+        to +(6*\hsep,0) node (b2) {$b_2$}
+    ;
+    \path (C)
+        to +(5.5*\hsep,0) node (c1) {$c_1$}
+    ;
+    % Timelines
+    \path (7*\hsep,0) coordinate (aend)
+        to +(0,\vsep) coordinate (mend)
+        to +(0,2*\vsep) coordinate (bend)
+        to +(0,3*\vsep) coordinate (cend)
+    ;
+    \foreach \src/\dest in {A/a1,a3/a4,a5/top,top/aend,B/b1,b1/b2,b2/bend,M/m1,m1/m1p,m1p/mend,C/c1,c1/cend}
+        \draw[timeline] (\src) to (\dest);
+    % Precedence
+    \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b1,a4/a5,b1/a5,a5/b2,c1/b2,b2/top}
+        \draw[pre] (\src) to (\dest);
+    \draw[vis,bend right=100] (a3) to (m1p);
+    \draw[vis,bend right=45] (m1p) to (c1);
+\end{tikzpicture}
+\caption[Exemple d'une exécution abstraite associée à un journal]{Exécution abstraite associée au journal de la \autoref{fig:log-example-2}.}\label{fig:exec-abs-log-example}
+\end{figure}
+
+
+
+
+
 
 \begin{theorem}
 Une exécution abstraite $A$ associée à un journal $J$ construit à partir du protocole à journaux complets respecte le modèle de cohérence \emph{DynVFJC}.
