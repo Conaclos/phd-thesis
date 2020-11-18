@@ -1,6 +1,7 @@
 \documentclass[12pt]{thesul}
 
 \input{0-preambule/acronyms.tex}
+\input{0-preambule/algo.tex}
 \input{0-preambule/biblio.tex}
 \input{0-preambule/comments.tex}
 %\input{0-preambule/debug.tex}
@@ -17,6 +18,7 @@
 
 % Which chapter to include?
 \includeonly{
+0-abstract,
 1-intro,
 2-problematic,
 3-background,
@@ -45,8 +47,9 @@
 
 \tableofcontents
 
-\listoffigures
-\listoftables
+\DontWriteThisInToc\listoffigures
+\DontWriteThisInToc\listoftables
+%\DontWriteThisInToc\listoftheorems[ignore={remark,lemma}]%
 
 \mainmatter{}
 \include{1-intro}
@@ -60,4 +63,6 @@
 
 %\appendix
 %\include{8-math-notations}
+
+\include{0-abstract}
 \end{document}

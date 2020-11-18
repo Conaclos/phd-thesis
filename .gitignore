@@ -5,7 +5,10 @@
 *.fdb*
 *.flg
 *.fls
+*.loe
+*.lof
 *.log
+*.lot
 *.toc
 *.maf
 *.mtc*
