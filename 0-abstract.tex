@@ -1,99 +1,28 @@
 \begin{ThesisAbstract}
 \begin{FrenchAbstract}
-Les applications de collaboration permettent à plusieurs individus de co-éditer un contenu.
-Les infrastructures pair-à-pair de collaboration visent à la conception d’applications de collaboration hautement disponibles, aux latences faibles, qui tolèrent les partitions
-réseaux, et passent à l’échelle.
-Elles connectent les appareils des individus les uns aux autres.
-Chaque pair (appareil) possède une copie du contenu qu’il peut consulter et modifier indépendamment des autres pairs.
-La modification concurrente des copies conduit à la divergence de leur état.
-Pour collaborer efficacement, les copies doivent converger vers un état qui intègre les modifications de chacun.
-Les protocoles de réplication sont en charge de la convergence et du maintien de la cohérence des copies du contenu.
-Ils supposent généralement l'absence de pairs mal-intentionnés qui dérogent au protocole.
-Ces pairs peuvent compromettre la convergence des copies.
-Pouvons-nous protéger la convergence des copies et préserver les propriétés offertes par les infrastructures pair-à-pair de collaboration~?
+Une application de collaboration permet à plusieurs individus de coéditer un contenu.
+Les infrastructures pair-à-pair de collaboration visent à la conception d’applications de collaboration hautement disponibles, aux latences faibles, qui tolèrent les partitions réseaux, et passent à l’échelle.
+Chaque pair (individu) a une copie du contenu qu’il peut indépendamment modifier.
+La modification concurrente des copies conduit à leur divergence.
+Les protocoles de réplication sont responsables de la convergence des copies du contenu.
 
-Notre première contribution propose deux protocoles qui protègent la convergence des copies.
-Notre premier protocole maintient un journal répliqué et infalsifiable dans lequel les pairs enregistrent leurs modifications du contenu.
-Au sein du journal, les modifications sont liées par des relations de dépendances.
+Ces protocoles supposent l'absence de pairs mal-intentionnés qui peuvent compromettre la convergence des copies.
+Pouvons-nous protéger la convergence des copies et préserver les propriétés des infrastructures pair-à-pair~?
+Nous proposons deux protocoles qui protègent la convergence des copies.
+Le premier protocole maintient un journal répliqué et infalsifiable qui enregistre les modifications du contenu.
 Les pairs conservent l’intégralité du journal pour déjouer les attaques des pairs mal-intentionnés et pour le transmettre à ceux qui rejoignent la collaboration.
-Ce qui représente un coût en mémoire et en transmission.
-Pour y remédier, notre second protocole permet aux pairs de tronquer leur journal.
-Pour rejoindre la collaboration, un pair récupère l'état d'une copie et un journal tronqué.
-Le protocole inclut un mécanisme pour vérifier l'authenticité de l'état à partir du journal tronqué.
-Pour déjouer les attaques des pairs mal-intentionnés, le journal ne doit pas être tronquer arbitrairement.
-Nous développons le concept de \emph{Stabilité} sur lequel repose le mécanisme de troncature.
-Une modification devient stable dans le journal d'un pair quand toutes les modifications intégrées ultérieurement dans le journal l’ont pour dépendance.
-Notre concept de stabilité prend en compte l'évolution de la composition du groupe.
+Le second protocole permet aux pairs de tronquer leur journal.
+La troncature du journal repose sur le concept de \emph{Stabilité}.
+Une modification devient stable lorsque toute modification intégrée ultérieurement dans le journal dépend d'elle.
+Pour rejoindre la collaboration, un pair récupère une copie et un journal tronqué.
+Il vérifie l'authenticité de la copie à partir du journal tronqué.
 
-Les protocoles de réplication peuvent être encapsulés au sein de types de données répliquées communément nommés \emph{CRDTs}.
-Les \emph{CRDTs} séquences sont la fondation de nouveaux éditeurs collaboratifs de texte.
-Ils échangent les modifications sous forme d'opérations.
-Les opérations doivent être intégrées dans un ordre spécifique pour garantir la convergence des copies du texte.
-Les aléas du réseau peuvent retarder la réception d'une opération.
-Ce retard bloque l'intégration d'opérations.
-Ce qui propage des ralentissement et des blocages dans l'ensemble de la collaboration.
-
-Notre deuxième contribution propose un \emph{CRDT} séquence synchronisé par différences d'états.
-Un \emph{CRDT} synchronisé par différences d'états permet l'intégration des modifications dans un ordre arbitraire.
-Notre approche est adaptable à d'autres \emph{CRDTs} séquences.
-
-
-% L'édition collaborative de texte en simultané exige des latences faibles.
-% Le délai entre le moment où une modification est effectuée et le moment où elle est intégrée par les autres pairs doit être suffisamment faible pour donner l'illusions d'une édition en simultané.
-% Les protocoles de réplication pour l'édition collaborative de texte échangent les modifications sous forme d'opérations.
-% Les opérations doivent être intégrées dans un ordre spécifique pour garantir la convergence des copies.
-% La perte d'une opération peut ralentir voire interrompre temporairement l'intégration d'opérations.
-% % Par ailleurs, lorsqu'un pair rejoint la collaboration ou revient après une longue période de déconnexions, de nombreuses opérations doivent être échangées et intégrées.
-% Pour répondre à ce problème, nous proposons un protocole de réplication de séquence qui synchronise les copies à l'aide de différences d'états.
-% Les différences d'états peuvent être livrés intégrés des ordres quelconques.
-
-% De nombreux protocoles de réplication synchronisent les copies du contenu partagé par l'échange d'opérations.
-% Les opérations doivent être livrées dans un ordre spécifique pour garantir la convergence des copies.
-% La perte d'une opération peut ralentir voire interrompre temporairement l'intégration des opérations des autres pairs.
-% Ces ralentissements peuvent compromettre l'efficacité des activités de collaboration en instantané tel que l'édition collaborative de texte.
-% Par ailleurs, lorsqu'un pair rejoint la collaboration ou revient après une longue période de déconnexions, de nombreuses opérations doivent être échangées.
-% Pour répondre à ces problèmes, nous proposons un protocole de réplication de séquence qui se synchronise à l'aide de différences d'états.
-% Les différences d'états peuvent être livrés intégrés des ordres quelconques.
-
-% Le protocole permet de déjouer les attaques des pairs mal-intentionnés avec un journal tronqué.
-
-% Pour déjouer les attaques des pairs mal-intentionnés, seule une partie du journal peut être supprimé.
-
-% Suffisamment de modifications doivent être conservées pour pouvoir déjouer les attaques des pairs mal-intentionnés.
-
-% Pour protéger la convergence de leur copie, les pairs honnêtes peuvent maintenir un journal répliqué et infalsifiable dans lequel ils enregistrent leurs modifications.
-% Les pairs conservent l’intégralité du journal pour déjouer les attaques des pairs mal-intentionnés et permettre à de nouveaux pairs de rejoindre la collaboration.
-% Ce qui représente un coût en mémoire et en communication.
-
-% Notre première contribution est un protocole qui permet de tronquer le journal et de déjouer les attaques des pairs mal-intentionnés avec un journal tronqué.
-% Pour ce faire, nous développons le concept de stabilité.
-
-
-
-
-% Ils souffrent de problèmes de sécurité et montrent leurs limites dans certains types de collaboration tel que l'édition collaborative de texte en simultané.
-% Nous nous intéressons à ces deux aspects.
-
-% Ils sont vulnérables à des attaques qui visent à compromettre la convergence des copies.
-
-% Est-il possible d’assurer la convergence des copies en présence de pairs mal-intentionnés et de conserver les propriétés offertes par les infrastructures pair-à-pair de collaboration~?
-
-% Est-il possible de concevoir un protocole de réplication optimiste pour l’édition collaborative de texte en simultané qui intègre immédiatement toute modification et est adapté aux longues périodes de déconnexions~?
-
-%Pour perturber ou faire échouer une collaboration, un adversaire peut compromettre la convergence des copies.
-%Nous proposons un protocole qui protège la convergence des copies d'un adversaire qui contrôle un ensemble de pairs mal-intentionnés.
-
-% Des pairs mal-intentionnés peuvent déroger au protocole de réplication pour compromettre la convergence des copies du contenu.
-% Pour protéger la convergence de leur copie, les pairs honnêtes peuvent maintenir un journal répliqué et infalsifiable dans lequel ils enregistrent leurs modifications.
-% Les pairs conservent l’intégralité du journal pour déjouer les attaques des pairs mal-intentionnés et permettre à de nouveaux pairs de rejoindre la collaboration.
-% Ce qui représente un coût en mémoire et en communication.
-% Nous proposons un protocole qui permet de tronquer le journal tout en permettent de déjouer les attaques des pairs mal-intentionnés.
-% Pour permettre à de nouveaux pairs de rejoindre la collaboration, nous proposons un mécanisme d’authentification de l’état d’une copie du contenu à partir d’un journal tronqué.
-% La troncature du journal repose sur le concept de stabilité.
-% Dans un journal les modifications sont liées les unes aux autres par des relations de dépendances.
-% Une modification devient stable au sein d'un journal dès lors que toutes les modifications intégrées ultérieurement dans le journal l’ont pour dépendance.
-% Un protocole de réplication contraint les relations de dépendances entre les modifications.
-% Nous développons le concept de stabilité pour plusieurs ensemble de contraintes, en particulier celui utilisé par le protocole que nous proposons.
+Un protocole de réplication peut être encapsulé dans un type de données répliquées communément nommé \emph{CRDT}.
+Les \emph{CRDTs} séquences de la littérature supposent généralement un ordre d'intégration causal des modifications du contenu.
+Le retard d'une modification propage des ralentissements dans l'ensemble du système.
+Pouvons-nous éliminer ces ralentissements~?
+Nous proposons un \emph{CRDT} séquence qui n'impose pas d'ordre d'intégration des modifications du contenu.
+Il résiste mieux aux aléas du réseau.
 
 \KeyWords{adversaire actif, cohérence de données, collaboration, convergence, journaux infalsifiables, pair-à-pair, réplication optimiste, sécurité, CRDT}
 \end{FrenchAbstract}
