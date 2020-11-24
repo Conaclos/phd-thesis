@@ -3850,7 +3850,7 @@ En plus des événements évoqués dans le précédent protocole, le protocole �
 \subsubsection{Exécution d'une opération d'invitation}
 
 L'exécution d'une opération d'invitation génère un message d'invitation.
-Un message $m$ d'invitation est accompagné des même méta-données qu'un autre message et d'une méta-données supplémentaire~:
+Un message $m$ d'invitation est accompagné des même méta-données qu'un autre message et d'une méta-donnée supplémentaire~:
 \begin{description}
     \item[$\trm{peer}_m$:] l'identifiant de l'auteur de $m$ 
     \item[$\trm{num}_m$:] le numéro de $m$
@@ -3873,7 +3873,7 @@ Il calcule l'empreinte de la copie $S$ avant l'exécution de l'opération et l'a
 La livraison d'un message suit la même procédure que celle présentée dans le protocole à journaux complets.
 Nous vérifions d'abord si un message est \emph{bien-formé} avant de le traiter afin de l'ajouter immédiatement au journal ou de le mettre en attente.
 Le traitement d'un message est inchangé.
-En revanche, nous ajoutons des conditions pour restreindre la définition de ce qu'est un message est bien-formé.
+En revanche, nous ajoutons des conditions pour restreindre la définition de ce qu'est un message bien-formé.
 Ces conditions supplémentaires sont décrites ci-après.
 
 Un message $m$ déclare uniquement des dépendances directes.
@@ -3938,27 +3938,6 @@ Nous abordons chacune de ces deux étapes.
 
 \paragraph{Tronquer le journal}
 
-\paragraph{Déterminer les messages convergent-stables}
-Un message $m$ devient stable dans un journal $J$ lorsqu'il n'est plus possible d'ajouter dans $J$ un message qui ne dépend pas de $m$.
-Par-ce-que un pair mal-intentionné est capable de produire des messages non-linéaires, le concept de stabilité traite différemment les pairs mal-intentionné et honnêtes.
-Chaque pair suspecte les autres pairs d'être mal-intentionné.
-
-Lorsqu'un nouveau pair honnête rejoint la collaboration il récupère le journal d'un pair existant.
-Si le journal est tronqué, le nouveau pair doit être capable de vérifier que le journal est correctement tronqué.
-
-Ce nouveau pair suspecte également le pair 
-
-Le protocole à journaux tronqués repose sur le protocole à journaux complets.
-Un message bien-formé pour le protocole à journaux tronqués est également bien-formé pour le protocole à journaux tronqués.
-Les journaux maintenus par le protocole à journaux tronqués ont donc des exécutions abstraites qui respectent le modèle de cohérence \emph{DynVFJC}.
-
-
-Déterminer si un message est convergent-stable est couteux.
-
-
-Déterminer l'ensemble des messages convergent-stables du journal $J$ est couteux.
-
-
 
 Pour ce faire, il procède en deux temps.
 Dans un premier temps, il choisit un message et détermine si ce dernier est stable.
@@ -3967,7 +3946,21 @@ Si le message est stable, alors l'ensemble des dépendances de ce message sont �
 Il détermine dans un second temps les messages qui peuvent être supprimés du journal.
 Il s'agit d'un sous-ensemble de l'ensemble des messages stables.
 
+Si $m$ est convergent-stable, le pair peut procéder à la troncature du journal.
+Pour simplifier, nous supprimons toujours un préfixe du journal.
+Nous supprimons un préfixe du journal qui inclut uniquement des messages stables et qui ne sont pas des dépendances déclarés de messages non-stables.
+cette dernière contrainte est nécessaire pour qu'un nouveau pair puisse vérifier que les messages non-stables sont bien-formés.
 
+Un pair mal-intentionné pourrait déclarer le premier message du journal complet comme dépendance pour empêcher la troncature des journaux des pairs honnêtes.
+C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarées aux dépendances directes du message.
+Les optimisations présentées dans le protocole à journaux complets peuvent toutefois être intégrées.
+Les dépendances indirectes qui sont déclarés comme dépendance sont bien-définies et dépendent au fur et à mesure sur un préfixe croissant du journal.
+
+Le message $m$ qui a été utilisé pour stabiliser et tronquer le journal est conservé dans la variable $\trm{ref}_I$.
+
+Un message du possesseur du journal dépend de l'ensemble des messages d'un préfixe du journal.
+Si un tel message est stable, alors un préfixe du journal est stable.
+Un pair teste uniquement la stabilité de ses messages.
 
 
 \begin{figure}[ht]
@@ -3975,11 +3968,11 @@ Il s'agit d'un sous-ensemble de l'ensemble des messages stables.
 \Procedure{$\trm{attemptTruncation}_i$}{}
     \State \textbf{let} $\tuple*{m_1, \dotsc} \assign J$
     \State \textbf{pick} $k \in \mathbb{N}^* \land \trm{peer}_{m_k} = p_i$
-    \If{$\trm{convergentStable}(m_k)$}
+    \If{$\trm{convergentStable}_i(m_k)$}
         \State $\trm{ref}_I \assign m_k$ \Comment{$m_k$ est la nouvelle référence de troncature}
         \State \textbf{let} $j \assign 1$
         \While{$j < k \land \nexists l > k \qsep \trm{id}(m_j) \in \trm{deps}_{m_l} $}
-            \State $J \assign J \sminus m_j$ \Comment{supprime $m_j$ du journal $J$}
+            \State $J \assign J \sminus \tuple*{m_j}$ \Comment{supprime $m_j$ du journal $J$}
             \State $I \assign \trm{integrate}_i(I, m_j)$ \Comment{intégre $m_j$ dans l'état $I$}
             \State $j \assign j + 1$ \Comment{passe au message suivant}
         \EndWhile
@@ -3989,46 +3982,136 @@ Il s'agit d'un sous-ensemble de l'ensemble des messages stables.
 \caption{Algorithme qui essaye de tronquer le journal d'un pair $p_i$. L'algorithme met à journal le journal $J$, l'état $I$, ainsi que la réference de troncature $\trm{ref}_I$}
 \end{figure}
 
-Un pair considère les autres pairs comme potentiellement mal-intentionnés.
-Lorsqu'un journal tronqué est transmis à un nouveau pair, ce dernier doit pouvoir vérifier qu'il a été tronqué correctement.
-Il doit donc être capable de vérifier qu'un message affirmé stable est réellement stable.
-Similairement au possesseur du journal, il considère les autres pairs comme mal-intentionnés, ce qui inclut le possesseur du journal tronqué.
-Nous nous intéressons donc à la stabilité convergente qui a été définit dans la \autoref{subsec:msg-stable}.
+
+
+
+
+
+\paragraph{Déterminer les messages convergent-stables}
+Pour rejoindre une collaboration, un pair honnête récupère un journal tronqué.
+Pour vérifier que le journal a été correctement tronqué, le pair et celui qui lui transmet le journal doivent déterminer le même ensemble de messages stables.
+Pour tronquer leur journal, les pairs déterminent donc les messages convergent-stables.
+Nous avons précédemment défini ce concept dans le \autoref{subsec:msg-stable}.
+
+Le protocole à journaux tronqués repose sur le protocole à journaux complets.
+Un message bien-formé pour le protocole à journaux tronqués est également bien-formé pour le protocole à journaux tronqués.
+Les journaux maintenus par le protocole à journaux tronqués sont donc associées à des exécutions abstraites qui respectent le modèle de cohérence \emph{DynVFJC}.
+Les pairs s'intéressent donc à la stabilité \emph{DynVFJC}.
+
+Par-ce-que les pairs mal-intentionnés sont capables de générer des messages non-linéaires, la stabilité \emph{DynVFJC} traite différemment les pairs honnêtes et les pairs mal-intentionnés.
+Chaque pair suspecte les autres pairs d'être mal-intentionnés.
+Lorsqu'il détermine la stabilité d'un message, il se considère donc être le seul pair honnête.
+Par-ce-qu'il esr lui-même suspecté mal-intentionné par les autres pairs, déterminer les messages convergent-stables revient en quelque sortes à considérer tous les pairs, y compris lui-même, comme des pairs mal-intentionnés.
+
+Un message $m$ est \emph{DynVFJC} convergent-stable au sein d'un journal $J$ si et seulement si pour chaque permutations $\tuple{p_1, \dotsc, p_N}$ de l'ensemble des pairs invités $\trm{invited}_J$, il existe une chaîne de dépendance $m_1 \depeq \dotsb \depeq m_n$ tel que $m_1$ dépend de $m$ ou est égal à $m$, et le $j$-ème pair de la permutation est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
+    \item le pair est l'auteur du message
+    \item le pair est reconnu mal-intentionné dans le message
+    \item le pair est invité dans le message
+\end{inlinelist}.
+Si la chaîne de dépendance est plus petite que la permutation ($n < N$), alors le $n$-ème pair doit être invité dans le dernier message de la chaîne (le $n$-ème message).
+
+La \autoref{fig:log-stability-example} montre un exemple d'un journal qui a des messages convergent-stables.
+Le \autoref{tab:log-stability-example-metadata} indique le contenu des messages et leurs méta-données.
+Le \autoref{tab:log-stability-example} justifie la stabilité convergente du message $b_2$ et de ses dépendances.
+Il indique pour chaque permutation des pairs invités une chaîne de dépendance correspondante.
+Par exemple, si nous prenons la permutation $\tuple*{p_M, p_B, p_A}$.
+La châines de dépendances $b_2 \depeq b_2 \depeq a_5$ est valide.
+La chaîne prend source en $b_2$.
+$p_M$ est reconnu mal-intentionné en $b_2$, $p_B$ est l'auteur de $b_2$, et $p_A$ est l'auteur de $a_5$.
+
+
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}
+    \newcommand*\hsep{1.6}
+    \path node[stable] (a1) {$a_1$}
+        to +(\hsep,0) node[stable] (a2) {$a_2$}
+        to +(2*\hsep,0) node[stable] (a3) {$a_3$}
+        to +(3*\hsep,0) node[stable] (m1) {$m_1$}
+        to +(4*\hsep,0) node[stable] (a4) {$a_4$}
+        to +(5*\hsep,0) node[stable] (m1p) {$m_1'$}
+        to +(6*\hsep,0) node[stable] (b1) {$b_1$}
+        to +(7*\hsep,0) node[stable] (b2) {$b_2$}
+        to +(8*\hsep,0) node (a5) {$a_5$}
+        to +(9*\hsep,0) node (b3) {$b_3$}
+    ;
+    % Dependency
+    \foreach \src/\dest in {a1/a2,a2/a3,a3/m1,m1/a4,m1p/b1,b1/b2,b2/a5,a5/b3}
+        \draw[pre] (\src) to (\dest);
+    \draw[vis,bend right=28] (a3) to (m1p);
+    \draw[vis,bend left=28] (a4) to (b2);
+\end{tikzpicture}
+\caption[Exemple d'un journal avec des messages convergent-stables]{Exemple d'un journal avec des messages convergent-stables.
+Les messages convergent-stables sont entourés}\label{fig:log-stability-example}
+\end{figure}
+
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{ccccc}
+        message $m$ & contenu de $m$ & $\trm{peer}_m$ & $\trm{num}_m$ & $\trm{deps}_m$ \\
+        \toprule
+        $a_1$ & $\tuple*{\trm{invite}, p_A}$ & $p_A$ & $1$ & $\emptyset$ \\
+        $a_2$ & $\tuple*{\trm{invite}, p_M}$ & $p_A$ & $2$ & $\set*{a_1}$ \\
+        $a_3$ & $\tuple*{\trm{invite}, p_B}$ & $p_A$ & $3$ & $\set*{a_2}$ \\
+        $m_1$ & $\tuple*{\trm{add}, 1}$ & $p_M$ & $1$ & $\set*{a_3}$ \\
+        $a_4$ & $\tuple*{\trm{ack}}$ & $p_A$ & $4$ & $\set*{m_1}$ \\
+        $m_1'$ & $\tuple*{\trm{add}, 2}$ & $p_M$ & $1$ & $\set*{b_1}$ \\
+        $b_1$ & $\tuple*{\trm{add}, 3}$ & $p_B$ & $1$ & $\set*{m_1'}$ \\
+        $b_2$ & $\tuple*{\trm{add}, 4}$ & $p_B$ & $2$ & $\set*{a_4,b_1}$ \\
+        $a_5$ & $\tuple*{\trm{add}, 5}$ & $p_A$ & $5$ & $\set*{b_2}$ \\
+        $b_3$ & $\tuple*{\trm{add}, 6}$ & $p_B$ & $3$ & $\set*{a_5}$ \\
+    \end{tabular}
+    \caption{Contenu et méta-données des messages du journal de la \autoref{fig:log-stability-example}}\label{tab:log-stability-example-metadata}
+\end{table}
+
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{cc}
+        permutation & chaîne de dépendance \\
+        \toprule
+        $\tuple*{p_A, p_B, p_M}$ & $a_5 \depeq b_3 \depeq b_3$ \\
+        $\tuple*{p_A, p_M, p_B}$ & $a_5 \depeq a_5 \depeq b_2$ \\
+        $\tuple*{p_B, p_A, p_M}$ & $b_2 \depeq a_5 \depeq a_5$ \\
+        $\tuple*{p_B, p_M, p_A}$ & $b_2 \depeq b_2 \depeq a_5$ \\
+        $\tuple*{p_M, p_A, p_B}$ & $b_2 \depeq a_5 \depeq b_3$ \\
+        $\tuple*{p_M, p_B, p_A}$ & $b_2 \depeq b_2 \depeq a_5$ \\
+    \end{tabular}
+    \caption{Justifications de la stabilité convergentes du message $b_2$ et de ses dépendances dans le journal de la \autoref{fig:log-stability-example}}\label{tab:log-stability-example}
+\end{table}
 
 Déterminer avec précision la stabilité d'un message tout en passant à l'échelle est un défi difficile.
-Pour déterminer si un message $m$ est stable, le pair doit vérifier que pour chaque permutation des pairs de la collaboration il existe un chemin dans le journal qui prend source en $m$ et qui respecte un certain prédicat.
-Étant donné que le nombre de permutations est $N!$ avec $N$ le nombre de pairs, la complexité de cette vérification est exponentielle. % chktex 40 % for factorial
+Une implémentation naïve pourrait parcourir pour chaque permutation chaque chemin de dépendance du graphe formé par le journal.
+Pour $N$ pairs invités, il y a $N!$ permutations.
+Et chaque branche dans le graphe démultiplie le nombre de chemin.
+La complexité d'un tel algorithme est exponentielle.
 
-C'est pourquoi, nous proposons un mécanisme qui détermine comme convergent-stable un sous-ensemble des messages qui le sont.
-Cette approche nous permet également d'introduire des implications pour rendre le mécanisme plus compréhensible.
+Nous proposons un mécanisme qui détermine comme convergent-stable un sous ensemble des messages qui le sont.
+Cet algorithme a une complexité linéaire par rapport aux nombre de pairs invités et du nombre de messages enregistrés dans le journal.
 
-La formulation de la stabilité \acl{VFJC} Dynamique traite les invitations comme des observations particulières du pair invité.
-Pour simplifier, nous considérons une invitation comme une simple observation du pair invité.
+Notre algorithme se base sur deux principes~:
+\begin{itemize}
+    \item Au lieu de considérer chaque permutation des pairs invités, nous considérons une énumération de pairs qui les inclut toutes.
+    \item Au lieu de parcourir chaque chemin du graphe qui prend source au message dont la stabilité est testé, nous en parcourons un seul.
+\end{itemize}
 
-Mettons d'abord de côté l'existence de pairs reconnus mal-intentionnés et concentrons-nous sur l'idée principale de l'algorithme que nous développons ici.
+Puisque chaque pair doit être capable de vérifier que le journal d'un autre pair est correctement tronqué, ils doivent considérer pour un même journal, la même énumération de pairs et le même chemin à parcourir.
 
-%Une idée naïve pour déterminer si un message est stable serait de tester pour chaque permutation de pair mal-intentionnés l'existence d'un chaîne de visibilité qui prend source en $m$.
-%sachant que pour $N$ pairs mal-intentionnés, il y a $N!$ permutations et que dans le pire cas le graphe dirigé acyclique formé par le journal est composé de $3^{(M/3)}$ chemins de taille $M/3$ avec $M$ le nombre de message dans le journal, nous avons donc une complexité temporelle au pire cas de $3^{(M/3)}*N!*N*(M/3)$.
-%A noter que nous ne prenons pas en compte la génération des permutations qui peut également être coûteux.
+Pour ce faire, les identifiants des pairs sont totalement ordonnées.
+l'ensemble des pairs invités $\trm{invited}_J$ est donc un ensemble ordonné.
+Le chemin parcouru est déterminé par l'ordre d'ajout des messages dans le journal.
+Si un message est une dépendance de plusieurs messages, alors le message qui a été ajouté en premier fait partie du chemin parcouru.
 
-%Une autre idée pourrait être de parcourir un seul chemin et vérifier qu'il inclut une chaîne de visibilité pour chaque permutation.
-%Le coût reste tout de même élevé puisque nous avons une complexité au pire cas de $N!*N+M$.
-
-L'idée principale est de vérifier qu'un chemin qui prend source en $m$ inclut l'ensemble des permutations des pairs de la collaboration.
-Pour simplifier davantage, nous considérons un seul chemin qui est choisit de manière déterministe.
-Ainsi si un pair affirme qu'un message $m$ est stable dans un journal $J$, alors tout pair qui dispose de $m$ et $J$ peut vérifier l'affirmation.
-
-La formation d'une séquence minimale qui inclut toutes les permutations est un problème ouvert.
-Toutefois plusieurs articles~\autocite{engen2018_containing} prouvent des bornes supérieures sur la taille de cette séquence.
-Pour ce faire, ils décrivent dans leur preuve la génération d'une telle séquence.
-L'un des articles~\autocite{adleman_1974_shortperm} a particulièrement attiré notre attention puisqu'il décrit une manière simple de générer une séquence de taille $N^2 -2N +4$ qui inclut l'ensemble des permutations de ces $N$ composantes.
-Ainsi nous pouvons réduire la recherche de la stabilité au parcours de cette séquence et du chemin du journal qui a été choisit.
-Si le chemin a une chaîne de visibilité qui correspond à cette séquence, alors $m$ est stable.
-La complexité au pire cas se réduit donc au parcours du journal.
+La formation d'une énumération minimale qui inclut toutes les permutations est un problème ouvert.
+Toutefois plusieurs articles~\autocite{engen2018_containing} prouvent des bornes supérieures sur la taille de cette énumération.
+Pour ce faire, ils décrivent dans leur preuve la génération d'une telle énumération.
+L'un des articles~\autocite{adleman_1974_shortperm} présente une manière simple de construire une énumération de taille $N^2 -2N +4$ qui inclut l'ensemble des permutations de ces $N$ composantes.
+Nous proposons dans la \autoref{fig:all-perm-enum}, un algorithme qui traduit la construction mathématique de l'article.
 
 \begin{figure}[ht]
 \begin{algorithmic}[1]
-\Function{$\trm{allPermSeq}$}{$\tuple*{p_1, \dotsc, p_n}$}
+\Function{$\trm{allPermEnum}$}{$\tuple*{p_1, \dotsc, p_n}$}
     \If{$n = 1$}
         \State \textbf{return} $\tuple*{p_1}$
     \ElsIf{$n = 2$}
@@ -4050,73 +4133,131 @@ La complexité au pire cas se réduit donc au parcours du journal.
     \EndIf
 \EndFunction
 \end{algorithmic}
-\caption{Algorithme de génération d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}
+\caption{Algorithme de génération d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}\label{fig:all-perm-enum}
 \end{figure}
 
-Nous proposons un algorithme qui repose sur cette idée et prend en compte les pairs reconnus mal-intentionnés.
+Ainsi, un message $m$ est convergent-stable si pour l'énumération de pairs $\tuple*{p_1, \dotsc}$ généré par l'algorithme de la \autoref{fig:all-perm-enum} auquel est passé en paramètre l'ensemble ordonné $\trm{invited}_J$, il existe une chaîne $m_1 \depeq \dotsc \depeq m_n$ issue du chemin parcouru qui prend source en $m$ tel que le $j$-ème pair de l'énumération est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
+    \item le pair est l'auteur du message
+    \item le pair est reconnu mal-intentionné dans le message
+    \item le pair est invité dans le message
+\end{inlinelist}.
 
-Le pair créé d'abord un journal temporaire $Z$ dont il initialise les structures de données dépendantes à l'aides des structures de données dépendantes de l'instantané $I$.
-Il ajoute alors l'ensemble des dépendances de $m$ présent dans $J$ dans le journal temporaire $Z$.
-Ces ajouts sont faits dans l'ordre dans lequel les messages ont été ajoutés dans $J$.
-
-Une fois ces ajouts effectués dans $Z$, nous pouvons débuter la procédure qui permet de déterminer si $m$ est convergent-stable.
-L'algorithme consiste à parcourir le chemin choisit dans le journal $J$ et la séquence qui inclut l'ensemble des permutations des pairs.
-
-Nous avançons d'un pas dans la séquence qui inclut l'ensemble des permutations des pairs si et seulement si le pair courant est \begin{inlinelist}\item l'auteur du message courant, ou si il est \item le pair invité dans le message courant (le message courant est une invitation), ou si il est \item reconnu mal-intentionné dans $Z$ (il est présent dans l'ensemble $\trm{knwonMalicious}_Z$) \end{inlinelist}.
-Dès lors que nous n'avançons plus dans la séquence, nous progressons d'un pas sur le chemin de messages.
-Le message courant précédent est alors ajouté au journal temporaire $Z$ ainsi que toutes les dépendances du nouveau message courant qui ne sont pas encore présentes dans $Z$.
-
-
-Le chemin doit être choisit de manière déterministe pour qu'un tiers puisse vérifier que le journal a été stabilisé correctement.
-il peut par exemple s'agir d'un chemin induit par l'ordre topologique du journal.
-
-Si $m$ est convergent-stable, le pair peut procéder à la troncature du journal.
-Pour simplifier, nous supprimons toujours un préfixe du journal.
-Nous supprimons un préfixe du journal qui inclut uniquement des messages stables et qui ne sont pas des dépendances déclarés de messages non-stables.
-cette dernière contrainte est nécessaire pour qu'un nouveau pair puisse vérifier que les messages non-stables sont bien-formés.
-
-Un pair mal-intentionné pourrait déclarer le premier message du journal complet comme dépendance pour empêcher la troncature des journaux des pairs honnêtes.
-C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarées aux dépendances directes du message.
-Les optimisations présentées dans le protocole à journaux complets peuvent toutefois être intégrées.
-Les dépendances indirectes qui sont déclarés comme dépendance sont bien-définies et dépendent au fur et à mesure sur un préfixe croissant du journal.
-
-Le message $m$ qui a été utilisé pour stabiliser et tronquer le journal est conservé dans la variable $\trm{ref}_I$.
-
-Un message du possesseur du journal dépend de l'ensemble des messages d'un préfixe du journal.
-Si un tel message est stable, alors un préfixe du journal est stable.
-Un pair teste uniquement la stabilité de ses messages.
-
+L'algorithme de la \autoref{fig:convergent-stable} implémente cette définition avec une petite optimisation.
+Puisque la chaîne considérée prend source en $m$, tous les messages de la chaîne ne peuvent pas dépendre directement d'un message d'un pair reconnu mal-intentionné en $m$.
+Nous pouvons donc considérer une énumération qui contient les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés en $m$.
+Pour connaître les pairs reconnus mal-intentionnés d'un message $m$, nous devons construire le journal qui inclut $m$ et toutes ses dépendances.
+Cette construction peut être coûteuse sauf pour lez messages qui dépendent de tous les messages qui ont été précédemment ajoutés dans le journal.
+C'est le cas des messages du possesseur du journal.
+Cette optimisation est donc considérée uniquement lorsque la stabilité convergente d'un message du possesseur du journal est testée.
+Lorsque le message n'est pas un message du possesseur du journal nous pouvons pouvons toutefois retirer les pairs reconnus mal-intentionnés dans l'état $I$.
+Ce qui correspond à un sous-ensemble des pairs reconnus mal-intentionnés en $m$.
 
 \begin{figure}[ht]
 \begin{algorithmic}[1]
-\Function{$\trm{convergentStable}$}{$x$}
+\Function{$\trm{convergentStable}_i$}{$x$}
+\textbf{require} $x \in J$
     \State \textbf{let} $Z \assign \tuple*{}$ \Comment{initialisation du journal temporaire}
-    \State \textbf{let} $\trm{knownMalicious}_Z \assign \trm{knownMalicious}_I$
     \State \textbf{let} $\trm{vv}_Z \assign \trm{vv}_I$
-    \State \textbf{let} $\tuple*{p_1, \dotsc, p_n} \assign \trm{allPermSeq}(\trm{invited}_J)$
+    \State \textbf{let} $\trm{knownMalicious}_Z \assign \trm{knownMalicious}_I$
+    \State \textbf{let} $\tuple*{y_1, \dotsc} \assign J$
+    \State \textbf{let} $k = 1$
+    \If{$\trm{peer}_x = p_i$}\Comment{l'auteur de $x$ est-il $p_i$, le possesseur du journal $J$~?}
+        \State $Z \assign Z \lappend \tuple*{y_1, \dotsc, x}$\Comment{ajoute $x$ et ses dépendances à $Z$}
+        \State $k \assign \trm{length}(\tuple*{y_1, \dotsc, x})$
+    \EndIf
+    \State \textbf{let} $\tuple*{p_1, \dotsc, p_n} \assign \trm{allPermEnum}(\trm{invited}_J \sminus \trm{knownMalicious}_Z)$
     \State \textbf{let} $j \assign 1$
-    \State \textbf{let} $\tuple*{m_1, \dotsc, m_k} \assign J$
-    \State \textbf{let} $i \assign 1$
     \State \textbf{let} $\trm{prev} \assign x$
-    \While{$j \leq n \land i \leq k$}
-        \If{$x_i = x \lor \trm{id}(prev) \in \trm{deps}_{x_i}$}\Comment{$m_i$ fait partie du chemin parcouru}
-            \If{$\trm{peer}_{m_i} = p_j \lor m_i = \tuple*{\trm{invite}, p_j} \lor p_j \in \trm{knownMalicious}_Z$}
-                \State $j \assign j + 1$ \Comment{avance d'un pas dans l'énumération de pair}
+    \While{$j \leq n \land k \leq \trm{length}(J)$}
+        \If{$y_k = x \lor \trm{id}(prev) \in \trm{deps}_{y_k}$}\Comment{$y_k$ fait-il partie du chemin parcouru~?}
+            \If{$\trm{peer}_{y_k} = p_j \lor y_k = \tuple*{\trm{invite}, p_j} \lor p_j \in \trm{knownMalicious}_Z$}
+                \State $j \assign j + 1$ \Comment{avance d'un pas dans l'énumération de pairs}
             \Else
-                \State $\trm{prev} \assign m_i$
-                \State $Z \assign Z \lappend \tuple*{x_i}$
-                \State $i \assign i + 1$\Comment{avance d'un pas dans le journal}
+                \State $\trm{prev} \assign y_k$
+                \State $Z \assign Z \lappend \tuple*{y_k}$
+                \State $k \assign k + 1$\Comment{avance d'un pas dans le journal $J$}
             \EndIf
         \Else
-            \State $Z \assign Z \lappend \tuple*{m_i}$
-            \State $i \assign i + 1$\Comment{avance d'un pas dans le journal}
+            \State $Z \assign Z \lappend \tuple*{y_k}$
+            \State $k \assign k + 1$\Comment{avance d'un pas dans le journal $J$}
         \EndIf
     \EndWhile
-    \State \textbf{return} $j = n$
+    \State \textbf{return} $j > n$\Comment{l'énumération de pairs a t-elle été entiérement parcourue~?}
 \EndFunction
 \end{algorithmic}
-\caption{Algorithme qui détermine si un message $x$ est convergent stable dans $J$.}
+\caption{Algorithme qui détermine si un message $x$ est convergent stable dans $J$.}\label{fig:convergent-stable}
 \end{figure}
+
+Le pair créé d'abord un journal temporaire $Z$ dont il initialise les structures de données dépendantes à l'aides des structures de données dépendantes de l'état $I$ (ligne 2 à 4).
+Si le message est un message du possesseur du journal, alors $m$ et ses dépendances sont ajoutées à $Z$ (ligne 7 à 10).
+Ces messages forment un préfixe du journal $J$.
+Nous construisons ensuite l'énumération de pairs qui inclut les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés dans $Z$ (ligne 11).
+Le reste de l'algorithme parcourt l'énumération de pairs et le journal.
+Si l'énumération de pairs est entièrement parcourut, le message $m$ est convergent-stables.
+Nous avançons d'un pas dans l'énumération de pairs si et seulement si le pair courant est \begin{inlinelist}\item l'auteur du message courant, ou si il est \item le pair invité dans le message courant (le message courant est une invitation), ou si il est \item reconnu mal-intentionné dans $Z$ (il est présent dans l'ensemble $\trm{knwonMalicious}_Z$) \end{inlinelist}.
+Dès lors que nous n'avançons plus dans l'énumération, nous progressons d'un pas sur le chemin de messages.
+Le message courant précédent est alors ajouté au journal temporaire $Z$ ainsi que toutes les dépendances du nouveau message courant qui ne sont pas encore présentes dans $Z$.
+
+Pour illustrer cette algorithme, nous testons la stabilité convergente du message $m_1$ du journal de la \autoref{fig:log-stability-example}.
+
+
+
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{cc}
+        variable·s & valeur·s initiale·s \\
+        \toprule
+        $x$ & $m_1$ \\
+        $\trm{Z}$ & $\tuple*{}$ \\
+        $\trm{vv}_Z$ & $\emptyset$ \\
+        $\trm{knownMalicious}_Z$ & $\emptyset$ \\
+        $\tuple*{y_1, \dotsc, y_{10}}$ & $\tuple*{a_1, a_2, a_3, m_1, a_4, m_1', b_1, b_2, a_5, b_3}$ \\
+        $k$ & $1$ \\
+        $\tuple*{p_1, \dotsc, p_{7}}$ & $\tuple*{p_M, p_A, p_B, p_M, p_A, p_B, p_M}$ \\
+        $n$ & $7$ \\
+        $j$ & $1$ \\
+        $\trm{prev}$ & $m_1$ \\
+    \end{tabular}
+    \caption{}\label{tab:log-stability-example-algo-const}
+\end{table}
+
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{ccccccc}
+        ligne·s exécutée·s & $j$ & $p_j$ & $\trm{prev}$ & $k$ & $m_k$ & $\trm{knownMalicious}_Z$ \\
+        \toprule
+        2 à 7 et 11 à 13 & $1$ & $p_M$ & $m_1$ & $1$ & $a_1$ & $\emptyset$ \\
+        14, 15, 24, 25 & $1$ & $p_M$ & $m_1$ & $2$ & $a_2$ & $\emptyset$ \\
+        14, 15, 24, 25 & $1$ & $p_M$ & $m_1$ & $3$ & $a_3$ & $\emptyset$ \\
+        14, 15, 24, 25 & $1$ & $p_M$ & $m_1$ & $4$ & $m_1$ & $\emptyset$ \\
+        14 à 17 & $2$ & $p_A$ & $m_1$ & $4$ & $m_1$ & $\emptyset$ \\
+        14 à 16, 19 à 21 & $2$ & $p_A$ & $m_1$ & $5$ & $a_4$ & $\emptyset$ \\
+        14 à 17 & $3$ & $p_B$ & $m_1$ & $5$ & $a_4$ & $\emptyset$ \\
+        14 à 16, 19 à 21 & $3$ & $p_B$ & $a_4$ & $6$ & $m_1'$ & $\set*{p_M}$ \\
+        14, 15, 24, 25 & $3$ & $p_B$ & $a_4$ & $7$ & $b_1$ & $\set*{p_M}$ \\
+        14, 15, 24, 25 & $3$ & $p_B$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
+        14 à 17 & $4$ & $p_M$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
+        14 à 17 & $5$ & $p_A$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
+        14 à 16, 19 à 21 & $5$ & $p_A$ & $b_2$ & $9$ & $a_5$ & $\set*{p_M}$ \\
+        14 à 17 & $6$ & $p_B$ & $b_2$ & $9$ & $a_5$ & $\set*{p_M}$ \\
+        14 à 16, 19 à 21 & $6$ & $p_B$ & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
+        14 à 17 & $7$ & $p_M$ & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
+        14 à 17 & $8$ & / & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
+    \end{tabular}
+    \caption{}\label{tab:log-stability-example-algo-loop}
+\end{table}
+
+
+
+
+%Une idée naïve pour déterminer si un message est stable serait de tester pour chaque permutation de pair mal-intentionnés l'existence d'un chaîne de visibilité qui prend source en $m$.
+%sachant que pour $N$ pairs mal-intentionnés, il y a $N!$ permutations et que dans le pire cas le graphe dirigé acyclique formé par le journal est composé de $3^{(M/3)}$ chemins de taille $M/3$ avec $M$ le nombre de message dans le journal, nous avons donc une complexité temporelle au pire cas de $3^{(M/3)}*N!*N*(M/3)$.
+%A noter que nous ne prenons pas en compte la génération des permutations qui peut également être coûteux.
+
+%Une autre idée pourrait être de parcourir un seul chemin et vérifier qu'il inclut une chaîne de visibilité pour chaque permutation.
+%Le coût reste tout de même élevé puisque nous avons une complexité au pire cas de $N!*N+M$.
 
 
 
