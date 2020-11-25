@@ -23,7 +23,7 @@ Les messages sont transmis aux autres collaborateur·ice·s qui les intègrent �
 
 Les séquences répliquées proposées dans la littérature sont synchronisées par opérations.
 Lorsqu'un pair exécute une opération sur sa copie, il dérive un message qui encapsule une opération intégrable sur sa copie et les copies des autres pairs.
-Une opération intégrable dépend sur un ensemble d'opérations intégrables.
+Une opération intégrable dépend d'un ensemble d'opérations intégrables.
 Par exemple, la suppression d'une valeur doit être intégrée après son insertion.
 La détection de ces dépendances peut être complexe.
 Pour simplifier, les protocoles de réplication de séquences supposent généralement une livraison causale des opérations intégrables.
@@ -53,7 +53,7 @@ Les différences d'états doivent être transmis au moins une fois.
 Les hypothèses de livraison des messages restent faibles.
 Ce qui ouvre à un large espace de conception de protocole de livraison de messages.
 
-Ces observations nous conduisent à formuler la question de recherche suivante~: un protocole synchronisé par différences d'états pour l'édition collaborative en simultané de texte est-il envisageable~?
+Ces observations nous conduisent à formuler la question de recherche suivante~: un protocole synchronisé par différences d'états pour l'édition collaborative en simultané de texte existe-il~?
 
 Dans un premier temps nous présentons un état de l'art sur les séquences répliquées.
 Dans un second temps nous présentons un protocole de réplication de séquences par différences d'états.
@@ -67,7 +67,7 @@ Pour finir nous présentons une classification des séquences répliquées propo
 
 \subsection{Séquences répliquées sans conflits}\label{subsec:replseq}
 
-Une séquence arrange de manière ordonnée des valeurs qui peuvent apparaître plusieurs fois.
+Une séquence arrange de manière ordonnée des valeurs.
 La composition de la séquence évolue au cours du temps~:
 des valeurs peuvent être insérées et supprimées de la séquence.
 Pour ce faire, le type abstrait Séquence dispose d'une opération d'insertion $\trm{ins}$ et d'une opération de suppression $\trm{del}$.
@@ -303,7 +303,7 @@ Elles correspondent à des extensions linéaires des ordres partiels induits par
 
 Pour respecter une spécification, les protocoles de réplication optimiste proposés dans la littérature mettent en oeuvre différents stratégies.
 Dans ce manuscrit nous nous intéressons particulièrement aux \acp{CRDT}.
-Un \ac{CRDT} encapsule le protoocle de réplication optimiste derrière une interface familière.
+Un \ac{CRDT} encapsule le protocole de réplication optimiste derrière une interface familière.
 Dans le cas d'une séquence répliquée, l'utilisateur·ice modifie la séquence et la lit de la même manière qu'il ou elle le ferait avec une séquence classique.
 Le protocole se charge d'exécuter les opérations et de synchroniser la copie de la séquence partagée avec les autres copies de la séquence.
 
@@ -545,15 +545,15 @@ Pour déterminer l'emplacement de $v$, le pair applique l'algorithme récursif s
 Si il n'y a aucune valeur après $v_1$, alors $v$ y est simplement placé.
 Sinon l'identifiant de $v$ est comparé à l'identifiant de la valeur $v_2$ qui se situe juste après $v_1$.
 Si l'identifiant de $v$ est supérieur à l'identifiant de $v_2$, alors $v$ est placé entre $v_1$ et $v_2$.
-Dans le cas contraire, $v$ dot être inséré après $v_2$.
-L'algorithme est donc répété en considérons $v_2$ comme $v_1$.
+Dans le cas contraire, $v$ doit être inséré après $v_2$.
+L'algorithme est donc répété en considérant $v_2$ comme $v_1$.
 
 Pour illustrer cet algorithme, nous reprenons l'exemple de la \autoref{fig:replseq-sematic-1}.
 Une fois l'ensemble des modifications intégrées, la séquence \emph{RGA} de la \autoref{fig:rga} est obtenue.
 Un identifiant $\tuple*{n, p_i}$ est noté $n_i$.
 $p_B$ débute avec la séquence $\textsf{'\textit{lady}'}$.
 Il insère le caractère $\textsf{'\textit{\negthinspace!}'}$ entre $\textsf{'\textit{y}'}$ et la fin de la séquence.
-Il génère un identifiant dont l'horotage est supérieur a ceux déjà générés dans la séquence.
+Il génère un identifiant dont l'horodatage est supérieur a ceux déjà générés dans la séquence.
 Il génère donc un horodatage égale à $7$.
 L'intégration de cette insertion s'effectue simplement en plaçant le caractère après $\textsf{'\textit{y}'}$.
 Il intègre ensuite l'insertion du caractère $\textsf{'\textit{i}'}$ qui référence le caractère $\textsf{'\textit{d}'}$.
@@ -868,21 +868,21 @@ Les messages d'insertion peuvent être livrés dans un ordre arbitraire.
 
 \paragraph{LogootSplit}\autocite{andre_2013_logootsplit} réduit l'occupation mémoire d'une séquence \emph{Logoot} en groupant les valeurs par \emph{blocs}.
 Pour ce faire, \emph{LogootSplit} modifie la structure des positions de telle manière à ce qu'elles puissent être agrégées.
-Des valeurs contiguës dans la séquence dont les positions sont agréables sont groupées au sein d'un \emph{bloc}.
+Des valeurs contiguës dans la séquence dont les positions sont agrégeables sont groupées au sein d'un \emph{bloc}.
 
 Une position \emph{LogootSplit} est une liste de quadruples.
 L'ordre total et dense des positions est formé par l'ordre lexicographique entre les listes de quadruples et les quadruples.
 Un quadruple est composé d'un entier choisit aléatoirement, de l'identifiant du pair qui a généré le quadruple, d'un nombre séquentiel, et d'un indice de bloc.
 Dans la \autoref{fig:logootsplit}, le caractère $\textsf{'\textit{\negthinspace!}'}$ est associé à une position qui contient le quadruple $\tuple{20, B, 1, 0}$.
 Ce quadruple est noté $t^{B1}_0$ où $t$ est la $20$-ème lettre de l'alphabet latin.
-Deux positions sont agréables si et seulement si elles partagent la même liste de quadruples, à l'exception des derniers dont les indice de blocs sont différents mais contiguës.
-Par exemple, la position $f^{A1}_2q^{A2}_0$ est agréable à la position $f^{A1}_2q^{A2}_1$.
-Deux valeurs de la séquence peuvent être groupées en un bloc si et seulement si elles sont contiguës dans la séquence et leur position sont agréables.
-Dans la \autoref{fig:logootsplit}, les caractères $\textsf{'\textit{l}'}$, $\textsf{'\textit{a}'}$, et $\textsf{'\textit{d}'}$ sont contiguës et ont des positions agréables.
+Deux positions sont agrégeables si et seulement si elles partagent la même liste de quadruples, à l'exception des derniers dont les indice de blocs sont différents mais contiguës.
+Par exemple, la position $f^{A1}_2q^{A2}_0$ est agrégeable à la position $f^{A1}_2q^{A2}_1$.
+Deux valeurs de la séquence peuvent être groupées en un bloc si et seulement si elles sont contiguës dans la séquence et leur position sont agrégeables.
+Dans la \autoref{fig:logootsplit}, les caractères $\textsf{'\textit{l}'}$, $\textsf{'\textit{a}'}$, et $\textsf{'\textit{d}'}$ sont contiguës et ont des positions agrégeables.
 Elles sont regroupées au sein d'un même bloc.
 Des positions agrégées sont représentées synthétiquement à l'aide de la position de la première valeur du bloc.
 La position d'une valeur peut alors être déduite de la première position du bloc et de son emplacement dans le bloc.
-Deux positions agréables sont nécessairement générés par le même pair.
+Deux positions agrégeables sont nécessairement générés par le même pair.
 Un bloc est donc composés de valeurs insérées par un même pair.
 Ce pair est le propriétaire du bloc.
 Seul ce pair peut ajouter des valeurs au bloc.
@@ -891,10 +891,10 @@ $p_B$ est le propriétaire du bloc $\textsf{'\textit{\negthinspace!}'}$.
 
 L'exécution d'une opération d'insertion d'une valeur $v$ produit un message d'insertion qui contient $v$ et la position de $v$.
 la position générée est comprises entre le positions $p_1$ et $p_2$ des valeurs $v_1$ et $v_2$ entre lesquelles $v$ doit être insérée.
-L'algorithme de génération des positions favorise la génération de positions agréables.
-Il tente ainsi de produire une position agréable à $p_1$ ou $p_2$.
+L'algorithme de génération des positions favorise la génération de positions agrégeables.
+Il tente ainsi de produire une position agrégeable à $p_1$ ou $p_2$.
 Si il n'y parvient pas, il génère la position de la même manière que \emph{Logoot}.
-Lorsque $p_1$ et $p_2$ sont agréables, $p_1$ devient un préfixe de la position de $v$.
+Lorsque $p_1$ et $p_2$ sont agrégeables, $p_1$ devient un préfixe de la position de $v$.
 
 Une séquence \emph{LogootSPlit} est une liste de blocs auxquelles sont associées la position de la première valeur du bloc.
 L'intégration d'un message d'insertion d'une valeur $v$ à une position $p$ débute par l'identification de l'emplacement d'insertion.
@@ -902,8 +902,8 @@ $v$ doit être insérée entre les valeurs contiguës $v_1$ et $v_2$ tel que la 
 Nous différencions deux cas principaux~: soit $v_1$ et $v_2$ font partie d'un même bloc, ou ils font partie de blocs distincts.
 Dans le premier cas, le bloc est scindé en deux blocs et la valeur est insérée entre ces deux blocs au sein d'un nouveau bloc.
 Dans le second cas, la valeur est soit insérée entre les deux blocs ou intégrée à l'un des blocs.
-Si $p_1$ et $p$ sont agréables, alors $v$ est ajouté en tant que dernière valeur du bloc qui contient $v_1$.
-Sinon si $p$ et $p_2$ sont agréables, alors $v$ est ajouté en tant que première valeur du bloc qui contient $v_2$.
+Si $p_1$ et $p$ sont agrégeables, alors $v$ est ajouté en tant que dernière valeur du bloc qui contient $v_1$.
+Sinon si $p$ et $p_2$ sont agrégeables, alors $v$ est ajouté en tant que première valeur du bloc qui contient $v_2$.
 Sinon, $v$ est insérée entre les deux blocs au sein d'un nouveau bloc.
 
 Pour illustrer la génération de positions et l'intégration de messages d'insertion, nous reprenons le scénario de la \autoref{fig:replseq-sematic-1}.
@@ -912,11 +912,11 @@ Le pair $p_A$ commence par une insertion contiguës de plusieurs caractères.
 Les positions sont générées de telle manière à être agrégées.
 Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
 $p_A$ exécute ensuite l'opération $a_5$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
-Aucune position agréable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprises entre les positions des deux valeurs.
+Aucune position agrégeable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprises entre les positions des deux valeurs.
 La position générée a donc pour préfixe la position du caractère $\textsf{'\textit{d}'}$.
 L'intégration de cette insertion produit la scission du premier bloc.
 En parallèle, le pair $p_B$ insère le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence après le bloc $\textsf{'\textit{lady}'}$.
-Une position agréable à $\textsf{'\textit{y}'}$ ne peut être généré étant donné que $p_B$ n'est pas le propriétaire du bloc.
+Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré étant donné que $p_B$ n'est pas le propriétaire du bloc.
 
 \begin{figure}[tb]
 \centering
@@ -1026,7 +1026,7 @@ En plus de la croissance de la taille de leurs positions, les séquence obtenus 
 Nous proposons alors un nouveau type de positions qui permet de construire des séquences à granularité variable synchronisées par différences qui réduit la croissance de ces méta-données.
 Nous nommons ce protocole de séquences répliquées \emph{Dotted logootSplit}.
 
-Dans un premeir temps nous présentons u nformalisme qui permet de décrire de spositions densément ordonnées.
+Dans un premier temps nous présentons un formalisme qui permet de décrire des positions densément ordonnées.
 Nous présentons alors un protocole générique synchronisé par opérations qui se base sur ce formalisme.
 Dans un second temps, nous utilisons ce formalisme pour introduire notre protocole générique synchronisé par différences d'états et \emph{Dotted logootSplit}.
 
@@ -1045,7 +1045,7 @@ Dans un second temps, nous utilisons ce formalisme pour introduire notre protoco
 Dans cette section nous introduisons un formalisme qui nous permet de mieux appréhender la structure des positions densément ordonnées des séquences répliquées de la littérature.
 Il permet également de clarifier les contraintes de tels positions et de ainsi ouvrir un espace de réflexion sur la structure des positions.
 
-Les séquences repiquées à positions densément ordonnées indexent chaque valeur avec une unique position.
+Les séquences répliquées à positions densément ordonnées indexent chaque valeur avec une unique position.
 L'ordre entre les valeurs de la séquence est induit par l'ordre total et strict entre leurs positions.
 Ces positions respectent plusieurs propriétés que nous décrivons dans les paragraphes suivants.
 
@@ -1161,7 +1161,7 @@ L'ordre entre deux positions correspond à l'ordre lexicographique de ces compos
 Lorsque deux valeurs sont insérées en parallèle au même endroit, elles ont le même n-uplets de \emph{bits} et de \emph{dots}.
 Par exemple les valeurs associées aux positions $\tuple{\tuple*{0, 1, 0},A_1}$ et $\tuple{\tuple*{0, 1, 0},B_1}$ ont été insérées en parallèle au même emplacement.
 Leur \emph{dot} respectif sert alors de désambiguïteur.
-Si une valeur est insérée entre ces deux valeurs, le \emph{dot} de la valeur à gauche fera partie de le n-uplets de la position nouvellement générée.
+Si une valeur est insérée entre ces deux valeurs, le \emph{dot} de la valeur à gauche fera partie du n-uplets de la position nouvellement générée.
 Par exemple la valeur associée à la position $\tuple{\tuple*{0, 1, 0, A_1},A_2}$ se situe entre les deux valeurs précédentes.
 
 \begin{align}
@@ -1173,7 +1173,7 @@ Dans le \autoref{ch:background}, nous avons vu que les types de données répliq
 Le choix du mécanisme de synchronisation précise l'implémentation du type de données.
 % talk about networks assumptions
 
-Nous spécifions une séquence à positions densément ordonnées synchronisée par opérations comme une paire dans laquelle le premier élément est un en ensemble fini d'associations de positions et de valeurs, et le second élément est un ensemble fini d'identifiants locaux.
+Nous spécifions une séquence à positions densément ordonnées synchronisée par opérations comme une paire dans laquelle le premier élément est un ensemble fini d'associations de positions et de valeurs, et le second élément est un ensemble fini d'identifiants locaux.
 Dans le cas de positions \emph{dot}-ifiées, cet ensemble peut être simplement remplacé par un nombre séquentiel.
 
 Pour faciliter l'expression de la spécification, nous définissions la fonction $\trm{nthPos}$ qui retourne la position de la n-ème valeur de la séquence.
@@ -1470,8 +1470,8 @@ Chaque fois qu'un pair exécute une insertion il incrémente son nombre séquent
 Ce \emph{dot} correspond à l'identifiant du pair et le nombre séquentiel du dernier n-uplet de la liste.
 Ces positiosn sont donc \emph{dot}-ifiées.
 
-Deux positions sont agréables, si et seulement si \begin{inlinelist}\item elles divergent uniquement par leur identifiant local (le nombre séquentiel du dernier n-uplet), et \item elles ont des identifiants locaux contiguës\end{inlinelist}.
-Le nombre séquentiel joue à la fois le rôle t'identifiant local et d'indice de bloc.
+Deux positions sont agrégeables, si et seulement si \begin{inlinelist}\item elles divergent uniquement par leur identifiant local (le nombre séquentiel du dernier n-uplet), et \item elles ont des identifiants locaux contiguës\end{inlinelist}.
+Le nombre séquentiel joue à la fois le rôle d'identifiant local et d'indice de bloc.
 
 \begin{align}
 &\trm{DottedLogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}^*)}^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^*)\\
@@ -1489,11 +1489,11 @@ Le pair $p_A$ commence par une insertion contiguës de plusieurs caractères.
 Les positions sont générées de telle manière à être agrégées.
 Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
 $p_A$ exécute ensuite l'opération $a_5$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
-Aucune position agréable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprises entre les positions des deux valeurs.
+Aucune position agrégeable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprises entre les positions des deux valeurs.
 La position générée a donc pour préfixe la position du caractère $\textsf{'\textit{d}'}$.
 L'intégration de cette insertion produit la scission du premier bloc.
 En parallèle, le pair $p_B$ insère le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence après le bloc $\textsf{'\textit{lady}'}$.
-Une position agréable à $\textsf{'\textit{y}'}$ ne peut être généré étant donné que $p_B$ n'est pas le propriétaire du bloc.
+Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré étant donné que $p_B$ n'est pas le propriétaire du bloc.
 
 \begin{figure}[tb]
 \centering
@@ -1615,14 +1615,14 @@ Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est di
 \emph{LogootSplit} et \emph{Dotted LogootSplit} agrègent leurs positions pour former des blocs et ainsi réduire leur empreinte mémoire.
 \emph{LogootSplit} permet au propriétaire d'un bloc d'ajouter des valeurs en début et fin du bloc à tout moment.
 \emph{Dotted LogootSplit} ne permet pas l'ajout de valeur en début de bloc et restreint l'ajout en fin de bloc.
-Deux positions agréables doivent avoir des nombres séquentiels contiguës.
+Deux positions agrégeables doivent avoir des nombres séquentiels contiguës.
 À chaque exécution d'une insertion, le nombre séquentiel est incrémenté.
 Un pair est donc dans l'impossibilité d'ajouter une valeur au début d'un de ses blocs étant donné qu'il devrait prendre un nombre séquentiel plus petit que celui de la première valeur du bloc.
 Il ne peut pas toujours ajouter une valeur en fin bloc.
-En effet, si il a procédé à une insertion à un autre emplacement, son nombre séquentiel devient trop grand pour pouvoir générer une position agréable à la position de la dernière valeur du bloc.
+En effet, si il a procédé à une insertion à un autre emplacement, son nombre séquentiel devient trop grand pour pouvoir générer une position agrégeable à la position de la dernière valeur du bloc.
 Cependant, un· collaborateur·ices à tendance à écrire de manière séquentiel.
 Nous conjecturons qu'en pratique cette restriction conduit à très peu d'ajout supplémentaires de blocs.
-En revanche la non-possibilité d'ajouter des valeurs en début de blocs est problématiques pour certains langues écrites de droite à gauche.
+En revanche la non-possibilité d'ajouter des valeurs en début de blocs est problématique pour certains langues écrites de droite à gauche.
 
 
 \section{Conclusion}
