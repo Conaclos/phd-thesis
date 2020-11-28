@@ -2810,8 +2810,8 @@ Ceci n'a aucune incidence sur la convergence des copies étant donné que l'ense
 Similairement au journal, l'ordre de l'ensemble $\trm{pending}$ correspond à l'ordre d'ajout des messages.
 Le journal étendu $W$ correspond au journal $J$ auquel a été ajouté les messages de l'ensemble $\trm{pending}$ dans leur ordre d'apparition.
 Ce journal est virtuel, il n'a pas d'existence propre.
-En revanche les structures de données dépendantes de $W$ sont concrètes.
-Elles sont mis à jour de la même manière que celles du journal $J$.
+%En revanche les structures de données dépendantes de $W$ sont concrètes.
+%Elles sont mis à jour de la même manière que celles du journal $J$.
 
 \begin{equation*}
     W \defeq J \lappend \trm{pending}
@@ -2831,22 +2831,22 @@ Lorsqu'un message $m$ est accepté dans le journal, l'ensemble de ses dépendanc
 $m$ est ajouté dans le journal après avoir ajouté ces messages en attente dans l'ordre dans lequel ils apparaissent dans $\trm{pending}$.
 Les messages en attente qui sont ajoutés dans le journal sont supprimés de l'ensemble $\trm{pending}$.
 
-\begin{equation*}
-    \trm{J}' \assign \trm{J} \lappend \begin{dcases}
-        \trm{ctx}_{\trm{pending}}(m) \lappend \set*{m} & \when \trm{accepted}(m)\\
-        \emptyset
-    \end{dcases}
-\end{equation*}
+% \begin{equation*}
+%     \trm{J}' \assign \trm{J} \lappend \begin{dcases}
+%         \trm{ctx}_{\trm{pending}}(m) \lappend \set*{m} & \when \trm{accepted}(m)\\
+%         \emptyset
+%     \end{dcases}
+% \end{equation*}
 
-\begin{equation*}
-    \trm{pending}' \assign \trm{pending} \lappend \begin{dcases}
-        \emptyset & \when \trm{accepted}(m)\\
-        \set*{m}
-    \end{dcases} \sminus \begin{dcases}
-        \trm{ctx}_{\trm{pending}}(m) & \when \trm{accepted}(m)\\
-        \emptyset
-    \end{dcases}
-\end{equation*}
+% \begin{equation*}
+%     \trm{pending}' \assign \trm{pending} \lappend \begin{dcases}
+%         \emptyset & \when \trm{accepted}(m)\\
+%         \set*{m}
+%     \end{dcases} \sminus \begin{dcases}
+%         \trm{ctx}_{\trm{pending}}(m) & \when \trm{accepted}(m)\\
+%         \emptyset
+%     \end{dcases}
+% \end{equation*}
 
 La mise-à-jour du journal est en réalité un peu plus complexe que l'équation présentée ci-dessus.
 En effet, le protocole exécute dans certains cas une opération d'acquiescement avant l'ajout d'un message et de ses dépendances en attente.
@@ -2870,6 +2870,28 @@ Pour s'assurer qu'un de ses messages ne soit pas mis en attente, un pair $p_i$ d
 Pour ce faire, il donne une preuve d'observation de l'invitation d'un pair avant d'accepter les messages de ce pair.
 Si l'auteur de $m$ ou de l'une de ses dépendances en attente n'est pas reconnu par $p_i$ ($p \not\in \trm{ackInvited}$), alors le protocole exécute une opération d'acquiescement avant l'ajout de $m$ et de ses dépendances en attente.
 
+Une opération d'acquiescement est donc exécutée avant l'ajout d'un message $m$ si et seulement si $m$ a au moins une dépendance en attente ou son auteur n'est pas un invité connu.
+L'\autoref{alg:full-log-deliver} synthèse la livraison d'un message.
+
+\begin{algorithm}[ht]
+\caption{Livraison d'un message}\label{alg:full-log-deliver}
+\begin{algorithmic}[1]
+\Procedure{$\trm{deliver}$}{$m$}
+    \If{$\trm{wellFormed}(m)$}\Comment{le message $m$ est-il bien-formé~?}
+        \If{$\trm{accepted}(m)$}
+            \If{$\trm{ctx}_{\trm{pending}}(m) \neq \emptyset \lor \trm{peer}_m \not\in \trm{ackInvited}$}
+                \State $\trm{execute}(\trm{ack})$\Comment{exécuter une opération d'acquiescement}
+            \EndIf
+            \State $J \assign J \lappend \trm{ctx}_{\trm{pending}}(m) \lappend \tuple*{m}$
+            \State $\trm{pending} \assign \trm{pending} \sminus \trm{ctx}_{\trm{pending}}(m)$
+        \Else
+            \State $\trm{pending} \assign \trm{pending} \lappend \tuple*{m}$
+        \EndIf
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 
 \subsubsection{Initialisation}
 
@@ -2881,12 +2903,14 @@ Les autres structures de données sont initialisées comme suit.
 &\trm{vv}_J \assign \emptyset\\
 &\trm{max}_J \assign \emptyset\\
 &\trm{knownMalicious}_J \assign \emptyset\\
+&\trm{pending} \assign \emptyset\\
 \end{align*}
 
 Un pair peut initier une nouvelle collaboration ou en rejoindre une existante.
 
 \paragraph{Initier une collaboration.}
 Pour initier une nouvelle collaboration, un pair exécute une première opération qui l'invite.
+L'exécution de cette invitation génère son identifiant de pair.
 % Il génère ainsi le premier message $m$ du journal et son identifiant de pair.
 % Son identifiant de pair correspond également à l'identifiant du contenu partagé $\trm{contentId}$.
 
@@ -2895,48 +2919,88 @@ Pour initier une nouvelle collaboration, un pair exécute une première opérati
 % \end{equation*}
 
 \paragraph{Rejoindre une collaboration.}
-Pour rejoindre une collaboration, un pair doit d'abord se faire inviter par un pair déjà présent dans la collaboration.
-Il récupère son identifiant de pair $p_i$.
+Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter par un pair déjà présent dans la collaboration.
+Ce dernier, exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
+Il transmet cet identifiant et son journal au nouveau pair.
 % Il récupère son identifiant de pair $p_i$ et l'identifiant $\trm{contentId}$ de la collaboration.
-Il récupère un journal qui inclut le message qui l'invite.
-Ce journal peut être celui du pair qui l'invite ou d'un autre pair.
+%Ce journal peut être celui du pair qui l'invite ou d'un autre pair.
+Un pair mal-intentionné peut transmettre un identifiant quelconque et un journal arbitraire.
 
-Le nouveau pair demande à sa couche réseau de lui livrer les messages dans l'ordre dans lequel ils ont été ajoutés dans le journal récupéré.
-Il suit les étapes de la livraison d'un message à quelques exceptions près.
-En effet, le pair ne peut pas exécuter d'opérations tant qu'il ne fait pas parti des invités connu de son propre journal.
-Autrement il produit des messages mal-formés.
-Or, lorsqu'un message est livré, le protocole peut être amené à exécuter une opération d'acquiescement avant l'ajout d'un message dans le journal.
-L'exécution de cette opération se produit si et seulement si \begin{inlinelist}
-\item l'ajout de messages dans le journal conduit à la présence d'une opération non-linéaire parmi les messages maximaux du journal, ou si
-\item un message dont l'auteur n'est pas reconnu par le pair est ajouté dans le journal.
-\end{inlinelist}
-Le premier cas ne devrait jamais survenir.
-Le pair s'assure que ce cas n'est jamais rencontré.
-Il peut simplement vérifier qu'à l'issue de l'ajout de messages dans le journal, il n'y a pas de messages d'un pair reconnu mal-intentionné dans les messages maximaux du journal.
+Le nouveau pair $p_i$ construit son journal $J$ et l'état de sa copie $S$ à partir du journal reçu.
+Lors de la construction de son journal, il vérifie que le journal reçu a été correctement construit.
+Il vérifie que chaque message est bien-formé et traite les messages dans l'ordre dans lequel ils ont été ajoutés dans le journal reçu.
+Le traitement d'un message suit les mêmes étapes que celles présentées pour la livraison d'un message a une exception près~: l'exécution d'une opération d'acquiescement avant l'acceptation immédiate d'un message est soumise à des conditions plus strictes.
 
-\begin{equation*}
-    x \in \trm{max}_J \implies \trm{peer}_x \not\in \trm{knownMalicious}_J
-\end{equation*}
+Lors de la livraison d'un message, un pair exécute une opération d'acquiescement avant l'acceptation immédiate d'un messages si et seulement si \begin{inlinelist}
+\item le message a au moins une dépendance en attente, ou si
+\item l'auteur du message ou d'une dépendance en attente n'est pas un invité que le pair reconnaît
+\end{inlinelist}.
+La première condition garantit l'absence de messages non-linéaires parmi les messages maximaux du journal.
+La seconde condition garantit que l'acceptation immédiate par les autres pairs honnêtes des message générés ultérieurement par le pair n'est pas conditionnée par l'acceptation de l'invitation d'un pair qu'il n'a pas préalablement reconnu.
 
-Pour le second cas, il n'exécute pas d'opérations d'acquiescement jusqu'à ce qu'il rencontre le message qui l'invite.
-Lorsqu'il ajoute le message qui l'invite, il initialise $\trm{ackInvited}$ avec les invités connus de son journal.
-Inviter un pair le force donc a se reconnaître lui-même et à reconnaître les pairs invités dans les dépendances de son invitation.
+Si le journal reçu est correctement construit, ses états successifs n'ont pas conduit à la présence de messages non-linéaires parmi ses messages maximaux.
+Le nouveau pair n'a donc pas besoin d'exécuter d'opérations d'acquiescement lorsque la première condition est remplie.
+Il doit simplement vérifier que l'ajout de messages dans son journal ne conduit pas à la présence de message non-linéaires parmi les messages maximaux de son journal.
 
-\begin{equation*}
-    \trm{ackInvited} \assign \trm{invited}_J
-\end{equation*}
+Les messages d'un pair dépendent tous du message qui l'invite.
+Une invitation contraint donc un pair à reconnaître comme invité lui-même ainsi que tous les pairs invités dans les dépendances de l'invitation.
+Lorsqu'il ajoute le message qui l'invite dans son journal, il initialise l'ensemble des pairs qu'il reconnaître comme invité.
+Puisque le journal reçu est celui du pair qui invite le nouveau pair, l'invitation sera accepté immédiatement et dépend d'un préfixe du journal.
+Les invités reconnus correspondent donc au invités connus du journal après l'ajout de l'invitation.
 
-Une fois son invitation ajouté dans son journal, le pair exécute uen opération d'acquiescement lorsqu'il rencontre le deuxième cas.
+Une fois que le message qui l'invite est ajouté dans son journal, le nouveau pair fait partie des invités connus du journal.
+Il peut alors exécuter des opérations d'acquiescement sans générer de messages mal-formés.
+Pour les mêmes raisons que celles évoqués précédemment, il exécute une opération d'acquiescement avant l'acceptation immédiate d'un message lorsqu'il ne reconnaît pas encore l'auteur de ce message ou de l'une de ses dépendances en attente.
 
-Il s'assure ainsi que le journal récupéré a été correctement formé.
-L'ajout des messages dans le journal met également à jour l'état de sa copie et des structures dépendantes du journal.
-Il construit ainsi l'état du contenu partagé.
+L'initialisation réussit si et seulement si le pair fait partie des invités connus du journal et l'ensemble des messages du journal reçu figurent dans le journal du nouveau pair (il n'y a pas de messages mal-formés et de message qui demeurent en attentes).
 
-En dernier lieu, il s'assure que le journal contient un message qui l'invite.
+L'\autoref{alg:full-log-init} synthèse l'initialisation du journal et de la copie d'un pair $p_i$ à partir d'un journal reçu $G$.
+L'instruction \textbf{check} permet de vérifier qu'une condition est remplie.
+Si la condition n'est pas remplie l'initialisation est mise en échec.
+Une mise en échec de l'initialisation survient lorsque le journal est mal-formé.
 
-\begin{equation*}
-    p_i \in \trm{invited}_J
-\end{equation*}
+
+% TODO
+% - parler d'un journal arbitraire
+%   - premier msg différent => collaboration différente
+% - parler de l'attaque de fork
+% - garantie : si un pair honnête accepte l'invitation
+%   alors les messages du pairs seront acceptés !
+%   Pas de blocage grâce à l'exec d'ops d'acquiescement
+
+
+\clearpage
+
+\begin{algorithm}[ht]
+\caption{Initialisation à partir d'un journal reçu $G$}\label{alg:full-log-init}
+\begin{algorithmic}[1]
+\Procedure{$\trm{init}_i$}{$G$}
+    \State $\trm{ackInvited} \assign \emptyset$
+    \State \textbf{let} $\tuple*{y_1, \dotsc, y_n} \assign G$
+    \State \textbf{let} $k \assign 1$
+    \While{$k \leq n$}
+        \State \textbf{check} $\trm{wellFormed}(y_k)$
+        \If{$\trm{accepted}(y_k)$}
+            \State \textbf{let} $\trm{msgs} \assign \trm{ctx}_{\trm{pending}}(y_k) \lappend \tuple*{y_k}$
+            \If{$p_i \in \trm{ackInvited} \land \exists x \in \trm{msgs} \qsep \trm{peer}_x \not\in \trm{ackInvited}$}
+                \State $\trm{execute}(\trm{ack})$\Comment{exécuter une opération d'acquiescement}
+            \EndIf
+            \State $J \assign J \lappend \trm{msgs}$
+            \State $\trm{pending} \assign \trm{pending} \sminus \trm{msgs}$
+            \If{$\tuple*{\trm{invite}, p_i} \in \trm{msgs}$}\Comment{$p_i$ est-il invité par l'un des messages~?}
+                \State \textbf{check} $\trm{max}_J = \set*{\tuple*{\trm{invite}, p_i}}$
+                \State $\trm{ackInvited} \assign \trm{invited}_J$
+            \EndIf
+            \State \textbf{check} $\forall x \in \trm{max}_J \qsep \trm{peer}_x \not\in \trm{knownMalicious}_J$
+        \Else
+            \State $\trm{pending} \assign \trm{pending} \lappend \tuple*{y_k}$
+        \EndIf
+        \State $k \assign k + 1$
+    \EndWhile
+    \State \textbf{check} $\trm{pending} = \emptyset \land p_i \in \trm{invited}_J$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 
 \subsection{Exemple d'une exécution du protocole}
@@ -2950,10 +3014,62 @@ Elles présentent également l'évolution de l'état de certaines structures de 
 Ces structures de données devraient suffire à appréhender l'évolution de l'état du journal.
 Nous avons précédemment présenté dans la \autoref{fig:log-example-2} le journal que construit le pair $p_A$.
 L'évolution de l'état des autres structures de données de l'exécution du protocole par le pair $p_A$ peut donc être suivi dans le \autoref{tab:data-structure-update}.
-Le contenu des messages et leurs méta-données pertinentes sont présentés dans le \autoref{tab:known-malicious}.
+Le \autoref{tab:known-malicious} présente le contenu des messages et leurs méta-données.
 
 Nous détaillons l'évolution de l'état du journal du pair $p_A$ et l'évolution de l'état du journal du pair $p_B$ dans les deux paragraphes qui suivent.
 Nous supposons que tous les messages livrés sont correctement signés.
+
+Le pair $p_A$ initie la collaboration (1).
+Il exécute ainsi une première operation qui l'invite lui-même.
+Cette exécution génère un message $a_1 \defeq \tuple*{\trm{invite}, p_A}$.
+Le pair invite ensuite le pair $p_M$ (2) et le pair $p_B$ (3) et génère ainsi les messages $a_2 \defeq tuple*{\trm{invite}, p_M}$ et $a_3 \defeq tuple*{\trm{invite}, p_B}$.
+Il livre le message bien-formé $m_1$ (4).
+Il est accepté immédiatement dans le journal $J$.
+$p_A$ livre ensuite le message bien-formé $m_1'$ (5).
+$m_1'$ n'est pas linéaire avec au moins un message du journal $\neg \trm{linear}_J(m_1')$.
+En l'occurrence, il est non-linéaire avec le message $m_1$.
+$m_1'$ est donc mis en attente.
+$p_A$ livre le message bien-formé $c_1$ (6).
+Il s'agit d'un message linéaire dans $J$.
+Cependant, son auteur n'est pas un invité reconnu dans $J$ ($p_C \not\in \trm{invited}_J$).
+$c_1$ est donc mis en attente.
+$p_A$ livre le message bien-formé $b_2$ (7).
+Il est accepté immédiatement dans le journal.
+Étant donné qu'il dépend sur le message en attente $m_1'$, ce dernier est également accepté dan sle journal.
+Avant ces ajouts, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_4 \defeq \tuple*{ack}$.
+Cette exécution permet d'éviter d'avoir le message non-linéaire $m_1$ parmi les messages maximaux du journal.
+L'ajout de $m_1'$ dans le journal implique la reconnaissance de $p_M$ comme un pair mal-intentionné.
+Toute livraison ultérieure d'un message bien-formé de $p_M$ sera systématiquement mis en attente.
+$p_C$ est désormais un invité connu dans $J$.
+En revanche, il n'est pas reconnu par $p_A$ étant donné que le pair n'a pas généré un message qui dépend transitivement sur le message qui invite $p_C$.
+Finalement, $p_A$ livre le message bien-formé $b_3$ (8).
+$b_3$ est accepté immédiatement dans le journal.
+Puisqu'il dépend sur le message en attente $c_1$, ce dernier est également accepté dans le journal.
+L'auteur de $c_1$ n'est pas un invité reconnu par $p_A$.
+Avant d'ajouter $c_1$ et $b_3$, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_5 \defeq \tuple*{\trm{ack}}$.
+
+Le pair $p_B$ récupère un journal dans lequel il est invité (1).
+Il livre le message bien-formé $m_1' \defeq \tuple*{\trm{invite}, p_C}$ (2).
+Le message est accepté immédiatement dans le journal.
+L'ajout du message dans le journal met à jour les invités connus du journal $J$.
+$p_C$ est un invité connu.
+En revanche il n'est pas encore reconnu par $p_B$.
+$p_B$ livre ensuite $m_1 \defeq \tuple*{\trm{add}, 1}$ (3).
+$m_1$ est non-linéaire avec un message du journal.
+Il est donc mis en attente.
+$p_B$ exécute une opération qui donne lieu à la génération du message $b_1 \defeq = \tuple*{\trm{add}, 3}$.
+Il reconnaît que $p_C$ est invité.
+Il livre ensuite les messages bien-formés $a_4$ (5) et $a_5$ (6).
+Ces deux messages sont acceptés immédiatement dans le journal.
+$a_4$ dépend sur le message en attente $m_1$.
+$m_1$ est donc ajouté dans le journal avant l'ajout de $a_4$.
+L'ajout de $m_1$ et $a_4$ n'aboutit pas à la présence d'un message non-linéaire parmi les messages maximaux du journal.
+Le protocole n'exécute donc pas uen opération d'acquiescement avant ces ajouts.
+$p_B$ livre le message bien-formé et linéaire $c_1$.
+L'auteur de $c_1$ est un invité connu du journal.
+$c_1$ est donc accepté immédiatement dans le journal.
+Puisque l'auteur de $c_1$ est reconnu par $p_B$ ($p_C \in \trm{ackInvited}$), le protocole n'exécute pas d'operation d'acquiescement avant l'ajout du message.
+Finalement, $p_B$ exécute une opération qui génère le message $b_2 \defeq \tuple*{\trm{add},4}$
 
 \clearpage
 \begin{figure}[hbt]
@@ -3254,64 +3370,8 @@ Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\labe
 
 \clearpage
 
-Le pair $p_A$ initie la collaboration (1).
-Il exécute ainsi une première operation qui l'invite lui-même.
-Cette exécution génère un message $a_1 \defeq \tuple*{\trm{invite}, p_A}$.
-Le pair invite ensuite le pair $p_M$ (2) et le pair $p_B$ (3) et génère ainsi les messages $a_2 \defeq tuple*{\trm{invite}, p_M}$ et $a_3 \defeq tuple*{\trm{invite}, p_B}$.
-Il livre le message bien-formé $m_1$ (4).
-Il est accepté immédiatement dans le journal $J$.
-$p_A$ livre ensuite le message bien-formé $m_1'$ (5).
-$m_1'$ n'est pas linéaire avec au moins un message du journal $\neg \trm{linear}_J(m_1')$.
-En l'occurrence, il est non-linéaire avec le message $m_1$.
-$m_1'$ est donc mis en attente.
-$p_A$ livre le message bien-formé $c_1$ (6).
-Il s'agit d'un message linéaire dans $J$.
-Cependant, son auteur n'est pas un invité reconnu dans $J$ ($p_C \not\in \trm{invited}_J$).
-$c_1$ est donc mis en attente.
-$p_A$ livre le message bien-formé $b_2$ (7).
-Il est accepté immédiatement dans le journal.
-Étant donné qu'il dépend sur le message en attente $m_1'$, ce dernier est également accepté dan sle journal.
-Avant ces ajouts, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_4 \defeq \tuple*{ack}$.
-Cette exécution permet d'éviter d'avoir le message non-linéaire $m_1$ parmi les messages maximaux du journal.
-L'ajout de $m_1'$ dans le journal implique la reconnaissance de $p_M$ comme un pair mal-intentionné.
-Toute livraison ultérieure d'un message bien-formé de $p_M$ sera systématiquement mis en attente.
-$p_C$ est désormais un invité connu dans $J$.
-En revanche, il n'est pas reconnu par $p_A$ étant donné que le pair n'a pas généré un message qui dépend transitivement sur le message qui invite $p_C$.
-Finalement, $p_A$ livre le message bien-formé $b_3$ (8).
-$b_3$ est accepté immédiatement dans le journal.
-Puisqu'il dépend sur le message en attente $c_1$, ce dernier est également accepté dans le journal.
-L'auteur de $c_1$ n'est pas un invité reconnu par $p_A$.
-Avant d'ajouter $c_1$ et $b_3$, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_5 \defeq \tuple*{\trm{ack}}$.
 
-\bigskip
-
-Le pair $p_B$ récupère un journal dans lequel il est invité (1).
-Il livre le message bien-formé $m_1' \defeq \tuple*{\trm{invite}, p_C}$ (2).
-Le message est accepté immédiatement dans le journal.
-L'ajout du message dans le journal met à jour les invités connus du journal $J$.
-$p_C$ est un invité connu.
-En revanche il n'est pas encore reconnu par $p_B$.
-$p_B$ livre ensuite $m_1 \defeq \tuple*{\trm{add}, 1}$ (3).
-$m_1$ est non-linéaire avec un message du journal.
-Il est donc mis en attente.
-$p_B$ exécute une opération qui donne lieu à la génération du message $b_1 \defeq = \tuple*{\trm{add}, 3}$.
-Il reconnaît que $p_C$ est invité.
-Il livre ensuite les messages bien-formés $a_4$ (5) et $a_5$ (6).
-Ces deux messages sont acceptés immédiatement dans le journal.
-$a_4$ dépend sur le message en attente $m_1$.
-$m_1$ est donc ajouté dans le journal avant l'ajout de $a_4$.
-L'ajout de $m_1$ et $a_4$ n'aboutit pas à la présence d'un message non-linéaire parmi les messages maximaux du journal.
-Le protocole n'exécute donc pas uen opération d'acquiescement avant ces ajouts.
-$p_B$ livre le message bien-formé et linéaire $c_1$.
-L'auteur de $c_1$ est un invité connu du journal.
-$c_1$ est donc accepté immédiatement dans le journal.
-Puisque l'auteur de $c_1$ est reconnu par $p_B$ ($p_C \in \trm{ackInvited}$), le protocole n'exécute pas d'operation d'acquiescement avant l'ajout du message.
-Finalement, $p_B$ exécute une opération qui génère le message $b_2 \defeq \tuple*{\trm{add},4}$
-
-\clearpage
-
-
-\subsection{Optimisations}
+\subsection{Optimisations}\label{subsec:full-log-opti}
 
 Nous présentons dans cette sous-section des optimisations du protocole à journaux complets.
 
@@ -3342,6 +3402,13 @@ Lorsqu'un message non-linéaire d'un pair donné est ajouté pour la première f
 Lorsqu'un message est ajouté au journal il est associé au marqueurs de ces dépendances déclarées.
 Ainsi un message est bien-formé si il n'hérite pas d'un marqueur dont son auteur est à l'origine et si il n'hérite pas de deux ou plusieurs marqueurs du même pair.
 Étant donné que le nombre d'embranchements accepté et borné, le nombre de parcours de marquage et le nombre de marqueurs associés à un message sont également bornés.
+
+Pour rejoindre une collaboration, un nouveau pair récupère le journal du pair qui l'invite.
+En réalité tout pair peut transmettre son journal au nouveau pair.
+Le nouveau pair doit s'assurer que son invitation dépendent d'un préfixe du journal.
+Il peut modifier l'ordre topologique des messages au sein du journal reçu pour s'en assurer.
+Cette vérification est nécessaire pour éviter une attaque qui viserait à faire accepter au nouveau pair le message d'un auteur qu'il n'a pas préalablement reconnu.
+Ce qui pourrait conduire à la mise en attente par les autres pairs honnêtes des messages qu'il génère.
 
 
 \subsection{Cohérence du journal}
@@ -4067,9 +4134,10 @@ La formation d'une énumération minimale qui inclut toutes les permutations est
 Toutefois plusieurs articles~\autocite{adleman_1974_shortperm,koutas1975shortest,galbiati1976permutation,zualinescu2011shorter,radomirovic2012construction} prouvent des bornes supérieures sur la taille de cette énumération.
 Pour ce faire, ils décrivent dans leur preuve la génération d'une telle énumération.
 L'un des articles~\autocite{adleman_1974_shortperm} présente une manière simple de construire une énumération de taille $N^2 -2N +4$ qui inclut l'ensemble des permutations de ces $N$ composantes.
-Dans la \autoref{fig:all-perm-enum}, nous proposons un algorithme qui traduit la construction mathématique de cet article.
+L'\autoref{alg:all-perm-enum} est une adaptation de la construction mathématique décrite dans cet article.
 
-\begin{figure}[ht]
+\begin{algorithm}[ht]
+\caption{Génération déterministe d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}\label{alg:all-perm-enum}
 \begin{algorithmic}[1]
 \Function{$\trm{allPermEnum}$}{$\tuple*{p_1, \dotsc, p_n}$}
     \If{$n = 1$}
@@ -4093,8 +4161,7 @@ Dans la \autoref{fig:all-perm-enum}, nous proposons un algorithme qui traduit la
     \EndIf
 \EndFunction
 \end{algorithmic}
-\caption{Algorithme de génération d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}\label{fig:all-perm-enum}
-\end{figure}
+\end{algorithm}
 
 \begin{table}[ht]
     \centering
@@ -4109,7 +4176,7 @@ Dans la \autoref{fig:all-perm-enum}, nous proposons un algorithme qui traduit la
     \caption{Enumérations de pairs qui inclut toutes les permutations d'un ensemble ordonné de pairs}\label{tab:all-perm-enum-example}
 \end{table}
 
-Ainsi, un message $m$ est convergent-stable si pour l'énumération de pairs $\tuple*{p_1, \dotsc}$ généré par l'algorithme de la \autoref{fig:all-perm-enum} auquel est passé en paramètre l'ensemble ordonné $\trm{invited}_J$ des pairs invités, il existe une chaîne $m_1 \depeq \dotsc \depeq m_n$ issue du chemin parcouru qui prend source en $m$ tel que le $j$-ème pair de l'énumération est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
+Ainsi, un message $m$ est convergent-stable si pour l'énumération de pairs $\tuple*{p_1, \dotsc}$ généré par l'\autoref{alg:all-perm-enum} auquel est passé en paramètre l'ensemble ordonné $\trm{invited}_J$ des pairs invités, il existe une chaîne $m_1 \depeq \dotsc \depeq m_n$ issue du chemin parcouru qui prend source en $m$ tel que le $j$-ème pair de l'énumération est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur du message
     \item le pair est reconnu mal-intentionné dans le message
     \item le pair est invité dans le message
@@ -4118,7 +4185,7 @@ Contrairement à la définition de la stabilité convergente d'un message, nous 
 Une invitation est considéré comme une simple observation du pair invité.
 La chaîne de dépendance doit donc avoir une taille égale à la taille de l'énumération.
 
-L'algorithme de la \autoref{fig:convergent-stable} ajoute une optimisation.
+L'\autoref{alg:convergent-stable} ajoute une optimisation.
 Puisque la chaîne considérée prend source en $m$, tous les messages de la chaîne ne peuvent pas dépendre directement d'un message d'un pair reconnu mal-intentionné en $m$.
 Nous pouvons donc considérer une énumération qui contient les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés en $m$.
 Pour connaître les pairs reconnus mal-intentionnés d'un message $m$, nous devons construire le journal qui inclut $m$ et toutes ses dépendances.
@@ -4128,7 +4195,8 @@ Cette optimisation est donc considérée uniquement lorsque la stabilité conver
 Lorsque le message n'est pas un message du possesseur du journal nous pouvons toutefois retirer les pairs reconnus mal-intentionnés dans l'état $I$.
 Ce qui correspond à un sous-ensemble des pairs reconnus mal-intentionnés en $m$.
 
-\begin{figure}[ht]
+\begin{algorithm}[ht]
+\caption{Détermine si un message $x$ est convergent stable dans $J$.}\label{alg:convergent-stable}
 \begin{algorithmic}[1]
 \Function{$\trm{convergentStable}_i$}{$x$}
 \textbf{require} $x \in J$
@@ -4161,8 +4229,7 @@ Ce qui correspond à un sous-ensemble des pairs reconnus mal-intentionnés en $m
     \State \textbf{return} $j > n$\Comment{l'énumération de pairs a t-elle été entiérement parcourue~?}
 \EndFunction
 \end{algorithmic}
-\caption{Algorithme qui détermine si un message $x$ est convergent stable dans $J$.}\label{fig:convergent-stable}
-\end{figure}
+\end{algorithm}
 
 Nous créons d'abord un journal temporaire $Z$ dont il initialise les structures de données dépendantes à l'aides des structures de données dépendantes de l'état $I$ (ligne 2 à 4).
 Si le message est un message du possesseur du journal, alors $m$ et ses dépendances sont ajoutées à $Z$ (ligne 7 à 10).
@@ -4296,25 +4363,24 @@ C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarée
 Le message qui a été choisit pour stabiliser et tronquer le journal est conservé dans la variable $\trm{ref}_I$.
 Les message supprimés du journal sont un à un intégré à l'état $I$.
 
-\begin{figure}[ht]
+\begin{algorithm}[ht]
+\caption{Troncature du journal d'un pair $p_i$.}
 \begin{algorithmic}[1]
 \Procedure{$\trm{attemptTruncation}_i$}{}
-    \State \textbf{let} $\tuple*{m_1, \dotsc} \assign J$
-    \State \textbf{pick} $k \in \mathbb{N}^* \land \trm{peer}_{m_k} = p_i$
-    \If{$\trm{convergentStable}_i(m_k)$}
-        \State $\trm{ref}_I \assign m_k$ \Comment{$m_k$ est la nouvelle référence de troncature}
+    \State \textbf{let} $\tuple*{y_1, \dotsc, y_n} \assign J$
+    \State \textbf{pick} $k \in \mathbb{N}^* \land \trm{peer}_{y_k} = p_i$
+    \If{$\trm{convergentStable}_i(y_k)$}
+        \State $\trm{ref}_I \assign \tuple*{y_k, y_n}$ \Comment{mise à jour des références de stabilisation}
         \State \textbf{let} $j \assign 1$
-        \While{$j < k \land \nexists l > k \qsep \trm{id}(m_j) \in \trm{deps}_{m_l} $}
-            \State $J \assign J \sminus \tuple*{m_j}$ \Comment{supprime $m_j$ du journal $J$}
-            \State $I \assign \trm{integrate}_i(I, m_j)$ \Comment{intégre $m_j$ dans l'état $I$}
+        \While{$j < k \land \nexists l > k \qsep \trm{id}(y_j) \in \trm{deps}_{y_l} $}
+            \State $J \assign J \sminus \tuple*{y_j}$ \Comment{supprime $y_j$ du journal $J$}
+            \State $I \assign \trm{integrate}_i(I, y_j)$ \Comment{intégre $y_j$ dans l'état $I$}
             \State $j \assign j + 1$ \Comment{passe au message suivant}
         \EndWhile
     \EndIf
 \EndProcedure
 \end{algorithmic}
-\caption{Algorithme qui essaye de tronquer le journal d'un pair $p_i$. L'algorithme met à journal le journal $J$, l'état $I$, ainsi que la réference de troncature $\trm{ref}_I$}
-\end{figure}
-
+\end{algorithm}
 
 
 \subsubsection{Initialisation}
@@ -4363,6 +4429,129 @@ Si un message d'un pair honnête est présent dans le journal tronqué et dépen
 
 % Pour la cohérence toute invitation peut faire l'affaire
 % En revanche il faut faire attention au invités dans des embranchements
+
+
+\subsubsection{Initialisation}
+
+Un pair peut initier une nouvelle collaboration ou en rejoindre une existante.
+
+\paragraph{Initier une collaboration.}
+Pour initier une collaboration, un pair exécute une première opération qui l'invite lui-même.
+Avant d'effectuer cette exécution, le pair initialise les structures de données utilisées par le protocole.
+La copie $S$ du contenu partagé est initialisée à un état déterminé par le protocole de réplication.
+Les autres structures de données sont initialisées comme suit.
+
+\begin{align*}
+    &J \assign \emptyset\\
+    &\trm{max}_J \assign \emptyset\\
+    &\trm{vv}_J \assign \emptyset\\
+    &\trm{knownMalicious}_J \assign \emptyset\\
+    &\trm{ackInvited} \assign \emptyset\\
+    &\trm{pending} \assign \emptyset\\
+    &I \assign S\\
+    &\trm{vv}_I \assign \emptyset\\
+    &\trm{knownMalicious}_I \assign \emptyset\\
+    &\trm{ref}_I \assign \varnothing\\
+\end{align*}
+
+\paragraph{Rejoindre une collaboration.}
+Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter par un pair déjà présent dans la collaboration.
+Ce dernier, exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
+Il transmet cet identifiant au nouveau pair, ainsi que son journal, son état $I$, les structures dépendantes de $I$ ($\trm{vv}_I$ et $\trm{knownMalicious}_I$), et les références de stabilisation $\trm{ref}_I$.
+Pour le distinguer du journal du pair $p_i$ nous le notons $G$.
+Nous n'avons pas besoin de distinguer son état $I$ de celui du pair $p_i$ étant donnée que $p_i$ utilise directement l'état $I$ qu'il reçoit.
+Un pair mal-intentionné peut transmettre des données arbitraires.
+
+Nous supposons que le journal reçu $G$ est tronqué.
+Si il ne l'est pas le pair peut suivre les mêmes étapes que celles présentés dans le protocole à journaux complets.
+Le nouveau pair $p_i$ construit son journal $J$ et l'état de sa copie $S$ à partir des données reçues.
+Il initialise les structures dépendantes de son journal à l'aide des structures dépendantes de $I$ et sa copie $S$ est initialisé avec l'état $I$.
+
+\begin{align*}
+    &J \assign \emptyset\\
+    &\trm{max}_J \assign \emptyset\\
+    &\trm{vv}_J \assign \trm{vv}_I\\
+    &\trm{knownMalicious}_J \assign \trm{knownMalicious}_I\\
+    &\trm{ackInvited} \assign \emptyset\\
+    &\trm{pending} \assign \emptyset\\
+    &S \assign I\\
+\end{align*}
+
+Il ajoute à $J$ les messages du journal $J_j$ que $p_j$ déclare comme convergent-stables.
+Il s'agit des messages qui précédent ou sont égal à la première référence de stabilisation dans le journal $J_j$.
+Pour les messages restants, le pair suit les même étapes que celles présentés pour le protocole à journaux complets.
+Il demande à sa couche réseau de lui livrer les messages restants de $J_j$, dans l'ordre dans lequel ils ont été ajoutés dans $J_j$.
+Il ne peut pas exécuter d'opérations d'acquiescement avant d'avoir ajouté à son journal le message qui l'invite.
+Une fois ce message ajouté, il exécute une opération d'acquiescement seulement avant l'ajout d'un message dont l'auteur n'est pas un invité reconnu.
+Pour chaque message qu'il ajoute dans son journal il vérifie qu'il n'y a pas de message non-linéaire dans les messages maximaux du journal.
+
+\begin{equation*}
+    x \in \trm{max}_J \implies \trm{peer}_x \not\in \trm{knownMalicious}_J
+\end{equation*}
+
+Il vérifie également que tous les messages qui précédent la première référence de stabilisation dans le journal sont des dépendances directes ou transitives de la première référence de stabilisation.
+
+Il vérifie que les message non-stables ne déclarent pas une dépendance sur un message qui précéde la première référence de stabilisation.
+
+Lorsqu'il ajoute la deuxième référence de stabilisation au sein de son journal, il vérifie que la première référence de stabilisation est bien un message convergent-stable du point de vue du pair $p_j$.
+
+La livraison de son message d'invitation lui permet de s'assurer que l'état $I$ et ses structures de données dépendantes sont cohérents.
+
+En dernier lieu, il s'assure que le journal contient un message qui l'invite.
+
+\begin{equation*}
+    p_i \in \trm{invited}_J
+\end{equation*}
+
+Pour le second cas, il n'exécute pas d'opérations d'acquiescement jusqu'à ce qu'il rencontre le message qui l'invite.
+Lorsqu'il ajoute le message qui l'invite, il initialise $\trm{ackInvited}$ avec les invités connus de son journal.
+Inviter un pair le force donc à se reconnaître lui-même et à reconnaître les pairs invités dans les dépendances de son invitation.
+
+\begin{equation*}
+    \trm{ackInvited} \assign \trm{invited}_J
+\end{equation*}
+
+\clearpage
+
+\begin{algorithm}[ht]
+\caption{Initialisation du journal et de la copie du pair $p_i$ à partir d'un journal tronqué $G$ et d'un état $I$ d'un pair $p_j$}\label{alg:pruned-log-init}
+\begin{algorithmic}[1]
+\Procedure{$\trm{init}_i$}{$G, p_j$}
+    \State \textbf{let} $\tuple*{l,h} \assign \trm{ref}_I$
+    \State \textbf{check} $1 <l < h < n$
+    \State \textbf{let} $\tuple*{y_1, \dotsc, y_n} \assign G$
+    \State \textbf{check} $\trm{peer}_{y_l} = p_j$
+    \State $J \assign J \lappend \tuple*{y_1,\dotsc,y_l}$\Comment{ajout des messages convergent-stables}
+    \State \textbf{check} $\trm{max}_J = \tuple*{y_l}$
+    \State \textbf{let} $k \assign l + 1$
+    \While{$k \leq n$}
+        \State \textbf{check} $\trm{wellFormed}(y_k)$
+        \If{$\trm{accepted}(y_k)$}
+            \State \textbf{let} $\trm{msgs} \assign \trm{ctx}_{\trm{pending}}(y_k) \lappend \tuple*{y_k}$
+            \If{$p_i \in \trm{ackInvited} \land \exists x \in \trm{msgs} \qsep \trm{peer}_x \not\in \trm{ackInvited}$}
+                \State $\trm{execute}(\trm{ack})$\Comment{exécuter une opération d'acquiescement}
+            \EndIf
+            \State $J \assign J \lappend \trm{msgs}$
+            \State $\trm{pending} \assign \trm{pending} \sminus \trm{msgs}$
+            \If{$\tuple*{\trm{invite}, p_i} \in \trm{msgs}$}\Comment{$p_i$ est-il invité par l'un des messages~?}
+                \State \textbf{check} $\trm{max}_J = \set*{\tuple*{\trm{invite}, p_i}}$
+                \State $\trm{ackInvited} \assign \trm{invited}_J$
+            \EndIf
+            \State \textbf{check} $\forall x \in \trm{max}_J \qsep \trm{peer}_x \not\in \trm{knownMalicious}_J$
+        \Else
+            \State $\trm{pending} \assign \trm{pending} \lappend \tuple*{y_k}$
+        \EndIf
+        \State \textbf{check} $k = h \implies \trm{convergentStable}_j(y_l)$
+        \State $k \assign k + 1$
+    \EndWhile
+    \State \textbf{check} $\trm{pending} = \emptyset \land p_i \in \trm{invited}_J$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\clearpage
+
+
 
 \subsection{Cohérence du journal}
 
