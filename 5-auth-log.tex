@@ -1,5 +1,5 @@
 
-\chapter{Journaux authentifiés tronqués}\label{ch:pruned-log}
+\chapter{Journaux infalsifiables tronqués}\label{ch:pruned-log}
 
 \minitoc{}
 \clearpage
@@ -22,11 +22,11 @@ Ils peuvent en particulier produire des \emph{équivoques}.
 Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identiques par le protocole de réplication.
 Les copies des pairs honnêtes divergent alors de manière permanente sans qu'ils s'en rendent compte.
 
-Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs peuvent répliquer un \emph{journal authentifié}.
+Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs peuvent répliquer un \emph{journal infalsifiable}.
 Chaque pair possède un journal dans lequel il enregistre l'ensemble des modifications qu'il intègre à sa copie du contenu partagé.
 Une modification est accompagnée d'une signature cryptographique qui permet de s'assurer de son authenticité.
 Un pair mal-intentionné ne peut donc pas prétendre qu'une de ses modifications a été effectuée par un pair honnête.
-Un journal authentifié contient uniquement des modifications authentiques.
+Un journal infalsifiable contient uniquement des modifications authentiques.
 
 \begin{figure}[hbt]
 \centering
@@ -83,7 +83,7 @@ Un journal authentifié contient uniquement des modifications authentiques.
     \caption{}\label{fig:invite-by-log-2}
 \end{subfigure}
 \caption[Transmission d'un journal complet à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
-Ils utilisent un journal authentifié pour assurer la convergence des copies des pairs honnêtes.
+Ils utilisent un journal infalsifiable pour assurer la convergence des copies des pairs honnêtes.
 Carol veut rejoindre la collaboration.
 \subref{fig:invite-by-log-1} Alice envoie son journal à Carol.
 \subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal et construit le dessin à partir du journal.}\label{fig:invite-by-log}
@@ -95,7 +95,7 @@ Les pairs doivent préserver l'intégralité de leur journal pour \begin{inlinel
 \end{inlinelist}.
 Un pair qui rejoint la collaboration a en effet besoin du journal pour obtenir l'état actuel du contenu partagé.
 Il obtient cet état en intégrant sur sa copie vierge du contenu partagé chaque modification enregistrée dans le journal.
-La \autoref{fig:invite-by-log} illustre la transmission d'un journal authentifié à un pair qui rejoint la collaboration.
+La \autoref{fig:invite-by-log} illustre la transmission d'un journal infalsifiable à un pair qui rejoint la collaboration.
 La préservation de l'intégralité du journal engendre plusieurs problèmes~:
 
 \paragraph{Passage à l'échelle.} Au fur et à mesure de la progression de la collaboration, les journaux contiennent de plus en plus de modifications.
@@ -114,7 +114,7 @@ Nous proposons ainsi deux mécanismes~:
 
 \paragraph{Troncature du journal.} Au lieu de préserver l'intégralité du journal, seules les modifications nécessaires à la détection d'équivoques pourraient être conservées.
 Pour supprimer une modification du journal nous devons nous assurer qu'elle n'est pas nécessaire à la détection des équivoques futures.
-Pour ce faire, nous utilisons des journaux authentifiés dans lesquels chaque modification déclare des dépendances sur d'autres modifications.
+Pour ce faire, nous utilisons des journaux infalsifiables dans lesquels chaque modification déclare des dépendances sur d'autres modifications.
 Les dépendances sont déclarées de telle manière à résister aux équivoques.
 En d'autres termes, si un pair mal-intentionné effectue une équivoque en générant deux modifications $x$ et $y$ et qu'une modification $z$ déclare dépendre de $x$, alors nous considérons qu'il n'est pas possible de prétendre que $z$ dépend de $y$.
 Les modifications et leurs dépendances forment ainsi un graphe dirigé sans cycle.
@@ -219,9 +219,9 @@ Nous nous basons sur ce protocole pour présenter dans la \autoref{sec:pruned-lo
     \caption{}\label{fig:invite-by-snaplog-2}
 \end{subfigure}
 \caption[Transmission d'un journal tronqué et d'un état à une nouvelle collaboratrice]{Alice et Bea répliquent de manière optimiste un dessin.
-Ils utilisent un journal authentifié pour assurer la convergence des copies des pairs honnêtes.
+Ils utilisent un journal infalsifiable pour assurer la convergence des copies des pairs honnêtes.
 Carol veut rejoindre la collaboration.
-\subref{fig:invite-by-log-1} Alice envoie l'état actuel de sa copie du dessin, ainsi qu'une version tronquée de son journal authentifié.
+\subref{fig:invite-by-log-1} Alice envoie l'état actuel de sa copie du dessin, ainsi qu'une version tronquée de son journal infalsifiable.
 \subref{fig:invite-by-log-2} Carol vérifie l'authenticité du journal tronqué.
 Elle vérifie également l'authenticité de l'état reçu à partir du journal tronqué.}\label{fig:invite-by-snaplog}
 \end{figure}
@@ -268,7 +268,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 
 % La convergence à terme des copies est une propriété essentielle des infrastructures pair-à-pair de collaboration.
 % Des pairs mal-intentionnés peuvent trouver un intérêt à compromettre la convergence des copies des pairs honnêtes.
-% Pour empêcher de tels scénarios, les pairs honnêtes peuvent maintenir un journal authentifié et répliqué.
+% Pour empêcher de tels scénarios, les pairs honnêtes peuvent maintenir un journal infalsifiable et répliqué.
 % Ils enregistrent l'ensemble de leurs modifications dans leur journal respectif.
 % Les pairs synchronisent leurs journaux afin de récupérer et intégrer sur leur copie les modifications de chacun.
 
@@ -298,7 +298,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 % En effet, un pair mal-intentionné peut facilement falsifier un instantané du document avant de la transmettre à un nouveau pair.
 % Ce dernier n'a aucun moyen de vérifier l'authenticité de l'instantané.
 
-% Nous proposons une approche qui permet de tronquer le journal authentifié et d'authentifier un instantané à partir du journal tronqué qui lui est associé.
+% Nous proposons une approche qui permet de tronquer le journal infalsifiable et d'authentifier un instantané à partir du journal tronqué qui lui est associé.
 % La \autoref{fig:invite-by-snaplog} illustre cette approche.
 
 % Un journal ne peut pas être tronqué de manière arbitraire.
@@ -1586,7 +1586,7 @@ La \autoref{def:dyn-causal-consistency} présente le modèle de cohérence causa
 % Pour joindre une collaboration et commencer à contribuer, un pair doit constituer l'état actuel du contenu répliqué.
 % Pour ce faire, il est aidé par un pair qui fait déjà partie de la collaboration.
 % Nous disons que le nouveau pair est invité.
-% Dans un protocole à base de journaux authentifiés, un pair peut transmettre son journal pour inviter un pair.
+% Dans un protocole à base de journaux infalsifiables, un pair peut transmettre son journal pour inviter un pair.
 % Le pair invité intègre l'ensemble des modifications enregistrées dans le journal sur un état vierge pour constituer sa copie du contenu répliqué.
 % L'état de la copie du pair invité est ainsi identique à l'état du pair qui l'invite.
 % Les deux copies intègrent le même ensemble de modifications.
@@ -2091,7 +2091,7 @@ La stabilité \acl{VFJC} dynamique identifie des opérations stables malgré la 
 Des opérations peuvent devenir stables alors que de nouveaux pairs sont invités au fur et à mesure de l'évolution de la collaboration.
 Les applications du concepts de stabilité sont nombreuses.
 Elle peut par exemple être la base d'un mécanisme de consensus asynchrone.
-Dans la section suivante nous explorons l'un de ses applications~: les journaux tronqués et l'authentification d'instantanés à l'aide de journaux tronqués authentifiés.
+Dans la section suivante nous explorons l'un de ses applications~: les journaux tronqués et l'authentification d'instantanés à l'aide de journaux tronqués infalsifiables.
 
 %\section{Stabilité (old)}
 %
@@ -2351,8 +2351,9 @@ Les pairs échangent et intègrent les messages qu'ils produisent pour synchroni
 Un pair enregistre l’ensemble des messages qu'il transmet et qu'il accepte des autres pairs dans son journal $J$.
 Un journal est un ensemble ordonné dont l'ordre entre les messages correspond à l'ordre dans lequel ils ont été ajoutés à l'ensemble.
 Cet ordre correspond donc également à l'ordre dans lequel les messages ont été intégrés à la copie du contenu partagé.
+Le journal est initialement vide.
 
-Pour former un journal authentifié, les messages sont accompagnés d'une signature cryptographique et référencent des messages.
+Pour former un journal infalsifiable, les messages sont accompagnés d'une signature cryptographique et référencent des messages.
 Les messages qu'ils référencent sont leurs \emph{dépendances déclarés}.
 Tout message est augmenté des méta-données suivantes~:
 \begin{description}
@@ -2464,14 +2465,15 @@ Lorsqu'il est mis à jour d'autres structures de données que nous qualifions de
 
 Le journal $J$ et la copie $S$ du contenu partagé d'un pair $p_i$ sont conservés en étroite synchronisation.
 Lorsqu'un message $m$ est accepté dans le journal, $m$ est intégré à la copie $S$.
-cette intégration permet d'obtenir une version mise-à-jour de $S$ notée $S'$.
+Cette intégration permet d'obtenir une version mise-à-jour de $S$ notée $S'$.
+La copie $S$ est initialisée avec un état prédéterminé par le protocole de réplication.
 %
 \begin{equation*}
     S' \assign \trm{integrate}_i(S, m)
 \end{equation*}
 
 Les messages d'un journal et leurs relations de dépendances forment un graphe dirigé acyclique.
-Nous dénotons par $\trm{max}_J$, l'ensemble des messages maximaux de $J$.
+$\trm{max}_J$ est l'ensemble des messages maximaux de $J$.
 En d'autres termes, ces messages ne sont pas déclarés comme dépendance d'un message du journal.
 Lorsqu'un message $m$ est ajouté dans le journal, l'ensemble est simplement mis à jour en ajoutant $m$ et en retirant les messages qui sont des dépendances déclarées de $m$.
 Initialement cet ensemble est vide.
@@ -2690,8 +2692,9 @@ Le message est finalement transmis à l'ensemble des pairs.
 
 $m$ dépend transitivement sur l'ensemble des messages du journal $J$.
 Ce message donne aux autres pair une preuve que l'auteur de $m$ connaît les pairs invités en $m$ et dans ses dépendances.
-$\trm{ackInvited}$ enregistre les pairs que $p_i$ reconnaît.
-Nous utilisons cette information lors de la livraison d'un message.
+$\trm{ackInvited}$ est l'ensemble des pairs invités que $p_i$ reconnaît.
+L'ensemble est initialement vide.
+Il est mis à jour après l'exécution d'une opération de modification.
 
 \begin{equation*}
     \trm{ackInvited} \assign \trm{invited}_{J'}
@@ -2808,6 +2811,7 @@ Ceci n'a aucune incidence sur la convergence des copies étant donné que l'ense
 
 \paragraph{Traitement d'un message bien-formé.} Si un message $m$ est bien-formé, le pair doit déterminer si il accepte immédiatement le message dans son journal $J$ ou si il le met en attente dans un ensemble ordonné $\trm{pending}$.
 Similairement au journal, l'ordre de l'ensemble $\trm{pending}$ correspond à l'ordre d'ajout des messages.
+L'ensemble $\trm{pending}$ est initialement vide.
 Le journal étendu $W$ correspond au journal $J$ auquel a été ajouté les messages de l'ensemble $\trm{pending}$ dans leur ordre d'apparition.
 Ce journal est virtuel, il n'a pas d'existence propre.
 %En revanche les structures de données dépendantes de $W$ sont concrètes.
@@ -2895,17 +2899,6 @@ L'\autoref{alg:full-log-deliver} synthèse la livraison d'un message.
 
 \subsubsection{Initialisation}
 
-La copie $S$ du contenu partagé est initialisée à un état déterminé par le protocole de réplication.
-Les autres structures de données sont initialisées comme suit.
-
-\begin{align*}
-&J \assign \emptyset\\
-&\trm{vv}_J \assign \emptyset\\
-&\trm{max}_J \assign \emptyset\\
-&\trm{knownMalicious}_J \assign \emptyset\\
-&\trm{pending} \assign \emptyset\\
-\end{align*}
-
 Un pair peut initier une nouvelle collaboration ou en rejoindre une existante.
 
 \paragraph{Initier une collaboration.}
@@ -2919,57 +2912,18 @@ L'exécution de cette invitation génère son identifiant de pair.
 % \end{equation*}
 
 \paragraph{Rejoindre une collaboration.}
-Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter par un pair déjà présent dans la collaboration.
-Ce dernier, exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
-Il transmet cet identifiant et son journal au nouveau pair.
-% Il récupère son identifiant de pair $p_i$ et l'identifiant $\trm{contentId}$ de la collaboration.
-%Ce journal peut être celui du pair qui l'invite ou d'un autre pair.
+Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter.
+Un pair de la collaboration peut inviter à tout moment un nouveau pair.
+Pour ce faire, il exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
+Il signe et transmet au nouveau pair un message qui contient l'identifiant $p_i$ et son journal.
 Un pair mal-intentionné peut transmettre un identifiant quelconque et un journal arbitraire.
 
-Le nouveau pair $p_i$ construit son journal $J$ et l'état de sa copie $S$ à partir du journal reçu.
+Le nouveau pair $p_i$ vérifie d'abord l'authenticité du message.
+Il construit son journal $J$ et l'état de sa copie $S$ à partir du journal reçu.
 Lors de la construction de son journal, il vérifie que le journal reçu a été correctement construit.
-Il vérifie que chaque message est bien-formé et traite les messages dans l'ordre dans lequel ils ont été ajoutés dans le journal reçu.
-Le traitement d'un message suit les mêmes étapes que celles présentées pour la livraison d'un message a une exception près~: l'exécution d'une opération d'acquiescement avant l'acceptation immédiate d'un message est soumise à des conditions plus strictes.
-
-Lors de la livraison d'un message, un pair exécute une opération d'acquiescement avant l'acceptation immédiate d'un messages si et seulement si \begin{inlinelist}
-\item le message a au moins une dépendance en attente, ou si
-\item l'auteur du message ou d'une dépendance en attente n'est pas un invité que le pair reconnaît
-\end{inlinelist}.
-La première condition garantit l'absence de messages non-linéaires parmi les messages maximaux du journal.
-La seconde condition garantit que l'acceptation immédiate par les autres pairs honnêtes des message générés ultérieurement par le pair n'est pas conditionnée par l'acceptation de l'invitation d'un pair qu'il n'a pas préalablement reconnu.
-
-Si le journal reçu est correctement construit, ses états successifs n'ont pas conduit à la présence de messages non-linéaires parmi ses messages maximaux.
-Le nouveau pair n'a donc pas besoin d'exécuter d'opérations d'acquiescement lorsque la première condition est remplie.
-Il doit simplement vérifier que l'ajout de messages dans son journal ne conduit pas à la présence de message non-linéaires parmi les messages maximaux de son journal.
-
-Les messages d'un pair dépendent tous du message qui l'invite.
-Une invitation contraint donc un pair à reconnaître comme invité lui-même ainsi que tous les pairs invités dans les dépendances de l'invitation.
-Lorsqu'il ajoute le message qui l'invite dans son journal, il initialise l'ensemble des pairs qu'il reconnaître comme invité.
-Puisque le journal reçu est celui du pair qui invite le nouveau pair, l'invitation sera accepté immédiatement et dépend d'un préfixe du journal.
-Les invités reconnus correspondent donc au invités connus du journal après l'ajout de l'invitation.
-
-Une fois que le message qui l'invite est ajouté dans son journal, le nouveau pair fait partie des invités connus du journal.
-Il peut alors exécuter des opérations d'acquiescement sans générer de messages mal-formés.
-Pour les mêmes raisons que celles évoqués précédemment, il exécute une opération d'acquiescement avant l'acceptation immédiate d'un message lorsqu'il ne reconnaît pas encore l'auteur de ce message ou de l'une de ses dépendances en attente.
-
-L'initialisation réussit si et seulement si le pair fait partie des invités connus du journal et l'ensemble des messages du journal reçu figurent dans le journal du nouveau pair (il n'y a pas de messages mal-formés et de message qui demeurent en attentes).
-
 L'\autoref{alg:full-log-init} synthèse l'initialisation du journal et de la copie d'un pair $p_i$ à partir d'un journal reçu $G$.
 L'instruction \textbf{check} permet de vérifier qu'une condition est remplie.
-Si la condition n'est pas remplie l'initialisation est mise en échec.
-Une mise en échec de l'initialisation survient lorsque le journal est mal-formé.
-
-
-% TODO
-% - parler d'un journal arbitraire
-%   - premier msg différent => collaboration différente
-% - parler de l'attaque de fork
-% - garantie : si un pair honnête accepte l'invitation
-%   alors les messages du pairs seront acceptés !
-%   Pas de blocage grâce à l'exec d'ops d'acquiescement
-
-
-\clearpage
+Si la condition n'est pas remplie l'initialisation échoue.
 
 \begin{algorithm}[ht]
 \caption{Initialisation à partir d'un journal reçu $G$}\label{alg:full-log-init}
@@ -3001,6 +2955,43 @@ Une mise en échec de l'initialisation survient lorsque le journal est mal-form�
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+Le pair vérifie que chaque message est bien-formé et traite les messages dans l'ordre dans lequel ils ont été ajoutés dans le journal reçu.
+Le traitement d'un message suit les mêmes étapes que celles présentées pour la livraison d'un message a une exception près~: l'exécution d'une opération d'acquiescement avant l'acceptation immédiate d'un message est soumise à des conditions plus strictes.
+
+Lors de la livraison d'un message, un pair exécute une opération d'acquiescement avant l'acceptation immédiate d'un messages si et seulement si \begin{inlinelist}
+\item le message a au moins une dépendance en attente, ou si
+\item l'auteur du message ou d'une dépendance en attente n'est pas un invité que le pair reconnaît
+\end{inlinelist}.
+La première condition garantit l'absence de messages non-linéaires parmi les messages maximaux du journal.
+La seconde condition garantit que l'acceptation immédiate par les autres pairs honnêtes des message générés ultérieurement par le pair n'est pas conditionnée par l'acceptation de l'invitation d'un pair qu'il n'a pas préalablement reconnu.
+
+Si le journal reçu est correctement construit, ses états successifs ne présentent pas de messages non-linéaires parmi leurs messages maximaux.
+Le nouveau pair n'a donc pas besoin d'exécuter d'opérations d'acquiescement lorsque la première condition est remplie.
+Il doit simplement vérifier que l'ajout de messages dans son journal ne conduit pas à la présence de message non-linéaires parmi les messages maximaux de son journal (ligne 18).
+
+Les messages d'un pair dépendent tous du message qui l'invite.
+Une invitation contraint donc un pair à reconnaître comme invité lui-même ainsi que tous les pairs invités dans les dépendances de l'invitation.
+Lorsqu'il ajoute le message qui l'invite dans son journal, il initialise l'ensemble des pairs qu'il reconnaître comme invité.
+Puisque le journal reçu est celui du pair qui invite le nouveau pair, le message qui invite le nouveau pair doit dépendre dépendre d'un préfixe du journal reçu et doit être accepté immédiatement (ligne 15).
+Les invités reconnus correspondent donc au invités connus du journal après l'ajout de l'invitation (ligne 16).
+
+Une fois que le message qui l'invite est ajouté dans son journal, le nouveau pair fait partie des invités connus du journal.
+Il peut alors exécuter des opérations d'acquiescement sans générer de messages mal-formés.
+Pour les mêmes raisons que celles évoqués précédemment, il exécute une opération d'acquiescement avant l'acceptation immédiate d'un message lorsqu'il ne reconnaît pas encore l'auteur de ce message ou de l'une de ses dépendances en attente (ligne 9 et ligne 10).
+
+L'initialisation réussit si le pair fait partie des invités connus du journal et l'ensemble des messages du journal reçu figurent dans le journal du nouveau pair (ligne 24).
+Il n'y a pas de messages mal-formés et de message qui demeurent en attentes.
+
+
+% TODO
+% - parler d'un journal arbitraire
+%   - premier msg différent => collaboration différente
+% - parler de l'attaque de fork
+% - garantie : si un pair honnête accepte l'invitation
+%   alors les messages du pairs seront acceptés !
+%   Pas de blocage grâce à l'exec d'ops d'acquiescement
+
 
 
 \subsection{Exemple d'une exécution du protocole}
@@ -3948,7 +3939,7 @@ Cette vérification est nécessaire pour éviter une attaque qui viserait à emp
 Nous en reparlons lorsque nous développerons les étapes pour tronquer le journal.
 
 \begin{equation*}
-    k, l \in \trm{deos}_m \implies \nexists x, y \in W \qsep \trm{id}(x) = k \land \trm{id}(y) = l \land x \in \trm{ctx}_W(y)
+    k, l \in \trm{deps}_m \implies \nexists x, y \in W \qsep \trm{id}(x) = k \land \trm{id}(y) = l \land x \in \trm{ctx}_W(y)
 \end{equation*}
 
 % \begin{remark}
@@ -3990,7 +3981,7 @@ Nous devons donc nous assurer que les messages des auteurs des dépendances déc
 
 \subsubsection{Troncature du journal}
 
-Les pairs essayent de tronquer leur journal pour réduire son occupation mémoire.
+Les pairs essayent périodiquement de tronquer leur journal pour réduire son occupation mémoire.
 Ils effectuent cette action indépendamment les uns des autres, sans aucune coordination.
 Ils peuvent donc effectuer cette action lorsqu'ils sont déconnectés des autres pairs.
 
@@ -4003,7 +3994,7 @@ Pour tronquer son journal, un pair doit d'abord déterminer quels messages sont 
 Il supprime ensuite un sous-ensemble de ces messages de telle sorte à permettre à un pair invité de vérifier que le journal a été correctement tronqué.
 Nous abordons chacune de ces deux étapes.
 
-\paragraph{Déterminer les messages convergent-stables}
+\paragraph{Messages convergent-stables}
 Pour rejoindre une collaboration, un pair honnête récupère un journal tronqué.
 Pour vérifier que le journal a été correctement tronqué, le pair et celui qui lui transmet le journal doivent déterminer le même ensemble de messages stables.
 Pour tronquer leur journal, les pairs déterminent donc les messages convergent-stables.
@@ -4017,7 +4008,7 @@ Les pairs s'intéressent donc à la stabilité \emph{DynVFJC}.
 Par-ce-que les pairs mal-intentionnés sont capables de générer des messages non-linéaires, la stabilité \emph{DynVFJC} traite différemment les pairs honnêtes et les pairs mal-intentionnés.
 Chaque pair suspecte les autres pairs d'être mal-intentionnés.
 Lorsqu'un pair détermine la stabilité d'un message, il se considère comme le seul pair honnête.
-Par-ce-qu'il esr lui-même suspecté mal-intentionné par les autres pairs, déterminer les messages convergent-stables revient en quelque sortes à considérer tous les pairs, y compris lui-même, comme des pairs mal-intentionnés.
+Par-ce-qu'il est lui-même suspecté mal-intentionné par les autres pairs, déterminer les messages convergent-stables revient en quelque sortes à considérer tous les pairs, y compris lui-même, comme des pairs mal-intentionnés.
 
 Un message $m$ est \emph{DynVFJC} convergent-stable au sein d'un journal $J$ si et seulement si pour chaque permutation $\tuple{p_1, \dotsc, p_N}$ de l'ensemble des pairs invités $\trm{invited}_J$, il existe une chaîne de dépendances $m_1 \depeq \dotsb \depeq m_n$ tel que $m_1$ dépend de $m$ ou est égal à $m$, et le $j$-ème pair de la permutation est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur du message
@@ -4099,7 +4090,7 @@ Les messages convergent-stables sont entourés}\label{fig:log-stability-example}
 \end{table}
 
 Déterminer avec précision la stabilité d'un message tout en passant à l'échelle est un défi difficile.
-Un algorithme naïf pourrait parcourir pour chaque permutation chaque chemin de dépendance du graphe formé par le journal.
+Un algorithme naïf pourrait parcourir chaque permutation et chaque chemin de dépendance du journal.
 Pour $N$ pairs invités, il y a $N!$ permutations.
 Et chaque branche dans le graphe démultiplie le nombre de chemin.
 La complexité d'un tel algorithme est exponentielle.
@@ -4110,13 +4101,13 @@ Cet algorithme a une complexité quadratique par rapport au nombre de pairs invi
 Notre algorithme se base sur deux principes~:
 \begin{itemize}
     \item Au lieu de considérer chaque permutation des pairs invités, nous considérons une énumération de pairs qui les inclut toutes.
-    Par exemple, l'énumération $\tuple*{p_B, p_A, p_B}$ inclut toutes les permutations de l'ensemble $\tuple*{p_A, p_B}$.
-    \item Au lieu de parcourir chaque chemin du graphe qui prend source au message dont la stabilité est testé, nous en parcourons un seul.
+    Par exemple, l'énumération $\tuple*{p_B, p_A, p_B}$ inclut toutes les permutations de l'ensemble $\set*{p_A, p_B}$.
+    \item Au lieu de parcourir chaque chemin de dépendance du journal, nous en parcourons un seul.
 \end{itemize}
 
 Un pair qui récupère un journal tronqué doit être capable de vérifier que le journal est correctement 
 tronqué.
-Si un pair détermine qu'un message est convergent-stable dans son journal, un autre pair qui récupère ce journal doit également la déterminer convergent-stable.
+Si un pair détermine qu'un message est convergent-stable dans son journal, alors un pair qui récupère ce journal doit également le déterminer convergent-stable.
 Ils doivent donc parcourir le même chemin dans le journal et considérer la même énumération de pairs.
 
 Le chemin parcouru est déterminé par l'ordre d'ajout des messages dans le journal.
@@ -4125,7 +4116,7 @@ Si un pair souhaite tester la stabilité du message $a_3$ dans le journal de la 
 
 Nous détaillons ci-après la fonction qui permet de générer une énumération de pairs qui inclut toutes les permutations d'un ensemble ordonné de pairs.
 Cet algorithme est déterministe.
-Pour assurer que l'énumération de pairs soit la même quelque soit le pair qui teste la stabilité d'un message, nous devons ordonner l'ensemble des pairs qui est passé à cette fonction.
+Pour assurer que l'énumération de pairs soit la même quelque soit le pair qui teste la stabilité d'un message, nous devons ordonner l'ensemble des pairs qui est passé en paramètre à cette fonction.
 Pour ce faire, les identifiants des pairs sont totalement ordonnées.
 Tous les ensemble de pairs sont donc également des ensembles ordonnées.
 Dans l'exemple que nous considérons, nous supposons l'ordre suivant entre les identifiants des pairs~: $p_A < p_B < p_M$.
@@ -4133,8 +4124,7 @@ Dans l'exemple que nous considérons, nous supposons l'ordre suivant entre les i
 La formation d'une énumération minimale qui inclut toutes les permutations est un problème ouvert~\autocite{engen2018_containing}.
 Toutefois plusieurs articles~\autocite{adleman_1974_shortperm,koutas1975shortest,galbiati1976permutation,zualinescu2011shorter,radomirovic2012construction} prouvent des bornes supérieures sur la taille de cette énumération.
 Pour ce faire, ils décrivent dans leur preuve la génération d'une telle énumération.
-L'un des articles~\autocite{adleman_1974_shortperm} présente une manière simple de construire une énumération de taille $N^2 -2N +4$ qui inclut l'ensemble des permutations de ces $N$ composantes.
-L'\autoref{alg:all-perm-enum} est une adaptation de la construction mathématique décrite dans cet article.
+L'\autoref{alg:all-perm-enum} est une adaptation de la construction mathématique décrite dans l'un de ces articles~\autocite{adleman_1974_shortperm}.
 
 \begin{algorithm}[ht]
 \caption{Génération déterministe d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}\label{alg:all-perm-enum}
@@ -4185,35 +4175,25 @@ Contrairement à la définition de la stabilité convergente d'un message, nous 
 Une invitation est considéré comme une simple observation du pair invité.
 La chaîne de dépendance doit donc avoir une taille égale à la taille de l'énumération.
 
-L'\autoref{alg:convergent-stable} ajoute une optimisation.
-Puisque la chaîne considérée prend source en $m$, tous les messages de la chaîne ne peuvent pas dépendre directement d'un message d'un pair reconnu mal-intentionné en $m$.
-Nous pouvons donc considérer une énumération qui contient les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés en $m$.
-Pour connaître les pairs reconnus mal-intentionnés d'un message $m$, nous devons construire le journal qui inclut $m$ et toutes ses dépendances.
-Cette construction peut être coûteuse sauf pour les messages qui dépendent de tous les messages qui ont été précédemment ajoutés dans le journal.
-C'est le cas des messages du possesseur du journal.
-Cette optimisation est donc considérée uniquement lorsque la stabilité convergente d'un message du possesseur du journal est testée.
-Lorsque le message n'est pas un message du possesseur du journal nous pouvons toutefois retirer les pairs reconnus mal-intentionnés dans l'état $I$.
-Ce qui correspond à un sous-ensemble des pairs reconnus mal-intentionnés en $m$.
-
 \begin{algorithm}[ht]
-\caption{Détermine si un message $x$ est convergent stable dans $J$.}\label{alg:convergent-stable}
+\caption{Détermine si un message $m$ est convergent stable dans $J$.}\label{alg:convergent-stable}
 \begin{algorithmic}[1]
-\Function{$\trm{convergentStable}_i$}{$x$}
+\Function{$\trm{convergentStable}$}{$m$}
 \textbf{require} $x \in J$
     \State \textbf{let} $Z \assign \tuple*{}$ \Comment{initialisation du journal temporaire}
     \State \textbf{let} $\trm{vv}_Z \assign \trm{vv}_I$
     \State \textbf{let} $\trm{knownMalicious}_Z \assign \trm{knownMalicious}_I$
     \State \textbf{let} $\tuple*{y_1, \dotsc} \assign J$
-    \State \textbf{let} $k = 1$
-    \If{$\trm{peer}_x = p_i$}\Comment{l'auteur de $x$ est-il $p_i$, le possesseur du journal $J$~?}
-        \State $Z \assign Z \lappend \tuple*{y_1, \dotsc, x}$\Comment{ajoute $x$ et ses dépendances à $Z$}
-        \State $k \assign \trm{length}(\tuple*{y_1, \dotsc, x})$
-    \EndIf
-    \State \textbf{let} $\tuple*{p_1, \dotsc, p_n} \assign \trm{allPermEnum}(\trm{invited}_J \sminus \trm{knownMalicious}_Z)$
+    \State $Z \assign Z \lappend \tuple*{y_1, \dotsc, m}$
+    \State \textbf{let} $\tuple*{p_1, \dotsc, p_n} \assign \begin{dcases}
+        \trm{allPermEnum}(\trm{invited}_J \sminus \trm{knownMalicious}_Z) & \when \trm{max}_Z = \set*{m}\\
+        \trm{allPermEnum}(\trm{invited}_J) &\\
+    \end{dcases}$
     \State \textbf{let} $j \assign 1$
-    \State \textbf{let} $\trm{prev} \assign x$
+    \State \textbf{let} $\trm{prev} \assign m$
+    \State $k \assign \trm{length}(Z)$\Comment{débuter le parcours de $J$ en $m$}
     \While{$j \leq n \land k \leq \trm{length}(J)$}
-        \If{$y_k = x \lor \trm{id}(prev) \in \trm{deps}_{y_k}$}\Comment{$y_k$ fait-il partie du chemin à parcourir~?}
+        \If{$y_k = m \lor \trm{id}(prev) \in \trm{deps}_{y_k}$}\Comment{$y_k$ fait-il partie du chemin à parcourir~?}
             \If{$\trm{peer}_{y_k} = p_j \lor y_k = \tuple*{\trm{invite}, p_j} \lor p_j \in \trm{knownMalicious}_Z$}
                 \State $j \assign j + 1$ \Comment{avance d'un pas dans l'énumération de pairs}
             \Else
@@ -4231,16 +4211,27 @@ Ce qui correspond à un sous-ensemble des pairs reconnus mal-intentionnés en $m
 \end{algorithmic}
 \end{algorithm}
 
-Nous créons d'abord un journal temporaire $Z$ dont il initialise les structures de données dépendantes à l'aides des structures de données dépendantes de l'état $I$ (ligne 2 à 4).
-Si le message est un message du possesseur du journal, alors $m$ et ses dépendances sont ajoutées à $Z$ (ligne 7 à 10).
-Ces messages forment un préfixe du journal $J$.
-Dans ce cas, $\trm{knownMalicious}_Z$ correspond également aux pairs reconnus mal-intentionnés en $m$.
-Nous construisons ensuite l'énumération de pairs qui inclut les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés dans $Z$ (ligne 11).
-Le reste de l'algorithme parcourt l'énumération de pairs et le journal.
-Si l'énumération de pairs est entièrement parcouru, le message $m$ est convergent-stables.
-Si le message fait partie du chemin à parcourir (ligne 15), nous avançons d'un pas dans l'énumération de pairs si et seulement si le pair actuel de l'énumération est \begin{inlinelist}\item l'auteur du message actuel, ou si il est \item le pair invité dans le message actuel (le message actuel est une invitation), ou si il est \item reconnu mal-intentionné dans $Z$ (il est présent dans l'ensemble $\trm{knwonMalicious}_Z$) \end{inlinelist}.
+L'\autoref{alg:convergent-stable} teste la stabilité du message $m$ passé en paramètre.
+Il initialise d'abord un journal vide $Z$.
+Les structures de données dépendantes $\trm{vv}_Z$ et $\trm{knownMalicious}_Z$ sont initialisées avec l'état des structures de données dépendantes $\trm{vv}_I$ et $\trm{knownMalicious}_I$.
+Le préfixe minimal du journal $J$ qui inclut $m$ est ajouté au journal temporaire $Z$.
+L'énumération de pairs est ensuite générée (ligne 7).
+L'algorithme introduit une optimisation que nous discutons dans le paragraphe suivant.
+Les variables $j$ et $k$ permettent respectivement d'itérer sur le journal $J$ et sur l'énumération de pairs.
+La variable $\trm{prev}$ enregistre le dernier message traité du chemin à parcourir.
+Ce chemin prend source en $x$.
+Le reste de l'algorithme parcourt l'énumération de pairs et le journal $J$ (lignes 11 à 24).
+Si le message fait partie du chemin à parcourir (ligne 12), nous avançons d'un pas dans l'énumération de pairs si et seulement si le pair actuel de l'énumération est \begin{inlinelist}\item l'auteur du message actuel, ou si il est \item le pair invité dans le message actuel (le message actuel est une invitation), ou si il est \item reconnu mal-intentionné dans $Z$ (il est présent dans l'ensemble $\trm{knwonMalicious}_Z$) \end{inlinelist}.
 Dès lors que nous n'avançons plus dans l'énumération de pairs, nous progressons d'un pas dans le journal $J$.
 Le message actuel est alors ajouté au journal temporaire $Z$.
+Si l'énumération de pairs est entièrement parcouru, le message $m$ est convergent-stables (ligne 25).
+
+L'\autoref{alg:convergent-stable} ajoute une optimisation.
+Puisque la chaîne considérée prend source en $m$, tous les messages de la chaîne ne peuvent pas dépendre directement d'un message d'un pair reconnu mal-intentionné en $m$.
+Nous pouvons donc considérer une énumération qui contient les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés en $m$.
+Si $m$ est l'unique message des messages maximaux du journal $Z$, alors $m$ dépend d'un préfixe du journal.
+Les pairs reconnus mal-intentionnés en $m$ correspondent donc aux pairs reconnus mal-intentionnés dans $Z$.
+Dans le cas où $m$ ne dépend pas d'un préfixe du journal nous ne considérons pas cette optimisation.
 
 Pour illustrer cette algorithme, nous testons la stabilité convergente du message $m_1$ du journal de la \autoref{fig:log-stability-example}.
 Le message est déterminé convergent-stable par l'algorithme.
@@ -4252,7 +4243,7 @@ L'évolution de ces variables entre la ligne 14 et 27 est détaillée dans le \a
     \begin{tabular}{cc}
         variable·s & valeur·s initiale·s \\
         \toprule
-        $x$ & $m_1$ \\
+        $m$ & $m_1$ \\
         $\trm{Z}$ & $\tuple*{}$ \\
         $\trm{vv}_Z$ & $\emptyset$ \\
         $\trm{knownMalicious}_Z$ & $\emptyset$ \\
@@ -4272,23 +4263,23 @@ L'évolution de ces variables entre la ligne 14 et 27 est détaillée dans le \a
     \begin{tabular}{ccccccc}
         ligne·s exécutée·s & $j$ & $p_j$ & $\trm{prev}$ & $k$ & $m_k$ & $\trm{knownMalicious}_Z$ \\
         \toprule
-        2 à 7 et 11 à 13 & $1$ & $p_M$ & $m_1$ & $1$ & $a_1$ & $\emptyset$ \\
-        14, 15, 24, 25 & $1$ & $p_M$ & $m_1$ & $2$ & $a_2$ & $\emptyset$ \\
-        14, 15, 24, 25 & $1$ & $p_M$ & $m_1$ & $3$ & $a_3$ & $\emptyset$ \\
-        14, 15, 24, 25 & $1$ & $p_M$ & $m_1$ & $4$ & $m_1$ & $\emptyset$ \\
-        14 à 17 & $2$ & $p_A$ & $m_1$ & $4$ & $m_1$ & $\emptyset$ \\
-        14 à 16, 19 à 21 & $2$ & $p_A$ & $m_1$ & $5$ & $a_4$ & $\emptyset$ \\
-        14 à 17 & $3$ & $p_B$ & $m_1$ & $5$ & $a_4$ & $\emptyset$ \\
-        14 à 16, 19 à 21 & $3$ & $p_B$ & $a_4$ & $6$ & $m_1'$ & $\set*{p_M}$ \\
-        14, 15, 24, 25 & $3$ & $p_B$ & $a_4$ & $7$ & $b_1$ & $\set*{p_M}$ \\
-        14, 15, 24, 25 & $3$ & $p_B$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
-        14 à 17 & $4$ & $p_M$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
-        14 à 17 & $5$ & $p_A$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
-        14 à 16, 19 à 21 & $5$ & $p_A$ & $b_2$ & $9$ & $a_5$ & $\set*{p_M}$ \\
-        14 à 17 & $6$ & $p_B$ & $b_2$ & $9$ & $a_5$ & $\set*{p_M}$ \\
-        14 à 16, 19 à 21 & $6$ & $p_B$ & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
-        14 à 17 & $7$ & $p_M$ & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
-        14 à 17 & $8$ & & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
+        2 à 10 & $1$ & $p_M$ & $m_1$ & $1$ & $a_1$ & $\emptyset$ \\
+        11, 12, 21, 22 & $1$ & $p_M$ & $m_1$ & $2$ & $a_2$ & $\emptyset$ \\
+        11, 12, 21, 22 & $1$ & $p_M$ & $m_1$ & $3$ & $a_3$ & $\emptyset$ \\
+        11, 12, 21, 22 & $1$ & $p_M$ & $m_1$ & $4$ & $m_1$ & $\emptyset$ \\
+        11 à 14 & $2$ & $p_A$ & $m_1$ & $4$ & $m_1$ & $\emptyset$ \\
+        11 à 13, 16 à 18 & $2$ & $p_A$ & $m_1$ & $5$ & $a_4$ & $\emptyset$ \\
+        11 à 14 & $3$ & $p_B$ & $m_1$ & $5$ & $a_4$ & $\emptyset$ \\
+        11 à 13, 16 à 18 & $3$ & $p_B$ & $a_4$ & $6$ & $m_1'$ & $\set*{p_M}$ \\
+        11, 12, 21, 22 & $3$ & $p_B$ & $a_4$ & $7$ & $b_1$ & $\set*{p_M}$ \\
+        11, 12, 21, 22 & $3$ & $p_B$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
+        11 à 14 & $4$ & $p_M$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
+        11 à 14 & $5$ & $p_A$ & $a_4$ & $8$ & $b_2$ & $\set*{p_M}$ \\
+        11 à 13, 16 à 18 & $5$ & $p_A$ & $b_2$ & $9$ & $a_5$ & $\set*{p_M}$ \\
+        11 à 14 & $6$ & $p_B$ & $b_2$ & $9$ & $a_5$ & $\set*{p_M}$ \\
+        11 à 13, 16 à 18 & $6$ & $p_B$ & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
+        11 à 14 & $7$ & $p_M$ & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
+        11 à 14 & $8$ & & $a_5$ & $10$ & $b_3$ & $\set*{p_M}$ \\
     \end{tabular}
     \caption{}\label{tab:log-stability-example-algo-loop}
 \end{table}
@@ -4304,17 +4295,18 @@ L'évolution de ces variables entre la ligne 14 et 27 est détaillée dans le \a
 %Le coût reste tout de même élevé puisque nous avons une complexité au pire cas de $N!*N+M$.
 
 
+\paragraph{Suppression de messages convergent-stables}
+Pour éviter de tester la stabilité convergente de plusieurs messages et prendre avantage de l'optimisation qui concerne les messages qui dépendent d'un préfixe du journal, un pair teste périodiquement la stabilité d'un message dont il est l'auteur.
 
-
-\paragraph{Tronquer le journal}
-Pour éviter de tester la stabilité convergente de plusieurs messages et prendre avantage de l'optimisation qui concerne les messages du possesseur du journal, un pair teste la stabilité d'un seul message dont il est l'auteur.
-
-Si le message est convergent-stable, alors ses dépendances le sont également.
-Puisqu'il s'agit d'un message du possesseur du journal, ces messages convergent-stables forment un préfixe.
+Si le message est convergent-stable, alors le préfixe minimal du journal qui inclut le message est convergent-stable.
 Le pair ne peut pas simplement supprimer ce préfixe pour tronquer le journal.
 Il doit conserver suffisamment de messages pour permettre à un pair de vérifier que le journal a été correctement tronqué.
+Il doit en particulier permettre à un pair de vérifier qu'un message qui ne fait pas partie du préfixe est bien-formé.
 Pour ce faire, il conserve tous les messages du préfixe qui sont des dépendances de messages qui ne font pas partie du préfixe.
 Pour simplifier, nous tronquons toujours un préfixe du journal.
+
+Une fois le journal tronqué, le pair enregistre l'indice du message déterminé convergent-stable et l'indice du message le plus récent dans le couple $\trm{stabilityRef}$.
+Il s'agit de la référence de stabilité.
 
 Prenons l'exemple du journal de la \autoref{fig:log-stability-example}.
 $p_A$ le possesseur du journal décide d'essayer de tronquer son journal.
@@ -4323,7 +4315,9 @@ $a_4$ est déterminé convergent-stable.
 Le préfixe $a_1 \dep a_2 \dep a_3 \dep m_1 \dep a_4$ est donc convergent-stable.
 $a_3$ est une dépendance du message $m_1'$.
 Puisque $m_1'$ ne fait pas partie du préfixe convergent-stable, il ne peut pas supprimer $a_3$.
-Le pair supprime donc un le préfixe $a_1 \dep a_2$.
+Le pair supprime donc le préfixe $a_1 \dep a_2$.
+Sa référence de stabilité correspond au couple $\tuple*{3, 8}$.
+Ces deux indices correspondent aux emplacements des messages $a_4$ et $b_3$.
 
 Le pair $p_B$ décide également de tronquer son journal.
 La \autoref{fig:log-stability-example-b} représente son journal.
@@ -4331,6 +4325,8 @@ Il choisit de tester la stabilité du message $b_2$.
 $b_2$ est déterminé convergent-stable.
 Aucun message du préfixe convergent-stable, à l'exception de $b_2$ n'est une dépendance d'un message qui ne fait pas partie du préfixe.
 Il supprime donc l'ensemble du préfixe, à l'exception de $b_2$.
+Sa référence de stabilité correspond au couple $\tuple*{1, 3}$.
+Ces deux indices correspondent aux emplacements des messages $b_2$ et $b_3$.
 
 \begin{figure}[hbt]
 \centering
@@ -4360,23 +4356,20 @@ Les messages convergent-stables sont entourés}\label{fig:log-stability-example-
 Un pair mal-intentionné pourrait déclarer le premier message du journal complet comme dépendance pour empêcher la troncature des journaux des pairs honnêtes.
 C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarées aux dépendances directes du message.
 
-Le message qui a été choisit pour stabiliser et tronquer le journal est conservé dans la variable $\trm{ref}_I$.
-Les message supprimés du journal sont un à un intégré à l'état $I$.
-
 \begin{algorithm}[ht]
 \caption{Troncature du journal d'un pair $p_i$.}
 \begin{algorithmic}[1]
 \Procedure{$\trm{attemptTruncation}_i$}{}
     \State \textbf{let} $\tuple*{y_1, \dotsc, y_n} \assign J$
     \State \textbf{pick} $k \in \mathbb{N}^* \land \trm{peer}_{y_k} = p_i$
-    \If{$\trm{convergentStable}_i(y_k)$}
-        \State $\trm{ref}_I \assign \tuple*{y_k, y_n}$ \Comment{mise à jour des références de stabilisation}
+    \If{$\trm{convergentStable}(y_k)$}
         \State \textbf{let} $j \assign 1$
         \While{$j < k \land \nexists l > k \qsep \trm{id}(y_j) \in \trm{deps}_{y_l} $}
             \State $J \assign J \sminus \tuple*{y_j}$ \Comment{supprime $y_j$ du journal $J$}
             \State $I \assign \trm{integrate}_i(I, y_j)$ \Comment{intégre $y_j$ dans l'état $I$}
             \State $j \assign j + 1$ \Comment{passe au message suivant}
         \EndWhile
+        \State $\trm{stabilityRef} \assign \tuple*{k - j - 1, n - j - 1}$ \Comment{mise à jour des références de stabilité}
     \EndIf
 \EndProcedure
 \end{algorithmic}
@@ -4385,144 +4378,51 @@ Les message supprimés du journal sont un à un intégré à l'état $I$.
 
 \subsubsection{Initialisation}
 
-Pour initier une collaboration, un pair procède de la même manière que dans le protocole à journaux complets.
-Il exécute une première opération qui l'invite lui-même.
-
-Pour rejoindre une collaboration un collaborateur ou une collaboratrice doit en premier lieu se faire inviter.
-Il ou elle obtient alors un identifiant qui correspond à un pair de la collaboration.
-
-Pour débuter à contribuer, un pair $p_i$ doit récupérer un journal et recréé une copie cohérente du contenu partagé.
-Pour ce faire il demande à un pair $p_J$ de lui transmettre son journal éventuellement tronqué, l'instantané associé à son journal, ainsi que les structures de données dépendantes de son instantané.
-Cette transmission est accompagnée d'une signature pour assurer l'authenticité et l'intégrité des données transmises.
-Pour distinguer les structures de données des deux pairs nous les indiçons respectivement de $i$ pour $p_i$ et $j$ pour $p_j$.
-
-%Avant d'accéder à la requête de $p_i$, $p_j$ vérifie que $p_i$ a bien été invité.
-%
-%\begin{equation*}
-%    p_i \in \trm{invited}_{J_j}
-%\end{equation*}
-%
-%Si tel est le cas il transmet à $p_i$ son journal $J_j$, son instantané $I_j$, ainsi que les structures de données dépendantes de son instantané.
-%Nous supposons que cette transmission est accompagnée d'une signature pour assurer l'authenticité et l'intégrité des données transmises.
-
-Une fois ces structures de données reçues, $p_i$ doit s'assurer qu'elles sont mutuellement cohérentes et que le journal a été tronqué correctement.
-Pour ce faire, il initialise un journal vide $J_i$, et initialise sa copie $S_i$ avec l'instantanée $I_j$.
-Il initialise également les structures de données dépendantes de $J_i$ à l'aide des structures de données dépendantes de $I_j$.
-
-$p_i$ ajoute ensuite dans son journal l'ensemble des messages déclarés comme convergent-stables.
-Il s'agit de $\trm{ref}_{I_j}$ et ses dépendances.
-Ces messages constituent la base stable du journal.
-
-Il livre ensuite chaque message restant de $J_j$ dans l'ordre dans lequel ils apparaissent dans $J_j$.
-Les messages sont alors vérifiés comme si ils étaient reçues normalement.
-
-Une fois l'ensemble des messages de $J_j$ livrés, si $J_j$ est identique à $J_i$, alors les données reçues sont mutuellement cohérentes.
-Pour s'assurer que le journal a été tronqué correctement, le pair $p_i$ vérifie que $\trm{ref}_{I_j}$ est bien un message convergent-stable.
-Pour finir, il s'assure qu'il a bien été invité.
-Il doit faire partie des pairs invités connus en $J_i$.
-
-\begin{equation*}
-    p_i \in \trm{invited}_{J_i}
-\end{equation*}
-
-Si un message d'un pair honnête est présent dans le journal tronqué et dépend de l'invitation qui invite $p_i$, alors le pair est assuré d'avoir une copie et un journal cohérent.
-
-% Pour la cohérence toute invitation peut faire l'affaire
-% En revanche il faut faire attention au invités dans des embranchements
-
-
-\subsubsection{Initialisation}
-
 Un pair peut initier une nouvelle collaboration ou en rejoindre une existante.
 
 \paragraph{Initier une collaboration.}
-Pour initier une collaboration, un pair exécute une première opération qui l'invite lui-même.
-Avant d'effectuer cette exécution, le pair initialise les structures de données utilisées par le protocole.
-La copie $S$ du contenu partagé est initialisée à un état déterminé par le protocole de réplication.
-Les autres structures de données sont initialisées comme suit.
-
-\begin{align*}
-    &J \assign \emptyset\\
-    &\trm{max}_J \assign \emptyset\\
-    &\trm{vv}_J \assign \emptyset\\
-    &\trm{knownMalicious}_J \assign \emptyset\\
-    &\trm{ackInvited} \assign \emptyset\\
-    &\trm{pending} \assign \emptyset\\
-    &I \assign S\\
-    &\trm{vv}_I \assign \emptyset\\
-    &\trm{knownMalicious}_I \assign \emptyset\\
-    &\trm{ref}_I \assign \varnothing\\
-\end{align*}
+Pour initier une nouvelle collaboration, un pair exécute une première opération qui l’invite. L’exécution de cette invitation génère son identifiant de pair.
 
 \paragraph{Rejoindre une collaboration.}
-Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter par un pair déjà présent dans la collaboration.
-Ce dernier, exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
-Il transmet cet identifiant au nouveau pair, ainsi que son journal, son état $I$, les structures dépendantes de $I$ ($\trm{vv}_I$ et $\trm{knownMalicious}_I$), et les références de stabilisation $\trm{ref}_I$.
-Pour le distinguer du journal du pair $p_i$ nous le notons $G$.
-Nous n'avons pas besoin de distinguer son état $I$ de celui du pair $p_i$ étant donnée que $p_i$ utilise directement l'état $I$ qu'il reçoit.
+Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter.
+Un pair de la collaboration peut inviter à tout moment un nouveau pair. Pour ce faire, il exécute une opération d’invitation qui génère l’identifiant $p_i$ du nouveau pair.
+Il signe et transmet au nouveau pair un message qui contient l'identifiant $p_i$, son journal $J$, son état $I$, $\trm{vv}_I$, $\trm{knownMalicious}_I$, et $\trm{stabilityRef}$.
 Un pair mal-intentionné peut transmettre des données arbitraires.
 
+Le nouveau pair $p_i$ vérifie d’abord l’authenticité du message.
+Nous notons $G$ le journal reçu pour le distinguer du journal du pair $p_i$.
+Nous n'avons pas besoin de distinguer l'état $I$ de celui reçu étant donnée que $p_i$ utilise directement l'état $I$ qu'il reçoit.
+
 Nous supposons que le journal reçu $G$ est tronqué.
-Si il ne l'est pas le pair peut suivre les mêmes étapes que celles présentés dans le protocole à journaux complets.
+Si il ne l'est pas le pair suit les mêmes étapes que celles présentées dans le protocole à journaux complets.
 Le nouveau pair $p_i$ construit son journal $J$ et l'état de sa copie $S$ à partir des données reçues.
 Il initialise les structures dépendantes de son journal à l'aide des structures dépendantes de $I$ et sa copie $S$ est initialisé avec l'état $I$.
 
-\begin{align*}
-    &J \assign \emptyset\\
-    &\trm{max}_J \assign \emptyset\\
-    &\trm{vv}_J \assign \trm{vv}_I\\
-    &\trm{knownMalicious}_J \assign \trm{knownMalicious}_I\\
-    &\trm{ackInvited} \assign \emptyset\\
-    &\trm{pending} \assign \emptyset\\
-    &S \assign I\\
-\end{align*}
+L'\autoref{alg:pruned-log-init} détaille les étapes d'initialisation.
+Le pair vérifie que la référence de stabilité désigne des messages du journal $G$ et que le premier message apparaît bien avant le second message (ligne 7).
+Il ajoute à $J$ les messages du journal $G$ qui sont déclarés convergent-stables.
+Il s'agit des messages qui précédent ou sont égal au premier message $y_l$ de la référence de stabilité.
+Il vérifie que $y_l$ doit dépendre d'un préfixe du journal (ligne 9).
+Pour les messages restants, le pair suit globalement les mêmes étapes que celles présentées pour le protocole à journaux complets (ligne 12 à 32).
+Une fois que le deuxième message de la référence de stabilité est ajouté au journal, il vérifie que $y_l$ est un message convergent-stable (ligne 10 et ligne 29).
 
-Il ajoute à $J$ les messages du journal $J_j$ que $p_j$ déclare comme convergent-stables.
-Il s'agit des messages qui précédent ou sont égal à la première référence de stabilisation dans le journal $J_j$.
-Pour les messages restants, le pair suit les même étapes que celles présentés pour le protocole à journaux complets.
-Il demande à sa couche réseau de lui livrer les messages restants de $J_j$, dans l'ordre dans lequel ils ont été ajoutés dans $J_j$.
-Il ne peut pas exécuter d'opérations d'acquiescement avant d'avoir ajouté à son journal le message qui l'invite.
-Une fois ce message ajouté, il exécute une opération d'acquiescement seulement avant l'ajout d'un message dont l'auteur n'est pas un invité reconnu.
-Pour chaque message qu'il ajoute dans son journal il vérifie qu'il n'y a pas de message non-linéaire dans les messages maximaux du journal.
-
-\begin{equation*}
-    x \in \trm{max}_J \implies \trm{peer}_x \not\in \trm{knownMalicious}_J
-\end{equation*}
-
-Il vérifie également que tous les messages qui précédent la première référence de stabilisation dans le journal sont des dépendances directes ou transitives de la première référence de stabilisation.
-
-Il vérifie que les message non-stables ne déclarent pas une dépendance sur un message qui précéde la première référence de stabilisation.
-
-Lorsqu'il ajoute la deuxième référence de stabilisation au sein de son journal, il vérifie que la première référence de stabilisation est bien un message convergent-stable du point de vue du pair $p_j$.
-
-La livraison de son message d'invitation lui permet de s'assurer que l'état $I$ et ses structures de données dépendantes sont cohérents.
-
-En dernier lieu, il s'assure que le journal contient un message qui l'invite.
-
-\begin{equation*}
-    p_i \in \trm{invited}_J
-\end{equation*}
-
-Pour le second cas, il n'exécute pas d'opérations d'acquiescement jusqu'à ce qu'il rencontre le message qui l'invite.
-Lorsqu'il ajoute le message qui l'invite, il initialise $\trm{ackInvited}$ avec les invités connus de son journal.
-Inviter un pair le force donc à se reconnaître lui-même et à reconnaître les pairs invités dans les dépendances de son invitation.
-
-\begin{equation*}
-    \trm{ackInvited} \assign \trm{invited}_J
-\end{equation*}
+Si un message d'un pair honnête est présent dans le journal tronqué et dépend de l'invitation qui invite $p_i$, alors le pair est assuré d'avoir une copie et un journal cohérent.
 
 \clearpage
 
 \begin{algorithm}[ht]
-\caption{Initialisation du journal et de la copie du pair $p_i$ à partir d'un journal tronqué $G$ et d'un état $I$ d'un pair $p_j$}\label{alg:pruned-log-init}
+\caption{Initialisation du journal et de la copie du pair $p_i$ à partir d'un journal tronqué $G$, d'un état $I$, des structures de données dépendantes de $I$, et de la référence de stabilité $\trm{stabilityRef}$.}\label{alg:pruned-log-init}
 \begin{algorithmic}[1]
-\Procedure{$\trm{init}_i$}{$G, p_j$}
-    \State \textbf{let} $\tuple*{l,h} \assign \trm{ref}_I$
-    \State \textbf{check} $1 <l < h < n$
+\Procedure{$\trm{init}_i$}{$G$}
+    \State $S \assign I$
+    \State $\trm{vv}_J \assign \trm{vv}_I$
+    \State $\trm{knownMalicious}_J \assign \trm{knownMalicious}_I$
+    \State \textbf{let} $\tuple*{l,h} \assign \trm{stabilityRef}$
     \State \textbf{let} $\tuple*{y_1, \dotsc, y_n} \assign G$
-    \State \textbf{check} $\trm{peer}_{y_l} = p_j$
+    \State \textbf{check} $1 \leq l \leq h \leq n$
     \State $J \assign J \lappend \tuple*{y_1,\dotsc,y_l}$\Comment{ajout des messages convergent-stables}
     \State \textbf{check} $\trm{max}_J = \tuple*{y_l}$
+    \State \textbf{check} $l = h \implies \trm{convergentStable}(y_l)$
     \State \textbf{let} $k \assign l + 1$
     \While{$k \leq n$}
         \State \textbf{check} $\trm{wellFormed}(y_k)$
@@ -4541,7 +4441,7 @@ Inviter un pair le force donc à se reconnaître lui-même et à reconnaître le
         \Else
             \State $\trm{pending} \assign \trm{pending} \lappend \tuple*{y_k}$
         \EndIf
-        \State \textbf{check} $k = h \implies \trm{convergentStable}_j(y_l)$
+        \State \textbf{check} $k = h \implies \trm{convergentStable}(y_l)$
         \State $k \assign k + 1$
     \EndWhile
     \State \textbf{check} $\trm{pending} = \emptyset \land p_i \in \trm{invited}_J$
@@ -4684,7 +4584,7 @@ Une livraison d'un message devient stable dès lors que l'ensemble des destinata
 Un message concurrent à un message dont la livraison est stable peut toujours être reçu.
 
 
-\subsection{Journaux authentifiés}
+\subsection{Journaux infalsifiables}
 
 
 
@@ -4692,7 +4592,7 @@ L'utilisation de protocole à base de journaux est fréquent pour offrir des gar
 % PRACTI
 % BAYOU
 
-\paragraph{Résumés de journaux.} \emph{ASTRO}~\autocite{mahajan_astro_2008} se base sur un journal authentifié des messages envoyés et livrés.
+\paragraph{Résumés de journaux.} \emph{ASTRO}~\autocite{mahajan_astro_2008} se base sur un journal infalsifiable des messages envoyés et livrés.
 Les messages référencent leurs dépendances et sont livrés lorsque les dépendances sont satisfaites.
 A tout moment, un pair peut décider de réduire la taille de son journal en remplaçant des séquences de messages par un résumé sécurisé.
 Le résumé référencent les dépendances des messages qu'il résume (à l'exception des dépendances qui correspondent à des messages qu'il résume).
@@ -4715,12 +4615,12 @@ Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces m
 Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs mal-intentionnés.
 Il garantit également la convergence des pairs honnêtes.
 
-\paragraph{Instantané authentifié} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
+\paragraph{État authentifié} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
 
 
 \section{Conclusion}
 
-Les journaux authentifiés permettent de sécuriser al convergence d'un contenu partagé en présence de pairs mal-intentionnés.
+Les journaux infalsifiables permettent de sécuriser al convergence d'un contenu partagé en présence de pairs mal-intentionnés.
 La conservation de l'ensemble du journal a un coût.
 Pour remédier à ce problème nous avons proposé un protocole qui permet de tronquer le journal.
 Nous avons également proposé un protocole pour authentifier un instantané à partir d'un journal tronqué.
