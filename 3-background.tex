@@ -14,7 +14,7 @@ La \autoref{sec:consistency-spec} introduit le formalisme que nous utilisons pou
 Notre formalisme étend le formalisme de~\textcite{burckhardt_eventualconsistency_2014} pour prendre en compte la présence d'un adversaire actif.
 Les protocoles de réplication garantissent souvent des ensembles communs de propriétés de cohérence.
 Pour faciliter l'appréciation de leurs similitudes, les propriétés de cohérence sont réunies sous des ensembles bien définies nommés \emph{modèle de cohérence}.
-La \autoref{sec:consistency-spec} présente également un moyen de comparer les modèles de cohérence.
+La \autoref{sec:consistency-spec} présente un moyen de comparer les modèles de cohérence.
 La \autoref{sec:causal-models} présente le modèle de cohérence causale ainsi que les modèles de cohérence sur-lesquelles nous nous reposons pour établir la contribution du \autoref{ch:pruned-log}.
 
 La convergence des copies est une propriété essentielle des protocoles de réplication optimiste.
@@ -34,12 +34,11 @@ En délimitant le périmètre d'action des pairs, le protocole garantit des prop
 Le formalisme qu'il introduit n'est pas adapté aux environnements soumis à la présence de pairs mal-intentionnés.
 Dans la \autoref{subsec:consistency-spec-honest} nous présentons son formalisme avec quelques simplifications.
 Nous l'étendons dans la \autoref{subsec:consistency-spec-malicious} pour permettre la description d'exécutions soumises à la présence de comportements mal-intentionnés.
-
-Les propriétés de cohérence sont groupées en ensembles logiques dénommés \emph{modèles de cohérence}.
-Les modèles de cohérence sont organisés en hiérarchie de celui qui offre les garanties de cohérence les plus fortes à ceux qui offrent les garantie les plus faibles.
-
 Dans le \autoref{ch:problematic} nous avons distingué les propriétés de sûreté des propriétés de vivacité.
 Dans la \autoref{subsec:consistency-spec-liveness-safety} nous montrons comment reconnaître et spécifier ces deux genres de propriétés au sein du formalisme introduit.
+
+% Les propriétés de cohérence sont groupées en ensembles logiques dénommés \emph{modèles de cohérence}.
+% Les modèles de cohérence sont organisés en hiérarchie de celui qui offre les garanties de cohérence les plus fortes à ceux qui offrent les garantie les plus faibles.
 
 %Nous motivons d'abord l'intérêt d'exprimer des garanties de cohérence et nous détaillons le formalisme introduit par \textcite{burckhardt_eventualconsistency_2014}.
 %Nous étendons ensuite ce formalisme à des environnement qui tolèrent la présence de pairs mal-intentionnés.
@@ -132,6 +131,8 @@ Une opération $x$ retourne-avant une opération $y$, et nous écrivons $x \rb y
 Si $x$ ne retourne pas avant $y$ et si $y$ ne retourne pas avant $x$, alors leur exécution coïncide.
 La \autoref{fig:rb-example} montre un exemple de deux opérations dont l'exécution coïncide dans le temps.
 
+\clearpage % better layout
+
 \begin{figure}[ht]
 \centering
 \begin{subfigure}{.5\linewidth}
@@ -219,7 +220,7 @@ Ici, cette information est explicitement marquée par l'utilisation de la relati
 
 \paragraph{}La \autoref{def:history} définit formellement une histoire.
 Elle définit en particulier les caractéristiques associées aux opérations.
-La \autoref{tab:op-attributes} donne les caractéristiques des opérations de l'histoire de la \autoref{fig:causal-expectation}.
+Le \autoref{tab:op-attributes} donne les caractéristiques des opérations de l'histoire de la \autoref{fig:causal-expectation}.
 
 \begin{definition}[histoire~\autocite{burckhardt_eventualconsistency_2014}]\label{def:history}
 Une \emph{histoire} d'un contenu partagé de type $T$ est un n-uplet $H \defeq \tuple*{E, \trm{peer}, \trm{call}, \trm{rval}, \trm{rb}}$ tel que $E$ est un ensemble dénombrable d'opérations.
@@ -423,7 +424,7 @@ Par exemple, pour spécifier le type de retour d'une opération de lecture, il e
 Dans la \autoref{fig:vis-example}, si un ajout de message textuel est visible à une opération de lecture, alors cette dernière inclut ce message dans sa valeur de retour.
 Pour faciliter l'expression de telles propriétés, nous introduisons dans la \autoref{def:op-context} le \emph{contexte} d'une opération.
 Le contexte d'une opération regroupe les opérations de modifications qui lui sont visibles.
-La \autoref{tab:op-ctx-obs} donne le contexte des opérations de l'exécution abstraite de la \autoref{fig:vis-example}.
+Le \autoref{tab:op-ctx-obs} donne le contexte des opérations de l'exécution abstraite de la \autoref{fig:vis-example}.
 
 \begin{definition}[Contexte]\label{def:op-context}
 Le \emph{contexte} d'une opération $x$ dans une \emph{exécution abstraite} $A$, dénoté par $\trm{ctx}_A(x)$, correspond à l'ensemble des opérations de modification\footnote{\textcite{burckhardt_eventualconsistency_2014,viotti_consistency_2016} incluent également les opérations d'interrogation dans le contexte d'une opération. Nous les excluons pour simplifier l'expression de certaines propriétés de cohérence.} qui lui sont visibles.
@@ -525,7 +526,7 @@ En d'autres termes ils rejettent toutes les interactions qui ne correspondent pa
 Au sein d'une exécution abstraite, une opération est acceptée par les pairs honnêtes si et seulement si elle est exécutée par un pair honnête ou si elle est visible à au moins une opération exécutée par un pair honnête.
 Une opération acceptée est ainsi observée par au moins un pair honnête.
 La \autoref{def:op-obs} définit ce qu'est un observateur d'une opération.
-La \autoref{tab:op-ctx-obs} donne les observateurs de chaque opération de l'histoire de la \autoref{fig:causal-expectation}.
+Le \autoref{tab:op-ctx-obs} donne les observateurs de chaque opération de l'histoire de la \autoref{fig:causal-expectation}.
 
 \begin{definition}[Observateurs]\label{def:op-obs}
 Soit une opération $x$ d'une exécution abstraite $A$.
@@ -718,8 +719,6 @@ Elle est attachée au pair $p_M$.
 La généralisation du formalisme de~\textcite{burckhardt_eventualconsistency_2014} que nous proposons nous permet de décrire des exécutions qui incluent des pairs mal-intentionnés.
 Ces descriptions nous permettent de rendre compte des propriétés de cohérence qu'un protocole garantit en présence de pairs mal-intentionnés.
 
-
-
 \subsection{Vivacité et sûreté}\label{subsec:consistency-spec-liveness-safety}
 
 La littérature divise les propriétés de cohérence entre propriétés de sûreté et propriétés de vivacité.
@@ -736,8 +735,8 @@ Dans le \autoref{ch:problematic}, l'intégration à terme des modifications est 
 Elle stipule qu'une modification est à terme intégrée par tous les pairs.
 
 Parce que les propriétés de vivacité décrivent quelque chose qui devrait survenir, elles nous invitent à penser l'exécution d'un protocole comme une succession infinie d'événements qui se déroule dans le temps.
-Une histoire peut décrit les opérations exécutées sur l'intégralité ou une partie d'une exécution.
-Elle décrit une partie d'une exécution lorsqu'elle enregistre l'ensembles des opérations exécutées depuis le commencement de l'exécution jusqu'à un temps donnée.
+Une histoire peut décrire les opérations exécutées sur l'intégralité ou une partie d'une exécution.
+Elle décrit une partie d'une exécution lorsqu'elle enregistre l'ensemble des opérations exécutées depuis le commencement de l'exécution jusqu'à un temps donné.
 Une histoire peut évoluer vers plusieurs histoires hypothétiques dans lesquelles de nouvelles opérations ont été exécutées.
 Par abus de langage nous parlons d'\emph{opérations futures}.
 Ces histoires hypothétiques sont des \emph{extensions de l'histoire}.
@@ -1301,7 +1300,7 @@ La \autoref{def:fjc-consistency} définit formellement le modèle de cohérence~
   \item[\namedlabel{itm:honest-linear}{FJC1} (ordre linéaire pour chaque pair honnête)]
   Les opérations d'un même pair honnête sont ordonnées par la relation de visibilité.
   \begin{equation*}
-    \forall x, y \in A \qsep (\trm{peer}(x) = \trm{peer}(y) \land \trm{peer}(x) \in \trm{Honest}) \implies (x \vis y \lor y \vis x)
+    x, y \in A \land \trm{peer}(x) = \trm{peer}(y) \land \trm{peer}(x) \in \trm{Honest} \implies (x \vis y \lor y \vis x)
   \end{equation*}
   \end{description}
 \end{definition}
@@ -1314,12 +1313,12 @@ Pour assurer la convergence des pairs honnêtes, les opérations observées par 
 Par conséquent les embranchements doivent être joints.
 Les opérations non-linéaires sont donc acceptées par les pairs honnêtes.
 Seuls les pairs honnêtes ordonnent linéairement leurs opérations.
-Dans la \autoref{fig:causal-violation}, le pair $p_A$ joints les deux embranchements avec l'opération $a_2$.
+Dans la \autoref{fig:causal-violation}, le pair $p_A$ joint les deux embranchements avec l'opération $a_2$.
 
 \begin{proposition}\label{th:honest-rb-vis}
 Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{FJC}, la relation de visibilité est égale à la relation retourne-avant pour les opérations d'un même pair honnête.
 \begin{equation*}
-    \forall x, y \in A \qsep (\trm{peer}(x) = \trm{peer}(y) \land \trm{peer}(x) \in \trm{Honest}) \implies (x \rb y \iff x \vis y)
+    x, y \in A \land \trm{peer}(x) = \trm{peer}(y) \land \trm{peer}(x) \in \trm{Honest} \implies (x \rb y \iff x \vis y)
 \end{equation*}
 \end{proposition}
 
@@ -1330,7 +1329,7 @@ La preuve de la \autoref{th:honest-rb-vis} suit la même structure que la preuve
 Soit une exécution abstraite qui respecte le modèle de cohérence \ac{FJC}.
 Si tous les pairs sont honnêtes, alors l'exécution abstraite respecte également le modèle de cohérence causale.
 \begin{equation*}\begin{split}
-    \forall A \in \trm{FJC} \qsep \trm{Peers} = \trm{Honest} \implies A \in \trm{Causal}
+    A \in \trm{FJC} \land \trm{Peers} = \trm{Honest} \implies A \in \trm{Causal}
 \end{split}\end{equation*}
 \end{proposition}
 
@@ -1435,7 +1434,7 @@ Le pair $p_B$ n'a pas encore observé $m_2$. Il présume que $m_3$ est une opér
 %\end{definition}
 
 Pour faciliter la spécification du modèle de cohérence \ac{VFJC}, nous définissons dans la \autoref{def:known-malicious} l'ensemble des pairs reconnus mal-intentionné en une opération.
-La \autoref{tab:known-malicious} indique pour chaque opération de la \autoref{fig:provably-malicious} les pairs qui sont reconnus mal-intentionnés.
+Le \autoref{tab:known-malicious} indique pour chaque opération de la \autoref{fig:provably-malicious} les pairs qui sont reconnus mal-intentionnés.
 
 \begin{definition}[Reconnus mal-intentionnés]\label{def:known-malicious}
   Soit une opération $x$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence \acl{FJC}.
@@ -1587,7 +1586,7 @@ Il est toutefois plus fort que le modèle de cohérence~\ac{FJC} puisqu'il n'acc
 \clearpage % better layout
 \section{Types de données répliquées}\label{sec:crdt}
 
-La réplication optimiste~\autocite{saito_2005_optimisticreplication} d'un contenu partagé permet d'interroger et de modifier ce dernier à tout moment.
+La réplication optimiste~\autocite{saito_2005_optimisticreplication} d'un contenu partagé permet d'interroger et de modifier le contenu à tout moment.
 Pour ce faire, chaque pair détient sa propre copie du contenu partagé sur-laquelle il exécute ses opérations de modification et ses opérations d'interrogation.
 Un pair intègre ses modifications avant de les transmettre ultérieurement aux autres pairs qui les intègrent à leur tour.
 La modification parallèle des copies conduit nécessairement à leur divergence~\autocite{dourish_1995_divergence}.
@@ -2016,7 +2015,7 @@ Finalement, le message est laissé à la charge d'un protocole de passage de mes
 L'intégration d'un message d'un autre pair s'effectue simplement à l'aide de la fonction $\trm{integrate}$.
 
 L'implémentation des fonctions $\trm{eval}$, $\trm{prepare}$, et $\trm{integrate}$, ainsi que la spécification de l'ensemble des états suffisent à décrire l'implémentation d'un \ac{CRDT}.
-La \autoref{tab:crdt-impl-func} donne la signature et la sémantique de ces fonctions.
+Le \autoref{tab:crdt-impl-func} donne la signature et la sémantique de ces fonctions.
 Dans les paragraphes suivants nous détaillons les différences entre les différentes familles de \acp{CRDT}.
 
 \begin{table}[htb]
@@ -2192,7 +2191,7 @@ La fonction d'intégration est par conséquent associative, commutative, et idem
 Les états sont partiellement ordonnés de telle manière à ce que la fusion de deux états produisent toujours un état plus grand que les états fusionnés ou égal à l'un des états fusionnés.
 L'état obtenu est unique et minimal.
 Il s'agit de la borne supérieure des états fusionnés.
-AInsi un état fusionné avec lui même donne l'état lui-même.
+Ainsi un état fusionné avec lui même donne l'état lui-même.
 La fusion d'un état $\sigma_1$ avec un état supérieur $\sigma_2$ donne $\sigma_2$.
 Ces propriétés forment une structure algébrique connue.
 En effet, l'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}.
@@ -2284,7 +2283,7 @@ En pratique le contexte causal peut être représenté par un vecteur de version
 L'ensemble répliqué utilise l'implémentation de la \autoref{fig:state-add-win-set}.}\label{fig:state-awset-state-trans}
 \end{figure}
 
-Nous prenons l’exécution abstraite de la Figure \autoref{fig:awset-example} pour illustrer la réplication d’un ensemble qui utilise l’implémentation de la \autoref{fig:state-add-win-set}.
+Nous prenons l’exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d’un ensemble qui utilise l’implémentation de la \autoref{fig:state-add-win-set}.
 La \autoref{fig:state-awset-state-trans} décrit les états successifs de la copie du pair $p_A$.
 La \autoref{fig:state-add-win-set-semilattice} présente le sup-demi-treillis des états de cette exécution.
 Les traits épaissis représente les transitions d'états du pair $p_A$.
@@ -2338,7 +2337,7 @@ Dans la littérature, plusieurs mécanismes de synchronisation par différences 
 Certains d'entre eux permettent d'assurer une cohérence causale avec un sur-coût plus faible que les mécanismes de synchronisation par état complet~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 La flexibilité de cette approche permet la conception de mécanismes de synchronisation variés et est donc adaptée à un large éventail d'applications.
 
-Comparé aux \ac{CRDT} synchronisé par états complets, l'appel à la fonction $\trm{prepare}$ ne retourne pas l'état mis-à-jour mais une différence d'état.
+Comparé aux \ac{CRDT} synchronisés par états complets, l'appel à la fonction $\trm{prepare}$ ne retourne pas l'état mis-à-jour mais une différence d'état.
 Bien que ce ne soit pas nécessaire, nous supposons que cette différence est minimale.
 En d'autres termes nous ne pouvons trouver un autre état plus petit qui produit la même inflation.
 Cette propriété n'est pas requise dans la définition originale des \ac{CRDT} synchronisés par différences d'états.

@@ -377,20 +377,20 @@ L'objectif de Mallory est atteint~: les copies de Alice et Bea demeurent diverge
 De nombreux protocoles de réplication optimiste synchronisent les copies en échangeant des opérations~\autocite{baquero_2018_pure-op-crdt}.
 L'opération synthétise une modification effectuée sur l'une des copies.
 Un pair mal-intentionné met en oeuvre une équivoque en générant deux opérations distinctes mais qui sont perçues comme identiques par le protocole de réplication.
-Pour détecter de telles opérations, les pairs peuvent utiliser des \emph{journaux authentifiés} d'opérations~\autocite{li_2004_sundr,mahajan_depot_2011,truong_authenticating_2012}.
+Pour détecter de telles opérations, les pairs peuvent utiliser des \emph{journaux infalsifiables} d'opérations~\autocite{li_2004_sundr,mahajan_depot_2011,truong_authenticating_2012}.
 Chaque pair possède un journal dans lequel il enregistre les opérations qu'il transmet et qu'il reçoit.
 Chaque opération est signée par son auteur et référence des opérations sur-lesquelles elle dépend.
 Deux opérations distinctes ont une signature différente.
 Les pairs peuvent donc identifier les équivoques.
-En considérant que le protocole de réplication puisse intégrer des opérations distinctes présentées comme identiques, les journaux authentifiés permettent donc d'assurer la convergence des copies des pairs honnêtes.
+En considérant que le protocole de réplication puisse intégrer des opérations distinctes présentées comme identiques, les journaux infalsifiables permettent donc d'assurer la convergence des copies des pairs honnêtes.
 
-L'utilisation de journaux authentifiés représente un coût supplémentaire pour la collaboration.
+L'utilisation de journaux infalsifiables représente un coût supplémentaire pour la collaboration.
 Les pairs doivent conserver le journal, et donc l'ensemble des opérations qu'ils ont transmis et reçu.
 Ce coût est en particulier visible lorsqu'un nouveau pair rejoint la collaboration.
 Le nouveau pair doit en effet récupérer l'intégralité du journal pour obtenir l'état actuel du contenu partagé.
 Au fur et à mesure de la collaboration, le journal croît.
 Ce qui rend coûteux la transmission du journal et la construction de l'état actuel du contenu partagé à partir du journal.
-L'utilisation de journaux authentifiés passe donc difficilement à l'échelle.
+L'utilisation de journaux infalsifiables passe donc difficilement à l'échelle.
 Ils ne permettent pas de tirer pleinement avantage des protocoles de réplication optimiste et des infrastructures pair-à-pair.
 
 Certains protocoles de réplication~\autocite{feldman2010sporc,almeida_2018_delta-crdt-revisited} permettent la transmission de l'état d'une copie aux nouveaux pairs.
@@ -400,8 +400,8 @@ Le coût de transmission est ainsi plus faible et les nouveaux pairs obtiennent 
 Malheureusement les pairs mal-intentionnés peuvent compromettre la convergence des copies des pairs honnêtes en transmettant des états falsifiés.
 Ils peuvent par exemple transmettre un ancien état et déclarer qu'il est à jour ou ajouter des modifications qui n'ont pas été transmises aux autres pairs.
 
-Pour réduire le coût lié à l'utilisation de journaux authentifiés, nous proposons un protocole qui permet de tronquer un journal authentifié et d'authentifier un état à l'aide d'un journal tronqué.
-La troncature d'un journal authentifié est réalisée de telle manière à ne pas compromettre la détection des équivoques des pairs mal-intentionnés.
+Pour réduire le coût lié à l'utilisation de journaux infalsifiables, nous proposons un protocole qui permet de tronquer un journal infalsifiable et d'authentifier un état à l'aide d'un journal tronqué.
+La troncature d'un journal infalsifiable est réalisée de telle manière à ne pas compromettre la détection des équivoques des pairs mal-intentionnés.
 Pour ce faire, elle repose sur le concept de \emph{stabilité}.
 Une opération est stable dans un journal si toute opération acceptée ultérieurement dans le journal dépend sur cette opération.
 Pour rejoindre une collaboration, les nouveaux pairs récupérent un état et le journal tronqué qui lui est associé.
@@ -558,14 +558,14 @@ Le reste du manuscrit est organisé en 5 chapitres~:
 \paragraph{Le \autoref{ch:background}} présente les formalismes que nous utilisons dans les chapitres suivants pour décrire nos contributions.
 Nous introduisons en particulier la notion de cohérence de données et les types de données répliqués.
 
-%\paragraph{Le \autoref{ch:secured-convergence}} présente notre première contribution qui propose de diviser en deux sous-classes : les \acp{CRDT} étiquetés et les \acp{CRDT} non-étiquetés. Nous montrons que la convergence des \acp{CRDT} non-étiquetés est protéger par conception ou peut être protégé en utilisant un journal authentifié. Nous proposons un mécanisme pour protéger les \acp{CRDT} étiquetés synchronisé par opérations.
+%\paragraph{Le \autoref{ch:secured-convergence}} présente notre première contribution qui propose de diviser en deux sous-classes : les \acp{CRDT} étiquetés et les \acp{CRDT} non-étiquetés. Nous montrons que la convergence des \acp{CRDT} non-étiquetés est protéger par conception ou peut être protégé en utilisant un journal infalsifiable. Nous proposons un mécanisme pour protéger les \acp{CRDT} étiquetés synchronisé par opérations.
 
 \paragraph{Le \autoref{ch:pruned-log}} présente deux protocoles qui protègent la convergence des copies des pairs honnêtes.
-Le protocole à journaux complets protège la convergence des copies des pairs honnêtes à l'aide de journaux authentifiés et complets.
+Le protocole à journaux complets protège la convergence des copies des pairs honnêtes à l'aide de journaux infalsifiables et complets.
 Le protocole à journaux tronqués repose sur le protocole à journaux complets.
 Il permet la troncature des journaux et l'authentification de l'état d'une copie à l'aide d'un journal tronqué.
 Pour développer ce protocole, le chapitre introduit la notion de stabilité et \emph{DynVFJC}, un nouveau modèle de cohérence.
-%notre mécanisme pour tronquer un journal authentifié. Nous développons \emph{DynVFJC} un modèle de cohérence de donnée basé sur \acl{VFJC} qui permet de stabiliser un journal authentifié dans un groupe dont la composition évolué au cours du temps et qui peut inclure des pairs mal-intentionnés. Nous présentons également \acl{VFJCS} qui définit qu'elle partie du journal est stable.
+%notre mécanisme pour tronquer un journal infalsifiable. Nous développons \emph{DynVFJC} un modèle de cohérence de donnée basé sur \acl{VFJC} qui permet de stabiliser un journal infalsifiable dans un groupe dont la composition évolué au cours du temps et qui peut inclure des pairs mal-intentionnés. Nous présentons également \acl{VFJCS} qui définit qu'elle partie du journal est stable.
 Nous présentons également les travaux de la littérature en relation avec notre protocole.
 
 \paragraph{Le \autoref{ch:dotted-logootsplit}} présente un état de l'art des types séquences de données répliquées.

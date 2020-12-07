@@ -6,4 +6,4 @@ main:
 
 clean:
 	$(LATEXMK) -silent -C
-	$(RM) *.flg *.glo *.maf *.run.xml main.mtc*
+	$(RM) *.bbl *.flg *.loe *.glo *.maf *.run.xml main.mtc*

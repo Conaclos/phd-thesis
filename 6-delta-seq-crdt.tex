@@ -80,7 +80,7 @@ L'exécution de l'opération $\trm{del}(n)$ supprime la $n$-ème valeur.
 Si $n$ ne correspond pas à l'indice d'une valeur, la dernière valeur est supprimée.
 Une lecture $\trm{rd}$ récupère le n-uplet de valeurs qui représente la séquence.
 Si les valeurs sont des caractères, ce n-uplet est une chaîne de caractère.
-$V^{n \in \mathbb{N}_0}$ correspond à l'ensemble des n-uplets de valeurs prises Dans $V$.
+$V^{n \in \mathbb{N}_0}$ correspond à l'ensemble des n-uplets de valeurs prises dans $V$.
 La signature syntaxique du type abstrait Séquence est ainsi spécifiée comme suit~:
 %
 \begin{align*}
@@ -94,39 +94,38 @@ Nous employons cette opération uniquement dans les illustrations.
 La \autoref{fig:seq-example} donne un exemple d'utilisation de ces opérations et suit la spécification usuelle d'une séquence.
 
 \begin{figure}[htb]
-    \newcommand*\hsep{2.4}
+    \newcommand*\hsep{1.2}
     \centering
     \begin{tikzpicture}
         % Peers
-        \path node (A) {$p_A$};
+        \path node (A) {$p_A$}
+        ;
         % Timeline ends
-        \path (6*\hsep+1.2,0) coordinate (aend);
+        \path (12*\hsep,0) coordinate (aend)
+        ;
         % Events
         \path (A)
-            to +(\hsep,0) node[
-                label=above:{$\trm{ins}(0, \textit{citi})$}
-            ] (a1) {$a_{\irange{1}{4}}$}
             to +(2*\hsep,0) node[
-                label=above:{$\trm{rd}\textit{citi}$}
-            ] (a3) {$a_5$}
-            to +(3*\hsep,0) node[
-                label=above:{$\trm{del}(3)$}
-            ] (a4) {$a_6$}
+                label={above:$\trm{ins}(0, \textit{lady})$}
+            ] (a1) {$a_1$}
             to +(4*\hsep,0) node[
-                label=above:{$\trm{rd}\textit{cit}$}
-            ] (a5) {$a_7$}
-            to +(5*\hsep,0) node[
-                label=above:{$\trm{ins}(3, \textsf{'\textit{y}'})$}
-            ] (a6) {$a_8$}
+                label={above:$\trm{ins}(3, \textsf{'\textit{i}'})$}
+            ] (a5) {$a_2$}
             to +(6*\hsep,0) node[
-                label=above:{$\trm{rd}\textit{cit\textbf{y}}$}
-            ] (a7) {$a_9$}
+                label={above:$\trm{del}(4)$}
+            ] (a6) {$a_3$}
+            to +(8*\hsep,0) node[
+                label={above:$\trm{ins}(4, \textit{es})$}
+            ] (a7) {$a_4$}
+            to +(10*\hsep,0) node[
+                label={above:$\trm{rd} \textit{ladies}$}
+            ] (a9) {$a_6$}
         ;
         % Timelines
-        \foreach \src/\dest in {A/a1,a7/aend}
-            \draw[timeline] (\src) to (\dest);
+        \foreach \src/\dest in {A/a1,a9/aend}
+            \draw (\src) edge[timeline] (\dest);
         % Precdence
-        \foreach \src/\dest in {a1/a3,a3/a4,a4/a5,a5/a6,a6/a7}
+        \foreach \src/\dest in {a1/a5,a5/a6,a6/a7,a7/a9}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
     \caption[Séquence répliquée de caractères modifiée et interrogée par un seul pair]{Séquence répliquée de caractères modifiée et interrogée par un seul pair.
@@ -145,7 +144,7 @@ Il en résulte que la majorité des opérations sont incompatibles.
 Seules deux suppressions qui affectent le même indice sont compatibles.
 Dans la lignée des travaux sur la réplication optimiste de séquences~\autocite{oster_2006_woot,sun_1998_cci}, nous soutenons qu'un pair ne souhaite pas insérer une valeur avant la n-ème valeur ou supprimer la n-ème valeur~:
 un pair souhaite insérer une valeur entre deux autres valeurs et supprimer une valeur bien déterminée.
-Dans la \autoref{fig:seq-example}, l'intention de l'opération $a_8$ est d'insérer $\textsf{'\textit{y}'}$ entre $\textsf{'\textit{t}'}$ et la fin de la séquence.
+Dans la \autoref{fig:seq-example}, l'intention de l'opération $a_5$ est d'insérer $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
 
 Dans une séquence, il est toujours possible d'insérer une valeur quelconque entre deux autres valeurs.
 L'ordre formé entre les valeurs est donc dense.
@@ -203,19 +202,19 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
         \path (A)
             to +(2*\hsep,0) node[
                 label={above:$\trm{ins}(0, \textit{lady})$}
-            ] (a1) {$a_{\irange{1}{4}}$}
+            ] (a1) {$a_1$}
             to +(4*\hsep,0) node[
                 label={above:$\trm{ins}(3, \textsf{'\textit{i}'})$}
-            ] (a5) {$a_5$}
+            ] (a5) {$a_2$}
             to +(6*\hsep,0) node[
                 label={above:$\trm{del}(4)$}
-            ] (a6) {$a_6$}
+            ] (a6) {$a_3$}
             to +(8*\hsep,0) node[
                 label={above:$\trm{ins}(4, \textit{es})$}
-            ] (a7) {$a_7$}
+            ] (a7) {$a_4$}
             to +(10*\hsep,0) node[
-                label={above:$\trm{rd} \textit{lad\textbf{ies}}$}
-            ] (a8) {$a_8$}
+                label={above:$\trm{rd} \textit{ladies}$}
+            ] (a9) {$a_6$}
         ;
         \path (B)
             to +(3*\hsep,0) node[
@@ -229,12 +228,12 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
             ] (b3) {$b_{3}$}
         ;
         % Timelines
-        \foreach \src/\dest in {A/a1,a8/aend,B/b1,b3/bend}
+        \foreach \src/\dest in {A/a1,a9/aend,B/b1,b3/bend}
             \draw (\src) edge[timeline] (\dest);
         % Precdence
-        \foreach \src/\dest in {a1/a5,a5/a6,a6/a7,a7/a8,b1/b2,b2/b3}
+        \foreach \src/\dest in {a1/a5,a5/a6,a6/a7,a7/a9,b1/b2,b2/b3}
             \draw[pre] (\src) to (\dest);
-        \foreach \src/\dest in {a1/b1,a8/b3}
+        \foreach \src/\dest in {a1/b1,a9/b3}
             \draw[pre] (\src) to (\dest);
     \end{tikzpicture}
     \caption{}\label{fig:replseq-sematic-1}
@@ -286,10 +285,10 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
     \begin{tabular}{cccc}
         $\trm{rval}(b_3)$ & Spéc.\ faible & Spéc.\ forte & Spéc.\ forte sans entrelacement\\
         \toprule
-        $\textit{ladies\textit{\negthinspace!}}$ & \checkmark{} & \checkmark{} & \checkmark{} \\
-        $\textit{ladi\textit{\negthinspace!}es}$ & \checkmark{} & \checkmark{} & \checkmark{} \\
-        $\textit{ladie\textit{\negthinspace!}s}$ & \checkmark{} & \checkmark{} & \\
-        $\textit{lad\textit{\negthinspace!}ies}$ & \checkmark{}& & \\
+        $\textit{ladies\textbf{\textit{\negthinspace!}}}$ & \checkmark{} & \checkmark{} & \checkmark{} \\
+        $\textit{ladi\textbf{\textit{\negthinspace!}}es}$ & \checkmark{} & \checkmark{} & \checkmark{} \\
+        $\textit{ladie\textbf{\textit{\negthinspace!}}s}$ & \checkmark{} & \checkmark{} & \\
+        $\textit{lad\textbf{\textit{\negthinspace!}}ies}$ & \checkmark{}& & \\
     \end{tabular}
     \caption{}\label{fig:replseq-sematic-4}
 \end{subfigure}
@@ -414,7 +413,7 @@ L'algorithme est répété en considérant les deux valeurs entre lesquelles $v$
 Pour illustrer cet algorithme, nous reprenons l'exemple de la \autoref{fig:replseq-sematic-1}.
 Une fois l'ensemble des modifications intégrées, la séquence \emph{WOOT} de la \autoref{fig:woot} est obtenue.
 Un identifiant $\tuple*{p_i, n}$ est noté $i_n$.
-$p_B$ intègre les messages d'insertion générés par l'exécution des opérations $a_5$, $a_6$ et $a_7$ avant d'exécuter l'opération de lecture $b_3$.
+$p_B$ intègre les messages d'insertion générés par l'exécution des opérations $a_2$, $a_3$, et $a_4$ avant d'exécuter l'opération de lecture $b_3$.
 $p_B$ débute avec la séquence $\textsf{'\textit{lady\negthinspace!}'}$.
 Le caractère $\textsf{'\textit{i}'}$ référence les caractères $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
 Aucun caractère n'est déjà présent entre ces deux caractères.
@@ -710,11 +709,10 @@ Le message est intégré à la copie et transmis aux autres pairs.
         to ++(\widthletter,0) node[letter,
                 label={below:$l_A3$}
             ]{$d$}
-        to ++(\widthletter,0) node[letter,
-                label={below:$l_A$},
-                label={[label distance=6mm]below:$q_A5$}
+        to ++(\widthletter,0) node[block,
+                label={below:$l_A q_A5$}
             ]{$i$}
-        to ++(\widthletter,0) node[letter,
+        to ++(\widthblock,0) node[letter,
                 label={below:$p_A6$}
             ]{$e$}
         to ++(\widthletter,0) node[letter,
@@ -929,8 +927,7 @@ Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré éta
                 label={below:$f^{A1}_{\irange{0}{2}}$}
             ] {$lad$}
         to ++(\widthblock,0) node[block,
-                label={below:$f^{A1}_2$},
-                label={[label distance=6mm]below:$q^{A2}_{\irange{0}{2}}$}
+                label={below:$f^{A1}_2q^{A2}_{\irange{0}{2}}$}
             ]{$ies$}
         to ++(\widthblock,0) node[letter,
                 label={below:$t^{B1}_0$}
@@ -1506,8 +1503,7 @@ Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré éta
                 label={below:$f^{A}_{\irange{1}{3}}$}
             ] {$lad$}
         to ++(\widthblock,0) node[block,
-                label={below:$f^{A}_3$},
-                label={[label distance=6mm]below:$q^{A}_{\irange{5}{7}}$}
+                label={below:$f^{A}_3 q^{A}_{\irange{5}{7}}$}
             ]{$ies$}
         to ++(\widthblock,0) node[letter,
                 label={below:$t^{B}_1$}
@@ -1523,7 +1519,7 @@ Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré éta
     \end{equation*}
     \caption{}\label{fig:dottedlogootsplit-2}
 \end{subfigure}
-\caption[Exemple d'une séquence \emph{LogootSplit}]{Exemple d'une séquence \emph{Dotted LogootSplit}.
+\caption[Exemple d'une séquence \emph{Dotted LogootSplit}]{Exemple d'une séquence \emph{Dotted LogootSplit}.
 \subref{fig:logootsplit-1} Séquence de valeurs associées à leurs positions.
 \subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 \end{figure}

@@ -16,8 +16,8 @@ La communauté scientifique a présenté de nombreux protocoles de réplication 
 La plupart des protocoles présentés ne résistent pas à la présence de pairs mal-intentionnés dans la collaboration.
 Les pairs mal-intentionnés peuvent produire des équivoques dans le but de compromettre la convergence des copies des pairs honnêtes.
 
-Les pairs peuvent détecter ces équivoques et converger de manière sûr à l'aide de journaux authentifiés.
-Malheureusement l'utilisation de journaux authentifiés limite le passage à l'échelle de la collaboration.
+Les pairs peuvent détecter ces équivoques et converger de manière sûr à l'aide de journaux infalsifiables.
+Malheureusement l'utilisation de journaux infalsifiables limite le passage à l'échelle de la collaboration.
 L'ensemble du journal doit être conservé pour maintenir sa cohérence et permettre à de nouveaux pairs de joindre la collaboration.
 
 Pour remédier à cette limitation nous avons proposé un protocole qui permet la troncature du journal et un protocole qui permet d'authentifier une instantané du contenu partagé à l'aide d'un journal tronqué.
@@ -48,18 +48,18 @@ Des évaluations devraient être menés pour déterminer qu'elle est la meilleur
 
 \section{Perspectives}
 
-\paragraph{Applications du concept de Stabilité.} Le concept de stabilité que nous avons développé a été uniquement appliqué pour la troncature sûr de journaux authentifiés.
+\paragraph{Applications du concept de Stabilité.} Le concept de stabilité que nous avons développé a été uniquement appliqué pour la troncature sûr de journaux infalsifiables.
 Des travaux ultérieurs pourraient s'intéresser à l'application de ce concept à d'autres domaines.
 Il pourrait par exemple être le socle pour la conception de protocole de consensus asynchrones~\autocite{bracha1985asynchronous}.
 
 \paragraph{Éviction des pairs inactifs.}
-Nous proposons un protocole pour tronquer un journal authentifié.
+Nous proposons un protocole pour tronquer un journal infalsifiable.
 Le mécanisme de troncature se base sur la stabilité des messages du journal.
 La déconnexion prolongée d'un pair retarde la troncature du journal.
 Elle peut même l'empêcher si la déconnexion est permanente.
 Les pairs déconnectés depuis un certain temps pourraient être automatiquement évincés.
 
-\paragraph{Convergence sécurisée des copies du contenu.} Les journaux authentifiés permettent de détecter les équivoques et ainsi d'obtenir l'ensemble des opérations qui ont été intégrées sur le contenu partagé.
+\paragraph{Convergence sécurisée des copies du contenu.} Les journaux infalsifiables permettent de détecter les équivoques et ainsi d'obtenir l'ensemble des opérations qui ont été intégrées sur le contenu partagé.
 Certains type de données répliquées sont sensibles aux équivoques.
 En présence d'équivoque les copies du contenu partagé peuvent diverger de manière permanente.
 Par exemple, les protocoles de séquences répliquées sont sensibles aux équivoque qui produisent deux insertions de valeurs distinctes avec le même identifiant.
