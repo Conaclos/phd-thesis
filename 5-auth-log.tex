@@ -1171,6 +1171,12 @@ Chaque opération de la chaîne entre $m_1$ et $a_1$ a pour auteur $p_G$ ou $p_M
 Chaque opération de la chaîne après $a_1$ a pour auteur $p_G$ ou $p_M$ ou $p_A$.
 EXEMPLE FIGURE.
 
+L'ensemble des châines d'observation cumulée de $P$ contient l'ensemble des chaînes d'observation cumulée des préfixes de $P$.
+Par exemple, l'ensemble des chaînes d'observation cumulée de $\tuple*{p_G, p_M}$ inclut l'ensemble des chaînes d'observation cumulée de $\tuple*{p_G}$.
+Si un pair rejette les châines d'observation cumulée de $P$ alors il rejette les châines d'observation cumulée des préfixes de $P$.
+Pour rejeter l'ensemble des chaînes d'observation cumulée d'énumération de pairs mal-intentionnés nous pouvons donc exclure l'ensemble des chaînes d'observation cumulée des permutations des pairs mal-intentionnés.
+Pour un ensemble de deux pairs mal-intentionnés $p_G$ et $p_M$, nous devrions donc rejeter les chaînes d'observation cumulée de $\tuple*{p_G, p_M}$ et $\tuple*{p_M, p_G}$.
+
 \begin{definition}[Chaîne d'observation cumulée]\label{def:cumulated-obs}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \acs{FJC}.
 Une chaîne de visibilité immédiate $Z \defeq z_1 \idr \dotsb$ de $A$ est une chaîne d'observation cumulée d'une énumération de pairs distincts $\tuple*{p_1, \dotsc, p_n}$ si et seulement si elle inclut une chaîne de visibilité $Y \defeq y_1 \vis \dotsb \vis y_n$ tel que $z_1 = y_1$, l'auteur de la $i$-ème opération de $Y$ est le $i$-ème pair de l'énumération, et l'auteur de toute opération de $Z$ est l'auteur d'une opération de $Y$ qui lui est visible.
@@ -1230,37 +1236,48 @@ Une chaîne de visibilité immédiate $Z \defeq z_1 \idr \dotsb$ de $A$ est une 
 \end{figure}
 
 La \autoref{th:cumulated-obs-exclusion} présente les conditions à remplir pour rejeter les chaînes d'observation cumulée d'une énumération de pairs dont la première opération est concurrente à une opération $x$.
-Le rejet des chaînes d'observation cumulée d'une énumération $P$ de pairs implique le rejet des chaînes d'observation cumulée des sous-énumérations de $P$.
+Le rejet des chaînes d'observation cumulée d'une énumération $P$ de pairs implique le rejet des chaînes d'observation cumulée des énumérations de pair qui préfixent $P$.
 EXEMPLE.
 Il suffit donc de rejeter les chaînes d'observation cumulée de chaque permutation de l'ensemble des pairs mal-intentionnés pour les rejeter toutes.
 A partir de cette observation et de la \autoref{th:cumulated-obs-exclusion}, nous déduisons le \autoref{th:vfjc-stable}.
 
 \begin{proposition}\label{th:cumulated-obs-exclusion}
-Soit une opération $x_0$ d'une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{VFJC}.
-Soit l'énumération de pairs distincts $P \defeq \tuple*{p_1, \dotsc ,p_n}$ tel que $p_n$ est un pair honnête.
-Soit une chaîne de visibilité $V \defeq x_1 \viseq \dotsb \viseq x_n$ tel que $x_0 \viseq x_1$ et le $i$-ème pair de $P$ est lié à la $i$-ème opération de $V$ par l'une des relations suivantes~: \begin{inlinelist}
+Soit une exécution abstraite $A$ et une extension $A'$ de $A$ tel que $A$ et $A'$ respectent le modèle de cohérence \ac{VFJC}.
+Soit une opération $x_0$ de $A$.
+Soit une énumération de pairs $P \defeq \tuple*{p_1, \dotsc ,p_n}$ tel que $p_n$ tel que $p_1, \dotsc, p_{n-1}$ sont des pairs mal-intentionnés, et $p_n$ est un pair honnête.
+$A'$ ne peut contenir une chaîne d'observation cumulée $Z$ de $P$ dont la première opération est concurrente à $x_0$ si et seulement si $A$ contient une chaîne de visibilité $X \defeq x_1 \viseq \dotsb \viseq x_n$ tel que $x_0 \viseq x_1$ et le $i$-ème pair de $P$ est lié à la $i$-ème opération de $V$ par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur de l'opération $p_i = \trm{peer}(x_i)$, ou
     \item le pair est reconnu mal-intentionné en l'opération $p_i \in \trm{knownMalicious}_A(x_i)$
 \end{inlinelist}.
-Il n'existe pas une extension de $A$ qui contient une chaîne d'observation cumulée $z_1 \idr \dotsb \idr z_m$ de $P$ absente de $A$ tel que $x_0 \concur z_1$.
 \end{proposition}
 
 \begin{proof}
-Procédons par contradiction et récurrence.
-Supposons qu'il existe une chaîne d'observation cumulée $z_1 \idr \dotsb \idr z_m$ de $P$.
+La proposition est décomposable en deux implications.
+Nous démontrons dans un premier temps que l'existence de $X$ empêche l'existence d'une chaîne d'observation cumulée $Z \defeq z_1 \idr \dotsb \idr z_m$ de $P$.
+Dans un deuxième temps nous démontrons que $Z$ ne peut exister seulement si $X$ n'existe pas.
 
-Montrons que si pour tout $j < k$, $z_j$ est non-linéaire avec une opération de $X$, alors $z_k$ est non-linéaire avec une opération $x_l$ de $X$.
+%\textbf{Première démonstration.}
+Procédons par contradiction et récurrence.
+Supposons que les châines $X$ et $Z$ existent.
+$x_0$ est concurrente à $z_1$.
+D'après la \autoref{th:concur-triad}, $z_1$ est concurrente à $x_1$.
+$z_1$ et $x_1$ sont exécutées par le même pair, elles sont donc non-linéaires.
+Montrons que si pour tout $j < k$ avec $1 < k \leq m$, $z_j$ est non-linéaire avec une opération de $X$, alors $z_k$ est non-linéaire avec une opération $x_l$ de $X$.
 $x_l$ retourne-avant $z_k$.
-$x_l$ est donc concurrent ou visible à $z_k$.
+$x_l$ est donc concurrente ou visible à $z_k$.
 D'après la supposition initiale, toutes les opérations de $Z$ qui sont visibles à $z_k$ sont des opérations non-linéaires.
 Les auteurs de ces opérations correspondent aux auteurs des opérations de $X$ qui sont visibles à $x_l$ ou à des pairs reconnus mal-intentionnés dans des opérations de $X$ qui sont visibles à $x_l$.
 $x_l$ ne peut donc pas être visible à $z_k$.
 $x_l$ et $z_k$ sont donc concurrentes et non-linéaires.
-
-$x_1$ est concurrent et non-linéaire à $z_1$.
-Par récurrence nous en déduisons que $x_n$ est non-linéaire à au moins une opération de $Z$.
+$z_1$ est non-linéaire à $x_1$.
+Par récurrence nous en déduisons qu'au moins une opération de $Z$ est non-linéaire à $x_n$.
 $p_n$ est donc un pair mal-intentionné.
 Ce qui contredit une hypothèse initiale.
+
+%\textbf{Deuxième démonstration.}
+%Supposons que les châines $X$ et $Z$ existent.
+
+
 \end{proof}
 
 Il suffit donc que chaque pair honnête observe pour chaque permutation de pairs mal-intentionnés, une chaîne de visibilité correspondante pour que les opérations qui précèdent (ou sont égales) à toutes ces chaînes soient vfjc-stable.
@@ -4409,7 +4426,7 @@ Parce que le nouveau pair récupère un instantané, nous devons prendre en comp
 Pour chaque valeur présente dans l'instantanée, nous identifions l'opération qui correspond à son ajout.
 Pour chacune de ces opérations et pour chaque opération correspondante à un message ajouté dans le journal $J$, nous créons une relation de visibilité dirigé de la première à la seconde opération.
 
-TODO
+%TODO
 
 
 \subsection{Discussions}
@@ -4478,38 +4495,38 @@ Une livraison d'un message devient stable dès lors que l'ensemble des destinata
 Un message concurrent à un message dont la livraison est stable peut toujours être reçu.
 
 
-\subsection{Journaux infalsifiables}
+% \subsection{Journaux infalsifiables}
 
 
 
-L'utilisation de protocole à base de journaux est fréquent pour offrir des garanties de cohérence.
-% PRACTI
-% BAYOU
+% L'utilisation de protocole à base de journaux est fréquent pour offrir des garanties de cohérence.
+% % PRACTI
+% % BAYOU
 
-\paragraph{Résumés de journaux.} \emph{ASTRO}~\autocite{mahajan_astro_2008} se base sur un journal infalsifiable des messages envoyés et livrés.
-Les messages référencent leurs dépendances et sont livrés lorsque les dépendances sont satisfaites.
-A tout moment, un pair peut décider de réduire la taille de son journal en remplaçant des séquences de messages par un résumé sécurisé.
-Le résumé référencent les dépendances des messages qu'il résume (à l'exception des dépendances qui correspondent à des messages qu'il résume).
-Lorsqu'un message est produit il référence le résumé sécurisé de l'ensemble des messages précédemment livrés.
-De ce fait, des séquences de messages peuvent être remplacés par des résumés de manière transparente.
-Un résumé est construit à l'aide d'un arbre de Merkle~\autocite{merkle_1979_merkletree} résistant aux collisions.
+% \paragraph{Résumés de journaux.} \emph{ASTRO}~\autocite{mahajan_astro_2008} se base sur un journal infalsifiable des messages envoyés et livrés.
+% Les messages référencent leurs dépendances et sont livrés lorsque les dépendances sont satisfaites.
+% A tout moment, un pair peut décider de réduire la taille de son journal en remplaçant des séquences de messages par un résumé sécurisé.
+% Le résumé référencent les dépendances des messages qu'il résume (à l'exception des dépendances qui correspondent à des messages qu'il résume).
+% Lorsqu'un message est produit il référence le résumé sécurisé de l'ensemble des messages précédemment livrés.
+% De ce fait, des séquences de messages peuvent être remplacés par des résumés de manière transparente.
+% Un résumé est construit à l'aide d'un arbre de Merkle~\autocite{merkle_1979_merkletree} résistant aux collisions.
 
-Le protocole présenté permet de garantir le modèle de cohérence \acf{FJC}.
-Deux pairs honnêtes peuvent en effet résumer des séquences de messages identiques qui diffèrent d'un seul message non-linéaire.
-Une fois résumé il n'est pas possible d'identifier quels messages sont non-linéaires à moins de récupérer les messages qui sont résumés.
+% Le protocole présenté permet de garantir le modèle de cohérence \acf{FJC}.
+% Deux pairs honnêtes peuvent en effet résumer des séquences de messages identiques qui diffèrent d'un seul message non-linéaire.
+% Une fois résumé il n'est pas possible d'identifier quels messages sont non-linéaires à moins de récupérer les messages qui sont résumés.
 
-Le calcul d'un résumé requiert un ordre total entre les messages qui est identique quelque soit l'ordre de livraison des messages.
-Lorsqu'un message est ajouté au journal, le nouvel ordre total n'est pas forcément un suffixe de l'ordre précédent.
-Il n'est donc pas possible de construire de manière incrémentale un résumé pour vérifier les messages livrés ultérieurement et pour construire les prochains messages.
-Ce qui induit un sur-coût non-négligeable.
-L'article ne discute pas de ce problème.
-De même, l'article ne discute pas des messages qui dépendent sur un message inclut dans un résumé.
-Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces messages.
+% Le calcul d'un résumé requiert un ordre total entre les messages qui est identique quelque soit l'ordre de livraison des messages.
+% Lorsqu'un message est ajouté au journal, le nouvel ordre total n'est pas forcément un suffixe de l'ordre précédent.
+% Il n'est donc pas possible de construire de manière incrémentale un résumé pour vérifier les messages livrés ultérieurement et pour construire les prochains messages.
+% Ce qui induit un sur-coût non-négligeable.
+% L'article ne discute pas de ce problème.
+% De même, l'article ne discute pas des messages qui dépendent sur un message inclut dans un résumé.
+% Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces messages.
 
-Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs mal-intentionnés.
-Il garantit également la convergence des pairs honnêtes.
+% Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs mal-intentionnés.
+% Il garantit également la convergence des pairs honnêtes.
 
-\paragraph{État authentifié} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
+% \paragraph{État authentifié} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}, un protocole qui vise des objectifs similaires aux nôtres.
 
 
 \section{Conclusion}
