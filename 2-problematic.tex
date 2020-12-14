@@ -244,7 +244,7 @@ $p_A$ ajoute l'élément $1$ sur sa copie.
 $p_B$ ajoute en parallèle l'élément $2$ sur sa copie.
 Les copies divergent~: les deux pairs obtiennent des singletons distincts.
 Ils synchronisent ultérieurement leurs copies pour échanger et intégrer leurs modifications respectives.
-Les modifications ne sont pas intégrées dans le même ordre sur les copies~: ils intégrent la modification de l'autre pair après leur propre modification.
+Les modifications ne sont pas intégrées dans le même ordre sur les copies~: ils intègrent la modification de l'autre pair après leur propre modification.
 Les copies finissent par converger~: les pairs obtiennent le même ensemble.}\label{fig:optimistic-replication}
 \end{figure}
 
@@ -429,8 +429,8 @@ La \emph{convergence forte} ne nécessite pas de coordination après l'intégrat
 Cependant, elle n'exclut pas l'utilisation de coordination avant l'intégration des modifications.
 Les pairs peuvent décider d'un moyen de résoudre les éventuels conflits de modification.
 Par exemple, un protocole peut utiliser un pair privilégié qui ordonne les modifications selon un ordre global~\autocite{terry_bayou_1995}.
-\textcite{mahajan_2011_cac} proposent la \emph{convergence unidirectionelle} pour éviter toute coordination.
-L'idée centrale de la \emph{convergence unidirectionelle} est que deux pairs $p_A$ et $p_B$ devraient être capables de faire converger leur copie en deux étapes de communication unidirectionelle~: $p_A$ envoie des modifications à $p_B$, puis $p_B$ envoie des modifications à $p_A$.
+\textcite{mahajan_2011_cac} proposent la \emph{convergence unidirectionnelle} pour éviter toute coordination.
+L'idée centrale de la \emph{convergence unidirectionnelle} est que deux pairs $p_A$ et $p_B$ devraient être capables de faire converger leur copie en deux étapes de communication unidirectionnelle~: $p_A$ envoie des modifications à $p_B$, puis $p_B$ envoie des modifications à $p_A$.
 
 %\begin{definition}[Convergence partielle]\label{def:partial-convergence}
 %$p_A$ \emph{converge partiellement} avec $p_B$ si et seulement si il suffit que
@@ -505,8 +505,6 @@ On peut considérer que l'emprunteur·ice final·e correspond à la personne qui
 
 
 \section{Modèle du système}
-
-\vicnote{Figure à mettre à jour}
 
 \begin{figure}[htb]
 \centering

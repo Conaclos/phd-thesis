@@ -20,7 +20,7 @@ Les pairs peuvent détecter ces équivoques et converger de manière sûr à l'a
 Malheureusement l'utilisation de journaux infalsifiables limite le passage à l'échelle de la collaboration.
 L'ensemble du journal doit être conservé pour maintenir sa cohérence et permettre à de nouveaux pairs de joindre la collaboration.
 
-Pour remédier à cette limitation nous avons proposé un protocole qui permet la troncature du journal et un protocole qui permet d'authentifier une instantané du contenu partagé à l'aide d'un journal tronqué.
+Pour remédier à cette limitation nous avons proposé un protocole qui permet la troncature du journal et un protocole qui permet d'authentifier un état du contenu partagé à l'aide d'un journal tronqué.
 La troncature du journal repose sur le concept de stabilité.
 Nous avons définit le concept de stabilité au sein de plusieurs modèle de cohérence, et en particulier sur deux modèles de cohérence que nous avons introduit~: le modèle de cohérence causale dynamique et le modèle de cohérence \acl{VFJC} dynamique.
 
@@ -32,14 +32,14 @@ Ces preuves devraient être complétées et une évaluation expérimentale devra
 
 De nombreux protocoles de réplication optimiste de séquence de caractère sont été proposés pour supporter l'édition collaborative de texte.
 Chacun à sa manière a permis d'améliorer l'état de l'art de l'édition collaborative.
-Nous avons proposé un nouveau protocole de réplication optimiste de séquence nommé \emph{Dotted LogootSPlit}.
+Nous avons proposé un nouveau protocole de réplication optimiste de séquence nommé \emph{Dotted LogootSplit}.
 Contrairement aux autres protocoles, il ne retarde pas l'intégration des modifications des pairs.
 Chaque modification est intégrée dès sa réception.
 Ce qui évite la propagation de ralentissement, voire l'interruption temporaire, de la collaboration.
 Il permet également à deux pairs d'échanger directement leurs états.
 Ce qui évite des échanges coûteux de journaux de modifications lorsque les deux pairs se reconnectent après une longue période de déconnexion.
 
-Pour ce faire, \emph{Dotted LogootSPlit} synchronise les copies par différences d'états.
+Pour ce faire, \emph{Dotted LogootSplit} synchronise les copies par différences d'états.
 Une différence d'état peut synthétiser une seule modification ou plusieurs modifications.
 Les différences d'états peuvent être librement réordonnées et dupliqués.
 La synchronisation par différences d'états offre une grande flexibilité dans al conception de protocole de synchronisation.

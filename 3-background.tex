@@ -492,6 +492,7 @@ Inversement, les pairs qui suivent le protocole sont qualifiés d'\emph{honnête
 Nous notons $\trm{Honest}$ et $\trm{Malicious}$ l'ensemble des pairs honnêtes et mal-intentionnés.
 L'union de ces deux ensemble correspond à l'ensemble des pairs $\trm{Peers}$.
 Ces ensembles sont connus étant donné que nous décrivons des exécutions d'un point de vue global.
+L'ensemble des pairs contient au moins un pair honnête ($\trm{Honest} \neq \emptyset$).
 
 Sans perte de généralité, nous supposons que les pairs honnêtes exécutent les opérations de manière séquentielle.
 Les opérations exécutées sur un même pair sont donc linéairement ordonnées selon la relation \emph{retourne-avant}.
@@ -939,7 +940,7 @@ La causalité potentielle est transitive.
 Dans une exécution abstraite qui respecte le modèle de cohérence causale, si une opération $x$ cause potentiellement une opération $y$, alors l'effet de $x$ est intégré avant l'exécution de $y$.
 Il s'ensuit que chaque relation de causalité potentielle donne lieu à une relation de visibilité.
 La relation de visibilité devient donc transitive.
-La transitivité de la relation de visibilité nous permet de définir la relation de \emph{concurrence} et la relation de \emph{précédence immédiate}.
+La transitivité de la relation de visibilité nous permet de définir la relation de \emph{concurrence} et la relation de \emph{visibilité immédiate}.
 Ces relations simplifient l'expression de propriétés de cohérence que nous aborderons ultérieurement.
 
 % \paragraph{Précédence.}
@@ -973,17 +974,16 @@ Dans la \autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que 
     x \concur y \defiff x \not\vis y \land y \not\vis x
 \end{equation*}
 
-\paragraph{Précédence immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
-Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, précède immédiatement $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
-Nous disons également que $y$ succède immédiatement $y$.
-La relation de précédence immédiate correspond à la réduction transitive de la relation de visibilité.
+\paragraph{Visibilité immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
+Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
+La relation de visibilité immédiate correspond à la réduction transitive de la relation de visibilité.
 
 \begin{equation*}
     x \idr y \defiff x \vis y \land \nexists z \qsep x \vis z \vis y
 \end{equation*}
 
 \paragraph{} La \autoref{fig:vis-vs-pre-1} montre que la représentation graphique d'une exécution abstraite où la relation de visibilité est transitive peut devenir difficile à appréhender.
-Lorsque la relation de visibilité est transitive, nous préférons représenter la relation de précédence immédiate.
+Lorsque la relation de visibilité est transitive, nous préférons représenter la relation de visibilité immédiate.
 La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont ainsi équivalentes.
 
 % TODO: in following figure, remove a1?
@@ -1533,7 +1533,7 @@ L'exécution abstraite $A_1$ respecte le modèle de cohérence \ac{VFJC}.}\label
 
 Les pairs honnêtes doivent s'assurer qu'un pair qui reconnaît un autre pair comme mal-intentionné arrête d'accepter directement les opérations de ce dernier.
 En d'autres termes, reconnaître qu'un pair est mal-intentionné devrait être responsabilisant.
-Ainsi un pair honnête ou mal-intentionné ne peut exécuter une opération qui succède immédiatement l'opération d'un pair qu'il reconnaît comme mal-intentionné.
+Si un un pair est reconnu mal-intentionné en une opération $x$, alors une opération de ce pair ne peut être immédiatement visible à $x$.
 Il s'agit de la propriété~\ref{itm:vfjc2} du modèle de cohérence \acf{VFJC} que nous présentons dans la \autoref{def:vfjc-consistency}.
 
 \begin{definition}[Cohérence \emph{\acl{VFJC}}~\autocite{mahajan_2011_cac}]\label{def:vfjc-consistency}
@@ -1547,7 +1547,7 @@ Il s'agit de la propriété~\ref{itm:vfjc2} du modèle de cohérence \acf{VFJC} 
   \end{equation*}
 
   \item[\namedlabel{itm:vfjc2}{VFJC2} (partage avec les pairs présumés honnêtes)]
-  Si une opération $x$ précède immédiatement une opération $y$, alors aucune des deux opérations n'est exécutée par un pair qui est reconnu mal-intentionné en $y$.
+  Si une opération $x$ est immédiatement visible à une opération $y$, alors aucune des deux opérations n'est exécutée par un pair qui est reconnu mal-intentionné en $y$.
   \begin{equation*}
     x \idr y \implies \trm{peer}(x), \trm{peer}(y) \notin \trm{knownMalicious}_A(y)
   \end{equation*}

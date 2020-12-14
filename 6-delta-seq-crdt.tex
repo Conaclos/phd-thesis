@@ -33,9 +33,7 @@ Il suffit qu'une opération ne soit pas livrée pour empêcher la livraison des 
 Ces latences peuvent compromettre des sessions de collaboration en simultané en augmentant le risque d'apparition de conflits de modification.
 Les collaborateur·ice·s peuvent adopter des stratégies pour limiter les conflits et ne plus prendre pleinement avantage de l'édition collaborative en simultané~\autocite{ignat2014_delayeffect}.
 Ces problèmes limitent également le passage à l'échelle à des sessions de collaborations qui incluent des centaines de collaborateur·ice·s.
-
 La livraison causale des opérations limite la conception de protocoles de synchronisation qui pourraient tirer avantage d'un modèle de livraison aux hypothèses plus faibles.
-Les hypothèses peuvent être trop fortes pour certains environnements dont les ressources sont contraintes.
 
 La synchronisation par états résout ces problèmes.
 Elle est particulièrement adaptée à des types de données répliquées simples tel que les compteurs \autocite{almeida_2018_delta-crdt-revisited}.
@@ -54,7 +52,6 @@ Les hypothèses de livraison des messages restent faibles.
 Ce qui ouvre à un large espace de conception de protocole de livraison de messages.
 
 Ces observations nous conduisent à formuler la question de recherche suivante~: un protocole synchronisé par différences d'états pour l'édition collaborative en simultané de texte existe-il~?
-
 Dans un premier temps nous présentons un état de l'art sur les séquences répliquées.
 Dans un second temps nous présentons un protocole de réplication de séquences par différences d'états.
 Ce protocole est présenté de manière générique à l'aide d'un formalisme que nous introduisons.
@@ -178,10 +175,22 @@ $p_B$ insère $\textsf{'\textit{\negthinspace!}'}$ entre $\textsf{'\textit{y}'}$
 Nous obtenons ainsi l'ordre partiel illustré dans la \autoref{fig:replseq-sematic-3}.
 Cet ordre admet 3 extensions linéaires.
 
+\clearpage % better layout
+
 \paragraph{La spécification forte sans entrelacement}\autocite{kleppmann2019_interleaving,kleppmann2018opsets} évite les entrelacements de n-uplet de valeurs insérés en parallèle.
 Dans l'exécution abstraite de la \autoref{fig:replseq-sematic-1}, la chaîne $\textsf{'\textit{es}'}$ est insérée en parallèle du caractère $\textsf{'\textit{\negthinspace!}'}$.
 La spécification forte sans entrelacement produit le même ordre partiel que la spécification forte, mais elle rejette l'extension linéaire qui produit un entrelacement, c'est-à-dire la chaîne $\textit{ladie\textit{\negthinspace!}s}$.
 Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement avant ou après la chaîne $\textsf{'\textit{es}'}$.
+
+\medskip % better layout
+
+Pour respecter une spécification, les protocoles de réplication optimiste proposés dans la littérature mettent en oeuvre différents stratégies.
+Dans ce manuscrit nous nous intéressons particulièrement aux \acp{CRDT}.
+Un \ac{CRDT} encapsule le protocole de réplication optimiste derrière une interface familière.
+Dans le cas d'une séquence répliquée, l'utilisateur·ice modifie la séquence et la lit de la même manière qu'il ou elle le ferait avec une séquence classique.
+Le protocole se charge d'exécuter les opérations et de synchroniser la copie de la séquence partagée avec les autres copies de la séquence.
+
+\medskip % better layout
 
 \begin{figure}[htb]
 \newcommand\hsep{1.2}
@@ -302,12 +311,6 @@ Elles correspondent à des extensions linéaires des ordres partiels induits par
 %Ce dernier présente une adaptation~\autocite{kleppmann2019_interleaving} pour respecter la spécification forte sans entrelacement.
 %Bien que ce ne soit pas prouvé, les protocoles de réplication optimiste de séquences présentés dans cet état de l'art respectent la spécification forte.
 
-Pour respecter une spécification, les protocoles de réplication optimiste proposés dans la littérature mettent en oeuvre différents stratégies.
-Dans ce manuscrit nous nous intéressons particulièrement aux \acp{CRDT}.
-Un \ac{CRDT} encapsule le protocole de réplication optimiste derrière une interface familière.
-Dans le cas d'une séquence répliquée, l'utilisateur·ice modifie la séquence et la lit de la même manière qu'il ou elle le ferait avec une séquence classique.
-Le protocole se charge d'exécuter les opérations et de synchroniser la copie de la séquence partagée avec les autres copies de la séquence.
-
 %Les \acp{CRDT} séquences attachent à chaque élément des méta-données qui permettent de former l'ordre de la séquence.
 %Ces méta-données sont générés de telle manière à garantir l'intention d'une insertion et d'une suppression.
 %Nous distinguons deux approches qui reposent sur des principes de générations distincts de ces méta-données.
@@ -401,7 +404,7 @@ L'intégration d'un message d'insertion d'une valeur $v$ se déroule comme suit.
 Le message contient les identifiants des valeurs $v_1$ et $v_2$ entre lesquelles $v$ doit être insérée.
 Ces deux valeurs sont récupérés.
 Des valeurs peuvent être présentes entre $v_1$ et $v_2$.
-Il s'agit de valeurs insérées en parallêle de $v$.
+Il s'agit de valeurs insérées en parallèle de $v$.
 Pour déterminer où placer $v$, le pair applique l'algorithme récursif suivant.
 Il récupère l'ensemble des valeurs comprises entre $v_1$ et $v_2$.
 Si l'ensemble est vide, alors la valeur est simplement placée entre $v_1$ et $v_2$.
@@ -781,33 +784,33 @@ L'ordre de la séquence correspond à l'ordre infixe de l'arbre.
 La position d'une valeur correspond au chemin qui doit être emprunté dans l'arbre pour l'atteindre.
 Lorsqu'il n'y a pas d'insertions en parallèle, une position est donc simplement une liste de bits tel que $0$ indique de se diriger vers l'enfant gauche et $1$ indique de se diriger vers l'enfant droit.
 L'ordre total et dense entre deux positions est formé par l'ordre lexicographique entre leur liste de bits.
-Chaque insertion d'une nouvelle valeur créé un noeud situé à droite du noeud qui stocke la valeur qui la précède et à gauche du noeud de la valeur qui la succède.
+Chaque insertion d'une nouvelle valeur créé un nœud situé à droite du nœud qui stocke la valeur qui la précède et à gauche du nœud de la valeur qui la succède.
 
-L'insertion en parallèle de valeurs au même endroit conduit à la création de deux noeuds qui ont le même chemin dans l'arbre.
-Pour remédier à ce problème, \emph{Treedoc} repose sur deux mécanismes~: l'identification des valeurs et le regroupement des noeuds ajoutés en concurrence en super-noeud.
+L'insertion en parallèle de valeurs au même endroit conduit à la création de deux nœuds qui ont le même chemin dans l'arbre.
+Pour remédier à ce problème, \emph{Treedoc} repose sur deux mécanismes~: l'identification des valeurs et le regroupement des nœuds ajoutés en concurrence en super-nœud.
 Chaque valeur est identifiée par un \emph{dot} constitué de l'identifiant du pair qui a insérée la valeur et du nombre séquentiel du pair.
-Un super-noeud est capable de stocker plusieurs valeurs.
-Les valeurs des super-noeuds sont ordonnées selon l'ordre lexicographique de leurs \emph{dots}.
-Chaque valeur d'un super-noeud est associée à un sous-arbre binaire.
-Lorsqu'une valeur $v$ est insérée entre les valeurs $v_1$ et $v_2$ d'un super-noeud, $v$ est insérée dans le sous-arbre associé à $v_1$.
+Un super-nœud est capable de stocker plusieurs valeurs.
+Les valeurs des super-nœuds sont ordonnées selon l'ordre lexicographique de leurs \emph{dots}.
+Chaque valeur d'un super-nœud est associée à un sous-arbre binaire.
+Lorsqu'une valeur $v$ est insérée entre les valeurs $v_1$ et $v_2$ d'un super-nœud, $v$ est insérée dans le sous-arbre associé à $v_1$.
 La position de $v$ indique son emplacement dans le sous-arbre de $v_1$ en utilisant l'identifiant de $v_1$.
 Si la position de $v_1$ est $01$ et que son identifiant est $A_1$, alors $v$ a pour position $01A_1$.
 
 L'exécution d'une opération d'insertion d'une valeur $v$ entre deux valeurs $v_1$ et $v_2$ produit un message d'intégration qui inclut la valeur, l'identifiant de la valeur, et la position de la valeur dans l'arbre.
-La position est choisit de telle manière à ce qu'elle correspond au chemin vers le noeud qui stockera $v$ dans l'arbre.
-Ce noeud est à droite de $v_1$ et à gauche de $v_2$.
-L'intégration d'un message d'insertion s'effectue par la création d'un noeud dont le chemin correspond à la position de la valeur à insérer.
-Si des noeuds et des super-noeuds sont manquants sur le chemin, ils sont créées.
-Si le noeud où la valeur doit être stockée existe déjà, alors ce dernier est transformé en super-noeud.
+La position est choisit de telle manière à ce qu'elle correspond au chemin vers le nœud qui stockera $v$ dans l'arbre.
+Ce nœud est à droite de $v_1$ et à gauche de $v_2$.
+L'intégration d'un message d'insertion s'effectue par la création d'un nœud dont le chemin correspond à la position de la valeur à insérer.
+Si des nœuds et des super-nœuds sont manquants sur le chemin, ils sont créées.
+Si le nœud où la valeur doit être stockée existe déjà, alors ce dernier est transformé en super-nœud.
 
 L'exécution d'une opération de suppression de la $n$-ème valeur consiste à identifier l'emplacement de la valeur et à produire un message de suppression qui inclut l'identifiant de la valeur et sa position dans l'arbre.
 L'intégration d'un message de suppression consiste à déterminer la valeur à supprimer à l'aide de sa position et de son identifiant et à la supprimer.
-L'identifiant de la valeur permet de supprimer la bonne valeur lorsqu'elle se trouve dans un super-noeud.
-Le noeud qui stocke la valeur supprimée est conservé si et seulement si il stocke une autre valeur (il s'agit d'un super-noeud) ou si il a au moins un enfant.
-Si un super-noeud ne stocke plus qu'une seule valeur qui est associée à un arbre vide, alors le super-noeud est transformé en noeud simple.
+L'identifiant de la valeur permet de supprimer la bonne valeur lorsqu'elle se trouve dans un super-nœud.
+Le nœud qui stocke la valeur supprimée est conservé si et seulement si il stocke une autre valeur (il s'agit d'un super-nœud) ou si il a au moins un enfant.
+Si un super-nœud ne stocke plus qu'une seule valeur qui est associée à un arbre vide, alors le super-nœud est transformé en nœud simple.
 
-La suppression de valeurs peut conduire à la présence de noeuds simples sans valeurs.
-Ces noeuds inutilisées peuvent être apparentés à des \emph{pierres tombales}.
+La suppression de valeurs peut conduire à la présence de nœuds simples sans valeurs.
+Ces nœuds inutilisées peuvent être apparentés à des \emph{pierres tombales}.
 Similairement à \emph{WOOT} et \emph{RGA}, elles nuisent à l'efficacité des opérations exécutées et des messages intégrés sur la séquence.
 Toutefois, le plus grand inconvénient de \emph{TreeDoc} réside dans le couplage de ses positions avec sa structure de données.
 Dans une écriture séquentielle de gauche à droite ou de droite à gauche l'arbre devient une liste chaînée.
@@ -852,13 +855,15 @@ La taille des positions croit rapidement.
     \draw (y) to node[above,sloped]{$1$} (!);
 \end{tikzpicture}
 \caption[Exemple d'une séquence \emph{treedoc}]{Exemple d'une séquence \emph{treedoc} de valeurs associées à leurs positions (chemin dans l'arbre) et leurs identifiants.
-Les noeuds conservés dont la valeur a été supprimée sont barrés.}\label{fig:treedoc}
+Les nœuds conservés dont la valeur a été supprimée sont barrés.}\label{fig:treedoc}
 \end{figure}
+
+\clearpage % better layout
 
 La \autoref{fig:treedoc} correspond à la séquence \emph{Treedoc} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic-1}.
 Le caractère $\textsf{'\textit{y}'}$ a pour position $111$ et identifiant $A_4$.
 Le caractère $\textsf{'\textit{i}'}$ est insérée entre les caractères $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
-Un noeud doit donc être créé à gauche de $\textsf{'\textit{y}'}$.
+Un nœud doit donc être créé à gauche de $\textsf{'\textit{y}'}$.
 La position de $\textsf{'\textit{i}'}$ est donc $1110$.
 
 \emph{Treedoc} utilise une synchronisation par opérations.
@@ -908,7 +913,7 @@ Sinon, $v$ est insérée entre les deux blocs au sein d'un nouveau bloc.
 
 Pour illustrer la génération de positions et l'intégration de messages d'insertion, nous reprenons le scénario de la \autoref{fig:replseq-sematic-1}.
 La séquence \emph{LogootSplit} obtenue est représentée dans la \autoref{fig:logootsplit-1}.
-Le pair $p_A$ commence par une insertion contiguëe de plusieurs caractères.
+Le pair $p_A$ commence par une insertion contiguë de plusieurs caractères.
 Les positions sont générées de telle manière à être agrégées.
 Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
 $p_A$ exécute ensuite l'opération $a_5$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
@@ -969,6 +974,8 @@ Ce travail a été adapté pour \emph{RGA}\autocite{briot_2016_rgasplit}.
 % LSeq
 
 
+\clearpage % better layout
+
 \subsection{Catégorisation des séquences répliquées}
 
 Les \acp{CRDT} séquences attachent à chaque élément des méta-données qui permettent de former l'ordre de la séquence.
@@ -1012,7 +1019,6 @@ Cette stratégie a été évalué sur des séquences à granularité fixe.
 
 
 La séquence répliquée que nous proposons utilise l'approche à positions densément ordonnées.
-
 
 
 \section{Séquences répliquées synchronisées par différences}\label{sec:delta-seq}
@@ -1280,14 +1286,17 @@ Elles peuvent donc être représentés efficacement en mémoire tout en autorisa
 Chaque bloc est indexé par la position associée à la première valeur.
 La position de chaque valeur est inférée à partir de cette dernière et de leur indice dans le bloc.
 
-Prenant une position $p$, il existe une unique position $q$ qui est strictement supérieure et aggrégeable à $q$.
-Par simplicité nous assumons que $p$ est l'unique position qui est inférieure à $q$ et aggrégeable à $q$.
-Par conséquent toute position entre $p$ et $q$ ne peuvent être aggrégé ni avec $p$ ni avec $q$.
+Prenant une position $p$, il existe une unique position $q$ qui est strictement supérieure et agrégeable à $q$.
+Par simplicité nous assumons que $p$ est l'unique position qui est inférieure à $q$ et agrégeable à $q$.
+Par conséquent toute position entre $p$ et $q$ ne peuvent être agrégé ni avec $p$ ni avec $q$.
 Il s'en suit que l'insertion d'une valeur entre deux valeurs qui appartiennent à un bloc conduit à la division du bloc en deux blocs.
 Ce type d'insertion produit ainsi trois blocs.
 
-\begin{definition}[Positions Aggrégeable]\label{def:offest-positions}
-Un ensemble $P$ de positions est un ensemble de positions \emph{aggrégeables}, et nous écrivons $P \in \trm{AggPos}$, si et seulement si l'ensemble est équipé d'une fonction bijective $\trm{agg}$ qui retourne l'unique position aggrégeable et strictement supérieure à la position passée en paramètre.
+
+\clearpage % better layout
+
+\begin{definition}[Positions Agrégeable]\label{def:offest-positions}
+Un ensemble $P$ de positions est un ensemble de positions \emph{agrégeables}, et nous écrivons $P \in \trm{AggPos}$, si et seulement si l'ensemble est équipé d'une fonction bijective $\trm{agg}$ qui retourne l'unique position agrégeable et strictement supérieure à la position passée en paramètre.
 \begin{equation*}
     \trm{agg}: \set*{p \in P} \to \set*{q \in P \given p <_P q}
 \end{equation*}
@@ -1295,19 +1304,18 @@ Un ensemble $P$ de positions est un ensemble de positions \emph{aggrégeables}, 
 % agg could be a prefix order instead.
 
 \begin{theorem}
-Une chaîne de positions aggrégeables peut être déduite à partir de sa première position et de sa longueur.
+Une chaîne de positions agrégeables peut être déduite à partir de sa première position et de sa longueur.
 \end{theorem}
 
 \begin{proof}
 Nous procédons par induction. La première position est connue. Supposons que nous connaissions la $n$-ème position de la chaîne que nous notons $p$.
-$\trm{agg}(p)$ est l'unique position aggrégeable à $p$ et strictement supérieure à $p$.
-Elle correspond ainsi à la $n+1$-ème position de la chaîne.
+$\trm{agg}(p)$ est l'unique position agrégeable à $p$ et strictement supérieure à $p$.
+Elle est la $n+1$-ème position de la chaîne.
 A partir de la première position $q$ et de la taille $m$ de la chaîne nous pouvons ainsi obtenir la chaîne $\set{p_k \in P \given 0 \leq k < m \land p_0 = q \land \forall 0 \leq i < m-1 \qsep \trm{agg}(p_i) = p_{i+1}}$.
 \end{proof}
 
 \textcite{yu_2012_string-wise-crdt} propose le premier type de séquences répliquées à granularité variable.
 Cependant, \emph{logootSplit}~\cite{andre_2013_logootsplit} est le premier type de séquences répliquées qui exploite l'idée d'agréger des positions.
-
 Une position \emph{logootSplit} est une liste de n-uplets.
 Le premier élément d'un n-uplet est un nombre prioritaire, le second élément est l'identifiant du pair qui a généré le n-uplet, le troisième élément est un nombre séquentiel, et le dernier élément est l'indice de la valeur dans le bloc.
 \emph{logootSplit} est construit sur les idées introduites par \emph{Logoot}.
@@ -1320,12 +1328,14 @@ Par exemple, le premier bloc de Alice est identifié par le \emph{dot} $A_1$, et
 Une position et par extension la valeur qui lui est associée sont identifiées de manière unique par le \emph{dot} du bloc correspondant et l'indice de la valeur dans le bloc.
 Par exemple, $\tuple*{A_1,0}$ et $\tuple*{A_1,1}$ identifient les deux premières valeurs du premier bloc du pair $p_A$.
 \emph{LogootSplit} permet d'ajouter des valeurs en début et en fin de blocs.
-Il génère ainsi les positions de telles sortes à ce qu'elles soient respectivement aggrégeable avec la première et la dernière position.
+Il génère ainsi les positions de telles sortes à ce qu'elles soient respectivement agrégeable avec la première et la dernière position.
 Pour ce faire, \emph{LogootSplit} utilise des indices négatifs et positifs.
 Par exemple si le pair $p_A$ insère une valeur en début de son premier bloc, la valeur est identifiée par $\tuple*{A_1,-1}$.
 Quand une valeur est insérée entre deux valeurs d'un même bloc, le bloc est divisé.
 La position générée inclut l'ensemble des n-uplets de la position qui la précède, auquel est joint un nouveau n-uplet.
 
+Nous disposons des concepts nécessaires à la présentation de notre séquence répliquée.
+%
 \begin{align}
 &\trm{LogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}_0 \times \mathbb{Z})}^{n \in \mathbb{N}^*} \times \mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^* \times \mathbb{Z}\\
 &\trm{id}(\set*{\tuple*{\_, i_k, n_k, z_k}}_{k=0}^m) \defeq \tuple*{i_m, \tuple*{n_m, z_m}}\\
@@ -1337,8 +1347,6 @@ La position générée inclut l'ensemble des n-uplets de la position qui la pré
     \end{dcases}
 \end{aligned}
 \end{align}
-
-Nous disposons de l'ensemble des concepts nécessaires à la présentation de notre séquence répliquée.
 
 
 \subsection{Approche générique}
@@ -1467,7 +1475,7 @@ Chaque n-uplet consiste d'un nombre prioritaire, de l'identifiant du pair qui a 
 Similairement à \emph{Logoot}, chaque valeur est identifiée par un \emph{dot}.
 Chaque fois qu'un pair exécute une insertion il incrémente son nombre séquentiel et assigne à la valeur insérée un nouveau \emph{dot}.
 Ce \emph{dot} correspond à l'identifiant du pair et le nombre séquentiel du dernier n-uplet de la liste.
-Ces positiosn sont donc \emph{dot}-ifiées.
+Ces positions sont donc \emph{dot}-ifiées.
 
 Deux positions sont agrégeables, si et seulement si \begin{inlinelist}\item elles divergent uniquement par leur identifiant local (le nombre séquentiel du dernier n-uplet), et \item elles ont des identifiants locaux contiguës\end{inlinelist}.
 Le nombre séquentiel joue à la fois le rôle d'identifiant local et d'indice de bloc.
@@ -1482,17 +1490,6 @@ Le nombre séquentiel joue à la fois le rôle d'identifiant local et d'indice d
     \end{dcases}
 \end{aligned}
 \end{align}
-
-La \autoref{fig:dottedlogootsplit} correspond à la séquence \emph{Dotted LogootSPlit} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic}.
-Le pair $p_A$ commence par une insertion contiguës de plusieurs caractères.
-Les positions sont générées de telle manière à être agrégées.
-Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
-$p_A$ exécute ensuite l'opération $a_5$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
-Aucune position agrégeable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprise entre les positions des deux valeurs.
-La position générée a donc pour préfixe la position du caractère $\textsf{'\textit{d}'}$.
-L'intégration de cette insertion produit la scission du premier bloc.
-En parallèle, le pair $p_B$ insère le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence après le bloc $\textsf{'\textit{lady}'}$.
-Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré étant donné que $p_B$ n'est pas le propriétaire du bloc.
 
 \begin{figure}[tb]
 \centering
@@ -1523,9 +1520,6 @@ Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré éta
 \subref{fig:logootsplit-1} Séquence de valeurs associées à leurs positions.
 \subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 \end{figure}
-
-Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu du sup-demi-treilli des états de la séquence obtenue dans la \autoref{fig:dottedlogootsplit}.
-%Étant donné que les positions sont omises dans le diagramme, il est valide pour tout type de positions \emph{dot}-ifiées.
 
 \begin{figure}[!ht]
 \centering
@@ -1606,6 +1600,20 @@ Les états entourés sont irréductibles.
 }\label{fig:dottedlogootsplit-semilattice}
 \end{figure}
 
+La \autoref{fig:dottedlogootsplit} correspond à la séquence \emph{Dotted LogootSplit} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic}.
+Le pair $p_A$ commence par une insertion contiguës de plusieurs caractères.
+Les positions sont générées de telle manière à être agrégées.
+Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
+$p_A$ exécute ensuite l'opération $a_5$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
+Aucune position agrégeable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprise entre les positions des deux valeurs.
+La position générée a donc pour préfixe la position du caractère $\textsf{'\textit{d}'}$.
+L'intégration de cette insertion produit la scission du premier bloc.
+En parallèle, le pair $p_B$ insère le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence après le bloc $\textsf{'\textit{lady}'}$.
+Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré étant donné que $p_B$ n'est pas le propriétaire du bloc.
+
+Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu du sup-demi-treillis des états de la séquence obtenue dans la \autoref{fig:dottedlogootsplit}.
+%Étant donné que les positions sont omises dans le diagramme, il est valide pour tout type de positions \emph{dot}-ifiées.
+
 Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est disponible sur \emph{GitHub}~: \href{https://github.com/coast-team/dotted-logootsplit}{github.com/coast-team/dotted-logootspli}} et intégré ce protocole de réplication à l'éditeur collaboratif \emph{MUTE}\footnote{\href{https://coedit.re}{coedit.re}}.
 
 \subsection{Discussion}
@@ -1622,6 +1630,7 @@ Cependant, un· collaborateur·ices à tendance à écrire de manière séquenti
 Nous conjecturons qu'en pratique cette restriction conduit à très peu d'ajout supplémentaires de blocs.
 En revanche la non-possibilité d'ajouter des valeurs en début de blocs est problématique pour certains langues écrites de droite à gauche.
 
+\clearpage
 
 \section{Conclusion}
 
