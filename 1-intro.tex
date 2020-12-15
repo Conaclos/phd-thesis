@@ -366,7 +366,7 @@ Mallory est mal-intentionnée.
 Elle souhaite compromettre la collaboration entre Alice et Bea.
 \subref{fig:equivocation-scenario-1} Mallory effectue une équivoque.
 Elle transmet à Alice l'ajout d'un triangle orange, alors qu'elle transmet à Bea l'ajout d'un trapèze orange.
-Elle fait en sorte que ces modifications distinctes paraissent identique.
+Elle fait en sorte que ces modifications distinctes paraissent identiques.
 Par exemple, si l'on considère que la couleur est la seule information utilisée pour détecter la présence d'une forme sur le dessin, alors il n'est pas possible de différencier un dessin avec la première forme d'un dessin avec la seconde.
 \subref{fig:equivocation-scenario-2} Alice et Bea intègrent la modification qu'elles reçoivent.
 Leurs copies divergent.
@@ -376,7 +376,7 @@ L'objectif de Mallory est atteint~: les copies de Alice et Bea demeurent diverge
 
 De nombreux protocoles de réplication optimiste synchronisent les copies en échangeant des opérations~\autocite{baquero_2018_pure-op-crdt}.
 L'opération synthétise une modification effectuée sur l'une des copies.
-Un pair mal-intentionné met en oeuvre une équivoque en générant deux opérations distinctes mais qui sont perçues comme identiques par le protocole de réplication.
+Un pair mal-intentionné met en œuvre une équivoque en générant deux opérations distinctes mais qui sont perçues comme identiques par le protocole de réplication.
 Pour détecter de telles opérations, les pairs peuvent utiliser des \emph{journaux infalsifiables} d'opérations~\autocite{li_2004_sundr,mahajan_depot_2011,truong_authenticating_2012}.
 Chaque pair possède un journal dans lequel il enregistre les opérations qu'il transmet et qu'il reçoit.
 Chaque opération est signée par son auteur et référence des opérations sur-lesquelles elle dépend.
@@ -535,7 +535,7 @@ En effet, il n'est pas raisonnable de transmettre et intégrer l'état d'un docu
 
 Un schéma de synchronisation par différences d'états~\autocite{almeida_2018_delta-crdt-revisited} a récemment été proposé pour tenter de réduire le coût du schéma de synchronisation par états.
 Ce schéma autorise toujours la transmission d'états complets.
-Cependant, il privilégie l'envoie de différences d'états qui synthétisent une ou plusieurs modifications.
+Cependant, il privilégie l'envoi de différences d'états qui synthétisent une ou plusieurs modifications.
 Les différences d'états peuvent être intégrées plusieurs fois dans des ordres arbitraires.
 Le schéma de synchronisation par différences d'états offre ainsi de nombreuses possibilités dans la manière de synchroniser deux copies.
 Par exemple, lorsque des pairs collaborent en simultané ils peuvent échanger des différences d'états, alors que deux pairs qui se reconnectent après une longue période de déconnexion peuvent échanger directement leur état.
@@ -570,7 +570,7 @@ Nous présentons également les travaux de la littérature en relation avec notr
 
 \paragraph{Le \autoref{ch:dotted-logootsplit}} présente un état de l'art des types séquences de données répliquées.
 Nous proposons un modèle unifié pour décrire et mieux appréhender un sous-ensemble de ces types séquence.
-A l'aide de ce modèle nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
+À l'aide de ce modèle nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
 
 \paragraph{Le \autoref{ch:conclusion}} clôt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
 
@@ -580,7 +580,7 @@ A l'aide de ce modèle nous répondons à notre deuxième question de recherche 
 La première contribution développée au sein de ce manuscrit a fait l'objet d'une publication~\autocite{2018_elvinger_prunable-auth-log}.
 La seconde contribution présentée n'a pas encore fait l'objet d'une publication.
 En revanche, la proposition a été implémentée dans notre prototype d'éditeur collaboratif \emph{MUTE} qui est décrit dans l'une de nos publications~\autocite{2017_nicolas-mute-demo}.
-Notre dernière publication~\autocite{2019_yu_genericundo} est en lien avec nos travaux sur les type de données répliquées, mais n'est pas présentée au sein de ce manuscrit.
+Notre dernière publication~\autocite{2019_yu_genericundo} est en lien avec nos travaux sur les types de données répliquées, mais n'est pas présentée au sein de ce manuscrit.
 Dans la suite de cette section nous référençons les articles qui ont été publiés au cours de cette thèse.
 
 \subsection*{Prunable Authenticated Log and Authenticable Snapshot in Distributed Collaborative Systems \autocite{2018_elvinger_prunable-auth-log}}

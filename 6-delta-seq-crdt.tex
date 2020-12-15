@@ -184,7 +184,7 @@ Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement ava
 
 \medskip % better layout
 
-Pour respecter une spécification, les protocoles de réplication optimiste proposés dans la littérature mettent en oeuvre différents stratégies.
+Pour respecter une spécification, les protocoles de réplication optimiste proposés dans la littérature mettent en œuvre différents stratégies.
 Dans ce manuscrit nous nous intéressons particulièrement aux \acp{CRDT}.
 Un \ac{CRDT} encapsule le protocole de réplication optimiste derrière une interface familière.
 Dans le cas d'une séquence répliquée, l'utilisateur·ice modifie la séquence et la lit de la même manière qu'il ou elle le ferait avec une séquence classique.
@@ -806,7 +806,7 @@ Si le nœud où la valeur doit être stockée existe déjà, alors ce dernier es
 L'exécution d'une opération de suppression de la $n$-ème valeur consiste à identifier l'emplacement de la valeur et à produire un message de suppression qui inclut l'identifiant de la valeur et sa position dans l'arbre.
 L'intégration d'un message de suppression consiste à déterminer la valeur à supprimer à l'aide de sa position et de son identifiant et à la supprimer.
 L'identifiant de la valeur permet de supprimer la bonne valeur lorsqu'elle se trouve dans un super-nœud.
-Le nœud qui stocke la valeur supprimée est conservé si et seulement si il stocke une autre valeur (il s'agit d'un super-nœud) ou si il a au moins un enfant.
+Le nœud qui stocke la valeur supprimée est conservé si et seulement s'il stocke une autre valeur (il s'agit d'un super-nœud) ou s'il a au moins un enfant.
 Si un super-nœud ne stocke plus qu'une seule valeur qui est associée à un arbre vide, alors le super-nœud est transformé en nœud simple.
 
 La suppression de valeurs peut conduire à la présence de nœuds simples sans valeurs.
@@ -888,14 +888,14 @@ Elles sont regroupées au sein d'un même bloc.
 Des positions agrégées sont représentées synthétiquement à l'aide de la position de la première valeur du bloc.
 La position d'une valeur peut alors être déduite de la première position du bloc et de son emplacement dans le bloc.
 Deux positions agrégeables sont nécessairement générés par le même pair.
-Un bloc est donc composés de valeurs insérées par un même pair.
+Un bloc est donc composé de valeurs insérées par un même pair.
 Ce pair est le propriétaire du bloc.
 Seul ce pair peut ajouter des valeurs au bloc.
 Dans la \autoref{fig:logootsplit}, $p_A$ est le propriétaires des blocs $\textsf{'\textit{lad}'}$ et $\textsf{'\textit{ies}'}$.
 $p_B$ est le propriétaire du bloc $\textsf{'\textit{\negthinspace!}'}$.
 
 L'exécution d'une opération d'insertion d'une valeur $v$ produit un message d'insertion qui contient $v$ et la position de $v$.
-La position générée est comprises entre le positions $p_1$ et $p_2$ des valeurs $v_1$ et $v_2$ entre lesquelles $v$ doit être insérée.
+La position générée est comprise entre le positions $p_1$ et $p_2$ des valeurs $v_1$ et $v_2$ entre lesquelles $v$ doit être insérée.
 L'algorithme de génération des positions favorise la génération de positions agrégeables.
 Il tente ainsi de produire une position agrégeable à $p_1$ ou $p_2$.
 Si il n'y parvient pas, il génère la position de la même manière que \emph{Logoot}.
@@ -961,7 +961,7 @@ En revanche l'intégration d'un message de suppression peut conduire à la sciss
 Pour éviter de générer plusieurs fois la même position, un bloc est associé à l'indice minimal et l'indice maximal des positions des valeurs qui ont été ajoutées au bloc.
 
 L'insertion d'une valeur peut conduire à la scission d'un bloc.
-Bien que ce soit possible, \emph{LogootSplit} ne propose pas de fusionner les deux blocs si ils deviennent contiguës.
+Bien que ce soit possible, \emph{LogootSplit} ne propose pas de fusionner les deux blocs s'ils deviennent contiguës.
 C'est une situation qui peut survenir lorsque les valeurs qui ont conduit à la scission du bloc sont supprimées.
 
 \emph{LogootSplit} utilise le même modèle de synchronisation que \emph{Logoot}.
@@ -1078,7 +1078,7 @@ Un pair peut choisir une position entre toute pair de positions avec l'identifia
 
 \begin{definition}[Positions]\label{def:pos}
 Soit $\trm{Pos}$ la famille des ensembles de positions.
-Un ensemble $P$ est un ensemble de positions, et nous écrivons $P \in \trm{Pos}$, si et seulement si il est équipé des relations et des fonctions suivantes~:
+Un ensemble $P$ est un ensemble de positions, et nous écrivons $P \in \trm{Pos}$, si et seulement s'il est équipé des relations et des fonctions suivantes~:
 \begin{itemize}
 \item $\trm{pid}(p) \in \mathbb{I}$ retourne l'identifiant globalement unique du pair qui possède la position p.
 
@@ -1625,7 +1625,7 @@ Deux positions agrégeables doivent avoir des nombres séquentiels contiguës.
 À chaque exécution d'une insertion, le nombre séquentiel est incrémenté.
 Un pair est donc dans l'impossibilité d'ajouter une valeur au début d'un de ses blocs étant donné qu'il devrait prendre un nombre séquentiel plus petit que celui de la première valeur du bloc.
 Il ne peut pas toujours ajouter une valeur en fin bloc.
-En effet, si il a procédé à une insertion à un autre emplacement, son nombre séquentiel devient trop grand pour pouvoir générer une position agrégeable à la position de la dernière valeur du bloc.
+En effet, s'il a procédé à une insertion à un autre emplacement, son nombre séquentiel devient trop grand pour pouvoir générer une position agrégeable à la position de la dernière valeur du bloc.
 Cependant, un· collaborateur·ices à tendance à écrire de manière séquentiel.
 Nous conjecturons qu'en pratique cette restriction conduit à très peu d'ajout supplémentaires de blocs.
 En revanche la non-possibilité d'ajouter des valeurs en début de blocs est problématique pour certains langues écrites de droite à gauche.

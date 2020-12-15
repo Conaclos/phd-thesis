@@ -37,14 +37,14 @@ Chaque collaborateur·ice est associé·e à un pair qui possède une copie du c
 Les algorithmes de réplication de données sont responsables de la convergence des copies.
 % Ils doivent s'assurer qu'à terme les copies répondent de manière identique à toutes les interrogations qui peuvent leur être soumit.
 La convergence des copies conditionne le succès d'une collaboration.
-Si les collaborateur·ice·s ne sont pas capable de partager une vue globalement convergente dans des délais raisonnables, leur collaboration est probablement compromise.
+Si les collaborateur·ice·s ne sont pas capables de partager une vue globalement convergente dans des délais raisonnables, leur collaboration est probablement compromise.
 Assurer à terme la convergence des copies est donc important.
 
 Les algorithmes existants de réplication de données supposent généralement l'absence de collaborateur·ice·s mal-intentionné·e·s.
 Plus largement, ils supposent l'absence d'un adversaire actif.
 Cette hypothèse n'est pas réaliste au sein d'infrastructures pair-à-pair.
 Les pairs partagent les mêmes responsabilités et peuvent nuire au succès de la collaboration.
-Certains pairs peuvent par exemple mener des attaques pour assurer une divergence permanente des copies des autres' pairs.
+Certains pairs peuvent par exemple mener des attaques pour assurer une divergence permanente des copies des autres pairs.
 Dans ce manuscrit de thèse, nous nous intéressons à cette problématique et nous proposons des mécanismes de défense pour assurer à terme la convergence.
 
 Ce chapitre introduit dans un premier temps la réplication de données. Il développe ensuite la notion de convergence et d'intention des opérations.
@@ -61,7 +61,7 @@ Elle réduit donc les latences pour interroger les contenus partagés.
 Comparé à un contenu non-répliqué, un contenu répliqué a un nombre étendu de comportements.
 Par exemple, des collaborateur·ice·s distinct·e·s peuvent modifier des copies distinctes d'un contenu répliqué.
 Ces nouveaux comportements peuvent engendrer des scénarios difficiles à prévoir et traiter.
-Idéalement, l'interrogation et la modification d'un contenu répliqué devrait se comporter comme si il existait une seule copie.
+Idéalement, l'interrogation et la modification d'un contenu répliqué devrait se comporter comme s'il existait une seule copie.
 Dans ce cas, nous disons que le contenu partagé est \emph{fortement cohérent} et nous parlons de réplication pessimiste de données~\autocite{saito_2005_optimisticreplication}.
 La \autoref{fig:strong-consistency} met en évidence que l'interrogation d'un contenu fortement cohérent prend toujours en compte toutes les modifications précédemment effectuées.
 
@@ -258,7 +258,7 @@ Un protocole de réplication optimiste peut garantir plusieurs modèles de cohé
 L'une des garanties élémentaires de ces modèle concerne la convergence des copies.
 En l'absence de modifications, les copies devraient converger.
 Toute interrogation sur deux copies convergentes donne la même réponse.
-La convergence peut être défini de différentes manières.
+La convergence peut être définie de différentes manières.
 La \emph{cohérence à terme}~\autocite{terry_sessionguarentees_1994,saito_2005_optimisticreplication, vogels_eventuallyconsistent_2009} offre la garantie de convergence la plus faible qu'un protocole de réplication optimiste doit respecter.
 Elle garantit que deux copies finissent par converger dès lors qu'elles ont intégré le même ensemble de modifications.
 Elle garantit également qu'une modification intégrée par un pair finit par l'être par les autres pairs.
@@ -433,7 +433,7 @@ Par exemple, un protocole peut utiliser un pair privilégié qui ordonne les mod
 L'idée centrale de la \emph{convergence unidirectionnelle} est que deux pairs $p_A$ et $p_B$ devraient être capables de faire converger leur copie en deux étapes de communication unidirectionnelle~: $p_A$ envoie des modifications à $p_B$, puis $p_B$ envoie des modifications à $p_A$.
 
 %\begin{definition}[Convergence partielle]\label{def:partial-convergence}
-%$p_A$ \emph{converge partiellement} avec $p_B$ si et seulement si il suffit que
+%$p_A$ \emph{converge partiellement} avec $p_B$ si et seulement s'il suffit que
 %\begin{enumerate}[label=(\roman*)]
 %\item $p_A$ et $p_B$ arrêtent de modifier leur copie et de communiquer avec les autres pairs
 %\item $p_B$ transmette à $p_A$ les modifications qu'il a intégré et $p_A$ intègre ces dernières

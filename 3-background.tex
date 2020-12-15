@@ -47,7 +47,7 @@ Dans la \autoref{subsec:consistency-spec-liveness-safety} nous montrons comment 
 \subsection{Spécification en l'absence de pairs mal-intentionnés}\label{subsec:consistency-spec-honest}
 
 Les collaborateur·ice·s s'attendent à ce que les infrastructures de collaboration leur offrent un certain nombre de garanties de cohérence des copies du contenu partagé.
-La \autoref{fig:causal-expectation} illustre un scénario dans lequel Bea s'attend à ce que Alice lise les messages textuels dans l'ordre dans lequel elle les a écrit.
+La \autoref{fig:causal-expectation} illustre un scénario dans lequel Bea s'attend à ce que Alice lise les messages textuels dans l'ordre dans lequel elle les a écrits.
 Certains protocoles de réplication optimiste peuvent respecter les attentes de Bea et d'autres peuvent ne pas les respecter.
 Les attentes des collaborateur·ice·s sont exprimées sous la forme de propriétés de cohérence.
 
@@ -229,7 +229,7 @@ Pour toute opération $x$~:
 \item $\trm{peer}(x) \in \trm{Peers}$ est l'auteur de l'opération $x$.
 \item $\trm{call}(x) \in \trm{Op}_T$ est l'appel effectué par l'auteur de $x$.
 Ces appels dépendent de $T$.
-\item $\trm{rval}(x) \in \trm{Val}_T$ est la valeur de retour de l'appel de $x$ si il s'agit d'une interrogation.
+\item $\trm{rval}(x) \in \trm{Val}_T$ est la valeur de retour de l'appel de $x$ s'il s'agit d'une interrogation.
 Ces valeurs de retour dépendent de $T$.
 \end{itemize}
 \begin{itemize}[leftmargin=*]
@@ -337,7 +337,7 @@ La relation \emph{retourne-avant} est inférée par le positionnement horizontal
 }\label{fig:vis-example}
 \end{figure}
 
-Une histoire vérifie une propriété de cohérence si et seulement si il existe au moins une exécution abstraite qui la respecte.
+Une histoire vérifie une propriété de cohérence si et seulement s'il existe au moins une exécution abstraite qui la respecte.
 Il suffit donc de générer toutes les exécutions abstraites possibles pour une histoire donnée et vérifier que au moins l'une d'entre elles respecte la propriété de cohérences considérée.
 La \autoref{fig:hist-absexec} met en évidence les relations entre histoires, exécutions abstraites, et propriétés de cohérence.
 
@@ -651,7 +651,7 @@ Par souci de concision, nous omettons de préciser qu'une histoire ou une exécu
 Les pairs mal-intentionnés peuvent faire coïncider dans le temps l'exécution de plusieurs opérations.
 La \autoref{fig:no-enum-example} illustre ce scénario.
 Pour pouvoir numéroter les opérations des pairs mal-intentionnés, nous utiliserons des exemples dans lesquels les pairs mal-intentionnés exécutent leurs opérations de manière séquentielle.
-%Nous suivrons cet ordre pour numéroter les opérations des pairs mal-intentionnés sauf si il gène la compréhension d'un exemple.
+%Nous suivrons cet ordre pour numéroter les opérations des pairs mal-intentionnés sauf s'il gène la compréhension d'un exemple.
 
 \begin{figure}[htb]
 \centering
@@ -810,7 +810,7 @@ En d'autres termes, pour toute opération il n'existe pas une infinité d'opéra
 % Nous devons raisonner également sur des exécutions infinies.
 % La \autoref{def:abstract-exec} permet la description d'exécutions abstraites infinies.
 % En effet, l'ensemble des opérations exécutées est dénombrable, mais peut être non-fini.
-% Une exécution abstraite respecte donc une propriété de vivacité si et seulement si il existe une extension qui la respecte.
+% Une exécution abstraite respecte donc une propriété de vivacité si et seulement s'il existe une extension qui la respecte.
 
 % Dans le cas d'une propriété de sûreté, il est nécessaire de vérifier que la propriété est respectée en chaque point des exécutions possibles du protocole.
 %Chaque point d'une exécution peut être restreint en une exécution abstraite (bien-formée).
@@ -835,7 +835,7 @@ $C$ désigne donc également l'ensemble des exécutions abstraites qui respecten
 \end{definition}
 
 % \begin{definition}[Histoire correcte]\label{def:correct-history}
-% Une histoire $H$ vérifie un modèle de cohérence $C$ si et seulement si il existe une exécution abstraite $A \defeq \tuple*{H, \trm{vis}}$ tel que $A$ respecte $C$.
+% Une histoire $H$ vérifie un modèle de cohérence $C$ si et seulement s'il existe une exécution abstraite $A \defeq \tuple*{H, \trm{vis}}$ tel que $A$ respecte $C$.
 % \begin{equation*}
 %     H \textit{is C-correct} \defiff \exists A \defeq \tuple*{H, \_} \qsep A \in C
 % \end{equation*}
@@ -843,7 +843,7 @@ $C$ désigne donc également l'ensemble des exécutions abstraites qui respecten
 
 Les modèles de cohérences offrent des garanties variées.
 Certains modèles de cohérence permettent des exécutions que d'autres ne permettent pas.
-Un modèle de cohérence est dit plus fort qu'un second modèle de cohérence si il accepte un sous-ensemble strict des exécutions abstraites que le premier accepte.
+Un modèle de cohérence est dit plus fort qu'un second modèle de cohérence s'il accepte un sous-ensemble strict des exécutions abstraites que le premier accepte.
 Dans la \autoref{def:consistency-hierearchy}, nous introduisons la notation que nous utilisons pour mettre en évidence qu'un modèle de cohérence est plus fort qu'un autre.
 Deux modèles de cohérence sont incompatibles si l'un n'est pas plus fort que l'autre.
 Nous pouvons néanmoins juger de la \enquote{force} d'un modèle de cohérence par rapport au nombre d'exécutions abstraites qu'il permet.
@@ -975,7 +975,7 @@ Dans la \autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que 
 \end{equation*}
 
 \paragraph{Visibilité immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
-Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
+Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement s'il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
 La relation de visibilité immédiate correspond à la réduction transitive de la relation de visibilité.
 
 \begin{equation*}
@@ -1082,7 +1082,7 @@ La \autoref{fig:vis-vs-pre-1} et la \autoref{fig:vis-vs-pre-2} sont ainsi équiv
 L'exécution abstraite de la \subref{fig:vis-vs-pre-2} correspond à la réduction transitive de l'exécution abstraite de la \subref{fig:vis-vs-pre-1}.}\label{fig:vis-vs-pre}
 \end{figure}
 
-La littérature comptent plusieurs spécifications de la cohérence causale.
+La littérature compte plusieurs spécifications de la cohérence causale.
 Certaines spécifications~\autocite{ahamad_1995_causal} imposent la manière de résoudre les conflits de modification.
 Similairement à~\textcite{mahajan_2011_cac}, nous pensons qu'il est préférable de séparer les garanties d'ordre entre les opérations et les garanties concernant la résolution de conflits.
 Certaines spécifications~\autocite{burckhardt_eventualconsistency_2014,viotti_consistency_2016} procèdent à cette séparation, mais ajoutent une garantie qui restreint les résultats possibles des opérations de lecture.
@@ -1349,7 +1349,7 @@ Ainsi, l'application considère que deux opérations non-linéaires n'ont pas é
 
 Les pairs mal-intentionnés peuvent réaliser des équivoques.
 Dans une exécution abstraite, ces équivoques se traduisent par des opérations non-linéaires.
-Une opération est non-linéaire si il existe une opération du même auteur qui lui est concurrente.
+Une opération est non-linéaire s'il existe une opération du même auteur qui lui est concurrente.
 Chaque opération non-linéaire forme un embranchement.
 Pour préserver la convergence des copies, le modèle de cohérence~\acf{VFJC}~\autocite{mahajan_2011_cac} permet aux pairs d'accepter des opérations non-linéaires.
 Les pairs peuvent ainsi joindre des embranchements.
@@ -1671,7 +1671,7 @@ La \autoref{fig:set-spec} présente une spécification algébrique~\autocite{wir
 Nous proposons de l'adapter au formalisme utilisé dans ce manuscrit.
 Les opérations de ce type regroupent une opération de lecture $\trm{rd}$, une opération d'ajout $\trm{add}(v)$, et une opération de suppression $\trm{rmv}(v)$ tel que $v$ est une valeur de l'ensemble $V$.
 Les valeurs de retour de l'opération de lecture sont l'ensemble des parties finies de $V$~: $\trm{Val}_{\trm{Set}\tuple*{V}} = \powerfset{V}$.
-La sémantique de ce type est précisé par la propriété de cohérence de l'\autoref{eq:add-win-set}.
+La sémantique de ce type est précisée par la propriété de cohérence de l'\autoref{eq:add-win-set}.
 Chaque valeur inclue dans l'ensemble retourné par l'exécution d'une opération de lecture est ajoutée par au moins une opération du contexte de l'opération de lecture et n'est pas visible à une opération du contexte de l'opération de lecture qui la supprime.
 
 \begin{equation}\begin{split}\label{eq:add-win-set}
@@ -1977,7 +1977,7 @@ Les \acp{CRDT} proposent différentes stratégies de synchronisation que nous pr
 
 Afin de converger, les pairs doivent intégrer l'ensemble des modifications effectuées sur les copies du contenu partagé.
 Pour ce faire, les pairs s'échangent leurs modifications sous forme de messages.
-Lorsqu'un pair exécute une opération, il génère un message qu'il intègre à sa copie et qu'il transmet aux autre pairs.
+Lorsqu'un pair exécute une opération, il génère un message qu'il intègre à sa copie et qu'il transmet aux autres pairs.
 Les pairs intègrent à terme les messages qu'ils reçoivent.
 
 La forme des messages conditionne la manière de synchroniser les copies du contenu partagé.
@@ -2118,7 +2118,7 @@ L'association d'une valeur $v$ et d'un identifiant $\tuple*{i, n'}$ est représe
 L'évaluation d'une opération de lecture retourne l'ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:op-awset-eval}).
 L'opération intégrable d'ajout d'une valeur correspond à un couple constitué de l'étiquette $\trm{add}$ et du triplet composé de la valeur et d'un nouvel identifiant unique (\autoref{eq:op-awset-prep-add}).
 L'identifiant unique est formé par l'identifiant du pair qui génère l'opération intégrable et de son nombre séquentiel incrémenté d'une unité.
-L'intégration d'une opération d'ajout consiste à ajouter le nouveau triplet et à incrémenter le nombre séquentiel si l'opération a été généré par le pair actuel (\autoref{eq:op-awset-integr-add}).
+L'intégration d'une opération d'ajout consiste à ajouter le nouveau triplet et à incrémenter le nombre séquentiel si l'opération a été générée par le pair actuel (\autoref{eq:op-awset-integr-add}).
 L'opération intégrable de suppression contient l'ensemble des triplets à supprimer et est estampillé par l'étiquette $\trm{rmv}$ (\autoref{eq:op-awset-prep-rmv}).
 L'intégration de l'opération de suppression supprime les triplets qu'elle contient (\autoref{eq:op-awset-integr-rmv}).
 
@@ -2191,7 +2191,7 @@ La fonction d'intégration est par conséquent associative, commutative, et idem
 Les états sont partiellement ordonnés de telle manière à ce que la fusion de deux états produisent toujours un état plus grand que les états fusionnés ou égal à l'un des états fusionnés.
 L'état obtenu est unique et minimal.
 Il s'agit de la borne supérieure des états fusionnés.
-Ainsi un état fusionné avec lui même donne l'état lui-même.
+Ainsi un état fusionné avec lui-même donne l'état lui-même.
 La fusion d'un état $\sigma_1$ avec un état supérieur $\sigma_2$ donne $\sigma_2$.
 Ces propriétés forment une structure algébrique connue.
 En effet, l'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}.
@@ -2327,7 +2327,7 @@ Les états entourés sont irréductibles.
 \paragraph{Les \acp{CRDT} synchronisés par différences}~\autocite{almeida_2018_delta-crdt-revisited} sont une sous-famille des \acp{CRDT} synchronisés par états.
 Ils permettent la conception de mécanismes de synchronisation plus efficaces~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles.
-Un état est irréductible si et seulement si il ne peut pas être obtenu par la fusion de deux états distincts et si il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
+Un état est irréductible si et seulement s'il ne peut pas être obtenu par la fusion de deux états distincts et s'il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
 Dans la \autoref{fig:state-add-win-set-semilattice}, les états irréductibles sont entourés.
 L'état minimal est $\tuple*{\emptyset, \emptyset}$.
 Un état décomposé peut être obtenu par la fusion de l'ensemble de ses états irréductibles.
@@ -2374,7 +2374,7 @@ Les messages générés sont des états irréductibles.
 Nous prenons de nouveau l'exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d'un ensemble qui utilise l'implémentation de la \autoref{fig:delta-awset}.
 Le pair $p_A$ a exactement les mêmes transitions d'états que l'ensemble synchronisé par états complets.
 Il génère les mêmes messages qui correspondent à des états irréductibles.
-La \autoref{fig:state-awset-state-trans} représente donc les état successifs de la copie du pair $p_A$.
+La \autoref{fig:state-awset-state-trans} représente donc les états successifs de la copie du pair $p_A$.
 Dans cet exemple, le pair $p_B$ transmet à $p_A$ l'état $\tuple*{\set*{\tuple*{1,A_1},\tuple*{1,B_1}},\set*{A_1,B_1}}$.
 La synchronisation par différences offre à $p_B$ plus de liberté.
 Un autre protocole de synchronisation pourrait envoyer l'état irréductible $\tuple*{\set*{\tuple*{1,B_1}},\set*{B_1}}$.
