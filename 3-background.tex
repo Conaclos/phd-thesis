@@ -13,17 +13,17 @@ La convergence des copies est l'une de ces propriétés de cohérence.
 La \autoref{sec:consistency-spec} introduit le formalisme que nous utilisons pour décrire les propriétés de cohérence.
 Notre formalisme étend le formalisme de~\textcite{burckhardt_eventualconsistency_2014} pour prendre en compte la présence d'un adversaire actif.
 Les protocoles de réplication garantissent souvent des ensembles communs de propriétés de cohérence.
-Pour faciliter l'appréciation de leurs similitudes, les propriétés de cohérence sont réunies sous des ensembles bien définies nommés \emph{modèle de cohérence}.
+Pour faciliter l'appréciation de leurs similitudes, les propriétés de cohérence sont réunies sous des ensembles bien définis nommés \emph{modèle de cohérence}.
 La \autoref{sec:consistency-spec} présente un moyen de comparer les modèles de cohérence.
 La \autoref{sec:causal-models} présente le modèle de cohérence causale ainsi que les modèles de cohérence sur-lesquelles nous nous reposons pour établir la contribution du \autoref{ch:pruned-log}.
 
 La convergence des copies est une propriété essentielle des protocoles de réplication optimiste.
 Dans le \autoref{ch:problematic}, nous avons motivé notre intérêt pour des protocoles qui permettent la convergence des copies sans coordination.
-De tels protocoles n'imposent pas aux pairs de dialoguer pour s'entendre sur la manière de résoudre les conflits de modification qui surviennent au cours de la collaboration.
-Ils n'ont d'autres choix que d'adopter des résolutions prédéterminées de conflit.
+De tels protocoles n'imposent pas aux pairs de communiquer pour s'entendre sur la manière de résoudre les conflits de modification qui surviennent au cours de la collaboration.
+Ils n'ont d'autres choix que d'adopter des résolutions prédéterminées de conflits.
 Les protocoles de réplication optimiste décident en général la manière de résoudre un conflit.
-Pour faciliter la comparaison des protocoles et leur implémentation, les stratégies de résolution de conflits sont encapsulées au sein de type de données répliquées nommés \acfp{CRDT}.
-Les concepteur·ice·s d'applications peuvent ainsi utiliser des type de données prêt à l'emploi.
+Pour faciliter la comparaison des protocoles et leur implémentation, les stratégies de résolution de conflits sont encapsulées au sein de types de données répliquées nommés \acfp{CRDT}.
+Les concepteur·ice·s d'applications peuvent ainsi utiliser des types de données prêts à l'emploi.
 La \autoref{sec:crdt} présente ces types de données et illustre plusieurs sémantiques de résolution de conflits.
 
 \section{Spécification de modèles de cohérence}\label{sec:consistency-spec}
@@ -338,7 +338,7 @@ La relation \emph{retourne-avant} est inférée par le positionnement horizontal
 \end{figure}
 
 Une histoire vérifie une propriété de cohérence si et seulement s'il existe au moins une exécution abstraite qui la respecte.
-Il suffit donc de générer toutes les exécutions abstraites possibles pour une histoire donnée et vérifier que au moins l'une d'entre elles respecte la propriété de cohérences considérée.
+Il suffit donc de générer toutes les exécutions abstraites possibles pour une histoire donnée et vérifier qu'au moins l'une d'entre elles respecte la propriété de cohérences considérée.
 La \autoref{fig:hist-absexec} met en évidence les relations entre histoires, exécutions abstraites, et propriétés de cohérence.
 
 \begin{figure}[tbh]
@@ -406,8 +406,8 @@ La \autoref{fig:hist-absexec} met en évidence les relations entre histoires, ex
 L'exécution du protocole $P$ peut produire les histoires $\bullet_1$ et $\bullet_2$.
 $\bsq_1$ et $\bsq_2$ correspondaient aux exécutions abstraites que nous obtenons à partir de $\bullet_1$.
 $\bsq_3$ et $\bsq_4$ correspondaient aux exécutions abstraites que nous obtenons à partir de $\bullet_2$.
-L'histoire $\bullet_1$ vérifié les propriétés de cohérence $p_1$ et $p_3$ puisque l'exécution abstraite $\bsq_2$ les respectent.
-De même, l'histoire $\bullet_2$ vérifié la propriété $p_1$ ou $p_2$ puisque l'exécution abstraite $\bsq_3$ respecte $p_1$ et l'exécution abstraite $\bsq_4$ respecte $p_2$.
+L'histoire $\bullet_1$ vérifie les propriétés de cohérence $p_1$ et $p_3$ puisque l'exécution abstraite $\bsq_2$ les respecte.
+De même, l'histoire $\bullet_2$ vérifie la propriété $p_1$ ou $p_2$ puisque l'exécution abstraite $\bsq_3$ respecte $p_1$ et l'exécution abstraite $\bsq_4$ respecte $p_2$.
 Le protocole $P$ garantit ainsi la propriété $p_1$ puisque chacune de ses histoires est associée à au moins une exécution abstraite qui la respecte.}\label{fig:hist-absexec}
 \end{figure}
 
@@ -448,7 +448,7 @@ Le \emph{contexte} d'une opération $x$ dans une \emph{exécution abstraite} $A$
     \caption{Contexte et observateurs des opérations de l'exécution abstraite de la \autoref{fig:vis-example}.}\label{tab:op-ctx-obs}
 \end{table}
 
-La spécification du type de données répliquées de la \autoref{fig:causal-expectation} (fil de discussion) peut ainsi être exprimé par l'\autoref{eq:chat-spec}~:
+La spécification du type de données répliquées de la \autoref{fig:causal-expectation} (fil de discussion) peut ainsi être exprimée par l'\autoref{eq:chat-spec}~:
 
 \begin{equation}\label{eq:chat-spec}
     x \in A \land \trm{call}(x) = \trm{rd} \implies \trm{rval}(x) = \set*{t \given \exists y \in \trm{ctx}_A(x) \qsep \trm{call}(y) = \trm{post}(t)}
@@ -490,8 +490,8 @@ Cette extension permet de décrire des exécutions dans lesquels des pairs peuve
 Nous qualifions ces pairs de \emph{mal-intentionnés}.
 Inversement, les pairs qui suivent le protocole sont qualifiés d'\emph{honnêtes}.
 Nous notons $\trm{Honest}$ et $\trm{Malicious}$ l'ensemble des pairs honnêtes et mal-intentionnés.
-L'union de ces deux ensemble correspond à l'ensemble des pairs $\trm{Peers}$.
-Ces ensembles sont connus étant donné que nous décrivons des exécutions d'un point de vue global.
+L'union de ces deux ensembles correspond à l'ensemble des pairs $\trm{Peers}$.
+Ces ensembles sont connus, étant donné que nous décrivons des exécutions d'un point de vue global.
 L'ensemble des pairs contient au moins un pair honnête ($\trm{Honest} \neq \emptyset$).
 
 Sans perte de généralité, nous supposons que les pairs honnêtes exécutent les opérations de manière séquentielle.
@@ -635,7 +635,7 @@ La \autoref{fig:wf-example} donne un exemple d'exécution abstraite mal-formée 
     \end{tikzpicture}
     \caption{}\label{fig:wf-example-2}
 \end{subfigure}
-\caption[Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée]{Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée.
+\caption[Exemples d'une exécution abstraite mal-formée et d'une exécution abstraite bien-formée]{Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée.
 Soit un groupe de pairs composé d'un pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.
 L'exécution abstraite \subref{fig:wf-example-1} n'est pas bien-formée.
 L'opération $m_1$ est uniquement observée par un pair mal-intentionné $p_M$.
@@ -771,7 +771,7 @@ Une propriété de vivacité ne peut pas être vérifiée indépendamment des au
 Seules les extensions de l'histoire qui respectent les autres propriétés de cohérence doivent être considérées.
 
 L'intégration à terme des modifications pourrait ainsi être traduite par~: une opération de modification est à terme visible à une infinité d'opérations d'interrogation.
-Nous pouvons prendre avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à une infinité d'opérations.
+Nous pouvons tirer avantage de la flexibilité de la relation de visibilité pour simplifier l'expression à~: une opération est à terme visible à une infinité d'opérations.
 En d'autres termes, pour toute opération il n'existe pas une infinité d'opérations auxquelles elle n'est pas visible~:
 
 \begin{equation}
@@ -852,7 +852,7 @@ L'ensemble des modèles de cohérence est alors partiellement ordonné
 
 \begin{definition}[Force des modèles de cohérence]\label{def:consistency-hierearchy}
 Soit deux modèle de cohérence $C$ et $C'$.
-Le modèle de cohérence $C$ est plus fort que le modèle de cohérence $C'$, si et seulement si l'ensemble des exécutions abstraites qui respectent $C$ est strictement inclut dans l'ensemble des exécutions abstraites qui respectent $C'$.
+Le modèle de cohérence $C$ est plus fort que le modèle de cohérence $C'$, si et seulement si l'ensemble des exécutions abstraites qui respectent $C$ est strictement inclus dans l'ensemble des exécutions abstraites qui respectent $C'$.
 En d'autres termes $C \subset C'$.
 \end{definition}
 
@@ -880,14 +880,14 @@ Dans ce manuscrit nous considérons un modèle de cohérence avec une propriét�
 Il s'agit du modèle de cohérence à terme forte~\autocite{shapiro_2011_crdt,burckhardt_eventualconsistency_2014}.
 Nous avons motivé ce choix dans le \autoref{ch:problematic}.
 La \autoref{def:strong-eventual-consistency} définit ce modèle.
-Elle reprend la propriété de visibilité à terme définit dans la \autoref{subsec:consistency-spec-liveness-safety}.
+Elle reprend la propriété de visibilité à terme définie dans la \autoref{subsec:consistency-spec-liveness-safety}.
 
 \begin{definition}[Cohérence à terme forte]\label{def:strong-eventual-consistency}
     Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence à terme forte si et seulement si~:
 
     \begin{description}
     \item[\namedlabel{itm:eventual-vis}{EC1} (visibilité à terme)]
-    Les effets des opérations de modification sont à terme intégrées par les pairs (honnêtes).
+    Les effets des opérations de modification sont à terme intégrés par les pairs (honnêtes).
     \begin{equation*}
         \forall x \in A \qsep \set*{y \in A \given x \not\vis y} \textit{est fini}
     \end{equation*}
@@ -1146,7 +1146,7 @@ Un protocole peut garantir la cohérence causale avec divers mécanismes~\autoci
 Un protocole naïf pourrait~:
 
 \begin{itemize}
-    \item Inclure dans chaque opération $x$ l'ensemble des opérations dont les effets ont été intégrées par l'auteur de $x$ avant l'exécution de $x$.
+    \item Inclure dans chaque opération $x$ l'ensemble des opérations dont les effets ont été intégrés par l'auteur de $x$ avant l'exécution de $x$.
     Cet ensemble correspond au contexte de l'opération.
     \item Intégrer l'effet d'une opération après l'intégration des effets de l'ensemble des opérations présentes dans son contexte.
 \end{itemize}
@@ -1334,10 +1334,10 @@ Si tous les pairs sont honnêtes, alors l'exécution abstraite respecte égaleme
 \end{proposition}
 
 \begin{proof}
-Si tous les pairs sont honnêtes alors les propriétés~\ref{itm:peer-linear} et~\ref{itm:honest-linear} sont équivalentes.
+Si tous les pairs sont honnêtes, alors les propriétés~\ref{itm:peer-linear} et~\ref{itm:honest-linear} sont équivalentes.
 \end{proof}
 
-le modèle de cohérence \ac{FJC} est plus faible que le modèle de cohérence causale.
+Le modèle de cohérence \ac{FJC} est plus faible que le modèle de cohérence causale.
 Les deux modèles partagent les mêmes garanties à l'exception de~\ref{itm:peer-linear} qui est une spécialisation de~\ref{itm:honest-linear}.
 Toutes les exécutions qui respectent le modèle de cohérence causale respectent également le modèle de cohérence~\ac{FJC}.
 Une application qui se base sur le modèle de cohérence~\ac{FJC} doit gérer la complexité induite par l'acceptation d'opérations \emph{non-linéaires}, c'est-à-dire d'opérations concurrentes d'un même pair.
@@ -1527,13 +1527,13 @@ Dans l'exécution abstraite $A$ de la \autoref{fig:known-colluding-malicious}, $
         \draw[pre] (\src) to (\dest);
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
-\caption[Exemple d'une exécution abstraites qui ne respecte pas le modèle de cohérence \ac{VFJC}]{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
+\caption[Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}]{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
 L'exécution abstraite $A_1$ respecte le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
 \end{figure}
 
 Les pairs honnêtes doivent s'assurer qu'un pair qui reconnaît un autre pair comme mal-intentionné arrête d'accepter directement les opérations de ce dernier.
 En d'autres termes, reconnaître qu'un pair est mal-intentionné devrait être responsabilisant.
-Si un un pair est reconnu mal-intentionné en une opération $x$, alors une opération de ce pair ne peut être immédiatement visible à $x$.
+Si un pair est reconnu mal-intentionné en une opération $x$, alors une opération de ce pair ne peut être immédiatement visible à $x$.
 Il s'agit de la propriété~\ref{itm:vfjc2} du modèle de cohérence \acf{VFJC} que nous présentons dans la \autoref{def:vfjc-consistency}.
 
 \begin{definition}[Cohérence \emph{\acl{VFJC}}~\autocite{mahajan_2011_cac}]\label{def:vfjc-consistency}
@@ -1647,7 +1647,7 @@ Les \acfp{CRDT}~\autocite{shapiro_2011_crdt,roh_2011_rga} sont des types de donn
 Ils encapsulent la complexité des protocoles de réplication optimiste derrière une interface bien définie.
 Les concepteur·ice·s d'applications peuvent ainsi se concentrer sur la sémantique des contenus répliqués.
 Nous spécifions un \ac{CRDT} avec deux modèles~\autocite{preguia2018_crdt}~: un type abstrait de données répliquées et un schéma de synchronisation.
-Le type abstrait de données répliquées définit les opérations qui peuvent être exécutées et leur effet lorsqu'elles sont exécutées en parallèle ou en séquence.
+Le type abstrait de données répliquées définis les opérations qui peuvent être exécutées et leur effet lorsqu'elles sont exécutées en parallèle ou en séquence.
 Nous abordons ce sujet plus en détail dans la \autoref{sec:crdt-spec}.
 Le schéma de synchronisation conditionne la manière dont les copies d'un \ac{CRDT} peuvent se synchroniser.
 Il repose lui-même sur un modèle réseau.
@@ -1915,7 +1915,7 @@ La littérature a par exemple proposé les sémantiques suivantes pour les ensem
 \end{subfigure}
 \caption[Sémantiques d'un ensemble répliqué]{Illustration des différentes sémantiques d'un ensemble répliqué d'entiers.
 \subref{fig:set-alt-sem-1} L'exécution abstraite considérée respecte le modèle de cohérence causale.
-\subref{fig:set-alt-sem-2} La valeur de retour de l'opération de lecture $a_5$ dépend de la sémantique choisit pour l'ensemble répliqué.
+\subref{fig:set-alt-sem-2} La valeur de retour de l'opération de lecture $a_5$ dépend de la sémantique choisie pour l'ensemble répliqué.
 }\label{fig:set-alt-sem}
 \end{figure}
 
@@ -1956,7 +1956,7 @@ L'ensemble lu est donc un singleton qui contient la valeur $1$.
 \paragraph{} Alors que les types abstraits usuels supposent le respect d'un modèle de cohérence séquentiel, les types abstraits de données répliquées respectent des modèles de cohérence plus faibles.
 Les \acp{CRDT} respectent par conception la propriété de convergence forte.
 Cette dernière est impliquée par leur sémantique.
-En fonction du schéma de synchronisation choisit, les \acp{CRDT} peuvent respecter des modèles de cohérence plus fort.
+En fonction du schéma de synchronisation choisi, les \acp{CRDT} peuvent respecter des modèles de cohérence plus fort.
 
 %Nous représentons un \ac{CRDT} $T$ par un n-uplet $\tuple*{\trm{Op}_T, \trm{Val}_T}$ dans lequel $\trm{Op}_T$ est l'ensemble des opérations admises par le \ac{CRDT}, et $\trm{Val}_T$ est l'ensemble des valeurs de retour des opération d'interrogation.
 %L'ensemble des opérations est l'union de l'ensemble $M$ des opérations de modifications et de l'ensemble $Q$ des opérations d'interrogations.
@@ -1983,12 +1983,12 @@ Les pairs intègrent à terme les messages qu'ils reçoivent.
 La forme des messages conditionne la manière de synchroniser les copies du contenu partagé.
 Il existe deux principales familles de \acp{CRDT}~: les \acp{CRDT} synchronisés par opérations, et les \acp{CRDT} synchronisés par états.
 Nous présentons chaque famille de \acp{CRDT} et nous les illustrons à l'aide d'un ensemble répliqué.
-L'ensemble répliqué choisit respecte la sémantique \emph{add-win} présentée dans la \autoref{sec:crdt-spec}.
+L'ensemble répliqué choisi respecte la sémantique \emph{add-win} présentée dans la \autoref{sec:crdt-spec}.
 
-Quel que soit le schéma de synchronisation choisit, les implémentations d'ensembles répliqués que nous présentons se basent sur une idée commune.
+Quel que soit le schéma de synchronisation choisi, les implémentations d'ensembles répliqués que nous présentons se basent sur une idée commune.
 Chaque ajout d'une valeur dans l'ensemble associe à cette valeur un identifiant unique.
 Si la valeur est ajoutée plusieurs fois dans l'ensemble, elle est donc associée à plusieurs identifiants.
-Une suppression ne supprime pas directement une valeur mais supprime définitivement un ensemble d'identifiants qui lui est associée.
+Une suppression ne supprime pas directement une valeur mais supprime définitivement un ensemble d'identifiants qui lui est associé.
 Une valeur est présente dans l'ensemble si elle est associée à au moins un identifiant.
 L'utilisation d'identifiants uniques est courant dans les implémentations de \acp{CRDT}~\autocite{baquero_2018_pure-op-crdt,almeida_2018_delta-crdt-revisited}.
 Ces identifiants sont généralement des couples dont le premier élément est l'identifiant unique du pair, et le second élément est un entier naturel qui est incrémenté avant chaque génération d'un nouvel identifiant.
@@ -2113,7 +2113,7 @@ Le contenu répliqué est un ensemble qui respecte la sémantique \emph{Add-Win}
 
 La \autoref{fig:op-add-win-set} propose une implémentation d'un ensemble répliqué synchronisé par opérations.
 L'\autoref{eq:op-awset-state} précise l'ensemble des états du \ac{CRDT}.
-Un état est définit comme un couple $\tuple*{t, n}$ où $t$ contient l'ensemble des valeurs associées à leur identifiant unique et $n$ est un nombre séquentiel utilisé pour générer les identifiants uniques.
+Un état est défini comme un couple $\tuple*{t, n}$ où $t$ contient l'ensemble des valeurs associées à leur identifiant unique et $n$ est un nombre séquentiel utilisé pour générer les identifiants uniques.
 L'association d'une valeur $v$ et d'un identifiant $\tuple*{i, n'}$ est représentée par un triplet $\tuple*{v, i, n'}$ où $i$ est pris dans l'ensemble $\mathbb{I}$ des identifiants des pairs et $n'$ est un entier naturel non-nul ($n' \in \mathbb{N}^*$).
 L'évaluation d'une opération de lecture retourne l'ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:op-awset-eval}).
 L'opération intégrable d'ajout d'une valeur correspond à un couple constitué de l'étiquette $\trm{add}$ et du triplet composé de la valeur et d'un nouvel identifiant unique (\autoref{eq:op-awset-prep-add}).
@@ -2176,7 +2176,7 @@ Lorsque l'événement correspond à l'exécution d'une opération de modificatio
 
 L'exécution d'une opération de suppression d'une valeur $v$ forme une opération intégrable qui contient l'ensemble des identifiants associés à $v$.
 Si une opération d'ajout de $v$ est exécutée en parallèle, un nouvel identifiant est associé à la valeur.
-Cet identifiant n'est pas inclut dans la suppression.
+Cet identifiant n'est pas inclus dans la suppression.
 Quel que soit l'ordre d'intégration de ces deux opérations, la valeur $v$ sera présente dans l'ensemble.
 L'implémentation décrite respecte donc la sémantique \emph{Add-Win}.
 
@@ -2188,7 +2188,7 @@ La fonction d'intégration $\trm{integrate}$ permet donc de fusionner deux état
 Les états peuvent être fusionnés dans un ordre arbitraire et plusieurs fois sans compromettre la convergence des copies.
 La fonction d'intégration est par conséquent associative, commutative, et idempotente.
 
-Les états sont partiellement ordonnés de telle manière à ce que la fusion de deux états produisent toujours un état plus grand que les états fusionnés ou égal à l'un des états fusionnés.
+Les états sont partiellement ordonnés de manière à ce que la fusion de deux états produisent toujours un état plus grand que les états fusionnés ou égal à l'un des états fusionnés.
 L'état obtenu est unique et minimal.
 Il s'agit de la borne supérieure des états fusionnés.
 Ainsi un état fusionné avec lui-même donne l'état lui-même.
@@ -2286,7 +2286,7 @@ L'ensemble répliqué utilise l'implémentation de la \autoref{fig:state-add-win
 Nous prenons l’exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d’un ensemble qui utilise l’implémentation de la \autoref{fig:state-add-win-set}.
 La \autoref{fig:state-awset-state-trans} décrit les états successifs de la copie du pair $p_A$.
 La \autoref{fig:state-add-win-set-semilattice} présente le sup-demi-treillis des états de cette exécution.
-Les traits épaissis représente les transitions d'états du pair $p_A$.
+Les traits épaissis représentent les transitions d'états du pair $p_A$.
 La fusion de deux états correspond à leur borne supérieure dans le sup-demi treillis.
 Ainsi la fusion des états $\tuple*{\emptyset,\set*{A_1}}$ et $\tuple*{\set*{\tuple*{1,A_1},\tuple*{1,B_1}},\set*{A_1,B_1}}$ produit l'état $\tuple*{\set*{\tuple*{1,B_1}},\set*{A_1,B_1}}$.
 
@@ -2333,7 +2333,7 @@ L'état minimal est $\tuple*{\emptyset, \emptyset}$.
 Un état décomposé peut être obtenu par la fusion de l'ensemble de ses états irréductibles.
 Par exemple, l'état $\tuple*{\set*{\tuple*{1,B_1}}, \set*{A_1,B_1}}$ est obtenu par la fusion des deux états irréductibles $\tuple*{\emptyset, \set*{A_1}}$ et $\tuple*{\set*{\tuple*{1,B_1}}, \set*{B_1}}$.
 Au lieu de transmettre aux autres pairs un état mis à jour dans son intégralité, un pair peut transmettre la différence entre un état mis à jour et sa version précédente.
-Dans la littérature, plusieurs mécanismes de synchronisation par différences d'états prennent avantage de cette observation.
+Dans la littérature, plusieurs mécanismes de synchronisation par différences d'états tirent avantage de cette observation.
 Certains d'entre eux permettent d'assurer une cohérence causale avec un sur-coût plus faible que les mécanismes de synchronisation par état complet~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 La flexibilité de cette approche permet la conception de mécanismes de synchronisation variés et est donc adaptée à un large éventail d'applications.
 
@@ -2381,7 +2381,7 @@ Un autre protocole de synchronisation pourrait envoyer l'état irréductible $\t
 
 Les \acp{CRDT} synchronisés par différences d'états conservent les avantages des \acp{CRDT} synchronisés par états tout en corrigeant leurs principaux défauts.
 Avec un mécanisme de synchronisation adéquate, ils peuvent supporter la perte, les duplications, et l'intégration dans un ordre arbitraire des messages.
-Ils ont la capacité de réduire le coût de transmission puisque seuls des différences d'états peuvent être transmises.
+Ils ont la capacité de réduire le coût de transmission puisque seules des différences d'états peuvent être transmises.
 
 
 \paragraph{} Nous avons présenté les deux principales familles de \acp{CRDT}~: les \acp{CRDT} synchronisés par opérations et les \acp{CRDT} synchronisés par états.
@@ -2390,4 +2390,4 @@ Les \acp{CRDT} synchronisés par états sont moins exigeants et supportent les m
 Cependant, la taille des messages de certains \acp{CRDT} synchronisés par états peut être impraticable.
 Les \acp{CRDT} synchronisés par différences d'états corrigent ce problème.
 Au lieu de transmettre l'intégralité de l'état mis à jour, ils peuvent transmettre des différences d'états.
-Dans le chapitre \autoref{ch:dotted-logootsplit} nous proposons un proposons un protocole synchronisé par différences d'états adapté à l'édition collaborative de texte.
+Dans le \autoref{ch:dotted-logootsplit} nous proposons un protocole synchronisé par différences d'états adapté à l'édition collaborative de texte.

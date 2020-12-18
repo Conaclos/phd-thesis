@@ -7,8 +7,9 @@
 Ce dernier chapitre synthétise nos contributions et propose une réponse aux questions de recherches que nous nous sommes posées.
 Il propose également des problématiques de recherches pour des travaux ultérieurs.
 
+Ce dernier chapitre montre comment nous avons répondu aux questions de recherches que nous nous sommes posées.
+
 \clearpage
-\section{Résumé des contributions}
 
 % %%%
 % Tu reprends tes objectifs du départ et tu dis comment
@@ -18,43 +19,38 @@ Il propose également des problématiques de recherches pour des travaux ultéri
 % conclusion plutôt qu'à la fin de chaque chapitre
 % %%%
 
-\subsection{Convergence sécurisée à l'aide d'un journal tronqué}
+\section{Convergence sécurisée à l'aide d'un journal tronqué}
 
-La communauté scientifique a présenté de nombreux protocoles de réplication optimiste dans le but de concevoir des applications de collaboration hautement disponible, aux latences faibles, et qui passent à l'échelle.
-La plupart des protocoles présentés ne résistent pas à la présence de pairs mal-intentionnés dans la collaboration.
-Les pairs mal-intentionnés peuvent produire des équivoques dans le but de compromettre la convergence des copies des pairs honnêtes.
+\subsection{Résumé des contributions}
 
-Les pairs peuvent détecter ces équivoques et converger de manière sûr à l'aide de journaux infalsifiables.
-Malheureusement l'utilisation de journaux infalsifiables limite le passage à l'échelle de la collaboration.
-L'ensemble du journal doit être conservé pour maintenir sa cohérence et permettre à de nouveaux pairs de joindre la collaboration.
+La communauté scientifique a proposé de nombreux protocoles de réplication optimiste dans le but de concevoir des applications de collaboration hautement disponibles, aux latences faibles, et qui passent à l'échelle.
+La plupart des protocoles de réplication optimiste ne garantissent pas la convergence des copies du contenu en présence de pairs mal-intentionnés.
+Les pairs mal-intentionnés peuvent en effet produire des équivoques pour compromettre la convergence des copies des pairs honnêtes.
+Nous nous sommes donc demandé s'il était possible de protéger la convergence des copies des pairs honnêtes tout en préservant les propriétés désirées des protocoles de réplication optimiste.
 
-Pour remédier à cette limitation nous avons proposé un protocole qui permet la troncature du journal et un protocole qui permet d'authentifier un état du contenu partagé à l'aide d'un journal tronqué.
-La troncature du journal repose sur le concept de stabilité.
-Nous avons définit le concept de stabilité au sein de plusieurs modèle de cohérence, et en particulier sur deux modèles de cohérence que nous avons introduit~: le modèle de cohérence causale dynamique et le modèle de cohérence \acl{VFJC} dynamique.
+Nous avons proposé deux protocoles qui protègent la convergences des copies des pairs honnêtes.
+Nos deux protocoles ne nécessitent pas de coordination entre les pairs.
+Chaque pair peut à tout moment modifier et interroger le contenu répliqué.
+Nous avons donc préservé la caractéristique principale des protocoles de réplication optimiste.
+Par ailleurs, nos protocoles prennent en compte la dynamique des groupes de collaboration et évincent les pairs qui sont reconnus mal-intentionnés.
 
-Nous avons apporté des éléments de preuves de nos protocoles.
-Ces preuves devraient être complétées et une évaluation expérimentale devraient comparer notre protocole à journaux tronqués à un protocole à journaux complets.
+Notre premier protocole repose sur le maintien d'un journal infalsifiable et répliqué.
+Chaque pair maintient son propre journal dans lequel il enregistre les messages qu'il transmet aux autres pairs et les messages qu'il reçoit des autres pairs.
+Notre protocole est le premier protocole réalisable de la litérature\footnote{\textcite{mahajan_2011_cac} décrit un \emph{protocole naïf} pour montrer la pertinence du modèle de cohérence \acs{VFJC}.} qui respecte le modèle de cohérence \acf{VFJC}.
+En réalité, il respecte un nouveau modèle de cohérence plus fort que le modèle de cohérence \acs{VFJC}.
+Ce nouveau modèle que nous avons nommé \acl{VFJC} Dynamique tient compte de la dynamique des groupes de collaboration.
+Notre protocole requiert la préservation de l'intégralité du journal pour maintenir la cohérence des copies et permettre à de nouveaux pairs de joindre la collaboration.
+La préservation de l'intégralité du journal et sa transmission aux nouveaux pairs engendre des coûts en mémoire et en communication réseau.
 
+Pour remédier à cette limitation nous avons proposé un second protocole qui repose sur le premier et permet la troncature du journal.
+La troncature de journal supprime les messages qui sont des dépendances de tous messages ajoutés ultérieurement dans le journal.
+Pour identifier ces messages, nous reposons sur le concept de Stabilité.
+Nous avons proposé un algorithme qui permet d'identifier les messages stables en présence de pairs mal-intentionnés.
+Cette algorithme a une complexité linéaire avec le nombre de messages dans le journal.
 
-\subsection{Séquence répliquée synchronisée par différences}
+Nous avons défini le concept de stabilité au sein de plusieurs modèle de cohérence, et en particulier sur deux modèles de cohérence que nous avons introduit~: le modèle de cohérence Causale Dynamique et le modèle de cohérence \acl{VFJC} Dynamique.
 
-De nombreux protocoles de réplication optimiste de séquence de caractère sont été proposés pour supporter l'édition collaborative de texte.
-Chacun à sa manière a permis d'améliorer l'état de l'art de l'édition collaborative.
-Nous avons proposé un nouveau protocole de réplication optimiste de séquence nommé \emph{Dotted LogootSplit}.
-Contrairement aux autres protocoles, il ne retarde pas l'intégration des modifications des pairs.
-Chaque modification est intégrée dès sa réception.
-Ce qui évite la propagation de ralentissement, voire l'interruption temporaire, de la collaboration.
-Il permet également à deux pairs d'échanger directement leurs états.
-Ce qui évite des échanges coûteux de journaux de modifications lorsque les deux pairs se reconnectent après une longue période de déconnexion.
-
-Pour ce faire, \emph{Dotted LogootSplit} synchronise les copies par différences d'états.
-Une différence d'état peut synthétiser une seule modification ou plusieurs modifications.
-Les différences d'états peuvent être librement réordonnées et dupliqués.
-La synchronisation par différences d'états offre une grande flexibilité dans al conception de protocole de synchronisation.
-Des évaluations devraient être menés pour déterminer qu'elle est la meilleure stratégie de synchronisation en fonction des modes de collaboration.
-
-
-\section{Perspectives}
+\subsection{Perspectives}
 
 % %%%
 % Tu organises tes perspectives en fonction de leur
@@ -68,42 +64,128 @@ Des évaluations devraient être menés pour déterminer qu'elle est la meilleur
 % perspectives plus grandes (consensus asynchrone)
 % Et tu ne classes rien
 % il y a des problématiques futures pour 
-% - La sureté
+% - La sûreté
 % - La sécurité
 % - L'utilisabilité
 % - Les performances
 % %%%
 
-\paragraph{Applications du concept de Stabilité.} Le concept de stabilité que nous avons développé a été uniquement appliqué pour la troncature sûr de journaux infalsifiables.
-Des travaux ultérieurs pourraient s'intéresser à l'application de ce concept à d'autres domaines.
-Il pourrait par exemple être le socle pour la conception de protocole de consensus asynchrones~\autocite{bracha1985asynchronous}.
+Nous avons apporté des éléments de preuves pour valider nos protocoles.
+Ces preuves devraient être complétées.
+Il reste notamment à démontrer que l'exécution de notre protocole à journaux tronqués respecte le modèle de cohérence \acl{VFJC} Dynamique.
+Nous devrions également mener des expérimentations pour évaluer leur capacité à passer à l'échelle.
 
-\paragraph{Éviction des pairs inactifs.}
-Nous proposons un protocole pour tronquer un journal infalsifiable.
-Le mécanisme de troncature se base sur la stabilité des messages du journal.
-La déconnexion prolongée d'un pair retarde la troncature du journal.
-Elle peut même l'empêcher si la déconnexion est permanente.
-Les pairs déconnectés depuis un certain temps pourraient être automatiquement évincés.
+% La troncature du journal repose sur le concept de Stabilité.
+Pour réduire la complexité algorithmique de la troncature du journal, nous n'identifions pas l'ensemble des messages qui peuvent être supprimés.
+Nous effectuons une approximation qui nous permet de supprimer un sous-ensemble de ces messages.
+Nous devrions évaluer par expérimentation si cette approximation n'est pas trop restrictive.
 
-\paragraph{Convergence sécurisée des copies du contenu.} Les journaux infalsifiables permettent de détecter les équivoques et ainsi d'obtenir l'ensemble des opérations qui ont été intégrées sur le contenu partagé.
-Certains type de données répliquées sont sensibles aux équivoques.
-En présence d'équivoque les copies du contenu partagé peuvent diverger de manière permanente.
-Par exemple, les protocoles de séquences répliquées sont sensibles aux équivoque qui produisent deux insertions de valeurs distinctes avec le même identifiant.
-Les pairs pourraient donc se retrouver divisés entre ceux qui ont la première valeur et ceux qui ont la seconde valeur.
+À plus long terme, nous souhaitons explorer d'autres applications du concept de Stabilité et améliorer l'utilisabilité de nos protocoles.
+Nous donnons un aperçu de ces axes de recherche dans les paragraphes suivants.
 
-\paragraph{Annulation de modifications.} L'une de nos publication~\autocite{2019_yu_genericundo} propose un mécanisme générique d'annulation et de rejeu de modification au sein de type de données répliquée synchronisés par différences d'états.
-Ce mécanisme pourrait être intégré à \emph{Dotted LogootSplit} et pourrait être une version de \emph{Logoot} adapté pour l'annulation et le rejeu de modification~\autocite{weiss2010logoot}.
+Dans ce manuscrit nous avons développé le concept de Stabilité à travers plusieurs modèles de cohérence et le concept de Stabilité convergente qui permet de garantir que deux pairs avec le même journal ont un même ensemble de messages stables.
+Nous avons employé ce concept pour tronquer le journal.
+Nous pensons que le concept de Stabilité peut trouver de nombreuses applications.
+Il pourrait par exemple être le socle d'un protocole de consensus asynchrones~\autocite{bracha1985asynchronous}.
+Dans un protocole de consensus asynchrones, un ensemble de pairs s'accordent sur une valeur unique sans aucune coordination en présence de pairs mal-intentionnés.
+Le protocole doit résister aux équivoques des pairs mal-intentionnés.
+Les pairs échangent des messages pour trouver un consensus.
+Un message convergent-stable garantit à un pair que tout sous-ensemble de pairs a connaissance du message et qu'il ne peut prétendre en avoir connaissance à un autre sous-ensemble de pairs.
+Les pairs peuvent ainsi trouver un consensus de manière déterministe à l'aide de l'ensemble de messages convergent-stables.
 
-\paragraph{Entrelacements.} La modification parallèle d'un contenu partagé rend difficile la définition de l'intention des opérations que les collaborateur·ice·s exécutent.
+Le plus grand problème d'utilisabilité de notre protocole à journaux tronqués réside dans la possibilité de bloquer la troncature du journal.
+La troncature du journal repose sur le concept de Stabilité.
+La stabilisation de messages exige le concourt de l'ensemble des pairs qui ont été invités, à l'exception des pairs évincés.
+Un pair qui n'exécute pas d'opérations ou qui produit délibérément des messages qui dépendent uniquement de ses anciens messages bloque alors la stabilisation de messages.
+Pour remédier à ce problème nous pourrions évincer les pairs qui empêchent la stabilisation de messages.
+
+Les pairs mal-intentionnés peuvent générer des messages non-linéaires et ainsi produire des embranchements.
+Nos protocoles rejettent les messages non-linéaires, et par extension les embranchements, qui ne sont pas acceptés par au moins un pair présumé honnête et connu.
+Les pairs mal-intentionnés peuvent inviter de nouveaux pairs dans un embranchement.
+Les pairs honnêtes peuvent donc être amenés à rejeter des invitations.
+Un nouveau pair pourrait donc se retrouver rejeté par les autres pairs du fait qu'il est été invité par un message non-linéaire.
+Un nouveau pair peut détecter qu'il a été invité dans un embranchement rejeté par les autres pairs.
+Il pourrait alors demander à être de nouveau invité par un autre pair.
+
+Nous avons contraint les invitations à être unique.
+Deux invitations ne peuvent pas inviter le même pair.
+Nos deux protocoles assurent cette contrainte en générant l'identifiant du pair à partir du message d'invitation.
+Deux messages d'invitation distincts donnent lieu à deux identifiants de pair distincts.
+Cette contrainte peut rendre plus difficile l'implémentation du protocole.
+Nous avons introduit cette contrainte pour simplifier l'expression de la Stabilité.
+Nous souhaitons étudier les conséquences de la suppression de cette contrainte sur l'expression de la Stabilité et sur les protocoles proposés.
+
+
+\section{Séquence répliquée synchronisée par différences}
+
+\subsection{Résumé des Contributions}
+
+De nombreux protocoles de réplication optimiste de séquences de caractères ont été proposés pour supporter l'édition collaborative de texte en simultané.
+Pour synchroniser leurs copies du document textuel, les pairs échangent leurs modifications sous la forme d'opérations d'insertion et de suppression.
+Les opérations doivent être intégrées une seule fois et dans un ordre spécifique.
+Un ordre d'intégration causal des opérations est généralement supposé.
+
+Les aléas du réseau conduisent au ré-ordonnement et à la perte d'opérations.
+L'intégration d'opérations peut donc être retardée si une de leurs dépendances n'a pas été intégrée.
+Ce qui propage des ralentissements dans l'ensemble de la collaboration.
+Par ailleurs, l'échange et l'intégration des opérations après une longue période de déconnexion d'un·e des collaborateur·ice·s peut être coûteuse.
+Nous nous sommes donc demandé si un protocole de réplication optimiste pour l'édition collaborative de texte en simultané pouvait remédier à ces deux problèmes.
+
+Nous avons proposé un nouveau protocole de réplication optimiste de séquence nommé \emph{Dotted LogootSplit}.
+Contrairement aux autres protocoles, il ne retarde pas l'intégration des modifications des pairs.
+Chaque modification est intégrée dès sa réception.
+Ce qui évite la propagation de ralentissements, voire l'interruption temporaire, de la collaboration.
+Il permet également à deux pairs d'échanger directement leur état.
+Ce qui évite des échanges coûteux de nombreuses modifications lorsqu'un pair se reconnecte après une longue période de déconnexion.
+
+Pour ce faire, \emph{Dotted LogootSplit} synchronise les copies par différences d'états.
+Une différence d'état peut synthétiser une seule modification ou plusieurs modifications.
+Les différences d'états peuvent être librement réordonnées et dupliqués.
+La synchronisation par différences d'états offre une grande flexibilité dans la conception de protocoles de synchronisation.
+
+\emph{Dotted LogootSplit} tire avantage des dernières avancées de l'état de l'art.
+Il agrége les méta-données associées aux caractères sous la forme de blocs.
+Ce qui le rend particulièrement adapté à l'édition collaborative de texte.
+
+\subsection{Perspectives}
+
+Nous devrions mener des expérimentations pour valider l'adéquation de \emph{Dotted LogootSplit} à l'édition collaborative de texte et valider ses avantages face aux protocoles existants.
+Pour montrer son adéquation à l'édition collaborative de texte, nous devrions vérifier que les temps d'intégration des modifications, et les temps d'exécutions des opérations d'insertion et de suppression sont suffisamment faibles.
+Nous devrions également nous assurer que l'occupation mémoire des méta-données associées aux caractères croîent raisonnablement avec le nombre de modifications effectuées.
+
+Pour montrer qu'il se comporte mieux que les protocoles existants face aux aléas du réseau, nous devrions simuler des pertes de messages sur le réseau, des retards de messages, des ré-ordonnement, et des déconnexions temporaires de pairs.
+Dans ces conditions, nous devrions mesurer les délais entre le moment où une modification est effectuée par un pair et le moment où elle est intégrée par les autres pairs.
+
+\emph{Dotted LogootSplit} offre une grande flexibilité dans la conception du protocole de synchronisation.
+Il devrait être évalué avec différents protocoles de synchronisation.
+La litérature a proposé plusieurs protocoles de synchronisation par différences d'états pour les \acp{CRDT}.
+Quel protocole est le plus adapté à l'édition collaborative de texte~?
+Plusieurs protocoles pourraient convenir en fonction du mode de collaboration rencontré.
+
+À plus long terme, nous souhaitons améliorer la résistance d'une séquence \emph{Dotted LogootSplit} aux attaques d'un adversaire actif, et nous souhaitons proposer une stratégie de génération de positions densément ordonnées qui limite les entrelacements de caractères.
+Nous donnons un aperçu de ces deux axes de recherche dans les paragraphes suivants.
+
+Les protocoles de réplication optimiste sont généralement conçus en supposant l'absence de pairs mal-intentionnés.
+Les pairs mal-intentionnés peuvent produire des équivoques en vue de compromettre la convergence des pairs honnêtes.
+Certains \acp{CRDT} résistent par conception aux équivoques de pairs mal-intentionnés.
+Les séquences répliquées associent un identifiant unique à chaque valeur.
+La synchronisation des copies se base sur ses identifiants uniques.
+Un pair mal-intentionné peut produire une équivoque en associant un même identifiant à différentes valeurs.
+Dans le cas des séquences répliquées à positions densément ordonnées, telle qu'une séquence \emph{Dotted LogootSplit}, un pair mal-intentionné peut également produire une équivoque en associant à une valeur et son identifiant une position distincte.
+L'utilisation de nos protocoles à journaux infalsifiables permet de détecter les équivoques.
+Nous pourrions proposer des mécanismes pour résoudre les conflits de modification introduits par les équivoques.
+Cependant, nous pensons que ces problématiques devraient être prises en compte dans la conception des \acp{CRDT}.
+Elles devraient en particulier être prises en compte dans la conception de \acp{CRDT} synchronisés par différences d'états puisque l'utilisation d'un journal infalsifiable annule la plupart de leurs avantages.
+En effet, l'utilisation d'un journal infalsifiable nécessite la réintroduction de dépendances causales entre les modifications.
+
+La modification parallèle d'un contenu partagé rend difficile la définition de l'intention des opérations que les collaborateur·ice·s exécutent.
 Concernant l'édition collaborative de texte, il est communément accepté qu'une insertion à un indice donné traduit l'intention de vouloir insérer un caractère entre les caractères qui entourent cet indice.
-\textcite{kleppmann2019_interleaving} a mis en évidence l'importance de rejeter les entrelacements de caractères insérées en parallèle.
+\textcite{kleppmann2019_interleaving} ont mis en évidence l'importance de rejeter les entrelacements de caractères insérés en parallèle.
 \emph{Logoot}, \emph{LogootSplit}, et notre protocole \emph{Dotted Logoot} peuvent produire des entrelacements.
-La génération de positions devraient être soigneusement effectuée pour limiter les entrelacements voire les éviter complètement.
+Toutefois, \emph{LogootSplit} et \emph{Dotted Logoot} pourraient tirer avantage de positions agrégeables pour rejeter certains entrelacements.
+Lorsqu'un pair insère des caractères à un même emplacement les uns à la suite des autres, les caractères sont associés à des positions agrégeables.
+Les caractères sont groupés au sein d'un bloc.
+Le générateur de position pourrait garantir que tout caractère inséré en parallèle de ces caractères est placé avant ou après ces derniers.
 
-\paragraph{Génération adaptative des positions densément ordonnées.} \emph{LSeq}~\autocite{nedelec_2013_lseq} propose une stratégie de génération des positions sensément ordonnées qui en moyenne réduit leur occupation mémoire.
-Cette stratégie a été conçue pour générer des positions qui ne sont pas agréables.
-L'adaptation de cette stratégie à des positions agréables peut représenter un défi stimulant.
 
-\paragraph{Protocole de synchronisation par différences d'états.} \emph{Dotted LogootSplit} est le premier protocole de réplication de séquence synchronisée par différences d'états.
-La synchronisation par différences d'états offre une grande flexibilité dans la conception de protocole de synchronisation.
-Les meilleures stratégies de synchronisation pour l'édition collaborative de texte reste à déterminer.
+\section{Propos finales}

@@ -160,14 +160,14 @@ Elle engendre plusieurs problèmes~:
     \item[Disponibilité.] Le contenu ne peut plus être modifié, voire interrogé, lorsque des pairs sont isolés par des partitions réseaux.
     \item[Latence.] L'interrogation et la modification du contenu partagé est sujet aux latences du réseau et des pairs.
     La lenteur d'un pair ou d'une connexion réseau peut donc affecter l'ensemble du système.
-    \item[Passage à l'échelle.] L'ajout de pairs, et donc de copies, peut détériorer la disponibilité et les latences étant donné que le nombre de pairs impliqués dans une coordination augmente.
+    \item[Passage à l'échelle.] L'ajout de pairs, et donc de copies, peut détériorer la disponibilité et les latences, étant donné que le nombre de pairs impliqués dans une coordination augmente.
 \end{description}
 
 Le théorème CAP~\cite{brewer_cap_2000,gilbert_cap_2002} montre l'impossibilité de garantir à la fois une cohérence forte et une disponibilité à tout moment en présence de partitions réseaux.
 Nous pouvons illustrer cette impossibilité en prenant l'exemple d'une bibliothèque municipale qui possède un système répliqué d'emprunts de livres.
 Deux usagers souhaitent faire un emprunt.
 Les usagers sont connecté·e·s à des pairs distincts.
-Supposons que le réseau est momentanément partitionné de telle manière à ce que les pairs considérés se trouvent dans l'impossibilité de communiquer.
+Supposons que le réseau est momentanément partitionné de manière à ce que les pairs considérés se trouvent dans l'impossibilité de communiquer.
 Le système doit faire le choix entre le maintien d'une cohérence forte des emprunts ou la disponibilité d'emprunter.
 Le maintien de la cohérence forte empêche tout emprunt tant que les partitions réseaux persistent.
 La disponibilité d'emprunter en dépit du partitionnement peut conduire à des conflits.
@@ -191,7 +191,7 @@ Ce qui conduit à la divergence des copies.
 Deux copies divergentes fournissent des réponses différentes à au moins une interrogation.
 Les pairs se synchronisent pour échanger leurs modifications.
 Ils intègrent les modifications de chacun à leur copie.
-Les modifications sont donc intégrés dans des ordres distincts.
+Les modifications sont donc intégrées dans des ordres distincts.
 Les protocoles de réplication optimiste sont responsables de la convergence des copies.
 La \autoref{fig:optimistic-replication} illustre un scénario de réplication optimiste.
 
@@ -267,7 +267,7 @@ Elle garantit également qu'une modification intégrée par un pair finit par l'
   Une exécution qui respecte la cohérence à terme, respecte les propriétés suivantes~:
   \begin{description}
   \item[\namedlabel{itm:ec1}{EC1} (intégration à terme)] Une modification intégrée sur la copie d'un pair est à terme intégrée par l'ensemble des pairs.
-  \item[\namedlabel{itm:ec2}{EC2} (convergence à terme)] Les pairs qui ont intégrés le même ensemble de modifications ont à terme des copies convergentes.
+  \item[\namedlabel{itm:ec2}{EC2} (convergence à terme)] Les pairs qui ont intégré le même ensemble de modifications ont à terme, des copies convergentes.
   \end{description}
 \end{definition}
 
@@ -460,7 +460,7 @@ L'idée centrale de la \emph{convergence unidirectionnelle} est que deux pairs $
 %\end{definition}
 
 La non-nécessité de coordination pour obtenir des copies convergentes, suggère une résolution déterministe des conflits de modification.
-Dans le cas de la bibliothèque, on peut supposer que dans la majorité des cas des emprunts simultanés concernent des livres ou des exemplaires différents sur des périodes distinctes.
+Dans le cas de la bibliothèque, on peut supposer que dans la majorité des cas, des emprunts simultanés concernent des livres ou des exemplaires différents sur des périodes distinctes.
 Toutefois, des conflits d'emprunts peuvent survenir.
 Le nombre d'exemplaires d'un nouveau livre peut être insuffisant par rapport au nombre de lecteur·ice·s intéressé·e·s.
 Plusieurs stratégies peuvent être mises en place pour résoudre ces conflits.
@@ -493,7 +493,7 @@ On peut considérer que l'emprunteur·ice final·e correspond à la personne qui
 % Dans la \autoref{fig:optimistic-replication} l'opération $\trm{add}(1)$ a comme intention l'obtention du singleton $\set*{1}$.
 % L'opération $\trm{add}(2)$ a comme intention l'obtention du singleton $\set*{2}$.
 % La réconciliation des copies des deux pairs conduit nécessairement à la violation de l'intention de l'une des opérations.
-% Nous pouvons définir plus prudemment l'intention des opérations de telle manière à ce qu'elle offre une garantie pertinente tout en évitant leur violation.
+% Nous pouvons définir plus prudemment l'intention des opérations de manière à ce qu'elle offre une garantie pertinente tout en évitant leur violation.
 % Dans notre cas, nous pouvons définir l'intention d'un ajout comme l'obtention d'un ensemble qui contient à la fois l'élément ajouté et les éléments précédemment ajoutés.
 % La présence d'éléments ajoutés en concurrence n'est donc pas exclue.
 % Dans la \autoref{fig:optimistic-replication} l'opération $\trm{add}(1)$ a comme intention l'obtention d'un ensemble qui contient l'élément $1$.
@@ -537,12 +537,12 @@ Par exemple, il doit se prémunir contre les défaillances inhérentes aux rése
 
 Les protocoles de réplication optimiste supposent généralement l'absence de comportements mal-intentionnés.
 Cette hypothèse n'est pas réaliste au sein d'activités massives de collaboration.
-Plus un groupe de collaborateur·ice·s est large plus il est probable que le groupe inclut un ou plusieurs utilisateur·ice·s mal-intentionné·e·s.
+Plus un groupe de collaborateur·ice·s est large, plus il est probable que le groupe inclue un ou plusieurs collaborateur·ice·s mal-intentionné·e·s.
 
 Les défaillances d'un système peuvent être accidentelles ou résultantes de comportements mal-intentionnés.
 Sans perte de généralité, nous considérons que toute défaillance est le résultat de comportements mal-intentionnés.
 Ces comportements sont exprimés par l'adversaire du système.
-L'adversaire du système est mû par un objectif et contrôle des ressources, tels que le réseau et des pairs, pour atteindre son objectif.
+L'adversaire du système est mû par un objectif et contrôle des ressources telles que le réseau et des pairs, pour atteindre son objectif.
 
 L'objectif de notre adversaire est de compromettre la convergence des copies des collaborateur·ice·s honnêtes~\footnote{Dans la littérature le terme \textquote{correct} est également utilisé.}.
 Et ce dans le but de faire échouer leur collaboration.
@@ -563,7 +563,7 @@ Il peut par exemple changer l'émetteur d'un message ou le contenu d'un message.
 Il peut le soumettre à des lenteurs arbitraires.
 Il ne peut toutefois pas empêcher un pair de progresser dans l'exécution du protocole.
 L'adversaire peut également produire des pannes qui rendent momentanément le pair indisponible.
-Nous supposons que les pairs honnêtes disposent d'une mémoire durable et fiable de telle sorte à ce qu'ils retrouvent l'état dans lequel ils se trouvaient juste avant leur dernière panne.
+Nous supposons que les pairs honnêtes disposent d'une mémoire durable et fiable de sorte à ce qu'ils retrouvent l'état dans lequel ils se trouvaient juste avant leur dernière panne.
 Pour les mêmes raisons que celles évoquées dans le profil \emph{réseau asynchrone non-fiable}, l'adversaire ne peut pas provoquer des pannes dans l'objectif d'arrêter l'exécution définitive du protocole ou d'empêcher indéfiniment les pairs honnêtes de s'échanger un nombre non-borné de messages.
 
 \paragraph{Pairs mal-intentionnés.} L'adversaire contrôle un ensemble de pairs mal-intentionnés~\footnote{Dans la littérature, le terme \textquote{défectueux} est également utilisé.} qui peuvent librement travailler de concert.
@@ -576,7 +576,7 @@ Toutefois, nous supposons les limitations suivantes~:
   \item L'adversaire a des ressources limitées en puissance de calcul et en temps.
   Ces ressources ne sont pas suffisantes pour compromettre les primitives de cryptographies, telles que les signatures digitales et les fonctions de hachage résistantes aux collisions.
   \item Il ne peut pas empêcher un pair honnête d'authentifier la clef publique d'un autre pair honnête.
-  L'adversaire ne peut pas obtenir la clef privé d'un pair honnête et il ne peut donc pas usurper son identité cryptographique.
+  L'adversaire ne peut pas obtenir la clef privée d'un pair honnête et il ne peut donc pas usurper son identité cryptographique.
 \end{itemize}
 
 Les protocoles de réplication optimiste s'intéressent généralement à un adversaire qui a les profils \emph{réseau asynchrone non-fiable} et \emph{pairs restaurés}.
@@ -597,7 +597,7 @@ La convergence des copies est une propriété essentielle des infrastructures de
 Elle conditionne le succès d'une collaboration.
 Afin d'assurer des latences faibles et un passage à l'échelle du protocole, nous nous intéressons à des propriétés de convergence qui ne nécessitent pas de coordination.
 
-Le passage à l'échelle et les latences faibles des protocoles de réplication optimiste auxquels nous nous intéressons permet le support de collaboration massive.
+Le passage à l'échelle et les latences faibles des protocoles de réplication optimiste auxquels nous nous intéressons permettent le support de collaboration massive.
 Ce type de collaboration a une probabilité plus importante de rencontrer des comportements mal-intentionnés.
 Nous avons choisi de nous intéresser à des protocoles qui résistent à un adversaire Byzantin.
 Ce dernier contrôle le réseau et un ensemble de pairs mal-intentionnés.

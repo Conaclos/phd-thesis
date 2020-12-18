@@ -18,7 +18,7 @@ Il détaille également l'organisation de ce manuscrit et il énumère nos publi
 %Les contenus produits sont plus élaborés et de meilleure qualité.
 %
 %Les applications de collaboration facilitent la production collaborative de contenus.
-%Elles permettent à des collaborateur·ices géographiquement éloignés de contribuer à un même contenu.
+%Elles permettent à des collaborateur·ice·s géographiquement éloignés de contribuer à un même contenu.
 %Elles permettent également de modifier simultanément ou de manière différée les contenus.
 %Chaque contributeur·ice modifie individuellement un contenu partagé.
 %Ses modifications sont à termes observées et prises en compte par les autres contributeur·ice·s.
@@ -33,7 +33,7 @@ Il détaille également l'organisation de ce manuscrit et il énumère nos publi
 
 Internet est devenu une plate-forme où les internautes ne consultent plus uniquement des contenus, mais les produisent et les enrichissent collectivement~\autocite{mogan2010_web2groupware}~: elles et ils partagent et commentent des contenus multimédias au sein des réseaux sociaux~; elles et ils co-écrivent des documents à l'aide d'éditeurs collaboratifs~; elles et ils co-programment à l'aide de gestionnaires de versions.
 Les productions de tels contenus sont le résultat d'activités de collaboration~\autocite{ellis1991_groupware} qui se répartissent dans l'espace et le temps.
-Les contributeur·ices modifient individuellement un contenu partagé.
+Les contributeur·ice·s modifient individuellement un contenu partagé.
 Elles et ils peuvent se trouver à des endroits géographiquement éloignés et peuvent modifier simultanément ou de manière différée les contenus partagés.
 Leurs modifications sont à terme observées et prises en compte par les autres contributeur·ice·s.
 
@@ -138,7 +138,7 @@ Le serveur peut difficilement s'adapter à un accroissement du nombre de modific
 Cette difficulté se traduit par une augmentation des latences pour intégrer de nouvelles modifications et propager les nouvelles versions du contenu partagé.
 Elle peut également produire un déni de service qui rend indisponible le serveur.
 Pour éviter ce problème les applications de collaboration limitent le nombre de collaborateur·ice·s autorisé·e·s au sein d'une collaboration~\autocite{ignat_2015_user-and-delay,ignat2014_delayeffect}.
-Ils supportent pas ou difficilement les activités de collaboration qui impliquent un nombre important de collaborateur·ice·s.
+Ils ne supportent pas ou ont des difficultés à supporter les activités de collaboration qui impliquent un nombre important de collaborateur·ice·s.
 
 %\paragraph{Coût.}
 %Afin de réduire les latences introduites par les infrastructures centralisées et de supporter un nombre raisonnable de collaborateur·ice·s, le serveur est en général dotée d'une puissance de calcul conséquente.
@@ -162,8 +162,8 @@ Il peut supprimer le contenu sans en alerter préalablement les contributeur·ic
 Les collaborateur·ice·s sont restreint·e·s dans les formes que peuvent prendre leur collaboration.
 Les infrastructures centralisées leur permettent de contribuer depuis des endroits géographiquement éloignés et à des instants différents.
 Toutefois elles et ils doivent être connecté·e·s au serveur.
-Ils ne peuvent pas travailler en sous-groupes déconnecté·e·s les un·e·s des autres.
-La modification hors ligne, voire la consultation hors ligne, des contenus partagés n'est pas toujours supportée.
+Ils ne peuvent pas travailler en sous-groupes, déconnecté·e·s les un·e·s des autres.
+La modification hors ligne et la consultation hors ligne ne sont pas toujours supportées.
 
 \bigskip
 
@@ -404,7 +404,7 @@ Pour réduire le coût lié à l'utilisation de journaux infalsifiables, nous pr
 La troncature d'un journal infalsifiable est réalisée de telle manière à ne pas compromettre la détection des équivoques des pairs mal-intentionnés.
 Pour ce faire, elle repose sur le concept de \emph{stabilité}.
 Une opération est stable dans un journal si toute opération acceptée ultérieurement dans le journal dépend sur cette opération.
-Pour rejoindre une collaboration, les nouveaux pairs récupérent un état et le journal tronqué qui lui est associé.
+Pour rejoindre une collaboration, les nouveaux pairs récupèrent un état et le journal tronqué qui lui est associé.
 Le protocole leur permet de rejeter les états falsifiés par des pairs mal-intentionnés.
 
 
@@ -417,10 +417,10 @@ Le protocole leur permet de rejeter les états falsifiés par des pairs mal-inte
 L'édition collaborative de texte permet à des collaborateur·ice·s géographiquement éloigné·e·s de co-rédiger un texte simultanément ou de manière différée dans le temps.
 Les collaborateur·ice·s doivent pouvoir consulter et modifier à tout moment le document textuel.
 En simultané, les latences doivent être suffisamment faibles pour éviter les conflits de modification et avoir conscience de l'activités des autres collaborateur·ice·s.
-Ces dernières années, l'usage de l'édition collaborative s'est étendue à des activités de collaboration qui impliquent de nombreux rédacteur·ice·s, telle que la rpise de note pour un cours en ligne.
+Ces dernières années, l'usage de l'édition collaborative s'est étendue à des activités de collaboration qui impliquent de nombreux rédacteur·ice·s, telle que la prise de note pour un cours en ligne.
 L'édition collaborative de texte présente donc un défi car elle requiert à la fois une haute disponibilité, des latences basses, et un passage à l'échelle raisonnable.
 
-L'usage de l'édition collaborative s'est répandue grâce à des éditeurs de texte collaboratifs tel que \emph{EtherPad}\footnote{\href{https://etherpad.org}{etherpad.org}}, \emph{Google Docs}\footnote{\href{https://docs.google.com}{docs.google.com}}, et \emph{ShareLaTeX / Overleaf}\footnote{\href{https://www.overleaf.com}{www.overleaf.com}}.
+L'usage de l'édition collaborative s'est répandu grâce à des éditeurs de texte collaboratifs tel que \emph{EtherPad}\footnote{\href{https://etherpad.org}{etherpad.org}}, \emph{Google Docs}\footnote{\href{https://docs.google.com}{docs.google.com}}, et \emph{ShareLaTeX / Overleaf}\footnote{\href{https://www.overleaf.com}{www.overleaf.com}}.
 Ces éditeurs collaboratifs reposent sur des infrastructures centralisées.
 Ils permettent à une dizaine d'utilisateur·ice·s d'éditer en simultané un document textuel.
 En revanche lorsque ce seuil est dépassé, les utilisateur·ice·s remarquent les latences~\autocite{dang2016performance}.
@@ -430,8 +430,8 @@ Ce qui les conduit à réduire leurs interactions et donc à réduire l'efficaci
 Au-delà de dix utilisateur·ice·s, \emph{Etherpad} rejette des connexions.
 \emph{Google Docs} expose le même comportement lorsqu'une quarantaine d'utilisateur·ice·s sont actifs~\autocite{dang2016performance}.
 
-Pour dépasser ces limitations, la communauté scientifique a proposé plusieurs protocoles de réplication optimiste qui prennent avantage des infrastructures pair-à-pair~\autocite{ahmednacer2011evaluatingcrdts,oster_2006_woot,preguica_2009_treedoc,weiss2010logoot,roh_2011_rga,andre_2013_logootsplit,nicolaescu2015yjs,briot_2016_rgasplit}.
-Dans ces protocoles, les pairs échangeant leurs modifications sous forme d'opérations pour synchroniser leurs copies.
+Pour dépasser ces limitations, la communauté scientifique a proposé plusieurs protocoles de réplication optimiste qui tirent avantage des infrastructures pair-à-pair~\autocite{ahmednacer2011evaluatingcrdts,oster_2006_woot,preguica_2009_treedoc,weiss2010logoot,roh_2011_rga,andre_2013_logootsplit,nicolaescu2015yjs,briot_2016_rgasplit}.
+Dans ces protocoles, les pairs échangent leurs modifications sous la forme d'opérations pour synchroniser leurs copies.
 Une opération insère ou supprime un caractère dans le document.
 Les protocoles s'assurent que chaque opération est intégrée exactement une fois.
 Ils s'assurent également que certaines opérations sont intégrées avant d'autres.
@@ -440,10 +440,10 @@ Selon le protocole, il peut exister d'autres ordres d'intégration à respecter.
 Le respect de l'ordre d'intégration est souvent assuré par une couche de livraison d'opérations.
 En pratique, cette couche de livraison ne prend pas en compte les ordres spécifiques d'intégration de chaque protocole de réplication~\autocite{shapiro_2011_crdt,shapiro2011_comprehensive}.
 Une livraison causale~\autocite{prakash_1997_barrierbarrier} des opérations est généralement utilisée~: si un pair intègre un ensemble d'opérations, alors cet ensemble doit être intégré sur toute copie avant l'intégration des opérations ultérieures de ce pair.
-La \autoref{fig:op-integration-order-example} donne un exemple de livraison causale et par extension d'intégration causale d'opérations lors d'une session d'édition collaborative de texte.
+La \autoref{fig:op-integration-order-example} donne un exemple de livraison causale et par extension d'intégration causale d'opérations lors d'une session collaborative.
 
 L'intégration des opérations dans un ordre spécifique met potentiellement en attente des intégrations.
-En effet, l'intégration d'une opération est retardée jusqu'à ce que les opérations qui doivent être préalablement intégrées le sont.
+En effet, l'intégration d'une opération est retardée jusqu'à ce que les opérations qui doivent être préalablement intégrées le soient.
 La perte d'opérations sur le réseau ou la déconnexion de pairs peut donc propager des ralentissements dans l'ensemble du système~\autocite{alvisi_2017_writes-dirty-secret}.
 
 \begin{figure}[bth]
@@ -499,7 +499,7 @@ La perte d'opérations sur le réseau ou la déconnexion de pairs peut donc prop
 \caption[Intégration causale d'une opération]{Exemple d'intégration causale d'une opération.
 Un ensemble de pairs réplique un texte.
 La synchronisation des copies reposent sur une livraison causale des modifications.
-\subref{fig:op-integration-order-example-1} Carol insère le caractère $\textsc{'C'}$ à sa copie qui intégré déjà les caractères $\textsc{'A'}$ et $\textsc{'B'}$.
+\subref{fig:op-integration-order-example-1} Carol insère le caractère $\textsc{'C'}$ à sa copie qui a déjà intégré les caractères $\textsc{'A'}$ et $\textsc{'B'}$.
 Elle propage sa modification a Alice et Bea.
 Pour intégrer le caractère $\textsc{'A'}$ sur une copie, la copie doit déjà contenir les caractères $\textsc{'A'}$ et $\textsc{'B'}$.
 Alice n'a pas reçu l'insertion du caractère $\textsc{'B'}$.
@@ -510,16 +510,16 @@ En revanche, la copie de Bea contient déjà les caractères $\textsc{'A'}$ et $
 }\label{fig:op-integration-order-example}
 \end{figure}
 
-Généralement, ces protocoles supportent par conception l'édition hors-ligne et en sous-groupes déconnecté·e·s les uns des autres.
+Généralement, ces protocoles supportent par conception l'édition hors-ligne et en sous-groupes déconnectés les uns des autres.
 Cependant, lorsque les périodes de déconnexion sont longues ou le nombre de modifications hors ligne est important, la synchronisation est coûteuse en communication et en ressources de calcul.
 En effet, chaque opération est transmise et intégrée aux copies des pairs.
 
-\paragraph{}Ce qui nous amène à la deuxième question de recherche que nous explorons dans ce manuscrit~: \textbf{Est-il possible de concevoir un protocole de réplication optimiste pour l'édition collaborative de texte en simultané qui intègre immédiatement toute modification et est adapté aux longues périodes de déconnexions~?}
+\paragraph{}Ce qui nous amène à la deuxième question de recherche que nous explorons dans ce manuscrit~: \textbf{Est-il possible de concevoir un protocole de réplication optimiste pour l'édition collaborative de texte en simultané qui intègre immédiatement toute modification et est adapté aux longues périodes de déconnexion~?}
 
 \paragraph{}A notre connaissance, la synchronisation par opérations est le seul schéma de synchronisation utilisé pour l'édition collaborative de texte en simultané.
 D'autres schémas de synchronisation ont été proposés pour la conception de protocole de réplication.
 La synchronisation par états~\autocite{shapiro_2011_crdt} consiste à transmettre l'état de la copie une fois mise à jour au lieu d'une opération.
-Les états sont fusionnés de telle sorte à inclure les mise-à-jours de chacun.
+Les états sont fusionnés de telle sorte à inclure les mises-à-jours de chacun.
 Ce schéma tire son avantage principal du fait qu'un état synthétise l'ensemble des modifications qui ont été précédemment intégrées.
 Les états peuvent donc être livrés et intégrés plusieurs fois dans des ordres arbitraires.
 Ce qui implique qu'ils peuvent être dupliqués, omis, et réordonnés par le réseau sans compromettre la convergence des copies.
@@ -538,7 +538,7 @@ Ce schéma autorise toujours la transmission d'états complets.
 Cependant, il privilégie l'envoi de différences d'états qui synthétisent une ou plusieurs modifications.
 Les différences d'états peuvent être intégrées plusieurs fois dans des ordres arbitraires.
 Le schéma de synchronisation par différences d'états offre ainsi de nombreuses possibilités dans la manière de synchroniser deux copies.
-Par exemple, lorsque des pairs collaborent en simultané ils peuvent échanger des différences d'états, alors que deux pairs qui se reconnectent après une longue période de déconnexion peuvent échanger directement leur état.
+Par exemple, lorsque des pairs collaborent en simultané, ils peuvent échanger des différences d'états, alors que deux pairs qui se reconnectent après une longue période de déconnexion peuvent échanger directement leur état.
 
 %Contrairement à la synchronisation par opérations, la synchronisation par différences d'états ne retardent pas l'intégration de modification.
 %Elle ne propage donc pas de latence dans l'ensemble du système.
@@ -569,8 +569,8 @@ Pour développer ce protocole, le chapitre introduit la notion de stabilité et 
 Nous présentons également les travaux de la littérature en relation avec notre protocole.
 
 \paragraph{Le \autoref{ch:dotted-logootsplit}} présente un état de l'art des types séquences de données répliquées.
-Nous proposons un modèle unifié pour décrire et mieux appréhender un sous-ensemble de ces types séquence.
-À l'aide de ce modèle nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
+Nous proposons un modèle unifié pour décrire et mieux appréhender un sous-ensemble de ces types séquences.
+À l'aide de ce modèle, nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
 
 \paragraph{Le \autoref{ch:conclusion}} clôt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
 
@@ -643,7 +643,7 @@ We also present a practical application of the approach in collaborative editing
 %
 %% flux d'activité = collaborateur + dimension temporel
 %
-%% mode de collaboration et infras
+%% mode de collaboration et infrastructures
 %Les infrastructures de collaboration permettent à des groupes de collaborateur·ice·s de produire collectivement des contenus.
 %Elles restreignent les formes que peuvent prendre ces collaborations.
 %Par exemple, l'encyclopédie Wikipedia et le gestionnaire de versions SVN permettent uniquement la modification exclusive d'un contenu ou d'un sous-ensemble d'un contenu.
