@@ -1,10 +1,14 @@
 \begin{ThesisAbstract}
-\begin{FrenchAbstract}
+\vspace{-7em}
+\small
+
+\subsection*{\centering Résumé}
+
 Une application de collaboration permet à plusieurs individus de coéditer un contenu.
-Les infrastructures pair-à-pair de collaboration visent à la conception d’applications hautement disponibles, aux latences faibles, qui tolèrent les partitions réseaux, et passent à l’échelle.
+Les infrastructures pair-à-pair de collaboration visent à la conception d’applications hautement disponibles, aux latences faibles, qui tolèrent les partitions réseaux, et qui passent à l’échelle.
 Chaque pair (individu) modifie sa propre copie du contenu.
 La modification concurrente des copies conduit à leur divergence.
-Les protocoles de réplication sont responsables de la convergence des copies du contenu.
+Les protocoles de réplication sont responsables de la convergence des copies.
 
 Ces protocoles supposent l'absence de pairs mal-intentionnés qui compromettent la convergence des copies.
 Pouvons-nous protéger la convergence des copies et préserver les propriétés des infrastructures pair-à-pair~?
@@ -17,19 +21,25 @@ Une modification devient stable lorsque toute modification intégrée dans le jo
 Pour rejoindre la collaboration, un pair récupère une copie et un journal tronqué.
 Il vérifie l'authenticité de la copie à partir du journal tronqué.
 
-Un type de données répliquées (un \emph{CRDT}) encapsule un protocole de réplication.
+% Un type de données répliquées (un \emph{CRDT}) encapsule un protocole de réplication.
+% Les \emph{CRDTs} séquences supposent généralement un ordre d'intégration causal des modifications du contenu.
+% Le retard d'une modification propage des ralentissements dans l'ensemble du système.
+% Pouvons-nous éliminer ces ralentissements~?
+% Nous proposons un \emph{CRDT} séquence qui n'impose pas d'ordre d'intégration.
+% Il résiste mieux aux aléas du réseau.
+
+Un type de données répliquées (\emph{CRDT}) encapsule un protocole de réplication.
 Les \emph{CRDTs} séquences supposent généralement un ordre d'intégration causal des modifications du contenu.
 Le retard d'une modification propage des ralentissements dans l'ensemble du système.
-Pouvons-nous éliminer ces ralentissements~?
-Nous proposons un \emph{CRDT} séquence qui n'impose pas d'ordre d'intégration.
-Il résiste mieux aux aléas du réseau.
-
+La connexion d'un pair peut engendrer l'intégration de nombreuses modifications.
+Pouvons-nous éliminer ces ralentissements et ces intégrations coûteuses~?
+Nous formalisons une famille de \emph{CRDTs} séquences et nous proposons une approche qui permet leur synchronisation par différences d'états.
+Les différences d'états peuvent être intégrées dans un ordre arbitraire et résumer plusieurs modifications.
+Nous proposons un \emph{CRDT} séquence qui tire avantage de notre approche.
 %\KeyWords{adversaire actif, cohérence de données, collaboration, convergence, journaux infalsifiables, pair-à-pair, réplication optimiste, sécurité, CRDT}
-\end{FrenchAbstract}
 
-%\clearpage
+\subsection*{\centering Abstract}
 
-\begin{EnglishAbstract}
 A collaborative application allows multiple users to edit a shared content.
 Collaborative peer-to-peer environment aim to design applications with desirable properties~: high-availability, low-latency, fault-tolerance, and scalability.
 Every peer (user) modifies her own copy of the content.
@@ -47,14 +57,24 @@ A modification becomes stable once every modification added in the log depends o
 To join the collaboration, a peer retrieves a copy of the content and a truncated log.
 She checks the authenticity of the copy using the truncated log.
 
+% A \acf{CRDT} encapsulates a replication protocol.
+% Sequence \emph{CRDTs} generally assume the integration of content modifications in a causal order.
+% A delayed integration propagates slowness across the system.
+% Can we remove these delays?
+% We propose a sequence \emph{CRDT} that does not impose any integration order.
+
 A \acf{CRDT} encapsulates a replication protocol.
 Sequence \emph{CRDTs} generally assume the integration of content modifications in a causal order.
 A delayed integration propagates slowness across the system.
-Can we remove these delays?
-We propose a sequence \emph{CRDT} that does not impose any integration order.
+The connection of a peer may lead to the integration of multiple modifications.
+Can we remove these delays and these costly intégrations?
+We formalize a family of sequence \emph{CRDTs} and we propose their synchronization using state deltas.
+Sate deltas can be integrated in any order.
+They are able to summarize several modifications.
+We propose a \emph{CRDT} that takes advantage of our approach.
+
 
 %\KeyWords{active adversary, data consistency, collaboration, convergence, unforgeable logs, p2p, optimistic replication, security, CRDT}
-\end{EnglishAbstract}
 \end{ThesisAbstract}
 
 

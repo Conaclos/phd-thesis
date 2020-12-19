@@ -4,10 +4,18 @@
 \minitoc{}
 \bigskip
 
-Ce dernier chapitre synthétise nos contributions et propose une réponse aux questions de recherches que nous nous sommes posées.
-Il propose également des problématiques de recherches pour des travaux ultérieurs.
+% Ce dernier chapitre montre comment nous avons répondu aux questions de recherches que nous nous sommes posées et les limites auxquelles nous nous sommes heurtées.
+% Il propose plusieurs axes de recherche à explorer.
 
-Ce dernier chapitre montre comment nous avons répondu aux questions de recherches que nous nous sommes posées.
+Les infrastructures pair-à-pair de collaboration et la réplication optimiste des contenus partagés ouvrent la voie vers la conception d'applications de collaboration hautement disponibles, aux latences faibles, qui tolèrent les partitions réseaux, et qui passent à l'échelle.
+Les protocoles de réplication optimiste proposés pour l'édition collaborative d'un contenu sont généralement vulnérables aux attaques d'un adversaire actif et ne tiennent pas toujours leurs promesses dans des cas d'utilisation exigeants tel que l'édition collaborative de texte en simultané.
+
+Dans ce manuscrit, nous avons proposé des protocoles qui permettent de répliquer de manière sûre un contenu et un protocole de réplication optimiste de séquence qui résiste mieux aux aléas du réseau et que nous pensons adapté à l'édition collaborative de texte en simultané.
+
+Ce dernier chapitre est pour nous l'occasion de rappeler nos questions de recherche et d'y répondre.
+Il synthétise nos contributions et met en évidence leurs limites.
+Nous proposons plusieurs axes de recherche pour poursuivre nos travaux.
+
 
 \clearpage
 
@@ -188,4 +196,19 @@ Les caractères sont groupés au sein d'un bloc.
 Le générateur de position pourrait garantir que tout caractère inséré en parallèle de ces caractères est placé avant ou après ces derniers.
 
 
-\section{Propos finales}
+\section{Notes finales}
+
+Les infrastructures pair-à-pair de collaboration et la réplication optimiste des contenus partagés offrent des défis difficiles et stimulants.
+Ils nous poussent à remettre en question des pratiques établies et à trouver de nouveaux compromis.
+La suppression du serveur et la promotion des collaborateur·ice·s en pairs responsables de la réplication du contenu partagé permettent de repousser les limites des architectures centralisées, mais apportent aussi de nouvelles problématiques.
+
+Les infrastructures pair-à-pair de collaboration présentent une surface d'attaque plus large qu'une architecture centralisée, étant donné la responsabilité conférée aux pairs.
+Les protocoles de réplication optimiste répondent déjà à de nombreuses problématiques difficiles.
+Leur sécurisation est une problématique qui apportent ses propres difficultés.
+Nous comprenons aujourd'hui davantage les problèmes que soulève la conception de protocoles de réplication optimiste et la manière d'y répondre.
+Les protocoles de réplication optimiste ont fait leurs preuves et nous pensons qu'il est désormais temps de prendre en compte les problématiques de sécurité dans leur conception.
+
+Certains types d'activités de collaboration mettent encore à rudes épreuves les protocoles de réplication optimiste et exposent leurs limites.
+La conception d'un protocole de réplication de séquence adapté à la co-édition de texte en simultané est particulièrement difficile.
+Nous continuos à faire progresser l'état de l'art dans le domaine.
+
