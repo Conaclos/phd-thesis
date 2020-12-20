@@ -592,7 +592,7 @@ Le \autoref{th:stability-hierarchy} met en perspective le concept de stabilité 
 
 \begin{definition}[Opération stable]\label{def:stable}
 Soit une opération $x$ d'une exécution abstraite (bien-formée ou mal-formée) $A$ qui respecte un modèle de cohérence $C$.
-$x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seulement s'il n'existe pas une opération $y$ d'une extension $A'$ de $A$ tel que $A'$ respecte $C$, $y$ est absente de $A$, et $x$ n'est pas visible à $y$.
+$x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seulement si il n'existe pas une opération $y$ d'une extension $A'$ de $A$ tel que $A'$ respecte $C$, $y$ est absente de $A$, et $x$ n'est pas visible à $y$.
 \begin{equation*}
   \trm{stable}_A^C(x) \defiff \forall A' \sqsupset A \qsep A' \in C \implies \forall y \in A' \sminus A \qsep x \vis y
 \end{equation*}
@@ -625,7 +625,7 @@ La \autoref{def:stabilisable} exprime cette attente sous la forme d'une proprié
 
 \begin{definition}[Opération stabilisable]\label{def:stabilisable}
 Soit une opération $x$ d'une exécution abstraite $A$ qui respecte un modèle de cohérence $C$.
-$x$ est $C$-stabilisable dans $A$ si et seulement s'il existe une extension de $A$ dans laquelle $x$ est $C$-stable.
+$x$ est $C$-stabilisable dans $A$ si et seulement si il existe une extension de $A$ dans laquelle $x$ est $C$-stable.
 $A$ garantit la propriété de vivacité $\trm{Stabilisable}_C$ si et seulement si toute opération de $A$ est $C$-stabilisable.
 Un modèle de cohérence $C$ est stabilisable, et nous écrivons $C \in \trm{Stabilisable}$, si et seulement si toutes opérations de toutes les exécutions abstraites correctes et finies de $C$ sont $C$-stabilisables.
 \begin{align*}
@@ -906,7 +906,7 @@ Avant de nous intéresser à ses implications générales en présence de plusie
 
 \paragraph{En présence d'un pair mal-intentionné $p_M$,}
 une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations de $p_M$ qui sont concurrentes à $x$.
-Un pair honnête ne peut pas accepter directement une opération concurrente à $x$ de $p_M$ si et seulement s'il a reconnu le pair comme mal-intentionné ou il reconnaît l'opération comme non-linéaire.
+Un pair honnête ne peut pas accepter directement une opération concurrente à $x$ de $p_M$ si et seulement si il a reconnu le pair comme mal-intentionné ou il reconnaît l'opération comme non-linéaire.
 D'après la \autoref{th:concur-triad}, si $x$ est visible ou égale à une opération $y$ de $p_M$, alors toute opération future de $p_M$ qui est concurrente à $x$ est également concurrente à $y$.
 Cette opération future est non-linéaire à $y$.
 Si un pair honnête reconnaît $p_M$ comme mal-intentionné ou observe une opération $y$ de $p_M$ tel que $x$ lui est visible, alors il ne peut pas accepter directement une opération future de $p_M$ qui est concurrente à $x$.
@@ -1112,7 +1112,7 @@ Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \acs{FJC
 Une chaîne de visibilité immédiate $Z \defeq z_1 \idr \dotsb$ de $A$ est une chaîne d'observation cumulée d'une énumération de pairs distincts $\tuple*{p_1, \dotsc, p_n}$ si et seulement si elle inclut une chaîne de visibilité $Y \defeq y_1 \vis \dotsb \vis y_n$ tel que $y_1 = z_1$, l'auteur de la $i$-ème opération de $Y$ est le $i$-ème pair de l'énumération, et l'auteur de toute opération de $Z$ est l'auteur d'une opération de $Y$ qui lui est visible ou égale.
 %
 \begin{equation*}
-    y_1 = z_1 \land \forall i \qsep p_i = \trm{peer}(y_i) \land \forall z \in Z \;\exists y \in Y \qsep y \viseq z \land \trm{peer}(y) = \trm{peer}(z)
+    y_1 = z_1 \land \forall i \qsep p_i = \trm{peer}(y_i) \land \forall z \in Z \:\exists y \in Y \qsep y \viseq z \land \trm{peer}(y) = \trm{peer}(z)
 \end{equation*}
 \end{definition}
 
@@ -1213,7 +1213,7 @@ A partir de cette observation et de la \autoref{th:cumulated-obs-exclusion}, nou
 Prenons pour exemple les exécutions abstraites de la \autoref{fig:vfjcs-two-malicious}.
 L'ensemble des pairs de ces exécutions abstraites est composé des pairs mal-intentionnés $p_G$ et $p_M$, ainsi que du pair honnête $p_A$.
 Le produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes correspond à l'ensemble d'énumérations $\set{\tuple*{p_G, p_M, p_A}, \tuple*{p_M, p_G, p_A}}$.
-Une opération est vfjc-stable si et seulement s'il elle est visible ou égale à la première opération d'une chaîne de visibilité liée à chacune de ces énumérations.
+Une opération est vfjc-stable si et seulement si il elle est visible ou égale à la première opération d'une chaîne de visibilité liée à chacune de ces énumérations.
 Dans l''exécution abstraite de la \autoref{fig:vfjcs-two-malicious-1}, les chaînes de visibilité $g_1 \viseq m_1 \viseq a_2$ et $m_1 \viseq g_1 \viseq a_2$ sont respectivement liées aux énumérations $\tuple*{p_G, p_M, p_A}$ et $\tuple*{p_M, p_G, p_A}$.
 $a_1$ et $m_1$ sont visibles ou égales à la première opération de ces deux chaînes.
 Elles sont donc toutes deux vfjc-stables.
@@ -1366,7 +1366,7 @@ C'est pourquoi nous considérons des haînes liées aux énumérations issues du
 
 
 %\begin{definition}[Pairs mal-intentionnés évincés]\label{def:evicted-peers}
-%Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{VFJC}, un pair mal-intentionné est évincé de $A$ si et seulement s'il n'existe pas une extension qui respecte le modèle de cohérence \ac{VFJC} et qui inclut une opération de ce pair absente de $A$.
+%Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{VFJC}, un pair mal-intentionné est évincé de $A$ si et seulement si il n'existe pas une extension qui respecte le modèle de cohérence \ac{VFJC} et qui inclut une opération de ce pair absente de $A$.
 %$\trm{Evicted}_A$ et $\overline{\trm{Evicted}}_A$ dénotent respectivement l'ensemble des pairs mal-intentionnés évincés et l'ensemble des pairs mal-intentionnés non-évincés.
 %\begin{align*}
 %\trm{Evicted}_A &\defeq \set*{ p \notin \trm{Honest} \given \forall A' \sqsupset_{\trm{VFJC}} A \:\forall x \in A' \sminus A \qsep \trm{peer}(x) \neq p}\\
@@ -1396,13 +1396,13 @@ Dans les deux sous-sections suivantes nous définissons des modèles de cohéren
 
 Dans les sections précédentes, nous avons montré qu'une opération, au sein d'une exécution abstraite qui respecte le modèle de cohérence causale ou le modèle de cohérence \ac{VFJC} peut à terme devenir stable.
 Dans le cas d'une exécution abstraite qui respecte le modèle de cohérence causale, tous les pairs doivent observer une opération pour que cette dernière soit stable.
-Dans le cas d'une exécution abstraite qui respecte le modèle de cohérence \ac{VFJC}, le concourt de tous les pairs à l'exception des pairs évincés à terme est nécessaire pour stabiliser une opération.
+Dans le cas d'une exécution abstraite qui respecte le modèle de cohérence \ac{VFJC}, la participation de tous les pairs à l'exception des pairs évincés à terme est nécessaire pour stabiliser une opération.
 %Ces conditions sont particulièrement fortes et peuvent être difficile à atteindre lorsque le nombre de pairs qui joignent à terme une collaboration est significatif.
 En pratique ces conditions rendent inutilisable la stabilité à moins de restreindre le groupe de pairs à un petit nombre de pairs connus.
 %Ce qui revient à empêcher de nouveaux pairs de joindre la collaboration après un certain temps.
 Si nous considérons un ensemble (dénombrable) infini de pairs, un pair qui n'a pas encore exécuté une opération peut toujours exécuter une opération concurrente à toute opération déjà exécutée.
 Dans cette section nous définissons le modèle de cohérence causale dynamique qui invalide cette capacité et repose sur le modèle de cohérence causale.
-Il permet de stabiliser des opérations avec le concourt d'un sous-ensemble de pairs.
+Il permet de stabiliser des opérations avec la participation d'un sous-ensemble de pairs.
 
 Au cours du temps, les pairs joignent la collaboration.
 La composition du groupe de pairs varie tout au long de la collaboration~: le groupe est dynamique.
@@ -1474,7 +1474,7 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence Invitat
 
 
 \begin{definition}[Cohérence causale dynamique]\label{def:dyn-causal-consistency}
-Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale dynamique, et nous écrivons $A \in \trm{DynCausal}$, si et seulement s'il respecte à la fois le modèle de cohérence causale et le modèle de cohérence invitation.
+Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale dynamique, et nous écrivons $A \in \trm{DynCausal}$, si et seulement si il respecte à la fois le modèle de cohérence causale et le modèle de cohérence invitation.
 \begin{equation*}
     \trm{DynCausal} \defeq \trm{Causal} \cap \trm{Invitation}
 \end{equation*}
@@ -1594,7 +1594,7 @@ Nous parlons d'observateurs requis.
 La \autoref{def:honest-rq-obs} définit formellement les observateurs requis d'une opération.
 
 \begin{definition}[Observateurs honnêtes requis]\label{def:honest-rq-obs}
-Un pair honnête est un observateur requis d'une opération $x$ si et seulement s'il est invité dans une opération qui visible ou est concurrente à $x$.
+Un pair honnête est un observateur requis d'une opération $x$ si et seulement si il est invité dans une opération qui visible ou est concurrente à $x$.
 \begin{equation*}
     \trm{rqHonestObs}_A(x) \defeq \set*{q \in \trm{Honest} \given \exists y \in A \qsep \trm{call}(y) = \trm{invite}(q) \land x \nviseq y}
 \end{equation*}
@@ -1687,7 +1687,7 @@ Dans cette section nous proposons un modèle de cohérence basé sur les modelé
 
 La conjonction des modèles de cohérence \acs{VFJC} et \emph{Invitation} ne permet pas d'aboutir à une telle définition.
 En effet, si nous considérons un ensemble (dénombrable) infini de pairs composé d'au moins un pair mal-intentionné, le pair mal-intentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
-Toute opération $x$ ne peut donc pas devenir stable sans le concourt de l'ensemble des pairs.
+Toute opération $x$ ne peut donc pas devenir stable sans la participation de l'ensemble des pairs.
 Dans la \autoref{fig:vfjc-invitation-issue}, le pair mal-intentionné $p_M$ invite un pair $p_G$ dans un embranchement dont il est à l'origine.
 $p_A$ reconnaît que $p_M$ est mal-intentionné mais il est forcé d'accepter l'opération linéaire $g_1$.
 
@@ -2380,7 +2380,7 @@ En effet, un message bien-formé ne peut pas joindre des embranchements dont son
 $m$ fait donc partie d'un embranchement et est non-linéaire avec les messages des autres embranchements.
 %
 Un message bien-formé dépend d'une suite de message du même auteur avec des numéros contigus.
-L'ajout du message $m$ dans $J$ créée donc un nouvel embranchement si et seulement s'il existe un autre message dans le journal du même auteur avec le même numéro.
+L'ajout du message $m$ dans $J$ créée donc un nouvel embranchement si et seulement si il existe un autre message dans le journal du même auteur avec le même numéro.
 Si l'auteur du message est déjà reconnu mal-intentionné, alors le message $m$ est forcément non-linéaire avec au moins un message du journal.
 Autrement, le message $m$ est non-linéaire si son numéro n'est pas contigu avec celui du précédent message du même pair.
 Nous pouvons ainsi préciser le prédicat $\trm{linear}_J(m)$.
@@ -3600,7 +3600,7 @@ Deux journaux avec le même ensemble de messages ont le même ensemble de \emph{
 
 \begin{definition}[Message convergent-stable]\label{def:msg-conv-stable}
 Soit deux journaux $J_1$ et $J_2$ avec le même ensemble de messages, mais avec un possesseur distinct (et éventuellement un ordre d'ajout distinct des messages).
-Dans un journal $J_1$, un message $m$ est convergent-stable si et seulement s'il est stable dans $J_1$ et dans $J_2$.
+Dans un journal $J_1$, un message $m$ est convergent-stable si et seulement si il est stable dans $J_1$ et dans $J_2$.
 \end{definition}
 
 \begin{theorem}[Opération stable et message convergent-stable]
@@ -4382,7 +4382,7 @@ Cet état permet de reconstituer des états à partir du journal tronqué et de 
 La conservation de cet état peut être évitée si les types de données répliquées sont équipés d'une opération qui annule l'intégration d'un message.
 Dans ce cas, l'état observé par le pair qui exécute une invitation peut être reconstitué par l'annulation des messages qui ne sont pas des dépendances de l'invitation.
 
-La stabilisation d'un message requiert le concourt de l'ensemble des pairs qui ne sont pas reconnus mal-intentionnés.
+La stabilisation d'un message requiert la participation de l'ensemble des pairs qui ne sont pas reconnus mal-intentionnés.
 Si l'un de ces pairs n'exécute pas d'opération de modification, il peut bloquer la stabilisation des journaux des autres pairs.
 Il peut s'agir d'un pair honnête qui n'a pas contribué depuis un long moment ou d'un pair mal-intentionné qui le fait délibérément.
 Pour répondre à cette problématique, un pair honnête ou mal-intentionné devrait être évincé de la collaboration après une certaine durée.

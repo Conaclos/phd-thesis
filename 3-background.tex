@@ -337,7 +337,7 @@ La relation \emph{retourne-avant} est inférée par le positionnement horizontal
 }\label{fig:vis-example}
 \end{figure}
 
-Une histoire vérifie une propriété de cohérence si et seulement s'il existe au moins une exécution abstraite qui la respecte.
+Une histoire vérifie une propriété de cohérence si et seulement si il existe au moins une exécution abstraite qui la respecte.
 Il suffit donc de générer toutes les exécutions abstraites possibles pour une histoire donnée et vérifier qu'au moins l'une d'entre elles respecte la propriété de cohérences considérée.
 La \autoref{fig:hist-absexec} met en évidence les relations entre histoires, exécutions abstraites, et propriétés de cohérence.
 
@@ -810,7 +810,7 @@ En d'autres termes, pour toute opération il n'existe pas une infinité d'opéra
 % Nous devons raisonner également sur des exécutions infinies.
 % La \autoref{def:abstract-exec} permet la description d'exécutions abstraites infinies.
 % En effet, l'ensemble des opérations exécutées est dénombrable, mais peut être non-fini.
-% Une exécution abstraite respecte donc une propriété de vivacité si et seulement s'il existe une extension qui la respecte.
+% Une exécution abstraite respecte donc une propriété de vivacité si et seulement si il existe une extension qui la respecte.
 
 % Dans le cas d'une propriété de sûreté, il est nécessaire de vérifier que la propriété est respectée en chaque point des exécutions possibles du protocole.
 %Chaque point d'une exécution peut être restreint en une exécution abstraite (bien-formée).
@@ -835,7 +835,7 @@ $C$ désigne donc également l'ensemble des exécutions abstraites qui respecten
 \end{definition}
 
 % \begin{definition}[Histoire correcte]\label{def:correct-history}
-% Une histoire $H$ vérifie un modèle de cohérence $C$ si et seulement s'il existe une exécution abstraite $A \defeq \tuple*{H, \trm{vis}}$ tel que $A$ respecte $C$.
+% Une histoire $H$ vérifie un modèle de cohérence $C$ si et seulement si il existe une exécution abstraite $A \defeq \tuple*{H, \trm{vis}}$ tel que $A$ respecte $C$.
 % \begin{equation*}
 %     H \textit{is C-correct} \defiff \exists A \defeq \tuple*{H, \_} \qsep A \in C
 % \end{equation*}
@@ -975,7 +975,7 @@ Dans la \autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que 
 \end{equation*}
 
 \paragraph{Visibilité immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
-Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement s'il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
+Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
 La relation de visibilité immédiate correspond à la réduction transitive de la relation de visibilité.
 
 \begin{equation*}
@@ -2199,7 +2199,7 @@ Chaque modification enfle l'état actuel pour obtenir un état qui lui est supé
 Ainsi si l'appel $\trm{prepare}_i(\sigma_1, \_)$ donne l'état $\sigma_2$, alors $\sigma_2$ est supérieur ou égal à $\sigma_2$ et leur fusion donne $\sigma_2$.
 
 La propriété d'idempotence de la fusion et la propriété d'inflation d'une modification rendent les \acp{CRDT} synchronisés par états particulièrement adaptés aux systèmes de passage de messages non-fiables.
-Elles permettent d'assurer la convergence à terme en dépit de la perte, du retard, de la duplication, ou du ré-ordonnement de messages.
+Elles permettent d'assurer la convergence à terme en dépit de la perte, du retard, de la duplication, ou du réordonnement de messages.
 Si des pairs ne reçoivent pas un état d'un pair, il suffit qu'ils reçoivent un état ultérieur de ce pair pour obtenir les modifications incluses dans l'état qu'ils n'ont pas reçu.
 Leur manière de se synchroniser permet également au \ac{CRDT} d'être causalement cohérent.
 Sur ce point, ils sont plus avantageux que les \acp{CRDT} synchronisés par opérations.
@@ -2327,7 +2327,7 @@ Les états entourés sont irréductibles.
 \paragraph{Les \acp{CRDT} synchronisés par différences}~\autocite{almeida_2018_delta-crdt-revisited} sont une sous-famille des \acp{CRDT} synchronisés par états.
 Ils permettent la conception de mécanismes de synchronisation plus efficaces~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles.
-Un état est irréductible si et seulement s'il ne peut pas être obtenu par la fusion de deux états distincts et s'il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
+Un état est irréductible si et seulement si il ne peut pas être obtenu par la fusion de deux états distincts et s'il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
 Dans la \autoref{fig:state-add-win-set-semilattice}, les états irréductibles sont entourés.
 L'état minimal est $\tuple*{\emptyset, \emptyset}$.
 Un état décomposé peut être obtenu par la fusion de l'ensemble de ses états irréductibles.
