@@ -585,7 +585,7 @@ Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'
 % \end{definition}
 
 Dans une exécution abstraite, une opération est stable une fois qu'elle est visible à toute opération future.
-Puisque l’acceptation d’une opération est conditionnée par le modèle de cohérence, la stabilité l'est également.
+Puisque l'acceptation d'une opération est conditionnée par le modèle de cohérence, la stabilité l'est également.
 Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
 La \autoref{def:stable} définit formellement la stabilité.
 Le \autoref{th:stability-hierarchy} met en perspective le concept de stabilité et de force d'un modèle de cohérence.
@@ -2191,7 +2191,7 @@ Le protocole utilise en particulier un journal de messages.
 
 L'exécution d'une opération de modification sur le contenu partagé dérive un message qui synthétise son effet.
 Les pairs échangent et intègrent les messages qu'ils produisent pour synchroniser leurs copies.
-Un pair enregistre l’ensemble des messages qu'il transmet et qu'il accepte des autres pairs dans son journal $J$.
+Un pair enregistre l'ensemble des messages qu'il transmet et qu'il accepte des autres pairs dans son journal $J$.
 Un journal est un ensemble ordonné dont l'ordre entre les messages correspond à l'ordre dans lequel ils ont été ajoutés à l'ensemble.
 Cet ordre correspond donc également à l'ordre dans lequel les messages ont été intégrés à la copie du contenu partagé.
 Le journal est initialement vide.
@@ -4235,15 +4235,15 @@ Un message qui déclare des dépendances indirectes est mal-formé (\autoref{eq:
 Un pair peut initier une nouvelle collaboration ou en rejoindre une existante.
 
 \paragraph{Initier une collaboration.}
-Pour initier une nouvelle collaboration, un pair exécute une première opération qui l’invite. L’exécution de cette invitation génère son identifiant de pair.
+Pour initier une nouvelle collaboration, un pair exécute une première opération qui l'invite. L'exécution de cette invitation génère son identifiant de pair.
 
 \paragraph{Rejoindre une collaboration.}
 Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter.
-Un pair de la collaboration peut inviter à tout moment un nouveau pair. Pour ce faire, il exécute une opération d’invitation qui génère l’identifiant $p_i$ du nouveau pair.
+Un pair de la collaboration peut inviter à tout moment un nouveau pair. Pour ce faire, il exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
 Il signe et transmet au nouveau pair un message qui contient l'identifiant $p_i$, son journal $J$, son état $I$, $\trm{vv}_I$, $\trm{knownMalicious}_I$, et $\trm{stabilityRef}$.
 Un pair mal-intentionné peut transmettre des données arbitraires.
 
-Le nouveau pair $p_i$ vérifie d’abord l’authenticité du message.
+Le nouveau pair $p_i$ vérifie d'abord l'authenticité du message.
 Nous notons $G$ le journal reçu pour le distinguer du journal du pair $p_i$.
 Nous n'avons pas besoin de distinguer l'état $I$ de celui reçu, étant donnée que $p_i$ utilise directement l'état $I$ qu'il reçoit.
 
@@ -4456,7 +4456,7 @@ Une fois résumé il n'est pas possible d'identifier quels messages sont non-lin
 Le calcul d'un résumé requiert un ordre total entre les messages qui est identique quel que soit l'ordre de livraison des messages.
 Lorsqu'un message est ajouté au journal, le nouvel ordre total n'est pas forcément un suffixe de l'ordre précédent.
 Il n'est donc pas possible de construire de manière incrémentale un résumé pour vérifier les messages livrés ultérieurement et pour construire les prochains messages.
-Ce qui induit un sur-coût non-négligeable.
+Ce qui induit un surcoût non-négligeable.
 L'article ne discute pas de ce problème.
 De même, l'article ne discute pas des messages qui dépendent sur un message inclut dans un résumé.
 Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces messages.

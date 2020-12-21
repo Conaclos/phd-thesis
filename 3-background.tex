@@ -1355,7 +1355,7 @@ Pour préserver la convergence des copies, le modèle de cohérence~\acf{VFJC}~\
 Les pairs peuvent ainsi joindre des embranchements.
 
 Pour certains contenus répliqués, les équivoques peuvent produire des conflits de modification difficiles à identifier et à résoudre.
-%Leur résolution peut notamment produire un sur-coût [Depot?].
+%Leur résolution peut notamment produire un surcoût [Depot?].
 De ce fait, il est souhaitable d'empêcher à terme la réalisation de nouvelles équivoques.
 Pour ce faire, les pairs qui en produisent doivent être à terme évincés.
 Leurs opérations futures devraient donc à terme être rejetées.
@@ -2236,7 +2236,7 @@ Les associations de valeurs et d'identifiants sont représentées de la même ma
 $c$ est le \emph{contexte causal }~\autocite{almeida_2018_delta-crdt-revisited} du \ac{CRDT}.
 Il permet d'éviter d'ajouter ou de ré-ajouter une association qui a été supprimée.
 %La suppression d'un triplet peut donc avoir lieu avant son ajout.
-L’évaluation d’une opération de lecture retourne l’ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:state-awset-eval}).
+L'évaluation d'une opération de lecture retourne l'ensemble des valeurs enregistrées dans au moins un triplet (\autoref{eq:state-awset-eval}).
 L'état généré par l'ajout d'une valeur correspond à l'ajout d'un nouveau triplet et de son identifiant au contexte causal (\autoref{eq:state-awset-prep-add}).
 Le nouvel identifiant est formé par l'identifiant du pair qui exécute l'opération et le nombre séquentiel de ce pair incrémenté d'une unité.
 Le nombre séquentiel d'un pair est obtenu à partir du contexte causal.
@@ -2283,7 +2283,7 @@ En pratique le contexte causal peut être représenté par un vecteur de version
 L'ensemble répliqué utilise l'implémentation de la \autoref{fig:state-add-win-set}.}\label{fig:state-awset-state-trans}
 \end{figure}
 
-Nous prenons l’exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d’un ensemble qui utilise l’implémentation de la \autoref{fig:state-add-win-set}.
+Nous prenons l'exécution abstraite de la \autoref{fig:awset-example} pour illustrer la réplication d'un ensemble qui utilise l'implémentation de la \autoref{fig:state-add-win-set}.
 La \autoref{fig:state-awset-state-trans} décrit les états successifs de la copie du pair $p_A$.
 La \autoref{fig:state-add-win-set-semilattice} présente le sup-demi-treillis des états de cette exécution.
 Les traits épaissis représentent les transitions d'états du pair $p_A$.
@@ -2334,7 +2334,7 @@ Un état décomposé peut être obtenu par la fusion de l'ensemble de ses états
 Par exemple, l'état $\tuple*{\set*{\tuple*{1,B_1}}, \set*{A_1,B_1}}$ est obtenu par la fusion des deux états irréductibles $\tuple*{\emptyset, \set*{A_1}}$ et $\tuple*{\set*{\tuple*{1,B_1}}, \set*{B_1}}$.
 Au lieu de transmettre aux autres pairs un état mis à jour dans son intégralité, un pair peut transmettre la différence entre un état mis à jour et sa version précédente.
 Dans la littérature, plusieurs mécanismes de synchronisation par différences d'états tirent avantage de cette observation.
-Certains d'entre eux permettent d'assurer une cohérence causale avec un sur-coût plus faible que les mécanismes de synchronisation par état complet~\autocite{enes_2018_efficient-sync-state-based-crdt}.
+Certains d'entre eux permettent d'assurer une cohérence causale avec un surcoût plus faible que les mécanismes de synchronisation par état complet~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 La flexibilité de cette approche permet la conception de mécanismes de synchronisation variés et est donc adaptée à un large éventail d'applications.
 
 Comparé aux \ac{CRDT} synchronisés par états complets, l'appel à la fonction $\trm{prepare}$ ne retourne pas l'état mis-à-jour mais une différence d'état.
