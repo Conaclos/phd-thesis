@@ -70,7 +70,7 @@ des valeurs peuvent être insérées et supprimées de la séquence.
 Pour ce faire, le type abstrait Séquence dispose d'une opération d'insertion $\trm{ins}$ et d'une opération de suppression $\trm{del}$.
 Il dispose également d'une opération de lecture $\trm{rd}$.
 L'exécution de l'opération $\trm{ins}(n, v)$ insère la valeur $v$ avant la $n$-ième valeur de la séquence.
-L'indexage des valeurs commence à $0$ et la valeur $v$ est pris dans un ensemble $V$.
+L'indexage des valeurs commence à $0$ et la valeur $v$ est prise dans un ensemble $V$.
 Ainsi, l'insertion d'une valeur en $n = 0$ revient à insérer la valeur en début de séquence.
 Lorsque $n$ est supérieur ou égal à la taille de la séquence, la valeur est insérée en fin de séquence.
 L'exécution de l'opération $\trm{del}(n)$ supprime la $n$-ième valeur.
@@ -379,7 +379,7 @@ Nous caractérisons également la structure du \ac{CRDT} et des messages qu'il g
 Plusieurs optimisations de \emph{WOOT}~\autocite{weiss2007wooki,ahmednacer2011evaluatingcrdts} ont été proposées.
 Il prend à la lettre la formulation de l'intention d'une insertion~: une valeur référence les deux valeurs entre lesquelles elle est insérée.
 
-\emph{WOOT} référence les valeurs à l'aide de leurs identifiants.
+\emph{WOOT} référence les valeurs à l'aide de leur identifiant.
 L'identifiant d'une valeur est constitué par l'identifiant du pair qui l'a inséré et un nombre séquentiel.
 Chaque pair maintient son propre nombre séquentiel qu'il incrémente avant chaque exécution d'une opération d'insertion.
 Ce nombre correspond donc au nombre de valeurs insérées par le pair.
@@ -411,7 +411,7 @@ Si l'ensemble est vide, alors la valeur est simplement placée entre $v_1$ et $v
 Dans le cas contraire, il récupère le sous-ensemble des valeurs qui référence des valeurs qui ne sont pas comprises entre $v_1$ et $v_2$.
 Ces valeurs ont été insérées en parallèle de $v_1$ et $v_2$.
 L'emplacement relatif de $v$ par rapport à ces dernières est déterminé à l'aide de l'ordre lexicographique entre leurs identifiants.
-L'algorithme est répété en considérant les deux valeurs entre lesquelles $v$ doit être placé comme les valeurs $v_1$ et $v_2$.
+L'algorithme est répété en considérant les deux valeurs entre lesquelles $v$ doit être placée comme les valeurs $v_1$ et $v_2$.
 
 Pour illustrer cet algorithme, nous reprenons l'exemple de la \autoref{fig:replseq-sematic-1}.
 Une fois l'ensemble des modifications intégrées, la séquence \emph{WOOT} de la \autoref{fig:woot} est obtenue.
@@ -538,7 +538,7 @@ Cette caractéristique résulte d'un algorithme de placement des valeurs plus si
 
 Lorsqu'un pair exécute une opération d'insertion de la valeur $v$ avant la $n$-ième valeur de la séquence, il génère un message d'insertion.
 Le message d'insertion contient la valeur, l'identifiant de la valeur, et l'identifiant de la $n-1$-ème valeur.
-La $n-1$-ème valeur correspond à la valeur après laquelle $v$ doit être inséré.
+La $n-1$-ème valeur correspond à la valeur après laquelle $v$ doit être insérée.
 Par la suite nous constaterons que les identifiants de $v$ et de la $n$-ième valeur conduisent nécessairement à placer $v$ avant la $n$-ième valeur.
 L'intention d'insérer $v$ entre la $n-1$-ème valeur et la $n$-ième valeur est donc respectée à la fois par le référence à la $n-1$-ème valeur et par le choix des identifiants associés aux valeurs.
 Le message est intégré à la copie de la séquence et est propagé aux autres pairs.
@@ -548,7 +548,7 @@ L'identifiant de la valeur $v_1$ après laquelle $v$ doit être insérée est r�
 Pour déterminer l'emplacement de $v$, le pair applique l'algorithme récursif suivant.
 S'il n'y a aucune valeur après $v_1$, alors $v$ y est simplement placé.
 Sinon l'identifiant de $v$ est comparé à l'identifiant de la valeur $v_2$ qui se situe juste après $v_1$.
-Si l'identifiant de $v$ est supérieur à l'identifiant de $v_2$, alors $v$ est placé entre $v_1$ et $v_2$.
+Si l'identifiant de $v$ est supérieur à l'identifiant de $v_2$, alors $v$ est placée entre $v_1$ et $v_2$.
 Dans le cas contraire, $v$ doit être insérée après $v_2$.
 L'algorithme est donc répété en considérant $v_2$ comme $v_1$.
 
@@ -651,8 +651,8 @@ Dans la \autoref{fig:rga}, les valeurs, à l'exception de $\textsf{'\textit{i}'}
 Au moment de l'insertion du caractère $\textsf{'\textit{i}'}$, le caractère $\textsf{'\textit{y}'}$ référence déjà le caractère $\textsf{'\textit{d}'}$.
 $\textsf{'\textit{i}'}$ inclut donc l'identifiant de $\textsf{'\textit{y}'}$ dans l'ensemble qui lui est associé.
 L'intégration d'une insertion prend en compte cet ensemble pour déterminer l'ordre entre les valeurs.
-L'ajout de cet ensemble augmente l'occupation mémoire de la structure et à un coût en communication puisqu'il fait partie des messages d'insertion.
-En pratique, on s'attends à ce que la taille de ces ensembles soit faible~\autocite{kleppmann2019_interleaving}.
+L'ajout de cet ensemble augmente l'occupation mémoire de la structure et a un coût en communication puisqu'il fait partie des messages d'insertion.
+En pratique, on s'attend à ce que la taille de ces ensembles soit faible~\autocite{kleppmann2019_interleaving}.
 
 
 %\paragraph{Yata}\autocite{nicolaescu2015yjs} emprunte des idées de \emph{WOOT} et \emph{RGA}.
@@ -684,9 +684,9 @@ Chaque triplet est constitué d'un entier aléatoire, de l'identifiant, et du no
 Nous nous basons sur la représentation originelle.
 
 Deux positions sont comparées de manière lexicographique.
-Une position $p_1$ est supérieure à une position $p_2$ si et seulement si \begin{inlinelist}\item leurs listes de couples sont identiques et le nombre séquentiel de $p_1$ est supérieur à celui de $p_2$, ou si \item la liste de couples de $p_1$ est un préfixe de la liste de couples de $p_2$, ou si \item les listes de $p_1$ et $p_2$ ont un préfixe commun de $n-1$ couples tel que le $n$-ième couple de $p_1$ est lexicographiquement supérieur au $n$-ième couple de $p_2$.\end{inlinelist}
+Une position $p_1$ est supérieure à une position $p_2$ si et seulement si \begin{inlinelist}\item leurs listes de couples sont identiques et le nombre séquentiel de $p_1$ est supérieur à celui de $p_2$, ou si \item la liste de couples de $p_2$ est un préfixe de la liste de couples de $p_1$, ou si \item les listes de $p_1$ et $p_2$ ont un préfixe commun de $n-1$ couples telles que le $n$-ième couple de $p_1$ est lexicographiquement supérieur au $n$-ième couple de $p_2$.\end{inlinelist}
 
-Une séquence \emph{Logoot} est simplement une liste des valeurs auxquelles sont associées leurs positions.
+Une séquence \emph{Logoot} est simplement une liste des valeurs auxquelles sont associées leur position.
 L'exécution d'une opération d'insertion d'une valeur $v$ produit un message d'insertion composé de la valeur et de sa position.
 Pour générer sa position, les positions $p_1$ et $p_2$ des valeurs entre lesquelles $v$ doit être insérée sont récupérées.
 La position de $v$ doit être comprise entre ces deux positions.
@@ -741,7 +741,7 @@ Le message est intégré à la copie et transmis aux autres pairs.
     \caption{}\label{fig:logoot-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{Logoot}]{Exemple d'une séquence \emph{Logoot}.
-\subref{fig:logoot-1} Séquence de valeurs associées à leurs positions.
+\subref{fig:logoot-1} Séquence de valeurs associées à leur position.
 \subref{fig:logoot-2} Valeur supprimée associée à sa position.}\label{fig:logoot}
 \end{figure}
 
@@ -760,7 +760,7 @@ Puisqu'il s'agit de la cinquième insertion de $p_A$, son nombre séquentiel est
 Le caractère inséré est donc associé à la position $l_A q_{A5}$.
 On constate un ordre total entre les positions des valeurs insérées~: $f_A1 < h_A2 < l_A3 < l_A q_A5 < m_A4 < p_A6 < r_A7 < t_B1$.
 
-L'intégration d'un message d'insertion d'une valeur $v$ de position $p$ se déroule simplement par le placement de $v$ de manière à ce que les positions des valeurs qui précèdent $v$ dans la séquence soient inférieurs à $p$ et les positions des valeurs qui succèdent $v$ soient supérieurs à $p$.
+L'intégration d'un message d'insertion d'une valeur $v$ de position $p$ se déroule simplement par le placement de $v$ de manière à ce que les positions des valeurs qui précèdent $v$ dans la séquence soient inférieures à $p$ et les positions des valeurs qui succèdent $v$ soient supérieures à $p$.
 
 L'exécution d'une opération de suppression produit un message de suppression qui contient la position de la valeur à supprimer.
 L'intégration de ce message supprime définitivement la valeur associée à la position contenue dans le message.
@@ -770,7 +770,7 @@ Les messages doivent être livrés exactement une fois.
 Un message qui supprime la valeur de position $p$ est livré après le message qui insère la valeur de position $p$.
 Les messages d'insertion peuvent être livrés dans un ordre arbitraire.
 
-Par-ce-que les positions sont indépendantes les unes des autres, \emph{Logoot} n'a pas  besoin de pierres tombales.
+Parce que les positions sont indépendantes les unes des autres, \emph{Logoot} n'a pas  besoin de pierres tombales.
 Toutefois la taille des positions croît au fur et à mesure des insertions de valeurs dans la séquence.
 Cette croissance de la taille des positions est particulièrement notable lorsque les insertions se concentrent dans une partie restreinte de la séquence.
 
@@ -779,7 +779,7 @@ Il souffre d'entrelacements~\autocite{kleppmann2019_interleaving}.
 
 
 \paragraph{Treedoc}\autocite{preguica_2009_treedoc} repose sur la même idée que \emph{Logoot}~: placer les valeurs indépendamment des autres à l'aide de positions uniques et immuables.
-Contrairement à \emph{Logoot}, \emph{Treedoc} pose des contraintes sur les structures de données utilisées afin d'éviter le stockage des positions.
+Cependant, \emph{Treedoc} pose des contraintes sur les structures de données utilisées afin d'éviter le stockage des positions.
 
 Les valeurs sont rangées au sein d'un arbre binaire.
 L'ordre de la séquence correspond à l'ordre infixe de l'arbre.
@@ -792,7 +792,7 @@ L'insertion en parallèle de valeurs au même endroit conduit à la création de
 Pour remédier à ce problème, \emph{Treedoc} repose sur deux mécanismes~: l'identification des valeurs et le regroupement des nœuds ajoutés en concurrence en super-nœud.
 Chaque valeur est identifiée par un \emph{dot} constitué de l'identifiant du pair qui a inséré la valeur et du nombre séquentiel du pair.
 Un super-nœud est capable de stocker plusieurs valeurs.
-Les valeurs des super-nœuds sont ordonnées selon l'ordre lexicographique de leurs \emph{dots}.
+Les valeurs des super-nœuds sont ordonnées selon l'ordre lexicographique de leur \emph{dot}.
 Chaque valeur d'un super-nœud est associée à un sous-arbre binaire.
 Lorsqu'une valeur $v$ est insérée entre les valeurs $v_1$ et $v_2$ d'un super-nœud, $v$ est insérée dans le sous-arbre associé à $v_1$.
 La position de $v$ indique son emplacement dans le sous-arbre de $v_1$ en utilisant l'identifiant de $v_1$.
@@ -812,10 +812,10 @@ Le nœud qui stocke la valeur supprimée est conservé si et seulement s'il stoc
 Si un super-nœud ne stocke plus qu'une seule valeur qui est associée à un arbre vide, alors le super-nœud est transformé en nœud simple.
 
 La suppression de valeurs peut conduire à la présence de nœuds simples sans valeurs.
-Ces nœuds inutilisés peuvent être apparentés à des \emph{pierres tombales}.
+Ces nœuds peuvent être apparentés à des \emph{pierres tombales}.
 Similairement à \emph{WOOT} et \emph{RGA}, elles nuisent à l'efficacité des opérations exécutées et des messages intégrés sur la séquence.
 Toutefois, le plus grand inconvénient de \emph{TreeDoc} réside dans le couplage de ses positions avec sa structure de données.
-Dans une écriture séquentielle de gauche à droite ou de droite à gauche l'arbre devient une liste chaînée.
+Dans une écriture séquentielle de gauche à droite ou de droite à gauche, l'arbre devient une liste chaînée.
 La taille des positions croît rapidement.
 
 \begin{figure}[tb]
@@ -856,8 +856,8 @@ La taille des positions croît rapidement.
     \draw (e) to node[above,sloped]{$1$} (s);
     \draw (y) to node[above,sloped]{$1$} (!);
 \end{tikzpicture}
-\caption[Exemple d'une séquence \emph{Treedoc}]{Exemple d'une séquence \emph{Treedoc} de valeurs associées à leurs positions (chemin dans l'arbre) et leurs identifiants.
-Les nœuds conservés dont la valeur a été supprimée sont barrés.}\label{fig:treedoc}
+\caption[Exemple d'une séquence \emph{Treedoc}]{Exemple d'une séquence \emph{Treedoc} de valeurs associées à leur position (chemin dans l'arbre) et leur identifiant.
+Les nœuds qui sont des \emph{pierres tombales} sont barrés.}\label{fig:treedoc}
 \end{figure}
 
 \clearpage % better layout
@@ -909,8 +909,8 @@ $v$ doit être insérée entre les valeurs contiguës $v_1$ et $v_2$ de manière
 Nous différencions deux cas principaux~: soit $v_1$ et $v_2$ font partie d'un même bloc, ou ils font partie de blocs distincts.
 Dans le premier cas, le bloc est scindé en deux blocs et la valeur est insérée entre ces deux blocs au sein d'un nouveau bloc.
 Dans le second cas, la valeur est soit insérée entre les deux blocs ou intégrée à l'un des blocs.
-Si $p_1$ et $p$ sont agrégeables, alors $v$ est ajouté en tant que dernière valeur du bloc qui contient $v_1$.
-Sinon si $p$ et $p_2$ sont agrégeables, alors $v$ est ajouté en tant que première valeur du bloc qui contient $v_2$.
+Si $p_1$ et $p$ sont agrégeables, alors $v$ est ajoutée en tant que dernière valeur du bloc qui contient $v_1$.
+Sinon si $p$ et $p_2$ sont agrégeables, alors $v$ est ajoutée en tant que première valeur du bloc qui contient $v_2$.
 Sinon, $v$ est insérée entre les deux blocs au sein d'un nouveau bloc.
 
 Pour illustrer la génération de positions et l'intégration de messages d'insertion, nous reprenons le scénario de la \autoref{fig:replseq-sematic-1}.
@@ -954,7 +954,7 @@ Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être générée, é
     \caption{}\label{fig:logootsplit-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{LogootSplit}]{Exemple d'une séquence \emph{LogootSplit}.
-\subref{fig:logootsplit-1} Séquence de valeurs associées à leurs positions.
+\subref{fig:logootsplit-1} Séquence de valeurs associées à leur position.
 \subref{fig:logootsplit-2} Valeur supprimée associée à sa position.}\label{fig:logootsplit}
 \end{figure}
 
@@ -1020,7 +1020,7 @@ Cette stratégie a été évaluée sur des séquences à granularité fixe.
 \textcite{nicolas2020_renaming} proposent de remplacer des positions par de nouvelles positions plus petites à l'aide d'un mécanisme de renommage.
 
 
-La séquence répliquée que nous proposons utilise l'approche à positions densément ordonnées.
+La séquence répliquée que nous proposons dans la section suivante utilise l'approche à positions densément ordonnées.
 
 
 \section{Séquences répliquées synchronisées par différences}\label{sec:delta-seq}
@@ -1031,7 +1031,7 @@ La séquence répliquée que nous proposons utilise l'approche à positions dens
 \medskip
 
 Nous proposons une approche générique qui permet d'obtenir des séquences répliquées synchronisées par différences d'états à partir de positions densément ordonnées.
-En plus de la croissance de la taille de leurs positions, les séquences obtenues peuvent souffrir d'une croissance linéaire des autres méta-données en fonction d'une nombre d'insertion.
+En plus de la croissance de la taille de leurs positions, les séquences obtenues peuvent souffrir d'une croissance linéaire des autres méta-données en fonction du nombre d'insertion.
 Nous proposons alors un nouveau type de positions qui permet de construire des séquences à granularité variable synchronisées par différences qui réduit la croissance de ces méta-données.
 Nous nommons ce protocole de séquences répliquées \emph{Dotted LogootSplit}.
 
@@ -1064,7 +1064,7 @@ Nous proposons également une implémentation générique pour les séquences r�
 \medskip
 
 Les séquences répliquées à positions densément ordonnées indexent chaque valeur avec une unique position.
-L'ordre entre les valeurs de la séquence est induit par l'ordre total et strict entre leurs positions.
+L'ordre entre les valeurs de la séquence est induit par l'ordre total et strict entre leur position.
 Ces positions respectent plusieurs propriétés que nous décrivons dans les paragraphes suivants.
 
 \medskip
@@ -1248,7 +1248,7 @@ Le premier élément de chaque couple est un nombre prioritaire et le second él
 Le nombre séquentiel est incrémenté après chaque insertion locale et évite ainsi la réutilisation de positions attachées à des valeurs supprimées.
 Une position \emph{Logoot} est donc \emph{dot}-ifiée.
 Une position est identifiée de manière unique avec le \emph{dot} qui est construit à partir de l'identifiant du pair inclus dans le dernier couple de la position et son nombre séquentiel.
-Deux positions sont ordonnées à partir de l'ordre lexicographique entre leurs composantes.
+Deux positions sont ordonnées à partir de l'ordre lexicographique entre leur composante.
 L'ordre est dense, étant donné l'extensibilité de la liste et l'exclusion du nombre prioritaire minimal dans le dernier couple de la séquence.
 Les nombres prioritaires sont des entiers naturels strictement inférieur à $u$.
 $u$ est supérieur ou égal à $2$.
@@ -1292,17 +1292,25 @@ Le choix du mécanisme de synchronisation précise l'implémentation du type de 
 % talk about networks assumptions
 
 La \autoref{fig:op-densely-id-repseq} propose une implémentation générique d'une séquence à positions densément ordonnées synchronisée par opérations.
+L'\autoref{eq:op-seq-state} précise l'ensemble des états du \ac{CRDT}.
+Un état est défini comme un couple $\tuple*{m, x}$ où $x$ est un ensemble fini d'identifiants locaux, et $m$ est un ensemble fini d'associations de positions et de valeurs.
+L'association d'une position $p$ et d'une valeur $v$ est représentée par un couple $\tuple*{p, v}$.
+$x$ contient l'ensemble des identifiants locaux utilisés par le pair qui détient l'état de la séquence.
+Si des positions \emph{dot}-ifiées sont utilisées, $x$ peut être remplacé par un nombre séquentiel.
+
 L'exécution d'une insertion ou d'une suppression se déroule en deux étapes.
 Un message est d'abord généré à l'aide de la fonction $\trm{prepare}$.
-L'appel $\trm{prepare}_i(\sigma, x)$ retourne un message généré par l'exécution de l'opération de modification $x$ par le pair $p_i$ sur l'état $\sigma$.
+L'appel $\trm{prepare}_i(\sigma, o)$ retourne un message généré par l'exécution de l'opération de modification $o$ par le pair $p_i$ sur l'état $\sigma$.
 Le message est ensuite intégré à l'aide de la fonction $\trm{integrate}$.
-L'appel $\trm{integrate}_i(\sigma, m)$ retourne la mise-à-jour de l'état $\sigma$ qui correspond à $\sigma$ auquel a été intégré le message m sur le pair $p_i$.
+L'appel $\trm{integrate}_i(\sigma, \trm{msg})$ retourne la mise-à-jour de l'état $\sigma$ qui correspond à $\sigma$ auquel a été intégré le message $\trm{msg}$ sur le pair $p_i$.
 Le message est également transmis aux autres pairs qui l'intégreront à terme.
 
-Pour faciliter l'expression de l'implémentation, nous définissions la fonction $\trm{nthPos}$ qui retourne la position de la $n$-ième valeur de la séquence.
-Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
-%Le nombre séquentiel est incrémenté après chaque génération d'une nouvelle position.
-%Chaque position générée sur un pair a un nombre séquentiel distinct.
+Pour faciliter l'implémentation de ces fonctions, nous définissions les fonctions $\trm{posIndex}$ et $\trm{nthPos}$.
+$\trm{posIndex}(m,p)$ retourne l'indice d'une position $p$ dans la séquence.
+Pour déterminer cette indice, il suffit de compter le nombre de positions de la séquence qui sont inférieures à $p$.
+$\trm{nthPos}(m,k)$ retourne la position de la $k$-ième valeur de l'ensemble $m$ des associations des valeurs et de leur position.
+$\card*{m}$ correspond au cardinal de l'ensemble des associations $m$.
+Il s'agit donc de la taille de la séquence.
 %
 \begin{equation}\begin{split}
 \MoveEqLeft \forall V \ \forall P \in \trm{Pos} \ \forall m: P \pto V \qsep \trm{dom}(m)\ \textit{is finite} \implies\\
@@ -1319,15 +1327,10 @@ Nous définissons également $\trm{posIndex}$ qui donne l'index d'une position.
 %
 \end{split}\end{equation}
 
-L'\autoref{eq:op-seq-state} précise l'ensemble des états du \ac{CRDT}.
-Un état est défini comme un couple $\tuple*{m, x}$ où $x$ est un ensemble fini d'identifiants locaux, et $m$ est un ensemble fini d'associations de positions et de valeurs.
-L'associations d'une position $p$ et d'une valeur $v$ est représentée par un couple $\tuple*{p, v}$ où $p$.
-$x$ contient l'ensemble des identifiants locaux utilisés par le pair qui détient l'état de la séquence.
-Si des positions \emph{dot}-ifiées sont utilisées, $x$ peut être remplacé par un simple nombre séquentiel.
 L'évaluation d'une opération de lecture retourne la liste des valeurs de la séquence (\autoref{eq:op-seq-eval}).
-L'ordre des valeurs dans la liste correspond à l'ordre de leurs positions dans la séquence.
+L'ordre des valeurs dans la liste correspond à l'ordre de leur position dans la séquence.
 Le message d'insertion généré par l'exécution d'une opération d'insertion d'une valeur $v$ avant la $n$-ième valeur de la séquence correspond à un triplet constitué de l'étiquette $\trm{ins}$, de la position choisie pour $v$, et de la valeur $v$ (\autoref{eq:op-seq-prep-ins}).
-Pour générer la position de $v$ nous déterminons les positions entre lesquelles $v$ est insérée.
+Pour générer la position de $v$, nous déterminons les positions entre lesquelles $v$ est insérée.
 Si la séquence est vide, il s'agit des positions $\bot_P$ et $\top_P$.
 Si $v$ est insérée avant la première valeur de la séquence, alors elle est insérée entre la position $\bot_P$ et la position de la première valeur.
 Si $v$ est insérée après la dernière valeur de la séquence, alors elle est insérée entre la position de la dernière valeur et la position $\top_P$.
@@ -1410,7 +1413,7 @@ Au lieu d'utiliser des caractères en tant que valeurs, certains travaux~\autoci
 Cette approche à le désavantage de ne pas permettre l'insertion de caractères au sein de ces chaînes de caractères.
 Ce n'est donc pas une approche généralisable à toute applications d'édition collaborative de texte.
 
-L'approche à granularité variable propose de permettre l'agrégation de valeurs et de leurs positions en blocs.
+L'approche à granularité variable propose de permettre l'agrégation de valeurs et de leur position en blocs.
 Elles peuvent donc être représentées efficacement en mémoire tout en autorisant leur séparation en plusieurs blocs.
 Chaque bloc est indexé par la position associée à la première valeur.
 La position de chaque valeur est inférée à partir de cette dernière et de leur indice dans le bloc.
@@ -1520,7 +1523,7 @@ Si l'identifiant de la valeur à supprimer est absent du contexte causal, alors 
 La \autoref{fig:deltaseq} présente l'implémentation générique d'une séquence synchronisée par différences d'états.
 Nous représentons un état d'une telle séquence par un couple $\tuple*{m, c}$ où $m$ associe les positions aux valeurs de la séquence et $c$ est le contexte causal de la séquence (\autoref{eq:deltaseq-state}).
 Les messages de synchronisation sont des différences d'états.
-L'exécution de l'insertion d'une valeur $v$ à la position $j$ génère une position $p$ entre les positions associées aux $j-1$-ème et $j$-ème valeurs de la séquence.
+L'exécution de l'insertion d'une valeur $v$ à l'indice $j$ génère une position $p$ comprise entre les positions associées aux $j-1$-ème et $j$-ème valeurs de la séquence.
 Le message d'insertion consiste donc en un couple qui contient uniquement l'association de $p$ à la valeur $v$ et un contexte causal qui contient uniquement l'identifiant unique dérivé de la position (\autoref{eq:deltaseq-ins}).
 L'exécution de la suppression de la $j$-ème valeur génère un message de suppression qui contient aucune association et un contexte causal qui contient uniquement l'identifiant de la valeur à supprimer (\autoref{eq:deltaseq-del}).
 
@@ -1591,7 +1594,7 @@ Dans la sous-section suivante, nous présentons un nouveau type de position qui 
 
 \subsection{LogootSplit dot-ifié}\label{subsec:dotted-logootsplit}
 
-Les positions \emph{Logoot} permettent de représenter efficacement le contexte causal par vecteur de versions.
+Les positions \emph{Logoot} permettent de représenter efficacement le contexte causal par un vecteur de versions.
 Pour ce faire, chaque valeur est identifiée par un \emph{dot}~: un couple qui consiste d'un pair et d'un nombre séquentiel.
 Les positions \emph{LogootSplit} ne permettent pas cette optimisation.
 Chaque valeur est identifiée par un couple qui contient un \emph{dot} et un indice.
@@ -1600,9 +1603,9 @@ L'indice correspond alors à l'indice de la valeur dans ce bloc.
 
 Nous proposons un nouveau type de positions qui tente de construire sur les idées introduites par \emph{Logoot} et \emph{LogootSplit}.
 Similairement à ces deux approches, nous utilisons des listes de n-uplets ordonnées par leur ordre lexicographique.
-Chaque n-uplet consiste d'un nombre prioritaire, de l'identifiant du pair qui a généré le n-uplet et d'un nombre séquentiel. 
+Chaque n-uplet consiste d'un nombre prioritaire, de l'identifiant du pair qui a généré le n-uplet, et d'un nombre séquentiel. 
 Similairement à \emph{Logoot}, chaque valeur est identifiée par un \emph{dot}.
-Chaque fois qu'un pair exécute une insertion il incrémente son nombre séquentiel et assigne à la valeur insérée un nouveau \emph{dot}.
+Chaque fois qu'un pair exécute une insertion il incrémente son nombre séquentiel et assigne un nouveau \emph{dot} à la valeur insérée.
 Ce \emph{dot} correspond à l'identifiant du pair et le nombre séquentiel du dernier n-uplet de la liste.
 Ces positions sont donc \emph{dot}-ifiées.
 
@@ -1646,7 +1649,7 @@ Le nombre séquentiel joue à la fois le rôle d'identifiant local et d'indice d
     \caption{}\label{fig:dottedlogootsplit-2}
 \end{subfigure}
 \caption[Exemple d'une séquence \emph{Dotted LogootSplit}]{Exemple d'une séquence \emph{Dotted LogootSplit}.
-\subref{fig:logootsplit-1} Séquence de valeurs associées à leurs positions.
+\subref{fig:logootsplit-1} Séquence de valeurs associées à leur position.
 \subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 \end{figure}
 
@@ -1759,21 +1762,107 @@ Lorsque l'événement correspond à l'exécution d'une opération de modificatio
 
 
 
+% \begin{figure}[tbh]
+% \centering
+% \begin{tikzpicture}
+%     \newcommand\hsep{2}
+%     % Events
+%     \node (s0) {}
+%         to +(0,-\hsep) node (s1) {$\tuple*{\emptyset, \emptyset}$}
+%         to +(0,-2*\hsep) node (s2) {$\tuple*{\textit{lady},\set*{A_1,\dotsc,A_4}}$}
+%         to +(0,-3*\hsep) node (s3) {$\tuple*{\textit{ladiy},\set*{A_1,\dotsc,A_5}}$}
+%         to +(0,-4*\hsep) node (s4) {$\tuple*{\textit{ladi},\set*{A_1,\dotsc,A_5}}$}
+%         to +(0,-5*\hsep) node (s5) {$\tuple*{\textit{ladies},\set*{A_1,\dotsc,A_7}}$}
+%         to +(0,-6*\hsep) node (s6) {$\tuple*{\textit{ladies},\set*{A_1,\dotsc,A_7}}$}
+%     ;
+%     % State transitions
+%     \draw[pre] (s0) to node[midway,left]{initialise} (s1);
+%     \draw[pre] (s1) to %
+%             node[midway,left]{exécute $a_1$} %
+%             node[midway,right]{génère $\tuple*{\textit{lady}, \set*{A_1,\dotsc,A_4}}$} %
+%         (s2);
+%     \draw[pre] (s2) to %
+%             node[midway,left]{exécute $a_2$} %
+%             node[midway,right]{génère $\tuple*{\textit{i}, \set*{A_5}}$} %
+%         (s3);
+%     \draw[pre] (s3) to %
+%             node[midway,left]{exécute $a_3$} %
+%             node[midway,right]{génère $\tuple*{\emptyset, \set*{A_4}}$} %
+%         (s4);
+%     \draw[pre] (s4) to %
+%             node[midway,left]{exécute $a_4$} %
+%             node[midway,right]{génère $\tuple*{\textit{es}, \set*{A_6,A_7}}$} %
+%         (s5);
+%     \draw[pre] (s5) to %
+%             node[midway,left]{exécute $a_5$} %
+%             node[midway,right]{retourne $\textit{ladies}$} %
+%         (s6);
+% \end{tikzpicture}
+% \caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic}.
+% L'ensemble répliqué utilise l'implémentation de la \autoref{fig:deltaseq}.}\label{fig:deltaseq-state-trans}
+% \end{figure}
+
+
+
+
+\clearpage
+
 \begin{figure}[tbh]
 \centering
 \begin{tikzpicture}
-    \newcommand\hsep{2}
+    \newcommand\hsep{4}
     % Events
-    \node (s0) {}
-        to +(0,-\hsep) node (s1) {$\tuple*{\emptyset, \emptyset}$}
-        to +(0,-2*\hsep) node (s2) {$\tuple*{\textit{lady},\set*{A_1,\dotsc,A_4}}$}
-        to +(0,-3*\hsep) node (s3) {$\tuple*{\textit{ladiy},\set*{A_1,\dotsc,A_5}}$}
-        to +(0,-4*\hsep) node (s4) {$\tuple*{\textit{ladi},\set*{A_1,\dotsc,A_5}}$}
-        to +(0,-5*\hsep) node (s5) {$\tuple*{\textit{ladies},\set*{A_1,\dotsc,A_7}}$}
-        to +(0,-6*\hsep) node (s6) {$\tuple*{\textit{ladies},\set*{A_1,\dotsc,A_7}}$}
+    \node (s1) {$\tuple*{\emptyset, \emptyset}$}
+        to +(0,-\hsep) node (s2) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{4}}$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                ] {$lady$}
+            ;
+        \end{tikzpicture}}
+        to +(0,-2*\hsep) node (s3) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_{\irange{1}{3}}$}
+                ] {$lad$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$f^A_3 q^A_5$}
+                ]{$i$}
+            to +(\widthblock+\widthletter,0) node[letter,
+                    label={below:$f^A_5$}
+                ]{$y$}
+            to +(\widthblock+3*\widthletter,0) node[anchor=west]{$\set*{A_1,\dotsc,A_5}$}
+            ;
+        \end{tikzpicture}}
+        to +(0,-3*\hsep) node (s4) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ] {$lad$}
+            to ++(\widthblock,0) node[letter,
+                    label={below:$f^A_3 q^A_5$}
+                ]{$i$}
+            ;
+        \end{tikzpicture}}
+        to +(0,-4*\hsep) node (s5) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ] {$lad$}
+            to ++(\widthblock,0) node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ]{$ies$}
+            ;
+        \end{tikzpicture}}
+        to +(0,-5*\hsep) node (s6) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ] {$lad$}
+            to ++(\widthblock,0) node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ]{$ies$}
+            ;
+        \end{tikzpicture}}
     ;
     % State transitions
-    \draw[pre] (s0) to node[midway,left]{initialise} (s1);
+    %\draw[pre] (s0) to node[midway,left]{initialise} (s1);
     \draw[pre] (s1) to %
             node[midway,left]{exécute $a_1$} %
             node[midway,right]{génère $\tuple*{\textit{lady}, \set*{A_1,\dotsc,A_4}}$} %
@@ -1799,8 +1888,210 @@ Lorsque l'événement correspond à l'exécution d'une opération de modificatio
 L'ensemble répliqué utilise l'implémentation de la \autoref{fig:deltaseq}.}\label{fig:deltaseq-state-trans}
 \end{figure}
 
+\clearpage
+
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}[every node/.style={}]
+    \newcommand*\hsep{1.4}
+    \newcommand*\vsepevt{-3.4}
+    \path (0,0)
+        to +(-4,0) node[
+            label={above:\textbf{(1) Initialise}}
+        ]{\begin{tikzpicture}
+            \node[label={[label distance=6mm]right:$\emptyset$}
+                ] {$\emptyset$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,\vsepevt) node[
+            label={above:\textbf{(2) Exécute $\trm{ins}(0, \textit{lady})$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{4}}$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                ] {$lady$}
+            ;
+        \end{tikzpicture}}
+        to +(4,\vsepevt) node[
+            label={above:\textbf{Message généré}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{4}}$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                ] {$lady$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,2*\vsepevt) node[
+            label={above:\textbf{(3) Exécute $\trm{ins}(3, \textsf{'\textit{i}'})$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_{\irange{1}{3}}$}
+                ] {$lad$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$f^A_3 q^A_5$}
+                ]{$i$}
+            to +(\widthblock+\widthletter,0) node[letter,
+                    label={below:$f^A_5$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_5}$}
+                ]{$y$}
+            ;
+        \end{tikzpicture}}
+        to +(4,2*\vsepevt) node[
+            label={above:\textbf{Message généré}}
+        ]{\begin{tikzpicture}
+            \node[letter,
+                    label={below:$f^A_5$},
+                    label={[label distance=6mm]right:$\set*{A_5}$}
+                ]{$i$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,3*\vsepevt) node[
+            label={above:\textbf{(4) Exécute $\trm{del}(4)$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_{\irange{1}{3}}$}
+                ] {$lad$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$f^A_3 q^A_5$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_5}$}
+                ]{$i$}
+            ;
+        \end{tikzpicture}}
+        to +(4,3*\vsepevt) node[
+            label={above:\textbf{Message généré}}
+        ]{\begin{tikzpicture}
+            \node[label={[label distance=6mm]right:$\set*{A_4}$}
+                ]{$\emptyset$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,4*\vsepevt) node[
+            label={above:\textbf{(4) Exécute $\trm{ins}(4, \textit{es})$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ] {$lad$}
+            to ++(\widthblock,0) node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_7}$}
+                ]{$ies$}
+            ;
+        \end{tikzpicture}}
+        to +(4,4*\vsepevt) node[
+            label={above:\textbf{Message généré}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$},
+                    label={[label distance=6mm]right:$\set*{A_6,A_7}$}
+                ]{$es$}
+            ;
+        \end{tikzpicture}}
+    ;
+\end{tikzpicture}
+\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
+Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-b}
+\end{figure}
 
 
+\clearpage
+
+\begin{figure}[hbt]
+\centering
+\begin{tikzpicture}[every node/.style={}]
+    \newcommand*\hsep{1.4}
+    \newcommand*\vsepevt{-3.4}
+    \path (0,0)
+        to +(-4,0) node[
+            label={above:\textbf{(1) Initialise}}
+        ]{\begin{tikzpicture}
+            \node[label={[label distance=6mm]right:$\emptyset$}
+                ] {$\emptyset$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,\vsepevt) node[
+            label={above:\textbf{(2) Intègre $m_1$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{4}}$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                ] {$lady$}
+            ;
+        \end{tikzpicture}}
+        to +(4,\vsepevt) node[
+            label={above:\textbf{Message $m_1$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{4}}$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                ] {$lady$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,2*\vsepevt) node[
+            label={above:\textbf{(3) Exécute $\trm{ins}(4, \textsf{'\textit{\negthinspace!}'})$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_{\irange{1}{4}}$}
+                ] {$lady$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$t^B_1$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4,B_1}$}
+                ]{$\negthinspace!$}
+            ;
+        \end{tikzpicture}}
+        to +(4,2*\vsepevt) node[
+            label={above:\textbf{Message généré}}
+        ]{\begin{tikzpicture}
+            \node[letter,
+                    label={below:$t^B_1$},
+                    label={[label distance=6mm]right:$\set*{B_1}$}
+                ]{$\negthinspace!$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,3*\vsepevt) node[
+            label={above:\textbf{(4) Intègre $m_2$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ] {$lad$}
+            to ++(\widthblock,0) node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ]{$ies$}
+            to +(2*\widthblock,0) node[letter,
+                    label={below:$t^B_1$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_7,B_1}$}
+                ]{$\negthinspace!$}
+            ;
+        \end{tikzpicture}}
+        to +(4,3*\vsepevt) node[
+            label={above:\textbf{Message $m_2$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$},
+                    label={[label distance=6mm]right:$\set*{A_4,\dotsc,A_7}$}
+                ]{$ies$}
+            ;
+        \end{tikzpicture}}
+        to +(-4,4*\vsepevt) node[
+            label={above:\textbf{(4) Intègre $m_1$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ] {$lad$}
+            to ++(\widthblock,0) node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ]{$ies$}
+            to +(2*\widthblock,0) node[letter,
+                    label={below:$t^B_1$},
+                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_7,B_1}$}
+                ]{$\negthinspace!$}
+            ;
+        \end{tikzpicture}}
+    ;
+\end{tikzpicture}
+\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
+Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-b}
+\end{figure}
+
+\clearpage
 
 
 
@@ -1849,16 +2140,16 @@ L'ensemble répliqué utilise l'implémentation de la \autoref{fig:deltaseq}.}\l
 \subsection{Discussion}
 
 \emph{LogootSplit} et \emph{Dotted LogootSplit} agrègent leurs positions pour former des blocs et ainsi réduire leur empreinte mémoire.
-\emph{LogootSplit} permet au propriétaire d'un bloc d'ajouter des valeurs en début et fin du bloc à tout moment.
-\emph{Dotted LogootSplit} ne permet pas l'ajout de valeur en début de bloc et restreint l'ajout en fin de bloc.
+\emph{LogootSplit} permet au propriétaire d'un bloc d'ajouter à tout moment des valeurs au début et à la fin du bloc.
+\emph{Dotted LogootSplit} ne permet pas l'ajout de valeurs au début de bloc et restreint l'ajout de valeurs à la fin du bloc.
 Deux positions agrégeables doivent avoir des nombres séquentiels contiguës.
 À chaque exécution d'une insertion, le nombre séquentiel est incrémenté.
 Un pair est donc dans l'impossibilité d'ajouter une valeur au début d'un de ses blocs, étant donné qu'il devrait prendre un nombre séquentiel plus petit que celui de la première valeur du bloc.
 Il ne peut pas toujours ajouter une valeur en fin de bloc.
 En effet, s'il a procédé à une insertion à un autre emplacement, son nombre séquentiel devient trop grand pour pouvoir générer une position agrégeable à la position de la dernière valeur du bloc.
-Cependant, un·e collaborateur·ices à tendance à écrire de manière séquentielle.
+Cependant, un·e collaborateur·ice à tendance à écrire de manière séquentielle.
 Nous conjecturons qu'en pratique cette restriction conduit à très peu d'ajouts supplémentaires de blocs.
-En revanche la non-possibilité d'ajouter des valeurs en début de blocs est problématique pour certaines langues écrites de droite à gauche.
+En revanche l'impossibilité d'ajouter des valeurs au début d'un bloc est problématique pour certaines langues écrites de droite à gauche.
 
 \section{Conclusion}
 

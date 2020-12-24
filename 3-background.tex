@@ -531,7 +531,7 @@ Le \autoref{tab:op-ctx-obs} donne les observateurs de chaque opération de l'his
 
 \begin{definition}[Observateurs]\label{def:op-obs}
 Soit une opération $x$ d'une exécution abstraite $A$.
-Un pair $p$ est un observateur de $x$ si et seulement si \begin{inlinelist}\item $p$ a exécuté $x$ ou \item $p$ a exécuté une opération de $A$ tel que $x$ est visible à cette dernière\end{inlinelist}.
+Un pair $p$ est un observateur de $x$ si et seulement si \begin{inlinelist}\item $p$ a exécuté $x$ ou \item $p$ a exécuté une opération de $A$ telle que $x$ est visible à cette dernière\end{inlinelist}.
 $\trm{obs}_A(x)$ désigne l'ensemble des observateurs de $x$.
 \begin{equation*}
   \trm{obs}_A(x) \defeq \set*{ \trm{peer}(y) \given y \in A \land x \viseq y}
@@ -933,7 +933,7 @@ $x$ et $y$ doivent être intégrées avant $z$.
 Une opération $x$ cause potentiellement une opération $y$ si et seulement si \begin{inlinelist}
     \item $x$ \emph{retourne-avant} $y$ et $x$ a le même auteur que $y$, ou
     \item L'effet de $x$ est intégré par l'auteur de $y$ avant l'exécution de $y$ ($x$ est visible à $y$), ou récursivement
-    \item il existe une opération $x'$ tel que $x$ cause potentiellement $x'$ et $x'$ cause potentiellement $y$
+    \item il existe une opération $x'$ telle que $x$ cause potentiellement $x'$ et $x'$ cause potentiellement $y$
 \end{inlinelist}.
 La causalité potentielle est transitive.
 
@@ -975,7 +975,7 @@ Dans la \autoref{fig:vis-vs-pre-2}, $a_1$ et $b_1$ sont concurrentes, ainsi que 
 \end{equation*}
 
 \paragraph{Visibilité immédiate~\autocite{hernandez2003immediate,hernandez2015minimal}.}
-Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ tel que $x$ est visible à $z$ et $z$ st visible à $y$.
+Lorsque la relation de visibilité est transitive, une opération $x$, qui est visible à une opération $y$, est immédiatement visible à $y$, et nous écrivons $x \idr y$, si et seulement si il n'existe pas une opération $z$ telle que $x$ est visible à $z$ et $z$ st visible à $y$.
 La relation de visibilité immédiate correspond à la réduction transitive de la relation de visibilité.
 
 \begin{equation*}
@@ -1131,7 +1131,7 @@ Dans une exécution abstraite $A$ qui respecte le modèle de cohérence causale,
 La \autoref{th:rb-vis} est décomposable en deux implications.
 
 Procédons par contradiction.
-Soit une exécution abstraite $A$ et deux opérations $x$ et $y$ d'un même pair $p$ tel que $x$ retourne-avant $y$.
+Soit une exécution abstraite $A$ et deux opérations $x$ et $y$ d'un même pair $p$ telles que $x$ retourne-avant $y$.
 Supposons que $x$ n'est pas visible à $y$.
 $y$ est visible à $x$, ou elles n'ont pas de relation de visibilité entre elles.
 Le premier cas contredit la propriété~\ref{itm:vtns2} de visibilité non-spéculative.
@@ -1669,7 +1669,7 @@ Prenons l'exemple du type abstrait de données \emph{Ensemble} noté $\trm{Set}\
 $V$ est l'ensemble des valeurs que l'ensemble peut contenir.
 La \autoref{fig:set-spec} présente une spécification algébrique~\autocite{wirsing1990_algebraicspec} de ce type.
 Nous proposons de l'adapter au formalisme utilisé dans ce manuscrit.
-Les opérations de ce type regroupent une opération de lecture $\trm{rd}$, une opération d'ajout $\trm{add}(v)$, et une opération de suppression $\trm{rmv}(v)$ tel que $v$ est une valeur de l'ensemble $V$.
+Les opérations de ce type regroupent une opération de lecture $\trm{rd}$, une opération d'ajout $\trm{add}(v)$, et une opération de suppression $\trm{rmv}(v)$ telle que $v$ est une valeur de l'ensemble $V$.
 Les valeurs de retour de l'opération de lecture sont l'ensemble des parties finies de $V$~: $\trm{Val}_{\trm{Set}\tuple*{V}} = \powerfset{V}$.
 La sémantique de ce type est précisée par la propriété de cohérence de l'\autoref{eq:add-win-set}.
 Chaque valeur inclue dans l'ensemble retourné par l'exécution d'une opération de lecture est ajoutée par au moins une opération du contexte de l'opération de lecture et n'est pas visible à une opération du contexte de l'opération de lecture qui la supprime.
