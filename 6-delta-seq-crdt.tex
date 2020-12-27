@@ -86,7 +86,7 @@ La signature syntaxique du type abstrait Séquence est ainsi spécifiée comme s
 \end{align*}
 
 Pour simplifier les illustrations, nous introduisons l'opération $\trm{ins}(n, \tuple*{v_1,\dotsc,v_k})$ qui ajoute le n-uplet de valeurs $\tuple*{v_1,\dotsc,v_k}$ avant la $n$-ième valeur.
-Cette opération revient à exécuter $k$ opérations d'insertion qui se succèdent $o_1 \pre \dotsb \pre o_k$ avec $\trm{call}(o_i) = \trm{ins}(n+i-1, v_i)$ et $1 \leq i \leq k$.
+Cette opération revient à exécuter $k$ opérations d'insertion qui se succèdent $o_1 \idr \dotsb \idr o_k$ avec $\trm{call}(o_i) = \trm{ins}(n+i-1, v_i)$ et $1 \leq i \leq k$.
 Nous employons cette opération uniquement dans les illustrations.
 La \autoref{fig:seq-example} donne un exemple d'utilisation de ces opérations et suit la spécification usuelle d'une séquence.
 
@@ -1521,6 +1521,7 @@ Si elle l'est nous la supprimons.
 Si l'identifiant de la valeur à supprimer est absent du contexte causal, alors nous l'ajoutons simplement au contexte causal.
 
 La \autoref{fig:deltaseq} présente l'implémentation générique d'une séquence synchronisée par différences d'états.
+Nous donnons un exemple de l'exécution de cette implémentation dans la sous-section suivante.
 Nous représentons un état d'une telle séquence par un couple $\tuple*{m, c}$ où $m$ associe les positions aux valeurs de la séquence et $c$ est le contexte causal de la séquence (\autoref{eq:deltaseq-state}).
 Les messages de synchronisation sont des différences d'états.
 L'exécution de l'insertion d'une valeur $v$ à l'indice $j$ génère une position $p$ comprise entre les positions associées aux $j-1$-ème et $j$-ème valeurs de la séquence.
@@ -1601,16 +1602,25 @@ Chaque valeur est identifiée par un couple qui contient un \emph{dot} et un ind
 Le \emph{dot} identifie de manière unique le bloc dans lequel la valeur se trouve.
 L'indice correspond alors à l'indice de la valeur dans ce bloc.
 
-Nous proposons un nouveau type de positions qui tente de construire sur les idées introduites par \emph{Logoot} et \emph{LogootSplit}.
+Nous proposons un nouveau type de positions qui repose sur les idées introduites par \emph{Logoot} et \emph{LogootSplit}.
 Similairement à ces deux approches, nous utilisons des listes de n-uplets ordonnées par leur ordre lexicographique.
 Chaque n-uplet consiste d'un nombre prioritaire, de l'identifiant du pair qui a généré le n-uplet, et d'un nombre séquentiel. 
 Similairement à \emph{Logoot}, chaque valeur est identifiée par un \emph{dot}.
-Chaque fois qu'un pair exécute une insertion il incrémente son nombre séquentiel et assigne un nouveau \emph{dot} à la valeur insérée.
-Ce \emph{dot} correspond à l'identifiant du pair et le nombre séquentiel du dernier n-uplet de la liste.
+Chaque fois qu'un pair exécute une insertion, il incrémente son nombre séquentiel et assigne un nouveau \emph{dot} à la valeur insérée.
+Ce \emph{dot} est constitué de l'identifiant du pair et du nombre séquentiel du dernier n-uplet de la liste.
 Ces positions sont donc \emph{dot}-ifiées.
+Par exemple, la position $\tuple*{\tuple*{f, A, 3}, \tuple*{q, A, 5}}$ est composée de deux n-uplets~: $\tuple*{f, A, 3}$ et $\tuple*{q, A, 5}$.
+Les nombres prioritaires correspondent ici à des lettres latines.
+Le dernier n-uplet indique le \emph{dot} de la position~: $\tuple*{A, 5}$.
+Il s'agit donc de la cinquième position générée par le pair $p_A$.
+Pour simplifier les exemples, cette position est abrégée par $f^A_3q^A_5$.
 
 Deux positions sont agrégeables, si et seulement si \begin{inlinelist}\item elles divergent uniquement par leur identifiant local (le nombre séquentiel du dernier n-uplet), et \item elles ont des identifiants locaux contiguës\end{inlinelist}.
 Le nombre séquentiel joue à la fois le rôle d'identifiant local et d'indice de bloc.
+Par exemple, $f^A_3$ est agrégeable à $f^A_4$ et $f^A_3q^A_5$ est agrégeable à $f^A_3q^A_6$.
+
+Pour assurer l'ordre dense des positions, le nombre prioritaire du dernier n-uplet d'une position est différent du nombre prioritaire minimal.
+Les équations suivantes définissent l'ensemble des positions \emph{Dotted LogootSplit}.
 
 \begin{align}
 &\trm{DottedLogootSplitPos}_u \defeq {(\mathbb{N}_0^{< u} \times \mathbb{I} \times \mathbb{N}^*)}^{n \in \mathbb{N}_0} \times (\mathbb{N}^{* < u} \times \mathbb{I} \times \mathbb{N}^*)\\
@@ -1623,372 +1633,204 @@ Le nombre séquentiel joue à la fois le rôle d'identifiant local et d'indice d
 \end{aligned}
 \end{align}
 
-\begin{figure}[tb]
-\centering
-\begin{subfigure}[b]{0.69\linewidth}
-    \centering
-    \begin{tikzpicture}
-        \node[block,
-                label={below:$f^{A}_{\irange{1}{3}}$}
-            ] {$lad$}
-        to ++(\widthblock,0) node[block,
-                label={below:$f^{A}_3 q^{A}_{\irange{5}{7}}$}
-            ]{$ies$}
-        to ++(\widthblock,0) node[letter,
-                label={below:$t^{B}_1$}
-            ]{$\negthinspace!$}
-        ;
-    \end{tikzpicture}
-    \caption{}\label{fig:dottedlogootsplit-1}
-\end{subfigure}
-\begin{subfigure}[b]{0.29\linewidth}
-    \centering
-    \begin{equation*}
-        \set*{A_{\irange{1}{7}},B_1}
-    \end{equation*}
-    \caption{}\label{fig:dottedlogootsplit-2}
-\end{subfigure}
-\caption[Exemple d'une séquence \emph{Dotted LogootSplit}]{Exemple d'une séquence \emph{Dotted LogootSplit}.
-\subref{fig:logootsplit-1} Séquence de valeurs associées à leur position.
-\subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-\begin{tikzpicture}
-    \matrix[column sep=6.4cm,row sep=2.2cm]{
-        & \coordinate(mA3A4rB1); &\\
-        \coordinate(mA3A4r); & \coordinate(mA3A4B1); & \coordinate(mA4rB1);\\
-         \coordinate(mA3A4); & \coordinate(mA3B1); & \coordinate(mA4B1); \\
-        & \coordinate(mA4r); &\\
-        \coordinate(mA3); & \coordinate(mA4); & \coordinate(mB1); \\
-        & \coordinate(mbot); &\\
-    };
-
-    \node (bot) at (mbot) {$\bot$};
-    \node[
-        label={[name=ccA3]above:$\set*{A_1,\dotsc,A_3}$}
-    ] (cA3) at (mA3) {$\textit{lad}$};
-    \node[
-        label={[name=ccA4]above:$\set*{A_4}$}
-    ] (cA4) at (mA4) {$y$};
-    \node[
-        label={[name=ccB1]above:$\set*{B_1}$}
-    ] (cB1) at (mB1) {$\negthinspace!$};
-    \node[
-        label={[name=ccA4r]above:$\set*{A_4}$}
-    ] (cA4r) at (mA4r) {$\emptyset$};
-    \node[
-        label={[name=ccA3A4]above:$\set*{A_3,A_4}$}
-    ] (cA3A4) at (mA3A4) {$dy$};
-    \node[
-        label={[name=ccA4B1]above:$\set*{A_4,B_1}$}
-    ] (cA4B1) at (mA4B1) {$y!$};
-    \node[
-        label={[name=ccA3B1]above:$\set*{A_3,B_1}$}
-    ] (cA3B1) at (mA3B1) {$d!$};
-    \node[
-        label={[name=ccA3A4r]above:$\set*{A_3,A_4}$}
-    ] (cA3A4r) at (mA3A4r) {$d$};
-    \node[
-        label={[name=ccA4rB1]above:$\set*{A_4,B_1}$}
-    ] (cA4rB1) at (mA4rB1) {$!$};
-    \node[
-        label={[name=ccA3A4B1]above:$\set*{A_3,A_4,B_1}$}
-    ] (cA3A4B1) at (mA3A4B1) {$dy!$};
-    \node[
-        label={[name=ccA3A4rB1]above:$\set*{A_3,A_4,B_1}$}
-    ] (cA3A4rB1) at (mA3A4rB1) {$d!$};
-
-    \foreach \x in {A4,A4r,B1}
-        \node[draw,rounded corners,fit=(c\x) (cc\x)](\x) {};
-
-    \foreach \x in {A3,A3A4,A3B1,A4B1,A3A4r,A4rB1,A3A4B1,A3A4rB1}
-        \node[fit=(c\x) (cc\x)](\x) {};
-
-    \draw (bot) to (A3);
-    \draw (bot) to (A4);
-    \draw (bot) to (B1);
-    \draw (A4) to (A4r);
-    \draw (A3) to (A3A4);
-    \draw (A3) to (A3B1);
-    \draw (A4) to (A3A4);
-    \draw (A4) to (A4B1);
-    \draw (B1) to (A3B1);
-    \draw (B1) to (A4B1);
-    \draw (A3A4) to (A3A4B1);
-    \draw (A3B1) to (A3A4B1);
-    \draw (A4B1) to (A3A4B1);
-    \draw (A4r) to (A3A4r);
-    \draw (A4r) to (A4rB1);
-    \draw (A3A4) to (A3A4r);
-    \draw (A4B1) to (A4rB1);
-    \draw (A3A4r) to (A3A4rB1);
-    \draw (A4rB1) to (A3A4rB1);
-    \draw (A3A4B1) to (A3A4rB1);
-\end{tikzpicture}
-\caption[Sup-demi-treillis des états d'une séquence répliquée synchronisée par états]{Aperçu du diagramme de Hasse du sup-demi-treillis des états de la séquence répliquée synchronisée par états.
-Pour simplifier la représentation, les positions associées aux valeurs sont omises.
-Les états entourés sont irréductibles.
-}\label{fig:dottedlogootsplit-semilattice}
-\end{figure}
-
-La \autoref{fig:dottedlogootsplit} correspond à la séquence \emph{Dotted LogootSplit} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic}.
-Le pair $p_A$ commence par une insertion contiguës de plusieurs caractères.
-Les positions sont générées de manière à être agrégées.
-Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
-$p_A$ exécute ensuite l'opération $a_2$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
-Aucune position agrégeable à la position de l'un des deux caractères ne peut être générée tel qu'elle soit comprise entre les positions des deux valeurs.
-La position générée a donc pour préfixe la position du caractère $\textsf{'\textit{d}'}$.
-L'intégration de cette insertion produit la scission du premier bloc.
-En parallèle, le pair $p_B$ insère le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence après le bloc $\textsf{'\textit{lady}'}$.
-Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré, étant donné que $p_B$ n'est pas le propriétaire du bloc.
-
-Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu du sup-demi-treillis des états de la séquence obtenue dans la \autoref{fig:dottedlogootsplit}.
-%Étant donné que les positions sont omises dans le diagramme, il est valide pour tout type de positions \emph{dot}-ifiées.
-
-Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est disponible sur \emph{GitHub}~: \href{https://github.com/coast-team/dotted-logootsplit}{github.com/coast-team/dotted-logootspli}} et intégré ce protocole de réplication à l'éditeur collaboratif \emph{MUTE}\footnote{\href{https://coedit.re}{coedit.re}}.
-
-
-Nous prenons l'exécution abstraite de la \autoref{fig:replseq-sematic} pour illustrer la réplication d'une séquence qui utilise l'implémentation de la \autoref{fig:deltaseq} avec de positions \emph{dot}-ifiées.
-La \autoref{fig:deltaseq-state-trans} décrit les états successifs de la copie du pair $p_A$.
-La \autoref{fig:deltaseq-state-trans} décrit les états successifs de la copie du pair $p_B$.
-Pour simplifier la représentation, les positions ne sont pas représentées.
-À la place des associations de positions et valeurs, nous avons indiqué la séquence de valeur.
-Un \emph{dot} $\tuple*{i, n}$ est noté $i_n$.
-Les arcs dirigés indiquent des transitions d'états.
-Ils sont étiquetés à gauche des événements qui produisent les transitions d'états.
-Lorsque l'événement correspond à l'exécution d'une opération de modification ou d'une opération d'interrogation, les arcs dirigés sont respectivement étiquetés à droite par le message généré et la valeur de retour.
-
-
-
-% \begin{figure}[tbh]
+% \begin{figure}[tb]
 % \centering
-% \begin{tikzpicture}
-%     \newcommand\hsep{2}
-%     % Events
-%     \node (s0) {}
-%         to +(0,-\hsep) node (s1) {$\tuple*{\emptyset, \emptyset}$}
-%         to +(0,-2*\hsep) node (s2) {$\tuple*{\textit{lady},\set*{A_1,\dotsc,A_4}}$}
-%         to +(0,-3*\hsep) node (s3) {$\tuple*{\textit{ladiy},\set*{A_1,\dotsc,A_5}}$}
-%         to +(0,-4*\hsep) node (s4) {$\tuple*{\textit{ladi},\set*{A_1,\dotsc,A_5}}$}
-%         to +(0,-5*\hsep) node (s5) {$\tuple*{\textit{ladies},\set*{A_1,\dotsc,A_7}}$}
-%         to +(0,-6*\hsep) node (s6) {$\tuple*{\textit{ladies},\set*{A_1,\dotsc,A_7}}$}
-%     ;
-%     % State transitions
-%     \draw[pre] (s0) to node[midway,left]{initialise} (s1);
-%     \draw[pre] (s1) to %
-%             node[midway,left]{exécute $a_1$} %
-%             node[midway,right]{génère $\tuple*{\textit{lady}, \set*{A_1,\dotsc,A_4}}$} %
-%         (s2);
-%     \draw[pre] (s2) to %
-%             node[midway,left]{exécute $a_2$} %
-%             node[midway,right]{génère $\tuple*{\textit{i}, \set*{A_5}}$} %
-%         (s3);
-%     \draw[pre] (s3) to %
-%             node[midway,left]{exécute $a_3$} %
-%             node[midway,right]{génère $\tuple*{\emptyset, \set*{A_4}}$} %
-%         (s4);
-%     \draw[pre] (s4) to %
-%             node[midway,left]{exécute $a_4$} %
-%             node[midway,right]{génère $\tuple*{\textit{es}, \set*{A_6,A_7}}$} %
-%         (s5);
-%     \draw[pre] (s5) to %
-%             node[midway,left]{exécute $a_5$} %
-%             node[midway,right]{retourne $\textit{ladies}$} %
-%         (s6);
-% \end{tikzpicture}
-% \caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic}.
-% L'ensemble répliqué utilise l'implémentation de la \autoref{fig:deltaseq}.}\label{fig:deltaseq-state-trans}
+% \begin{subfigure}[b]{0.69\linewidth}
+%     \centering
+%     \begin{tikzpicture}
+%         \node[block,
+%                 label={below:$f^{A}_{\irange{1}{3}}$}
+%             ] {$lad$}
+%         to ++(\widthblock,0) node[block,
+%                 label={below:$f^{A}_3 q^{A}_{\irange{5}{7}}$}
+%             ]{$ies$}
+%         to ++(\widthblock,0) node[letter,
+%                 label={below:$t^{B}_1$}
+%             ]{$\negthinspace!$}
+%         ;
+%     \end{tikzpicture}
+%     \caption{}\label{fig:dottedlogootsplit-1}
+% \end{subfigure}
+% \begin{subfigure}[b]{0.29\linewidth}
+%     \centering
+%     \begin{equation*}
+%         \set*{A_{\irange{1}{7}},B_1}
+%     \end{equation*}
+%     \caption{}\label{fig:dottedlogootsplit-2}
+% \end{subfigure}
+% \caption[Exemple d'une séquence \emph{Dotted LogootSplit}]{Exemple d'une séquence \emph{Dotted LogootSplit}.
+% \subref{fig:logootsplit-1} Séquence de valeurs associées à leur position.
+% \subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 % \end{figure}
 
+L'utilisation de l'implémentation de la \autoref{fig:deltaseq} et de ce nouveau type de positions permet la réplication d'une séquence \emph{Dotted LogootSplit} synchronisée par différences d'état.
+Afin d'illustrer ce nouveau \ac{CRDT}, nous reprenons le scénario de la \autoref{fig:replseq-sematic-1}.
+La \autoref{fig:deltaseq-state-trans-a} décrit les états successifs de la copie du pair $p_A$.
+La \autoref{fig:deltaseq-state-trans-b} décrit les états successifs de la copie du pair $p_B$.
+L'exécution de l'opération $\trm{ins}(n, \tuple*{v_1,\dotsc,v_k})$ est un raccourci pour l'exécution de $k$ opérations d'insertion qui se succèdent $o_1 \idr \dotsb \idr o_k$ avec $\trm{call}(o_i) = \trm{ins}(n+i-1, v_i)$ et $1 \leq i \leq k$.
+Elle ajoute le n-uplet de valeurs $\tuple*{v_1,\dotsc,v_k}$ avant la $n$-ième valeur de la séquence.
+Un \emph{dot} $\tuple*{i, n}$ est noté $i_n$.
 
+Le pair $p_A$ initialise sa séquence et exécute une succession d'opérations qui génère des messages.
+Il commence par une insertion contiguë de quatre caractères (2).
+Les positions sont générées de manière à être agrégées.
+Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
+Le contexte causal est égal à $\set*{A_1, \dotsc, A_4}$.
+$p_A$ exécute ensuite l'opération $a_2$ qui insère le caractère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$ (3).
+Aucune position agrégeable à la position de l'un des deux caractères ne peut être générée telle qu'elle soit comprise entre les positions des deux caractères.
+La position générée a donc pour préfixe la position du caractère $\textsf{'\textit{d}'}$.
+L'intégration de cette insertion produit la scission du premier bloc.
+Le contexte causal est alors égal à $\set*{A_1, \dotsc, A_5}$.
+$p_A$ supprime ensuite le caractère $\textsf{'\textit{y}'}$ qui conduit à la suppression du bloc.
+Le contexte causal demeure inchangé.
+$p_A$ termine par l'insertion contiguë de deux caractères à la fin de la séquence.
 
+\emph{Dotted LogootSplit} laisse beaucoup de liberté dans le choix du protocole de synchronisation.
+Nous illustrons en partie cette liberté à l'aide de la succéssion des états du pair $p_B$.
+Nous supposons que $p_B$ ne reçoit pas les messages d'insertion générés par $p_A$ du caractère $\textsf{'\textit{i}'}$ et du bloc $\textsf{'\textit{es}'}$.
+Nous supposons également que $p_A$ détecte la perte de messages sur le réseau.
+Ces messages sont perdus sur le réseau.
+$p_B$ initialise d'abord sa séquence (1).
+$p_A$ lui transmet son état complet.
+$p_B$ intègre l'état de $p_A$ à sa copie (2).
+Il insère ensuite le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence (3).
+Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré, étant donné que $p_B$ n'est pas le propriétaire du bloc.
+Il génère une nouvelle position supérieure à celle de $\textsf{'\textit{y}'}$.
+Il reçoit ensuite une différence d'état dont l'intégration conduit à la suppression du $\textsf{'\textit{y}'}$ (4).
+$p_A$ détecte la perte de messages sur le réseau et transmet alors une différences d'état qui provient de la fusion des dernières différences d'états qu'il a transmis (y compris celle qui conduit à la suppression de  $\textsf{'\textit{y}'}$).
+$p_B$ intègre l'état qu'il reçoit et obtient ainsi la séquence $\textsf{'\textit{ladies\textbf{\negthinspace!}}'}$.
 
-\clearpage
+Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu du sup-demi-treillis des états de la séquence du pair $p_B$.
+Les traits épaissis représentent les transitions d'états du pair $p_B$ des étapes (1) à (4).
+La fusion de deux états correspond à leur borne supérieure dans le sup-demi treillis.
 
-\begin{figure}[tbh]
-\centering
-\begin{tikzpicture}
-    \newcommand\hsep{4}
-    % Events
-    \node (s1) {$\tuple*{\emptyset, \emptyset}$}
-        to +(0,-\hsep) node (s2) {\begin{tikzpicture}
-            \node[block,
-                    label={below:$f^{A}_{\irange{1}{4}}$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
-                ] {$lady$}
-            ;
-        \end{tikzpicture}}
-        to +(0,-2*\hsep) node (s3) {\begin{tikzpicture}
-            \node[block,
-                    label={below:$f^A_{\irange{1}{3}}$}
-                ] {$lad$}
-            to +(\widthblock,0) node[letter,
-                    label={below:$f^A_3 q^A_5$}
-                ]{$i$}
-            to +(\widthblock+\widthletter,0) node[letter,
-                    label={below:$f^A_5$}
-                ]{$y$}
-            to +(\widthblock+3*\widthletter,0) node[anchor=west]{$\set*{A_1,\dotsc,A_5}$}
-            ;
-        \end{tikzpicture}}
-        to +(0,-3*\hsep) node (s4) {\begin{tikzpicture}
-            \node[block,
-                    label={below:$f^{A}_{\irange{1}{3}}$}
-                ] {$lad$}
-            to ++(\widthblock,0) node[letter,
-                    label={below:$f^A_3 q^A_5$}
-                ]{$i$}
-            ;
-        \end{tikzpicture}}
-        to +(0,-4*\hsep) node (s5) {\begin{tikzpicture}
-            \node[block,
-                    label={below:$f^{A}_{\irange{1}{3}}$}
-                ] {$lad$}
-            to ++(\widthblock,0) node[block,
-                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
-                ]{$ies$}
-            ;
-        \end{tikzpicture}}
-        to +(0,-5*\hsep) node (s6) {\begin{tikzpicture}
-            \node[block,
-                    label={below:$f^{A}_{\irange{1}{3}}$}
-                ] {$lad$}
-            to ++(\widthblock,0) node[block,
-                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
-                ]{$ies$}
-            ;
-        \end{tikzpicture}}
-    ;
-    % State transitions
-    %\draw[pre] (s0) to node[midway,left]{initialise} (s1);
-    \draw[pre] (s1) to %
-            node[midway,left]{exécute $a_1$} %
-            node[midway,right]{génère $\tuple*{\textit{lady}, \set*{A_1,\dotsc,A_4}}$} %
-        (s2);
-    \draw[pre] (s2) to %
-            node[midway,left]{exécute $a_2$} %
-            node[midway,right]{génère $\tuple*{\textit{i}, \set*{A_5}}$} %
-        (s3);
-    \draw[pre] (s3) to %
-            node[midway,left]{exécute $a_3$} %
-            node[midway,right]{génère $\tuple*{\emptyset, \set*{A_4}}$} %
-        (s4);
-    \draw[pre] (s4) to %
-            node[midway,left]{exécute $a_4$} %
-            node[midway,right]{génère $\tuple*{\textit{es}, \set*{A_6,A_7}}$} %
-        (s5);
-    \draw[pre] (s5) to %
-            node[midway,left]{exécute $a_5$} %
-            node[midway,right]{retourne $\textit{ladies}$} %
-        (s6);
-\end{tikzpicture}
-\caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic}.
-L'ensemble répliqué utilise l'implémentation de la \autoref{fig:deltaseq}.}\label{fig:deltaseq-state-trans}
-\end{figure}
+La séquence obtenue est relativement proche de celle obtenue avec \emph{LogootSplit}.
+Cependant, nos positions sont de taille plus faible, étant donné que nous utilisons une composante en moins dans les n-uplets.
+\emph{Dotted LogootSplit} a également moins de suppositions sur la livraison de messages.
+Ce qui permet la conception de protocoles de synchronisation plus souples et mieux adaptés au condition réseau ou au type de collaboration rencontré.
+Dans l'exemple précédent nous avons combiné la transmission d'états complets, avec la transmission de différences d'états irréductibles, et la transmission de différences d'états décomposables.
+
+Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est disponible sur \emph{GitHub}~: \href{https://github.com/coast-team/dotted-logootsplit}{github.com/coast-team/dotted-logootspli}} et intégré ce protocole de réplication à l'éditeur collaboratif \emph{MUTE}\footnote{\href{https://coedit.re}{coedit.re}}.
+Il a été testé dans des conditions réelles à l'aide d'une synchronisation par opérations.
+Dans ces conditions il a montré des performances similaires à celles de \emph{LogootSplit}.
 
 \clearpage
 
 \begin{figure}[hbt]
 \centering
 \begin{tikzpicture}[every node/.style={}]
-    \newcommand*\hsep{1.4}
-    \newcommand*\vsepevt{-3.4}
+    \newcommand*\vsepevt{-4}
     \path (0,0)
-        to +(-4,0) node[
+        to +(-4,0) node[anchor=north,
             label={above:\textbf{(1) Initialise}}
         ]{\begin{tikzpicture}
-            \node[label={[label distance=6mm]right:$\emptyset$}
-                ] {$\emptyset$}
-            ;
+            \node[
+                minimum height=\widthletter
+            ](b1){$\emptyset$};
+            \node[fit=(b1),
+                label={above:$\emptyset$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,\vsepevt) node[
+        to +(-4,\vsepevt) node[anchor=north,
             label={above:\textbf{(2) Exécute $\trm{ins}(0, \textit{lady})$}}
         ]{\begin{tikzpicture}
             \node[block,
-                    label={below:$f^{A}_{\irange{1}{4}}$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
-                ] {$lady$}
-            ;
+                label={below:$f^{A}_{\irange{1}{4}}$}
+            ](b1){$lady$};
+            \node[fit=(b1),
+                label={above:$\set*{A_1,\dotsc,A_4}$}
+            ]{};
         \end{tikzpicture}}
-        to +(4,\vsepevt) node[
+        to +(4,\vsepevt) node[anchor=north,
             label={above:\textbf{Message généré}}
         ]{\begin{tikzpicture}
             \node[block,
-                    label={below:$f^{A}_{\irange{1}{4}}$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
-                ] {$lady$}
-            ;
+                label={below:$f^{A}_{\irange{1}{4}}$}
+            ](b1){$lady$};
+            \node[fit=(b1),
+                label={above:$\set*{A_1,\dotsc,A_4}$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,2*\vsepevt) node[
+        to +(-4,2*\vsepevt) node[anchor=north,
             label={above:\textbf{(3) Exécute $\trm{ins}(3, \textsf{'\textit{i}'})$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^A_{\irange{1}{3}}$}
-                ] {$lad$}
+                ](b1){$lad$}
             to +(\widthblock,0) node[letter,
                     label={below:$f^A_3 q^A_5$}
                 ]{$i$}
             to +(\widthblock+\widthletter,0) node[letter,
-                    label={below:$f^A_5$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_5}$}
-                ]{$y$}
+                    label={below:$f^A_4$}
+                ](b3){$y$}
             ;
+            \node[fit=(b1)(b3),
+                label={above:$\set*{A_1,\dotsc,A_5}$}
+            ]{};
         \end{tikzpicture}}
-        to +(4,2*\vsepevt) node[
+        to +(4,2*\vsepevt) node[anchor=north,
             label={above:\textbf{Message généré}}
         ]{\begin{tikzpicture}
             \node[letter,
-                    label={below:$f^A_5$},
-                    label={[label distance=6mm]right:$\set*{A_5}$}
-                ]{$i$}
+                    label={below:$f^A_5$}
+                ](b1){$i$}
             ;
+            \node[fit=(b1),
+                label={above:$\set*{A_5}$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,3*\vsepevt) node[
+        to +(-4,3*\vsepevt) node[anchor=north,
             label={above:\textbf{(4) Exécute $\trm{del}(4)$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^A_{\irange{1}{3}}$}
-                ] {$lad$}
+                ](b1){$lad$}
             to +(\widthblock,0) node[letter,
-                    label={below:$f^A_3 q^A_5$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_5}$}
-                ]{$i$}
+                    label={below:$f^A_3 q^A_5$}
+                ](b2){$i$}
             ;
+            \node[fit=(b1)(b2),
+                label={above:$\set*{A_1,\dotsc,A_5}$}
+            ]{};
         \end{tikzpicture}}
-        to +(4,3*\vsepevt) node[
+        to +(4,3*\vsepevt) node[anchor=north,
             label={above:\textbf{Message généré}}
         ]{\begin{tikzpicture}
-            \node[label={[label distance=6mm]right:$\set*{A_4}$}
-                ]{$\emptyset$}
-            ;
+            \node[
+                minimum height=\widthletter
+            ](b1){$\emptyset$};
+            \node[fit=(b1),
+                label={above:$\set*{A_4}$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,4*\vsepevt) node[
-            label={above:\textbf{(4) Exécute $\trm{ins}(4, \textit{es})$}}
+        to +(-4,4*\vsepevt) node[anchor=north,
+            label={above:\textbf{(5) Exécute $\trm{ins}(4, \textit{es})$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^{A}_{\irange{1}{3}}$}
-                ] {$lad$}
+                ](b1){$lad$}
             to ++(\widthblock,0) node[block,
-                    label={below:$f^A_3 q^A_{\irange{5}{7}}$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_7}$}
-                ]{$ies$}
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ](b2){$ies$}
             ;
+            \node[fit=(b1)(b2),
+                label={above:$\set*{A_1,\dotsc,A_7}$}
+            ]{};
         \end{tikzpicture}}
-        to +(4,4*\vsepevt) node[
+        to +(4,4*\vsepevt) node[anchor=north,
             label={above:\textbf{Message généré}}
         ]{\begin{tikzpicture}
             \node[block,
-                    label={below:$f^A_3 q^A_{\irange{5}{7}}$},
-                    label={[label distance=6mm]right:$\set*{A_6,A_7}$}
-                ]{$es$}
-            ;
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ](b1){$es$};
+            \node[fit=(b1),
+                label={above:$\set*{A_6,A_7}$}
+            ]{};
         \end{tikzpicture}}
     ;
 \end{tikzpicture}
-\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
-Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-b}
+\caption[États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}]{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}.
+Le contenu répliqué est une séquence \emph{Dotted LogootSplit}.}\label{fig:deltaseq-state-trans-a}
 \end{figure}
 
 
@@ -1997,145 +1839,253 @@ Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\labe
 \begin{figure}[hbt]
 \centering
 \begin{tikzpicture}[every node/.style={}]
-    \newcommand*\hsep{1.4}
-    \newcommand*\vsepevt{-3.4}
+    \newcommand*\vsepevt{-4}
     \path (0,0)
-        to +(-4,0) node[
+        to +(0,0) node[anchor=north,
             label={above:\textbf{(1) Initialise}}
         ]{\begin{tikzpicture}
-            \node[label={[label distance=6mm]right:$\emptyset$}
-                ] {$\emptyset$}
-            ;
+            \node[
+                minimum height=\widthletter
+            ](b1){$\emptyset$};
+            \node[fit=(b1),
+                label={above:$\emptyset$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,\vsepevt) node[
+        to +(0,\vsepevt) node[anchor=north,
             label={above:\textbf{(2) Intègre $m_1$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^{A}_{\irange{1}{4}}$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                    label={above:$\set*{A_1,\dotsc,A_4}$}
                 ] {$lady$}
             ;
         \end{tikzpicture}}
-        to +(4,\vsepevt) node[
-            label={above:\textbf{Message $m_1$}}
+        to +(-6,\vsepevt) node[anchor=north,
+            label={above:\textbf{Message livré $m_1$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^{A}_{\irange{1}{4}}$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4}$}
+                    label={above:$\set*{A_1,\dotsc,A_4}$}
                 ] {$lady$}
             ;
         \end{tikzpicture}}
-        to +(-4,2*\vsepevt) node[
+        to +(0,2*\vsepevt) node[anchor=north,
             label={above:\textbf{(3) Exécute $\trm{ins}(4, \textsf{'\textit{\negthinspace!}'})$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^A_{\irange{1}{4}}$}
-                ] {$lady$}
+                ](b1){$lady$}
             to +(\widthblock,0) node[letter,
-                    label={below:$t^B_1$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_4,B_1}$}
-                ]{$\negthinspace!$}
+                    label={below:$t^B_1$}
+                ](b2){$\negthinspace!$}
             ;
+            \node[fit=(b1)(b2),
+                label={above:$\set*{A_1,\dotsc,A_4,B_1}$}
+            ]{};
         \end{tikzpicture}}
-        to +(4,2*\vsepevt) node[
+        to +(6,2*\vsepevt) node[anchor=north,
             label={above:\textbf{Message généré}}
         ]{\begin{tikzpicture}
             \node[letter,
-                    label={below:$t^B_1$},
-                    label={[label distance=6mm]right:$\set*{B_1}$}
-                ]{$\negthinspace!$}
+                    label={below:$t^B_1$}
+                ](b1){$\negthinspace!$}
             ;
+            \node[fit=(b1),
+                label={above:$\set*{B_1}$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,3*\vsepevt) node[
+        to +(0,3*\vsepevt) node[anchor=north,
             label={above:\textbf{(4) Intègre $m_2$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^{A}_{\irange{1}{3}}$}
-                ] {$lad$}
-            to ++(\widthblock,0) node[block,
-                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
-                ]{$ies$}
-            to +(2*\widthblock,0) node[letter,
-                    label={below:$t^B_1$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_7,B_1}$}
-                ]{$\negthinspace!$}
+                ] (b1) {$lad$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$t^B_1$}
+                ] (b2){$\negthinspace!$}
             ;
+            \node[fit=(b1) (b2),
+                label={above:$\set*{A_1,\dotsc,A_7,B_1}$}
+            ]{};
         \end{tikzpicture}}
-        to +(4,3*\vsepevt) node[
-            label={above:\textbf{Message $m_2$}}
+        to +(-6,3*\vsepevt) node[anchor=north,
+            label={above:\textbf{Message livré $m_2$}}
         ]{\begin{tikzpicture}
-            \node[block,
-                    label={below:$f^A_3 q^A_{\irange{5}{7}}$},
-                    label={[label distance=6mm]right:$\set*{A_4,\dotsc,A_7}$}
-                ]{$ies$}
-            ;
+            \node[
+                minimum height=\widthletter
+                ](b1){$\emptyset$};
+            \node[fit=(b1),
+                label={above:$\set*{A_4}$}
+            ]{};
         \end{tikzpicture}}
-        to +(-4,4*\vsepevt) node[
-            label={above:\textbf{(4) Intègre $m_1$}}
+        to +(0,4*\vsepevt) node[anchor=north,
+            label={above:\textbf{(5) Intègre $m_3$}}
         ]{\begin{tikzpicture}
             \node[block,
                     label={below:$f^{A}_{\irange{1}{3}}$}
-                ] {$lad$}
+                ](b1){$lad$}
             to ++(\widthblock,0) node[block,
                     label={below:$f^A_3 q^A_{\irange{5}{7}}$}
                 ]{$ies$}
             to +(2*\widthblock,0) node[letter,
-                    label={below:$t^B_1$},
-                    label={[label distance=6mm]right:$\set*{A_1,\dotsc,A_7,B_1}$}
-                ]{$\negthinspace!$}
+                    label={below:$t^B_1$}
+                ](b3){$\negthinspace!$}
             ;
+            \node[fit=(b1)(b3),
+                label={above:$\set*{A_1,\dotsc,A_7,B_1}$}
+            ]{};
+        \end{tikzpicture}}
+        to +(-6,4*\vsepevt) node[anchor=north,
+            label={above:\textbf{Message livré $m_3$}}
+        ]{\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_3 q^A_{\irange{5}{7}}$}
+                ](b1){$ies$}
+            ;
+            \node[fit=(b1),
+                label={above:$\set*{A_4,\dotsc,A_7}$}
+            ]{};
         \end{tikzpicture}}
     ;
 \end{tikzpicture}
-\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
-Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-b}
+\caption[États successifs de la copie du pair $p_B$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}]{États successifs de la copie du pair $p_B$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}.
+Le contenu répliqué est une séquence \emph{Dotted LogootSplit}.}\label{fig:deltaseq-state-trans-b}
 \end{figure}
 
 \clearpage
+\vspace*{\fill}
 
-
-
-\begin{figure}[tbh]
+\begin{figure}[!ht]
 \centering
 \begin{tikzpicture}
-    \newcommand\hsep{2}
-    % Events
-    \node (s0) {}
-        to +(0,-\hsep) node (s1) {$\tuple*{\emptyset, \emptyset}$}
-        to +(0,-2*\hsep) node (s2) {$\tuple*{\textit{lady},\set*{A_1,\dotsc,A_4}}$}
-        to +(0,-3*\hsep) node (s3) {$\tuple*{\textit{lady\textbf{!}},\set*{A_1,\dotsc,A_4,B_1}}$}
-        to +(0,-4*\hsep) node (s4) {$\tuple*{\textit{lady\textbf{!}},\set*{A_1,\dotsc,A_4,B_1}}$}
-        to +(0,-5*\hsep) node (s5) {$\tuple*{\textit{ladies\textbf{!}},\set*{A_1,\dotsc,A_7,B_1}}$}
-        to +(0,-6*\hsep) node (s6) {$\tuple*{\textit{ladies\textbf{!}},\set*{A_1,\dotsc,A_7,B_1}}$}
-        to +(0,-7*\hsep) node (s7) {$\tuple*{\textit{ladies\textbf{!}},\set*{A_1,\dotsc,A_7,B_1}}$}
-    ;
-    % State transitions
-    \draw[pre] (s0) to node[midway,left]{initialise} (s1);
-    \draw[pre] (s1) to %
-            node[midway,left]{intègre $\tuple*{\textit{lady}, \set*{A_1,\dotsc,A_4}}$} %
-        (s2);
-    \draw[pre] (s2) to %
-            node[midway,left]{exécute $b_1$} %
-            node[midway,right]{génère $\tuple*{\textit{\textbf{!}},\set*{B_1}}$} %
-        (s3);
-    \draw[pre] (s3) to %
-            node[midway,left]{exécute $b_2$} %
-            node[midway,right]{retourne $\textit{lady\textbf{!}}$} %
-        (s4);
-    \draw[pre] (s4) to %
-            node[midway,left]{intègre $\tuple*{\textit{ies}, \set*{A_4,\dotsc,A_7}}$} %
-        (s5);
-    \draw[pre] (s5) to %
-            node[midway,left]{intègre $\tuple*{\textit{lady}, \set*{A_1,\dotsc,A_4}}$} %
-        (s6);
-    \draw[pre] (s6) to %
-            node[midway,left]{exécute $b_3$} %
-            node[midway,right]{retourne $\textit{ladies\textbf{!}}$} %
-        (s7);
+    \matrix[column sep=6.4cm,row sep=3.8cm]{
+        & \coordinate(mA3A4rB1); &\\
+        \coordinate(mA3A4r); & \coordinate(mA3A4B1); & \coordinate(mA4rB1);\\
+            \coordinate(mA3A4); & \coordinate(mA4r); & \coordinate(mB1); \\
+        %& \coordinate(mA4); & \coordinate(mB1); \\
+        & \coordinate(mbot); &\\
+    };
+
+    \node[] (bot) at (mbot) {\begin{tikzpicture}
+            \node[
+                minimum height=\widthletter
+            ](b1){$\emptyset$};
+            \node[fit=(b1),
+                label={above:$\emptyset$}
+            ]{};
+        \end{tikzpicture}};
+    % \node[draw,dashed,rounded corners] (A4) at (mA4) {\begin{tikzpicture}
+    %         \node[letter,solid,rounded corners=0,
+    %                 label={below:$f^A_4$}
+    %             ](b1){$y$}
+    %         ;
+    %         \node[fit=(b1),
+    %             label={above:$\set*{A_4}$}
+    %         ]{};
+    %     \end{tikzpicture}};
+    \node[draw,dashed,rounded corners] (B1) at (mB1) {\begin{tikzpicture}
+            \node[letter,solid,rounded corners=0,
+                    label={below:$t^B_1$}
+                ](b1){$!$}
+            ;
+            \node[fit=(b1),
+                label={above:$\set*{B_1}$}
+            ]{};
+        \end{tikzpicture}};
+    \node[draw,dashed,rounded corners] (A4r) at (mA4r) {\begin{tikzpicture}
+            \node[minimum height=\widthletter](b1){$\emptyset$}
+            ;
+            \node[fit=(b1),
+                label={above:$\set*{A_4}$}
+            ]{};
+        \end{tikzpicture}};
+    \node[] (A3A4) at (mA3A4) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_{\irange{1}{4}}$}
+                ](b1){$lady$}
+            ;
+            \node[fit=(b1),
+                label={above:$\set*{A_1,\dotsc,A_4}$}
+            ]{};
+        \end{tikzpicture}};
+    % \node[] (A4B1) at (mA4B1) {\begin{tikzpicture}
+    %         \node[letter,
+    %                 label={below:$f^{A}_4$}
+    %             ](b1){$y$}
+    %         to +(\widthletter,0) node[letter,
+    %                 label={below:$f^A_4$}
+    %             ](b2){$!$}
+    %         ;
+    %         \node[fit=(b1)(b2),
+    %             label={above:$\set*{A_4,B_1}$}
+    %         ]{};
+    %     \end{tikzpicture}};
+    \node[] (A3A4r) at (mA3A4r) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^A_{\irange{1}{3}}$}
+                ](b1){$lad$}
+            ;
+            \node[fit=(b1),
+                label={above:$\set*{A_1,\dotsc,A_4}$}
+            ]{};
+        \end{tikzpicture}};
+    \node[] (A4rB1) at (mA4rB1) {\begin{tikzpicture}
+            \node[letter,
+                    label={below:$t^B_1$}
+                ](b1){$!$}
+            ;
+            \node[fit=(b1),
+                label={above:$\set*{A_4,B_1}$}
+            ]{};
+        \end{tikzpicture}};
+    \node[] (A3A4B1) at (mA3A4B1) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{4}}$}
+                ](b1){$lady$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$t^B_1$}
+                ](b3){$\negthinspace!$}
+            ;
+            \node[fit=(b1)(b3),
+                label={above:$\set*{A_1,\dotsc,A_4,B_1}$}
+            ]{};
+        \end{tikzpicture}};
+    \node[] (A3A4rB1) at (mA3A4rB1) {\begin{tikzpicture}
+            \node[block,
+                    label={below:$f^{A}_{\irange{1}{3}}$}
+                ](b1){$lad$}
+            to +(\widthblock,0) node[letter,
+                    label={below:$t^B_1$}
+                ](b3){$\negthinspace!$}
+            ;
+            \node[fit=(b1)(b3),
+                label={above:$\set*{A_1,\dotsc,A_4,B_1}$}
+            ]{};
+        \end{tikzpicture}};
+
+    \draw[ultra thick] (bot) to (A3A4);
+    \draw (bot) to (A4r);
+    \draw (bot) to (B1);
+    % \draw (A4) to (A4r);
+    % \draw (A4) to (A3A4);
+    % \draw (A4) to (A4B1);
+    \draw[ultra thick] (A3A4) to (A3A4B1);
+    \draw (B1) to (A3A4B1);
+    \draw (A4r) to (A3A4r);
+    \draw (A4r) to (A4rB1);
+    \draw (A3A4) to (A3A4r);
+    \draw (B1) to (A4rB1);
+    \draw (A3A4r) to (A3A4rB1);
+    \draw (A4rB1) to (A3A4rB1);
+    \draw[ultra thick] (A3A4B1) to (A3A4rB1);
 \end{tikzpicture}
-\caption{États successifs de la copie du pair $p_B$ de l'exécution abstraite de la \autoref{fig:replseq-sematic}.
-L'ensemble répliqué utilise l'implémentation de la \autoref{fig:deltaseq}.}\label{fig:deltaseq-state-trans}
+\caption[Sup-demi-treillis des états d'une séquence \emph{Dotted Logootsplit}]{Aperçu du diagramme de Hasse du sup-demi-treillis des états d'une séquence \emph{Dotted Logootsplit}.
+Les états entourés par des tirets sont irréductibles.
+}\label{fig:dottedlogootsplit-semilattice}
 \end{figure}
+
+\vspace*{\fill}
+\clearpage
 
 \subsection{Discussion}
 

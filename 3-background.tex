@@ -2107,7 +2107,7 @@ La suppression d'une valeur doit être intégrée après l'intégration de son a
     \foreach \src/\dest in {a1/a2,a1/b1,a2/a3,b1/a3}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption{Exécution abstraite qui respecte le modèle de cohérence causale.
+\caption[Ensemble répliqué qui respecte la sémantique \emph{Add-Win}]{Exécution abstraite qui respecte le modèle de cohérence causale.
 Le contenu répliqué est un ensemble qui respecte la sémantique \emph{Add-Win}.}\label{fig:awset-example}
 \end{figure}
 
@@ -2152,7 +2152,7 @@ L'intégration de l'opération de suppression supprime les triplets qu'elle cont
             node[midway,right]{retourne $\set*{1}$} %
         (s5);
 \end{tikzpicture}
-\caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
+\caption[États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}]{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
 L'ensemble répliqué utilise l'implémentation de la \autoref{fig:op-add-win-set}.}\label{fig:op-awset-state-trans}
 \end{figure}
 
@@ -2279,7 +2279,7 @@ En pratique le contexte causal peut être représenté par un vecteur de version
             node[midway,right]{retourne $\set*{1}$} %
         (s5);
 \end{tikzpicture}
-\caption{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
+\caption[États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}]{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:awset-example}.
 L'ensemble répliqué utilise l'implémentation de la \autoref{fig:state-add-win-set}.}\label{fig:state-awset-state-trans}
 \end{figure}
 

@@ -4525,24 +4525,26 @@ Il garantit également la convergence des pairs honnêtes.
 
 
 \paragraph{État authentifié} Au moment de la rédaction de ce manuscrit, \textcite{kollmann2019_snapdoc} ont présenté \emph{SnapDoc}.
-\emph{SnapDoc} a pour objectif de masquer l'historique de la collaboration aux pairs qui rejoignent la collaboration.
-Les pairs maintiennent un journal infalsifiable des messages qu'ils échangent.
+\emph{SnapDoc} se place dans un contexte similaire au nôtre et a pour objectif de masquer l'historique de la collaboration aux futur·e·s collaborateur·ice·s.
+L'historique de la collaboration correspond à un journal infalsifiable dans lequel sont enregistrés les messages échangés par les pairs.
+Les pairs ne transmettent pas leur journal aux nouveaux pairs.
+Pour rejoindre la collaboration, un nouveau pair récupère l'état d'une copie du contenu partagé.
 
-Un pair ne transmet pas son journal.
-Il transmet à un nouveau pair l'état de sa copie du contenu partagé, le dernier message de chaque pair connu, et une preuve de l'absence de messages non-linéaires (et donc d'embranchements) au sein de son journal.
+\emph{SnapDoc} tolère la présence de pairs mal-intentionnés.
+Un pair mal-intentionné peut falsifier un état du contenu, avant de le transmettre à un nouveau pair.
+Pour limiter les falsifications, l'état est accompagné de plusieurs données infalsifiables qui permettent son authentification.
+Il est en particulier accompagné du dernier message de chaque pair de la collaboration et de preuves qui démontrent l'absence d'embranchements (de messages non-linéaires) au sein du journal.
 
-\emph{SnapDoc} suppose l'utilisation du type de données répliquées \emph{TreeDoc}\footnote{\emph{TreeDoc} est présenté dans le \autoref{ch:dotted-logootsplit}} pour le contenu répliqué.
-L'état de la copie est décomposable en éléments irréductibles.
-Chaque message contient un accumulateur cryptographique qui inclut l'ensemble des éléments irréductibles de l'état au moment de la génération du message.
-À la récéption d'un message, un pair vérifie que cet accumulateur est correctement calculé.
-Un pair transmet à un nouveau pair le dernier message de chaque pair.
-Le nouveau pair vérifie à l'aide des accumulateurs de ces messages, que les éléments irréductibles observés par les pairs sont authentiques.
+Le mécanisme d'authentification fait l'hypothèse que l'état de la copie du contenu partagé est décomposable en éléments irréductibles.
+Chaque message inclut un accumulateur cryptographique et un \emph{hash} $mh$.
+L'accumulateur cryptographique est calculé sur l'ensemble des éléments irréductibles de l'état au moment de la génération du message.
+Le \emph{hash} $mh$ est calculé sur l'ensemble des arbres de \emph{Merkle} maintenus par l'auteur du message.
+Chaque pair maintient un arbre de \emph{Merkle} pour chaque pair (y compris lui-même) dans lequel il enregistre les message qu'il reçoit de ce dernier.
 
-Un pair maintient pour chaque pair qu'il connaît (y compris lui-même) un arbre de \emph{Merkle} dans lequel il enregistre leurs messages.
-Un message contient un \emph{hash} $mh$ qui couvre l'ensemble des arbres de \emph{Merkle} maintenus par l'auteur du message.
-Un nouveau pair reçoit une preuve que le \emph{hash} $mh$ de chaque message qu'il a reçu couvre bien un préfixe des arbres du pair qui l'invite.
-Il peut donc s'assurer que l'historique de chaque pair est un préfixe de l'historique du pair qui l'invite.
-Ce qui démontre l'absence d'embranchements dans le journal.
+Un nouveau pair vérifie que pour chaque message $m$ qui accompagne l'état $s$, les éléments irréductibles de $s$ observés par l'auteur de $m$ sont bien présents dans l'accumulateur de $m$.
+Il vérifie également qu'il dispose d'une preuve que le \emph{hash} $mh$ de $m$ couvre bien des préfixes des arbres de \emph{Merkle} du pair qui lui a transmis l'état.
+
+
 
 L'accumulateur cryptographique a la propriété intéressante de donner une preuve de la présence d'un élément irréductible en son sein sans divulguer les éléments qui le forme.
 Un pair mal-intentionné peut tirer avantage de cette propriété pour librement supprimer des éléments irréductibles d'un état qu'il transmet à un nouveau pair.
@@ -4556,7 +4558,7 @@ En effet, les pairs doivent conserver l'ensemble des messages qu'ils ont transmi
 La copie du contenu partagé ne suffit pas à cette vérification étant donné que l'évolution de l'état du contenu peut conduire à la disparition d'éléments irréductibles.
 Le concept de Stabilité que nous avons développé au sein de ce manuscrit pourrait être utilisé pour identifier les messages stables qui peuvent être définitivement supprimer.
 
-\emph{SnapDoc} autorise l'apparition d'embranchements mais ne permet pas leurs jonctions.
+\emph{SnapDoc} autorise l'apparition d'embranchements, mais ne permet pas leurs jonctions.
 Les journaux et donc les copies des pairs honnêtes peuvent donc diverger.
 Notre protocole respecte un modèle de cohérence plus fort qui permet la jonction des embranchements et l'éviction à terme des pairs mal-intentionnés.
 
