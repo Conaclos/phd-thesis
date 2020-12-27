@@ -635,7 +635,7 @@ La \autoref{fig:wf-example} donne un exemple d'exécution abstraite mal-formée 
     \end{tikzpicture}
     \caption{}\label{fig:wf-example-2}
 \end{subfigure}
-\caption[Exemples d'une exécution abstraite mal-formée et d'une exécution abstraite bien-formée]{Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée.
+\caption[Exécution abstraite mal-formée et exécution abstraite bien-formée]{Exemples d'une exécutions abstraite mal-formée et d'une exécution abstraite bien-formée.
 Soit un groupe de pairs composé d'un pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.
 L'exécution abstraite \subref{fig:wf-example-1} n'est pas bien-formée.
 L'opération $m_1$ est uniquement observée par un pair mal-intentionné $p_M$.
@@ -709,7 +709,7 @@ Pour pouvoir numéroter les opérations des pairs mal-intentionnés, nous utilis
     \end{tikzpicture}
     \caption{}\label{fig:no-enum-example-2}
 \end{subfigure}
-\caption{Mallory est une collaboratrice mal-intentionnée.
+\caption[Exécution de deux opérations qui coïncident dans le temps par un pair mal-intentionné]{Mallory est une collaboratrice mal-intentionnée.
 Elle est attachée au pair $p_M$.
 \subref{fig:no-enum-example-1} Les exécutions des deux opérations de Mallory coïncident dans le temps.
 \subref{fig:no-enum-example-2} Exemple d'une exécution abstraite correspondante.}\label{fig:no-enum-example}
@@ -1270,7 +1270,7 @@ Il est démontrable que dans un environnement mal-intentionné, l'une des trois 
     \end{tikzpicture}
     \caption{Une exécution abstraite qui respecte la spécification du fil de discussion.}
 \end{subfigure}
-\caption[Exemple de violation du modèle de cohérence causale]{Exemple d'équivoque.
+\caption[Exécution abstraite qui ne respecte pas le modèle de cohérence causale]{Exemple d'équivoque.
 Les pairs $p_A$, $p_B$, et $p_M$ répliquent un fil de discussion.
 $p_M$ est un pair mal-intentionné.
 Il prétend au pair $p_A$ que sa deuxième opération est $m_2$, alors qu'il prétend au pair $p_B$ que sa deuxième opération est $m_3$.}\label{fig:causal-violation}
@@ -1412,7 +1412,7 @@ Le pair $p_B$ n'a pas encore observé $m_2$. Il présume que $m_3$ est une opér
         \draw[pre] (\src) to (\dest);
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
-\caption{Exemple d'exécutions abstraites qui respectent le modèle de cohérence \ac{VFJC}.}\label{fig:provably-malicious}
+\caption{Exécutions abstraites qui respectent le modèle de cohérence \acs{VFJC}.}\label{fig:provably-malicious}
 \end{figure}
 
 %\begin{definition}[Reconnus mal-intentionnés]\label{def:known-malicious}
@@ -1527,7 +1527,7 @@ Dans l'exécution abstraite $A$ de la \autoref{fig:known-colluding-malicious}, $
         \draw[pre] (\src) to (\dest);
     \draw[pre,bend right=20] (m1) to (m3);
 \end{tikzpicture}
-\caption[Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}]{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
+\caption[Exécution abstraite qui ne respecte pas le modèle de cohérence \acs{VFJC}]{Exemple d'une exécution abstraite qui ne respecte pas le modèle de cohérence \ac{VFJC}.
 L'exécution abstraite $A_1$ respecte le modèle de cohérence \ac{VFJC}.}\label{fig:known-colluding-malicious}
 \end{figure}
 

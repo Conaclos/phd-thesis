@@ -145,7 +145,7 @@ La \autoref{fig:log-example} donne un exemple d'un journal et d'une version tron
     % pruned
     \node[draw,dashed,fit=(b2) (b2a4) (a4)]{};
 \end{tikzpicture}
-\caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.
+\caption[Journal d'un pair]{Exemple du journal d'un pair.
 L'arrangement horizontal des opérations traduit leur ordre d'ajout dans le journal.
 Ainsi les opérations ont été ajoutées dans l'ordre suivant~: $a_1$, $a_2$, $b_1$, $a_3$, $b_2$, $a_4$.
 Un arc dirigé entre deux modifications se traduit par \enquote{est une dépendance déclarée de}.
@@ -738,7 +738,7 @@ Le \autoref{th:cs} définit formellement la stabilité causale.
 \end{tikzpicture}
 \caption{}\label{fig:cs-example-2}
 \end{subfigure}
-\caption[Exemple d'opérations causalement stables]{Un ensemble de trois pairs $\trm{Peers} = \set{p_A, p_B, p_C}$ modifie un contenu répliqué.
+\caption[Stabilité causale]{Un ensemble de trois pairs $\trm{Peers} = \set{p_A, p_B, p_C}$ modifie un contenu répliqué.
 Dans l'exécution abstraite \subref{fig:cs-example-1}, l'opération $a_1$ est observée par son auteur $p_A$, par $p_B$ parce que $a_1$ est visible à $b_1$, et par $p_C$ parce que $a_1$ est visible à $c_2$.
 $\trm{obs}(a_1) = \set{p_A, p_B, p_C}$.
 $a_1$ est visible à toute opération future de $p_A$.
@@ -1282,7 +1282,7 @@ Ce qui contredit une hypothèse initiale.
 \end{tikzpicture}
 \caption{}\label{fig:vfjcs-two-malicious-2}
 \end{subfigure}
-\caption{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un pair honnête $p_A$, et de deux pairs mal-intentionnés $p_M$ et $p_G$.}\label{fig:vfjcs-two-malicious}
+\caption{Exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un pair honnête $p_A$, et de deux pairs mal-intentionnés $p_M$ et $p_G$.}\label{fig:vfjcs-two-malicious}
 \end{figure}
 
 Le rejet des chaînes d'observation cumulée d'une énumération $P$ de pairs implique le rejet des chaînes d'observation cumulée des énumérations de pairs qui préfixent $P$.
@@ -1745,7 +1745,7 @@ $p_A$ est forcé d'accepter l'opération linéaire $g_1$.
     % Prefix
     \node[draw, dashed, label=below:$A_1$, fit=(G) (a3) (la1)] {};
 \end{tikzpicture}
-\caption{Exemple  d'une exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation} dans laquelle le pair mal-intentionné $p_M$ invite le pair $p_G$ dans un nouvel embranchement.}\label{fig:vfjc-invitation-issue}
+\caption[Exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation}]{Exemple  d'une exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation} dans laquelle le pair mal-intentionné $p_M$ invite le pair $p_G$ dans un nouvel embranchement.}\label{fig:vfjc-invitation-issue}
 \end{figure}
 
 Pour pouvoir définir une stabilité adaptée à des groupes dynamiques, il nous faut rejeter ce type d'embranchements.
@@ -2195,7 +2195,7 @@ La \autoref{fig:op-gset} présente son implémentation.
 &\trm{prepare}_i(\sigma, \trm{add}(v)) \defeq \tuple*{\trm{add}, v} \label{eq:op-gset-prep-add}\\
 &\trm{integrate}_i(\sigma, \tuple*{\trm{add}, v}) \defeq \sigma \cup \set*{v} \label{eq:op-gset-integr-add}
 \end{align}
-\caption[Implémentation d'un ensemble sans suppression répliqué synchronisé par opérations]{Implémentation d'un ensemble répliqué sans suppression synchronisé par opérations.}\label{fig:op-gset}
+\caption[Implémentation d'un ensemble répliqué synchronisé par opérations sans opération de suppression]{Implémentation d'un ensemble répliqué synchronisé par opérations sans opération de suppression.}\label{fig:op-gset}
 \end{figure}
 
 % Avant de décrire notre protocole, nous décrivons les structures de données qu'il utilise.
@@ -2294,7 +2294,7 @@ Les messages $m_1$ et $m_1'$ sont générés par le pair $p_M$ avec un numéro �
     \draw[vis,bend right=24] (m1p) to (c1);
     \draw[vis,bend left=32] (a5) to (b2);
 \end{tikzpicture}
-\caption[Exemple du journal d'un pair]{Exemple du journal d'un pair.}\label{fig:log-example-2}
+\caption[Journal d'un pair]{Exemple du journal d'un pair.}\label{fig:log-example-2}
 \end{figure}
 %
 \begin{table}[ht]
@@ -3096,7 +3096,7 @@ Finalement, $p_B$ exécute une opération qui génère le message $b_2 \defeq \t
     %\draw[pre,bend right=20] (start) to node[midway,left]{initialise} (exec1.170);
     %\draw[pre,bend right=20] (exec1.190) to node[midway,left]{exécute} (exec2.170);
 \end{tikzpicture}
-\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_A$]{Exemple d'exécution du protocole à journaux complets par un pair $p_A$.
+\caption[Exécution du protocole à journaux complets par un pair $p_A$]{Exemple d'exécution du protocole à journaux complets par un pair $p_A$.
 Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-a}
 \end{figure}
 
@@ -3244,7 +3244,7 @@ Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\labe
     \end{tikzpicture}}
     ;
 \end{tikzpicture}
-\caption[Exemple d'exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
+\caption[Exécution du protocole à journaux complets par un pair $p_B$]{Exemple d'exécution du protocole à journaux complets par un pair $p_B$.
 Voir le \autoref{tab:msg-metadata} pour plus de détails sur les messages.}\label{fig:full-log-protocol-peer-b}
 \end{figure}
 
@@ -3437,7 +3437,7 @@ Nous démontrons dans la suite de cette sous-section que l'exécution abstraite 
     \draw[vis,bend right=100] (a3) to (m1p);
     \draw[vis,bend right=45] (m1p) to (c1);
 \end{tikzpicture}
-\caption[Exemple d'une exécution abstraite associée à un journal]{Exécution abstraite associée au journal de la \autoref{fig:log-example-2}.}\label{fig:exec-abs-log-example}
+\caption[Exécution abstraite associée à un journal]{Exécution abstraite associée au journal de la \autoref{fig:log-example-2}.}\label{fig:exec-abs-log-example}
 \end{figure}
 
 \begin{theorem}\label{th:wf-abs-exec-log}
@@ -3970,7 +3970,7 @@ $p_M$ est reconnu mal-intentionné en $b_2$, $p_B$ est l'auteur de $b_2$, et $p_
     \draw[vis,bend right=28] (a3) to (m1p);
     \draw[vis,bend left=28] (a4) to (b2);
 \end{tikzpicture}
-\caption[Exemple d'un journal avec des messages convergents-stables]{Exemple d'un journal avec des messages convergents-stables.
+\caption[Journal du pair $p_A$ avec des messages convergents-stables]{Exemple du journal du pair $p_A$ avec des messages convergents-stables.
 Les messages convergents-stables sont entourés}\label{fig:log-stability-example}
 \end{figure}
 
@@ -4262,7 +4262,7 @@ Ces deux indices correspondent aux emplacements des messages $b_2$ et $b_3$ au s
     \draw[vis,bend right=28] (a3) to (m1);
     \draw[vis,bend left=28] (b1) to (b2);
 \end{tikzpicture}
-\caption[Exemple d'un journal avec des messages convergents-stables]{Exemple d'un journal avec des messages convergents-stables.
+\caption[Journal d'un pair $p_B$ avec des messages convergents-stables]{Exemple du journal du pair $p_B$ avec des messages convergents-stables.
 Les messages convergents-stables sont entourés}\label{fig:log-stability-example-b}
 \end{figure}
 

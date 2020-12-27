@@ -301,7 +301,7 @@ Le protocole se charge d'exécuter les opérations et de synchroniser la copie d
     \end{tabular}
     \caption{}\label{fig:replseq-sematic-4}
 \end{subfigure}
-\caption[Illustration des différentes spécifications partielles d'une séquence répliquée]{Illustration des différentes spécifications partielles d'une séquence répliquée.
+\caption[Spécifications partielles d'une séquence répliquée]{Illustration des différentes spécifications partielles d'une séquence répliquée.
 \subref{fig:replseq-sematic-1} L'exécution abstraite considérée respecte le modèle de cohérence causale.
 \subref{fig:replseq-sematic-4} Les valeurs de retour admises de l'opération de lecture $b_3$ dépendent de la spécification choisie.
 Elles correspondent à des extensions linéaires des ordres partiels induits par la spécification faible \subref{fig:replseq-sematic-2} ou la spécification forte \subref{fig:replseq-sematic-3}.}\label{fig:replseq-sematic}
@@ -492,7 +492,7 @@ En répétant l'algorithme pour le caractère $\textsf{'\textit{s}'}$, on en dé
     \end{tikzpicture}
     \caption{}\label{fig:woot-2}
 \end{subfigure}
-\caption[Exemple d'une séquence \emph{WOOT}]{Exemple d'une séquence \emph{WOOT}.
+\caption[Séquence \emph{WOOT}]{Exemple d'une séquence \emph{WOOT}.
 \subref{fig:woot-1} Séquence de valeurs et pierres tombales associées à leurs identifiants.
 Les pierres tombales sont représentées par un caractère barré.
 \subref{fig:woot-2} Valeurs référencées par les valeurs de la séquence.
@@ -622,7 +622,7 @@ Il intègre de la même manière les insertions des caractères $\textsf{'\texti
     \end{tikzpicture}
     \caption{}\label{fig:rga-2}
 \end{subfigure}
-\caption[Exemple d'une séquence \emph{RGA}]{Exemple d'une séquence \emph{RGA}.
+\caption[Séquence \emph{RGA}]{Exemple d'une séquence \emph{RGA}.
 \subref{fig:rga-1} Séquence de valeurs et pierres tombales associées à leurs identifiants.
 Les pierres tombales sont représentées par un caractère barré.
 \subref{fig:rga-2} Valeurs référencés par les valeurs de la séquence.
@@ -740,7 +740,7 @@ Le message est intégré à la copie et transmis aux autres pairs.
     \end{tikzpicture}
     \caption{}\label{fig:logoot-2}
 \end{subfigure}
-\caption[Exemple d'une séquence \emph{Logoot}]{Exemple d'une séquence \emph{Logoot}.
+\caption[Séquence \emph{Logoot}]{Exemple d'une séquence \emph{Logoot}.
 \subref{fig:logoot-1} Séquence de valeurs associées à leur position.
 \subref{fig:logoot-2} Valeur supprimée associée à sa position.}\label{fig:logoot}
 \end{figure}
@@ -856,7 +856,7 @@ La taille des positions croît rapidement.
     \draw (e) to node[above,sloped]{$1$} (s);
     \draw (y) to node[above,sloped]{$1$} (!);
 \end{tikzpicture}
-\caption[Exemple d'une séquence \emph{Treedoc}]{Exemple d'une séquence \emph{Treedoc} de valeurs associées à leur position (chemin dans l'arbre) et leur identifiant.
+\caption[Séquence \emph{Treedoc}]{Exemple d'une séquence \emph{Treedoc} de valeurs associées à leur position (chemin dans l'arbre) et leur identifiant.
 Les nœuds qui sont des \emph{pierres tombales} sont barrés.}\label{fig:treedoc}
 \end{figure}
 
@@ -953,7 +953,7 @@ Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être générée, é
     \end{tikzpicture}
     \caption{}\label{fig:logootsplit-2}
 \end{subfigure}
-\caption[Exemple d'une séquence \emph{LogootSplit}]{Exemple d'une séquence \emph{LogootSplit}.
+\caption[Séquence \emph{LogootSplit}]{Exemple d'une séquence \emph{LogootSplit}.
 \subref{fig:logootsplit-1} Séquence de valeurs associées à leur position.
 \subref{fig:logootsplit-2} Valeur supprimée associée à sa position.}\label{fig:logootsplit}
 \end{figure}
@@ -1829,7 +1829,7 @@ Dans ces conditions il a montré des performances similaires à celles de \emph{
         \end{tikzpicture}}
     ;
 \end{tikzpicture}
-\caption[États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}]{États successifs de la copie du pair $p_A$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}.
+\caption[États successifs de la copie du pair $p_A$ du scénario de la \autoref{fig:replseq-sematic-1}]{États successifs de la copie du pair $p_A$ du scénario de la \autoref{fig:replseq-sematic-1}.
 Le contenu répliqué est une séquence \emph{Dotted LogootSplit}.}\label{fig:deltaseq-state-trans-a}
 \end{figure}
 
@@ -1948,7 +1948,7 @@ Le contenu répliqué est une séquence \emph{Dotted LogootSplit}.}\label{fig:de
         \end{tikzpicture}}
     ;
 \end{tikzpicture}
-\caption[États successifs de la copie du pair $p_B$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}]{États successifs de la copie du pair $p_B$ de l'exécution abstraite de la \autoref{fig:replseq-sematic-1}.
+\caption[États successifs de la copie du pair $p_B$ du scénario de la \autoref{fig:replseq-sematic-1}]{États successifs de la copie du pair $p_B$ du scénario de la \autoref{fig:replseq-sematic-1}.
 Le contenu répliqué est une séquence \emph{Dotted LogootSplit}.}\label{fig:deltaseq-state-trans-b}
 \end{figure}
 
