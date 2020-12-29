@@ -3525,7 +3525,7 @@ A l'issue de l'exécution d'une opération de modification, l'ensemble $\trm{max
 
 La livraison d'un message bien-formé aboutit à l'acceptation immédiate du message dans le journal ou à sa mise en attente.
 Un message $m$ est ajouté immédiatement dans le journal s'il est linéaire dans $J$.
-Il est ajouté à l'ensemble $\trm{max}_J$ et les message desquels il dépend sont retirés de l'ensemble.
+Il est ajouté à l'ensemble $\trm{max}_J$ et les messages desquels il dépend sont retirés de l'ensemble.
 Son ajout immédiat dans $J$ conduit préalablement à l'ajout de ses dépendances qui sont en attente.
 Certaines de ses dépendances en attente peuvent être des messages non-linéaires avec un ou plusieurs messages du journal.
 Ces dépendances non-linéaires ne sont pas ajoutés dans l'ensemble $\trm{max}_J$ puisqu'il s'agit de dépendances de $m$.
@@ -3871,7 +3871,7 @@ Dans le protocole à journaux complets, cet état peut être obtenu en intégran
 Cependant, dans le protocole à journaux tronqués, des messages peuvent être supprimés du journal lors de la troncature du journal.
 Pour remédier à ce problème, le pair maintient un état $I$ qui intègre les messages qu'il a supprimé de son journal $J$.
 Nous pouvons donc construire l'état observé par l'auteur de $m$ en intégrant sur $I$ l'ensemble des dépendances de $m$ présentes dans le journal étendu $W$.
-Le journal étendu $W$ correspond au journal $J$ auquel est ajouté les message mis en attente.
+Le journal étendu $W$ correspond au journal $J$ auquel est ajouté les messages mis en attente.
 
 \begin{remark}
 $I$ ne peut pas intégrer des messages qui ne sont pas des dépendances de $m$.
@@ -4495,8 +4495,9 @@ Un message concurrent à un message dont la livraison est stable peut toujours �
 
 \subsection{Journaux infalsifiables}
 
-L'utilisation de protocole à base de journaux infalsifiables est fréquente pour offrir des garanties de cohérence.
-Nous présentons les deux travaux qui se rapprochent le plus des objectifs que nous nous sommes donnés.
+la litérature propose de nombreux protocoles qui reposent sur un journal infalsifiable~\autocite{terry_bayou_1995,mahajan_astro_2008,mahajan_depot_2011,truong_authenticating_2012,kollmann2019_snapdoc}.
+Nous présentons les deux travaux qui se rapprochent le plus des objectifs que nous nous sommes donnés et qui utilisent un modèle de système et un modèle d'adversaire proches des nôtres.
+
 % PRACTI
 % BAYOU
 
@@ -4538,39 +4539,47 @@ Il est en particulier accompagné du dernier message de chaque pair de la collab
 Le mécanisme d'authentification fait l'hypothèse que l'état de la copie du contenu partagé est décomposable en éléments irréductibles.
 Chaque message inclut un accumulateur cryptographique et un \emph{hash} $mh$.
 L'accumulateur cryptographique est calculé sur l'ensemble des éléments irréductibles de l'état au moment de la génération du message.
-Le \emph{hash} $mh$ est calculé sur l'ensemble des arbres de \emph{Merkle} maintenus par l'auteur du message.
-Chaque pair maintient un arbre de \emph{Merkle} pour chaque pair (y compris lui-même) dans lequel il enregistre les message qu'il reçoit de ce dernier.
-
+Le \emph{hash} $mh$ est calculé sur l'ensemble des arbres de \emph{Merkle}~\autocite{merkle_1979_merkletree} maintenus par l'auteur du message.
+Chaque pair maintient un arbre de \emph{Merkle} pour chaque pair (y compris lui-même) dans lequel il enregistre les messages qu'il reçoit de ce dernier.
+%
 Un nouveau pair vérifie que pour chaque message $m$ qui accompagne l'état $s$, les éléments irréductibles de $s$ observés par l'auteur de $m$ sont bien présents dans l'accumulateur de $m$.
 Il vérifie également qu'il dispose d'une preuve que le \emph{hash} $mh$ de $m$ couvre bien des préfixes des arbres de \emph{Merkle} du pair qui lui a transmis l'état.
 
+L'utilisation d'accumulateurs cryptographiques a un surcoût important qui rend le protocole inadapté à la réplication de contenus composés d'un nombre important d'éléments irréductibles.
+En effet, l'accumulateur ne peut pas être calculé de manière incrémentale lorsque des éléments irréductibles sont supprimés de la décomposition de l'état.
+De plus, chaque pair doit vérifier que l'accumulateur cryptographique d'un message est correctement calculé, ce qui implique de reconstituer l'état observé par l'auteur du message.
+Les auteurs de ce protocoles préconisent son utilisation pour des contenus de petites tailles qui sont soumis à peu de modifications.
 
+Notre protocole à journaux tronqués et \emph{SnapDoc} se différencient d'abord sur l'objectif qu'ils visent.
+Notre protocole à journaux tronqués n'a pas pour objectif de masquer l'historique de la collaboration et \emph{SnapDoc} n'a pas pour objectif de réduire l'occupation mémoire du journal infalsifiable.
+Toutefois, chacun remplie en partie l'objectif de l'autre.
+Notre protocole permet la troncature du journal qui masque donc en partie l'historique de la collaboration aux nouveaux pairs.
+\emph{SnapDoc} permet à un nouveau pair de débuter la collaboration sans l'historique de la collaboration.
+Le journal d'un nouveau pair occupera donc moins de mémoire que le journal d'un pair existant.
 
-L'accumulateur cryptographique a la propriété intéressante de donner une preuve de la présence d'un élément irréductible en son sein sans divulguer les éléments qui le forme.
-Un pair mal-intentionné peut tirer avantage de cette propriété pour librement supprimer des éléments irréductibles d'un état qu'il transmet à un nouveau pair.
-Un nouveau pair ne se rendrait alors pas compte que des éléments irréductibles manquent.
-Notre protocole à journaux tronqués souffre d'un problème similaire si le message qui invite le pair n'est pas une dépendance d'un message d'un pair honnête.
-
-
-
-Contrairement à notre protocole à journaux tronqués, \emph{SnapDoc} ne permet pas aux pairs de tronquer leur journal.
-En effet, les pairs doivent conserver l'ensemble des messages qu'ils ont transmis et reçu pour pouvoir vérifier les accumulateurs présents dans les messages.
-La copie du contenu partagé ne suffit pas à cette vérification étant donné que l'évolution de l'état du contenu peut conduire à la disparition d'éléments irréductibles.
-Le concept de Stabilité que nous avons développé au sein de ce manuscrit pourrait être utilisé pour identifier les messages stables qui peuvent être définitivement supprimer.
-
+Notre protocole à journaux tronqués et \emph{SnapDoc} se différencient également sur les garanties de cohérence qu'ils offrent.
 \emph{SnapDoc} autorise l'apparition d'embranchements, mais ne permet pas leurs jonctions.
-Les journaux et donc les copies des pairs honnêtes peuvent donc diverger.
-Notre protocole respecte un modèle de cohérence plus fort qui permet la jonction des embranchements et l'éviction à terme des pairs mal-intentionnés.
+Les journaux et les copies des pairs honnêtes peuvent donc diverger.
+Notre protocole respecte un modèle de cohérence plus faible qui permet la jonction des embranchements et l'éviction à terme des pairs mal-intentionnés.
+il permet la convergence des copies des pairs honnêtes à la condition que l'invitation de chaque nouveau pair honnête soit acceptée par un pair honnête existant
 
-Un nouveau pair peut uniquement accepter des messages qui dépendent de son invitation.
-Il rejette les message qui sont concurrents à son invitation.
+Du point de vue de la sécurité, \emph{SnapDoc} offre une garantie supplémentaire par rapport à notre protocole.
+Il ne permet pas à un pair mal-intentionné d'envoyer un état falsifié dans lequel se trouve des éléments irréductibles produits par un pair honnête.
+Il permet en effet l'authentification de chaque éléments irréductibles qui compose l'état.
+Cependant, le pair mal-intentionné à la liberté de supprimer des éléments irréductibles d'un état initialement authentique sans que le nouveau pair puisse le détecter.
+Cette faculté provient du fait que la composition de l'accumulateur cryptographique est inconnue.
+Similairement à notre protocole, un nouveau pair est certain qu'il a un état authentique seulement lorsqu'il reçoit le message d'un pair honnête qui dépend de l'invitation du nouveau pair.
+
+Du point de vue de l'utilisabilité, \emph{SnapDoc} ne supporte pas tous les type de données répliquées.
+Il suppose l'utilisation de \emph{TreeDoc}\footnote{Ce type de données répliquées est présenté dans le \autoref{ch:dotted-logootsplit}.} car les éléments irréductibles que l'intégration d'un message ajoute à la décomposition de l'état de la copie sont déductibles du message.
+Il s'agit d'une contrainte très spécifique qui n'est pas toujours rencontrée.
+Par ailleurs, un nouveau pair peut uniquement accepter des messages qui dépendent de son invitation.
+Il rejette les messages qui sont concurrents à son invitation.
 Pour remédier à ce problème, l'article propose la récupération et l'authentification d'un nouvel état qui couvre les messages concurrents.
 
-Notre protocole requiert la définition d'une fonction de \emph{hash} qui donne le même \emph{hash} pour deux états convergents.
-Elle permet de supporter tout type de données répliquées.
-\emph{SnapDoc} ne supporte pas tous les type de données répliquées.
-Il suppose l'utilisation de \emph{TreeDoc} car les éléments irréductibles que l'intégration d'un message ajoute à la décomposition de l'état de la copie sont déductibles du message.
-Il s'agit d'une contrainte très spécifique qui n'est pas toujours rencontrée.
+Chaque protocole pourrait être amélioré en empruntant des mécanismes de l'autre protocole.
+\emph{SnapDoc} pourrait par exemple utiliser le concept de stabilité pour tronquer le journal d'un pair.
+Notre protocole pourrait reposer sur des accumulateurs cryptographiques pour améliorer l'authentification de certains types de contenu.
 
 
 \section{Conclusion}

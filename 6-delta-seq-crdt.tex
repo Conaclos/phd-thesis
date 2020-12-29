@@ -45,7 +45,7 @@ La synchronisation par états présente toutefois un surcoût trop important pou
 Au fur et à mesure que l'état croît, le coût de communication et de fusion s'accroît~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 
 La synchronisation par différences d'états~\autocite{almeida_2018_delta-crdt-revisited} a montré qu'il était possible de conserver les avantages de la synchronisation par états tout en réduisant leur coût en communication et en fusion~\autocite{enes_2018_efficient-sync-state-based-crdt}.
-Lorsqu'un pair exécute une opération il dérive un message qui contient une différence d'état.
+Lorsqu'un pair exécute une opération il dérive un message qui contient une différence d'états.
 Les protocoles sont conçus de manière à ce que cette différence soit bien plus petite que l'état complet.
 Les différences d'états doivent être transmises au moins une fois.
 Les hypothèses de livraison des messages restent faibles.
@@ -1663,7 +1663,7 @@ Les équations suivantes définissent l'ensemble des positions \emph{Dotted Logo
 % \subref{fig:logootsplit-2} Contexte causal de la séquence.}\label{fig:dottedlogootsplit}
 % \end{figure}
 
-L'utilisation de l'implémentation de la \autoref{fig:deltaseq} et de ce nouveau type de positions permet la réplication d'une séquence \emph{Dotted LogootSplit} synchronisée par différences d'état.
+L'utilisation de l'implémentation de la \autoref{fig:deltaseq} et de ce nouveau type de positions permettent la réplication d'une séquence \emph{Dotted LogootSplit} synchronisée par différences d'états.
 Afin d'illustrer ce nouveau \ac{CRDT}, nous reprenons le scénario de la \autoref{fig:replseq-sematic-1}.
 La \autoref{fig:deltaseq-state-trans-a} décrit les états successifs de la copie du pair $p_A$.
 La \autoref{fig:deltaseq-state-trans-b} décrit les états successifs de la copie du pair $p_B$.
@@ -1671,7 +1671,7 @@ L'exécution de l'opération $\trm{ins}(n, \tuple*{v_1,\dotsc,v_k})$ est un racc
 Elle ajoute le n-uplet de valeurs $\tuple*{v_1,\dotsc,v_k}$ avant la $n$-ième valeur de la séquence.
 Un \emph{dot} $\tuple*{i, n}$ est noté $i_n$.
 
-Le pair $p_A$ initialise sa séquence et exécute une succession d'opérations qui génère des messages.
+Le pair $p_A$ initialise sa séquence (1) et exécute une succession d'opérations qui génère des messages.
 Il commence par une insertion contiguë de quatre caractères (2).
 Les positions sont générées de manière à être agrégées.
 Nous obtenons ainsi le bloc qui contient la chaîne $\textsf{'\textit{lady}'}$.
@@ -1686,29 +1686,28 @@ Le contexte causal demeure inchangé.
 $p_A$ termine par l'insertion contiguë de deux caractères à la fin de la séquence.
 
 \emph{Dotted LogootSplit} laisse beaucoup de liberté dans le choix du protocole de synchronisation.
-Nous illustrons en partie cette liberté à l'aide de la succéssion des états du pair $p_B$.
+Nous illustrons en partie cette liberté par les messages qui sont livrés à $p_B$.
 Nous supposons que $p_B$ ne reçoit pas les messages d'insertion générés par $p_A$ du caractère $\textsf{'\textit{i}'}$ et du bloc $\textsf{'\textit{es}'}$.
 Nous supposons également que $p_A$ détecte la perte de messages sur le réseau.
-Ces messages sont perdus sur le réseau.
 $p_B$ initialise d'abord sa séquence (1).
 $p_A$ lui transmet son état complet.
 $p_B$ intègre l'état de $p_A$ à sa copie (2).
 Il insère ensuite le caractère $\textsf{'\textit{\negthinspace!}'}$ à la fin de la séquence (3).
-Une position agrégeable à $\textsf{'\textit{y}'}$ ne peut être généré, étant donné que $p_B$ n'est pas le propriétaire du bloc.
+Une position agrégeable à la position de $\textsf{'\textit{y}'}$ ne peut pas être générée, étant donné que $p_B$ n'est pas le propriétaire du bloc.
 Il génère une nouvelle position supérieure à celle de $\textsf{'\textit{y}'}$.
-Il reçoit ensuite une différence d'état dont l'intégration conduit à la suppression du $\textsf{'\textit{y}'}$ (4).
-$p_A$ détecte la perte de messages sur le réseau et transmet alors une différences d'état qui provient de la fusion des dernières différences d'états qu'il a transmis (y compris celle qui conduit à la suppression de  $\textsf{'\textit{y}'}$).
-$p_B$ intègre l'état qu'il reçoit et obtient ainsi la séquence $\textsf{'\textit{ladies\textbf{\negthinspace!}}'}$.
+Il reçoit ensuite une différence d'états dont l'intégration conduit à la suppression du caractère $\textsf{'\textit{y}'}$ (4).
+$p_A$ détecte la perte de messages sur le réseau et transmet alors une différence d'états qui provient de la fusion des dernières différences d'états qu'il a transmis (y compris celle qui conduit à la suppression de  $\textsf{'\textit{y}'}$).
+$p_B$ intègre la différence d'états qu'il reçoit et obtient ainsi la séquence $\textsf{'\textit{ladies\textbf{\negthinspace!}}'}$.
 
 Le \autoref{fig:dottedlogootsplit-semilattice} représente un aperçu du sup-demi-treillis des états de la séquence du pair $p_B$.
 Les traits épaissis représentent les transitions d'états du pair $p_B$ des étapes (1) à (4).
 La fusion de deux états correspond à leur borne supérieure dans le sup-demi treillis.
 
-La séquence obtenue est relativement proche de celle obtenue avec \emph{LogootSplit}.
+La séquence obtenue est relativement proche de celle obtenue avec \emph{LogootSplit} (\autoref{fig:logootsplit}).
 Cependant, nos positions sont de taille plus faible, étant donné que nous utilisons une composante en moins dans les n-uplets.
-\emph{Dotted LogootSplit} a également moins de suppositions sur la livraison de messages.
-Ce qui permet la conception de protocoles de synchronisation plus souples et mieux adaptés au condition réseau ou au type de collaboration rencontré.
-Dans l'exemple précédent nous avons combiné la transmission d'états complets, avec la transmission de différences d'états irréductibles, et la transmission de différences d'états décomposables.
+\emph{Dotted LogootSplit} a également moins d'hypothèse sur la livraison de messages.
+Ce qui permet la conception de protocoles de synchronisation plus souples et mieux adaptés aux conditions du réseau ou au type de collaboration rencontré.
+Dans l'exemple précédent, nous avons combiné la transmission d'états complets avec la transmission de différences d'états irréductibles et la transmission de différences d'états décomposables.
 
 Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est disponible sur \emph{GitHub}~: \href{https://github.com/coast-team/dotted-logootsplit}{github.com/coast-team/dotted-logootspli}} et intégré ce protocole de réplication à l'éditeur collaboratif \emph{MUTE}\footnote{\href{https://coedit.re}{coedit.re}}.
 Il a été testé dans des conditions réelles à l'aide d'une synchronisation par opérations.
@@ -2109,4 +2108,4 @@ Elle permet en particulier à deux pairs de se synchroniser en échangeant des m
 L'intégration d'une modification n'a pas besoin d'être retardée jusqu'à l'intégration d'une ou plusieurs autres modifications.
 Ce qui devrait permettre d'améliorer le support de l'édition collaborative de texte en simultané.
 %Pour s'en assurer des expérimentations devraient être menées.
-Elle devrait également permettre à des pairs qui se connectent rarement au groupe de se synchroniser plus rapidement en échangeant et intégrant directement leur état.
+Elle devrait également permettre à des pairs qui se connectent rarement au groupe de se synchroniser plus rapidement en échangeant et en intégrant directement leur état.
