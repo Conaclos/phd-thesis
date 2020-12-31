@@ -1180,19 +1180,21 @@ $A'$ ne peut pas contenir une chaîne d'observation cumulée $Z$ de $P$ dont la 
 \end{proposition}
 
 \begin{proof}
-Procédons par contradiction et récurrence.
-Supposons que les châines $X$ et $Z \defeq z_1 \idr \dotsb$ existent.
-$Z$ inclut une chaîne $y_1 \vis \dotsb \vis y_n$ telle que $y_i$ soit la première opération du pair $p_i$ dans $Z$ avec $1 \leq i \leq n$.
+$Z \defeq z_1 \idr \dotsb$ inclut une chaîne $y_1 \vis \dotsb \vis y_n$ telle que $y_i$ soit la première opération du pair $p_i$ dans $Z$ avec $1 \leq i \leq n$.
 On a donc $y_1 = z_1$.
 
-Montrons que pour tout $j$ et $k$ avec $1 \leq j < k \leq n$, si $y_j$ est non-linéaire à $x_j$ ou l'auteur de $y_j$ est reconnu mal-intentionné en $x_j$, alors $y_k$ est concurrente à $x_k$.
-Soit $z$ l'opération de $Z$ qui est immédiatement visible à $y_k$ ($z \idr z_k$).
+\textbf{Démontrons que $X$ est suffisante pour rejeter $Z$.}
+Procédons par contradiction et récurrence.
+Supposons que $Z$ existe.
+
+Montrons que pour tout $j$ et $k$ avec $1 \leq j < k \leq n$, si $y_j$ est non-linéaire à $x_j$ ou si l'auteur de $y_j$ est reconnu mal-intentionné en $x_j$, alors $y_k$ est concurrente à $x_k$.
+Soit $z$ l'opération de $Z$ qui est immédiatement visible à $y_k$ ($z \idr y_k$).
 Par définition, l'auteur de $z$ est l'auteur d'une opération $y_l$ avec avec $l < k$ (éventuellement $z$).
 $y_l$ est visible à $y_k$ ($y_l \vis y_k$).
-D'après notre hypothèse de récurrence, l'auteur de $y_l$ est reconnu mal-intentionné en $x_l$ ($\trm{peer}(y_l) \in \trm{knownMalicious}(x_l)$) ou $y_l$ est non-linéaire à $x_l$ ($y_l \concur x_l$).
-$x_l$ ne peut pas être visible à $z_k$ autrement la propriété~\ref{itm:vfjc2} serait violée.
+D'après notre hypothèse de récurrence, l'auteur de $y_l$ est reconnu mal-intentionné en $x_l$ ($p_l \in \trm{knownMalicious}_A(x_l)$) ou $y_l$ est non-linéaire à $x_l$ ($y_l \concur x_l \land \trm{peer}(x_l) = p_l$).
+$x_l$ ne peut pas être visible à $z_k$ autrement~\ref{itm:vfjc2} serait violée.
 D'après le \autoref{th:future-concur}, $x_l$ et $z_k$ sont concurrentes.
-Or $x_l$ est visible ou égale à $x_k$ ($x_l \vis x_k$).
+Or $x_l$ est visible ou égale à $x_k$ ($x_l \viseq x_k$).
 D'après la \autoref{th:concur-triad}, $x_k$ et $y_k$ sont donc concurrentes ($x_k \concur y_k$).
 L'auteur de $y_k$ est soit reconnu mal-intentionné en $x_k$ ou est l'auteur de $x_k$.
 Dans le dernier cas, $z_k$ est non-linéaire à $x_k$.
@@ -1202,6 +1204,25 @@ D'après la \autoref{th:concur-triad}, $z_1$ est concurrente à $x_1$ ($z_1 \con
 Nous déduisons par récurrence que $y_n$ est non-linéaire à $x_n$.
 $p_n$ est donc un pair mal-intentionné.
 Ce qui contredit une hypothèse initiale.
+
+%
+
+\textbf{Démontrons que $X$ est nécessaire pour rejeter $Z$.}
+Pour que $y_n$ ne puisse pas exister, il est nécessaire qu'une opération $x_n$ de $A$ dont l'auteur est $p_n$ existe et que $x_n$ ne puisse pas être visible à $y_n$.
+D'après le \autoref{th:future-concur}, si $x_n$ n'est pas visible à $y_n$, alors $x_n$ et $y_n$ sont forcément concurrentes (et donc non-linéaires dans notre cas).
+
+Montrons que si nous souhaitons que $y_k$ ($k > 1$) soit concurrente à une opération $x_k$ de $A$, alors pour tout $0 < j < k$, il doit exister une opération $x_j$ de $A$ visible ou égale à $x_k$ telle que $x_j$ soit non-linéaire à $y_j$ ou l'auteur de $y_j$ ($p_j$) soit reconnu mal-intentionné en $x_j$.
+Soit $z$ l'opération de $Z$ immédiatement visible à $y_k$ ($z \idr y_k$).
+$x_k$ ne peut pas être visible à $y_k$ si et seulement si il existe une opération $x_l$ de $X$ visible ou égale à $x_k$ telle que l'auteur de $z$ est reconnu mal-intentionné en $x_l$ ou $z$ est non-linéaire à $x_l$.
+Si $x_l$ est non-linéaire à $z$, alors elle est également non-linéaire à $y_l$.
+Par construction, l'auteur de $z$ est l'un des pairs de l'énumération $p_1, \dotsc, p_{k-1}$.
+Pour que $y_k$ soit non-linéaire à une opération $x_k$ de $A$, il doit donc exister pour tout $0 < j < k$, une opération $x_j$ de $X$ visible à $x_k$ telle que $x_j$ soit non-linéaire à $y_j$ ou l'auteur de $y_j$ soit reconnu mal-intentionné en $x_j$.
+Pour que $x_1$ soit non-linéaire à $y_1$ il est nécessaire que $x_0$ soit visible ou égale à $x_1$.
+
+Par récurrence, nous générons un ensemble de châines de visibilité dont l'existence est nécessaire pour rejeter $Z$.
+Cet ensemble inclut la chaîne $X$.
+Pour s'en convaincre il suffit de supposer que l'opération de $Z$ qui est immédiatement visible à $y_n$ a pour auteur $p_{n-1}$ et de prendre $j = k-1$ à chaque étape de récurrence.
+L'existence de $X$ est donc nécessaire et suffisante pour rejeter $Z$.
 \end{proof}
 
 \begin{figure}[htb]
@@ -1295,7 +1316,7 @@ Pour un ensemble de deux pairs mal-intentionnés $p_G$ et $p_M$, il suffit de re
 Prenons pour exemple les exécutions abstraites de la \autoref{fig:vfjcs-two-malicious}.
 L'ensemble des pairs de ces exécutions abstraites est composé du pair honnête $p_A$ ($\trm{Honest} \defeq \set*{p_A}$) et des pairs mal-intentionnés $p_G$ et $p_M$ ($\trm{Malicious} \defeq \set*{p_G, p_M}$).
 Le produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes correspond à l'ensemble d'énumérations $\trm{Perm}(\trm{Malicious}) \times \trm{Honest} = \set{\tuple*{p_G, p_M, p_A}, \tuple*{p_M, p_G, p_A}}$.
-Une opération est vfjc-stable si et seulement si il elle est visible ou égale à la première opération d'une chaîne de visibilité liée à chacune de ces énumérations.
+Une opération est vfjc-stable si et seulement si pour chaque énumérations de pairs elle est visible ou égale à la première opération d'une chaîne de visibilité liée à l'énumération considérée.
 Dans l''exécution abstraite de la \autoref{fig:vfjcs-two-malicious-1}, les chaînes de visibilité $g_1 \viseq m_1 \viseq a_2$ et $m_1 \viseq g_1 \viseq a_2$ sont respectivement liées aux énumérations $\tuple*{p_G, p_M, p_A}$ et $\tuple*{p_M, p_G, p_A}$.
 $a_1$ et $m_1$ sont visibles ou égales à la première opération de ces deux chaînes.
 Elles sont donc toutes deux vfjc-stables.
@@ -1345,8 +1366,6 @@ $m_2$ est donc vfjc-stable.
 % Le pair $p_M$ est reconnu mal-intentionné par $p_A$ et $p_G$.}\label{fig:vfjcs-evicted-peer}
 % \end{figure}
 
-\clearpage
-
 \begin{theorem}[Stabilité~\acs{VFJC}]\label{th:vfjc-stable}
 Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$, une opération $x_0$ est vfjc-stable si et seulement si les pairs honnêtes observent $x_0$ et pour chaque énumération de pairs $\tuple*{p_1, \dotsc, p_n}$ issue du produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes, il existe une chaîne de visibilité $x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$ et le $i$-ème pair de l'énumération est lié à la $i$-ème opération de l'énumération par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur de l'opération $p_i = \trm{peer}(x_i)$, ou
@@ -1363,10 +1382,10 @@ Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$
 \begin{proof}
 En l'absence de pairs mal-intentionnés, la démonstration est identique à celle du \autoref{th:cs}.
 
-En présence d'au moins un pair mal-intentionné, une opération $x$ devient stable si et seulement si les pairs honnêtes observent $x$ et ne peuvent plus accepter de chaîne d'observation cumulée d'une énumération de pairs mal-intentionnés dont la première opération est concurrente à $x$.
-À partir de la \autoref{th:cumulated-obs-exclusion}, nous déduisons qu'une opération $x$ devient stable si et seulement si pour chaque permutation de l'ensemble des pairs mal-intentionnés et pour chaque pair honnête, le pair honnête observe une chaîne de visibilité liée à la permutation de pairs telle que $x$ est visible ou égale à la première opération de cette chaîne.
+En présence d'au moins un pair mal-intentionné, une opération $x_0$ devient stable si et seulement si les pairs honnêtes observent $x_0$ et ne peuvent plus accepter de chaîne d'observation cumulée d'une énumération de pairs mal-intentionnés dont la première opération est concurrente à $x_0$.
+À partir de la \autoref{th:cumulated-obs-exclusion}, nous déduisons qu'une opération $x_0$ devient stable si et seulement si pour chaque permutation de l'ensemble des pairs mal-intentionnés et pour chaque pair honnête, le pair honnête observe une chaîne de visibilité liée à la permutation de pairs telle que $x_0$ est visible ou égale à la première opération de cette chaîne.
 Dans le théorème, l'observation du pair honnête est matérialisée dans la chaîne sous la forme d'une opération.
-C'est pourquoi nous considérons des haînes liées aux énumérations issues du produit cartésien de l'ensemble des permutations de l'ensemble des pairs mal-intentionnés par l'ensemble des pairs honnêtes.
+C'est pourquoi nous considérons des chaînes liées aux énumérations issues du produit cartésien de l'ensemble des permutations de l'ensemble des pairs mal-intentionnés par l'ensemble des pairs honnêtes.
 \end{proof}
 
 
@@ -1396,7 +1415,7 @@ Le modèle de cohérence \ac{VFJC} est stabilisable (\autoref{th:stabilizable-vf
 Cependant, la stabilisation d'une opération requiert le concours de l'ensemble des pairs qui ne sont pas évincés.
 Dans les deux sous-sections suivantes nous définissons des modèles de cohérence qui prennent en compte la nature dynamique des groupes de pairs.
 
-\clearpage
+%\clearpage
 
 \subsection{Stabilité causale dynamique}\label{subsec:dcs}
 
@@ -1497,21 +1516,7 @@ Dans la \autoref{fig:dyn-causal-example-1}, le pair honnête invite $p_B$ en $c_
 A ce moment, $p_C$ observe $c_1$, $a_2$, et $a_1$.
 Puisque l'invitation $c_1$ doit être visible aux opérations de $p_B$, $p_B$ observe nécessairement $c_1$, $a_2$, et $a_1$.
 
-À partir de ces deux remarques nous en déduisant que seuls les pairs dont l'invitation est visible ou est concurrente à une opération $x$ peuvent exécuter une opération concurrente à $x$.
-$x$ devient stable dès lors que ces pairs l'observent.
-Nous parlons d'\emph{observateurs requis}.
-La \autoref{def:honest-rq-obs} définit formellement les observateurs requis d'une opération.
-
-\begin{definition}[Observateurs honnêtes requis]\label{def:honest-rq-obs}
-Un pair honnête est un observateur requis d'une opération $x$ si et seulement si il est invité dans une opération qui est visible ou concurrente à $x$.
-\begin{equation*}
-    \trm{rqHonestObs}_A(x) \defeq \set*{q \in \trm{Honest} \given \exists y \in A \qsep \trm{call}(y) = \trm{invite}(q) \land x \nviseq y}
-\end{equation*}
-\end{definition}
-
-\clearpage
-
-\begin{figure}[htb]
+\begin{figure}[hbt]
 \centering
 \begin{subfigure}{\linewidth}
     \centering
@@ -1603,10 +1608,24 @@ Un pair honnête est un observateur requis d'une opération $x$ si et seulement 
 Les opérations DynCausal-stables (dcs) sont encadrées.
 L'exécution abstraite \subref{fig:dyn-causal-example-2} ne respecte pas le modèle de cohérence causale dynamique.
 La propriété~\ref{itm:rq-invite} est violée.
-En effet, il n'existe pas une opération qui invite $p_B$ et qui soit visible à $b_1$.}\label{fig:dyn-causal-example}
+En effet, il n'existe pas une invitation de $p_B$ qui est visible à $b_1$.}\label{fig:dyn-causal-example}
 \end{figure}
 
-\vspace{5em}
+À partir de ces deux remarques nous en déduisant que seuls les pairs dont l'invitation est visible ou est concurrente à une opération $x$ peuvent exécuter une opération concurrente à $x$.
+$x$ devient stable dès lors que ces pairs l'observent.
+Nous parlons d'\emph{observateurs requis}.
+La \autoref{def:honest-rq-obs} définit formellement les observateurs requis d'une opération.
+
+\begin{definition}[Observateurs honnêtes requis]\label{def:honest-rq-obs}
+Un pair honnête est un observateur requis d'une opération $x$ si et seulement si il est invité dans une opération qui est visible ou concurrente à $x$.
+\begin{equation*}
+    \trm{rqHonestObs}_A(x) \defeq \set*{q \in \trm{Honest} \given \exists y \in A \qsep \trm{call}(y) = \trm{invite}(q) \land x \nviseq y}
+\end{equation*}
+\end{definition}
+
+Nous en déduisons ainsi la stabilité causale dynamique décrite dans le \autoref{th:dyn-cs}.
+Le \autoref{tab:rq-obs} indique les observateurs et les observateurs requis des opérations de la \autoref{fig:dyn-causal-example-1}.
+À partir de ces informations nous concluons que les opérations $a_1$ et $a_2$ sont stables.
 
 \begin{table}[h!]
     \centering
@@ -1619,14 +1638,8 @@ En effet, il n'existe pas une opération qui invite $p_B$ et qui soit visible à
         $c_1$ & $\set*{p_A, p_C}$ & $\set*{p_B, p_C}$\\
         $b_1$ & $\set*{p_A, p_B, p_C}$ & $\set*{p_B}$ \\
     \end{tabular}
-    \caption[Observateurs requis]{observateurs requis et observateurs des opérations de l'exécution abstraite de la \autoref{fig:dyn-causal-example-1}.}\label{tab:rq-obs}
+    \caption[Observateurs requis]{Observateurs requis et observateurs des opérations de l'exécution abstraite de la \autoref{fig:dyn-causal-example-1}.}\label{tab:rq-obs}
 \end{table}
-
-\clearpage
-
-Nous en déduisons ainsi la stabilité causale dynamique décrite dans le \autoref{th:dyn-cs}.
-Le \autoref{tab:rq-obs} indique les observateurs et les observateurs requis des opérations de la \autoref{fig:dyn-causal-example-1}.
-À partir de ces informations nous concluons que les opérations $a_1$ et $a_2$ sont stables.
 
 \begin{theorem}[Stabilité causale dynamique]\label{th:dyn-cs}
 Dans une exécution abstraite qui respecte le modèle de cohérence causale dynamique, une opération $x$ est stable si les observateurs requis de $x$ sont inclus dans les observateurs de $x$.
@@ -1649,7 +1662,7 @@ Supposons que $x$ n'est pas stable.
 Il existe donc une extension $A'$ de $A$ telle que $A'$ respecte le modèle de cohérence causale dynamique et $x$ n'est pas visible à une opération $y$ de $A' \sminus A$.
 Nous distinguons deux cas.
 Si l'auteur de $y$ est un observateur requis de $x$, alors $x$ est visible à une opération incluse dans $A$ de l'auteur de $y$.
-Suivant la propriété~\ref{itm:peer-linear}, cette opération est visible à $y$.
+Suivant la propriété~\ref{itm:peer-linear} (ordre linéaire pour chaque pair), cette opération est visible à $y$.
 Par transitivité, $x$ est visible à $y$.
 Ce qui contredit une hypothèse.
 Si l'auteur de $y$ n'est pas un observateur requis, alors il est invité en $x$ ou dans une opération $z$ telle que $x$ est visible à $z$.
@@ -1692,7 +1705,7 @@ Le modèle de cohérence causale dynamique nous a permis de stabiliser une opér
 Il exige qu'un pair soit invité avant qu'il puisse exécuter des opérations.
 L'invitation d'un pair est rendue explicite à l'aide d'une opération qui est visible à toutes les opérations du pair.
 Il est ainsi possible de définir une stabilité adaptée aux groupes dynamiques.
-Dans cette section nous proposons un modèle de cohérence basé sur les modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permet de définir une stabilité adaptée aux groupes dynamiques en présence de pairs mal-intentionnés.
+Dans cette section nous proposons un modèle de cohérence qui respose sur les modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permet de définir une stabilité adaptée aux groupes dynamiques en présence de pairs mal-intentionnés.
 
 La conjonction des modèles de cohérence \acs{VFJC} et \emph{Invitation} ne permet pas d'aboutir à une telle définition.
 En effet, si nous considérons un ensemble (dénombrable) infini de pairs composé d'au moins un pair mal-intentionné, un pair mal-intentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
@@ -1755,7 +1768,7 @@ Cette première invitation est une opération non-linéaire.
 Dans la \autoref{fig:vfjc-invitation-issue}, il s'agit de l'opération d'invitation $m_2$.
 Une manière simple de rejeter de tels embranchements est de contraindre les pairs à observer l'invitation d'un pair avant d'observer des opérations de ce pair.
 Puisque l'invitation est non-linéaire, ils la rejettent et sont donc dans l'incapacité d'accepter l'embranchement.
-Cette contrainte pourrait être appliquer seulement lorsque des branches sont jointes.
+Cette contrainte pourrait être appliquée seulement lorsque des branches sont jointes.
 Pour ce faire, nous pourrions rejeter les relations de visibilité immédiate entre une opération $x$ et une opération $y$ si l'auteur de $x$ n'est pas un \emph{invité connu} dans les autres opérations qui sont immédiatement visibles à $y$.
 La \autoref{def:known-invited} définit formellement ce que nous nommons \emph{invité connu}.
 Le \autoref{tab:invited} indique les invités connus de chaque opération de l'exécution abstraite de la \autoref{fig:vfjc-invitation-issue}.
@@ -1791,15 +1804,16 @@ $\trm{invited}_A(y)$ désigne l'ensemble des pairs invités connus en $y$.
 \end{table}
 
 Contraindre chaque pair à observer l'invitation d'un nouveau pair avant d'observer les opérations de ce nouveau pair est un peu trop strict.
-Elle rejette des exécutions abstraites qui pourraient être stabilisables.
-En réalité, nous n'avons pas besoin que chaque pair observe l'invitation il suffit d'un seul pair qui n'est pas reconnu mal-intentionné.
+En effet, des exécutions abstraites qui pourraient être stabilisables sont rejetées.
+En réalité, nous n'avons pas besoin que chaque pair observe l'invitation, il suffit d'un seul pair qui n'est pas reconnu mal-intentionné.
 Lorsqu'un pair joint deux branches, il s'assure ainsi que pour chaque opération qui est immédiatement visible à la jonction, l'invitation de l'auteur de l'opération est observée par un invité connu dans chaque branche jointe.
 Cet observateur ne doit pas être reconnu mal-intentionné à la jonction.
 La \autoref{def:invitation-obs} définit ce que nous nommons observateur connu d'une invitation d'un pair en une opération.
 Le \autoref{tab:invited} indique les observateurs connus de l'invitation du pair $p_G$ en chaque opération de l'exécution abstraite de la \autoref{fig:vfjc-invitation-issue}.
 Dans la \autoref{fig:vfjc-invitation-issue}, l'invitation de $p_G$ est observée par $p_G$ et $p_M$ avant l'exécution de $a_1$.
 $p_G$ n'est pas un invité connu en $a_3$.
-$p_M$ est un invité connu en $a_3$, cependant il est reconnu mal-intentionné en $a_4$.
+$p_M$ est un invité connu en $a_3$.
+Cependant, il est reconnu mal-intentionné en $a_4$.
 La jonction n'est donc pas autorisée.
 Nous définissons ainsi le modèle de cohérence \ac{VFJC} dynamique dans la \autoref{def:svfjc-consistency}.
 
@@ -1837,7 +1851,7 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence \emph{D
   \end{description}
 \end{definition}
 
-Lorsqu'un pair est invité dans un embranchement rejeté par les autres pairs et qu'il contribue sur cet embranchement, il est exclu de manière permanente par les autres pairs.
+Lorsqu'un pair est invité dans un embranchement rejeté par les autres pairs, il est exclu de manière permanente par les autres pairs.
 Pour respecter notre définition initiale de la stabilité au sein d'une exécution abstraite, nous considérons un tel pair comme mal-intentionné.
 Un collaborateur ou une collaboratrice attaché·e à un tel pair pourrait détecter cette exclusion.
 Il ou elle pourrait donc demander à un autre pair de la collaboration de l'inviter pour obtenir une nouvelle identité (un nouveau pair).
@@ -1850,8 +1864,10 @@ Il suffit donc que chaque pair honnête invité observe pour chaque permutation 
 Cependant, il est nécessaire de prendre en compte les contraintes introduites par les invitations.
 L'invitation d'un pair est visible à toutes les opérations de ce pair.
 Si un pair est invité après une opération $x$, alors il ne peut pas exécuter d'opération concurrente à $x$.
-
 Pour faciliter l'expression de la stabilité, la \autoref{def:invited} introduit l'ensemble des pairs invités au sein d'une exécution abstraite et des sous-ensembles correspondant.
+La \autoref{th:cumulated-obs-exclusion-dyn} indique els conditions à rencontrer pour exclure les chaînes d'observation cumulée d'une énumération de pairs mal-intentionnés.
+
+\clearpage
 
 \begin{definition}[Invités]\label{def:invited}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{Invitation}.
@@ -1864,20 +1880,69 @@ $\trm{InvitedHonest}_A$ et $\trm{InvitedMalicious}_A$ sont respectivement les pa
 \end{align*}
 \end{definition}
 
+
+\begin{proposition}\label{th:cumulated-obs-exclusion-dyn}
+Soit une exécution abstraite $A$ et une extension $A'$ de $A$ telles que $A$ et $A'$ respectent le modèle de cohérence \emph{DynVFJC}.
+Soit une opération $x_0$ de $A$.
+Soit une énumération de pairs $P \defeq \tuple*{p_1, \dotsc ,p_n}$ telle que $p_1, \dotsc, p_{n-1}$ sont des pairs mal-intentionnés, et $p_n$ est un pair honnête.
+$A'$ ne peut pas contenir une chaîne d'observation cumulée $Z$ de $P$ dont la première opération est concurrente à $x_0$ si et seulement si $A$ contient une chaîne de visibilité $X \defeq x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$, pour les $k$ premières opérations ($0 \leq k \leq n$) le $i$-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou est reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $k \neq n$, alors la $(k+1)$-ème opération de la chaîne invite le $(k+1)$-ème pair de l'énumération.
+\end{proposition}
+
+\begin{proof}
+Toutes les opérations de $X$ sont des opérations de $A$.
+Les pairs reconnus mal-intentionnés dans une opération de $X$ et les auteurs des opérations de $X$ sont donc des pairs invités de $A$ ($\forall x \in X \qsep \trm{peer}(x) \in \trm{Invited}_A \land \trm{knownMalicious}_A(x) \subset \trm{Invited}_A$).
+
+Si il ne peut exister une chaîne $X$ avec $k \neq n$, alors la démonstration est identique à celle de la \autoref{th:cumulated-obs-exclusion}.
+
+\textbf{Démontrons pour $k \neq n$ que $X$ est suffisante pour rejeter $Z$.}
+Procédons par contradiction.
+Supposons que $Z$ existe.
+À partir de la démonstration du \autoref{th:cumulated-obs-exclusion}, nous déduisons que pour tout $j \leq k + 1$, $y_j$ est concurrente à $x_j$.
+Or $x_{k+1}$ invite l'auteur de $y_{k+1}$.
+D'après la propriété~\ref{itm:rq-invite} $x_{k+1}$ doit être visible à $y_{k+1}$.
+Ce qui contredit une hypothèse initiale.
+$X$ est donc suffisante pour rejeter $Z$.
+
+\textbf{Démontrons pour $k \neq n$ que $X$ est nécessaire pour rejeter $Z$.}
+Puisque $x_{k+1}$ invite l'auteur de $y_{k+1}$, $x_{k+1}$ doit être visible à $y_{k+1}$.
+Si cette relation de visibilité ne peut exister sans violer une autre propriété, alors la chaîne $Z$ ne peut exister.
+À partir de la démonstration du \autoref{th:cumulated-obs-exclusion}, nous déduisons que la chaîne $X$ est nécessaire pour rejeter $Z$.
+\end{proof}
+
+Le rejet des chaînes d'observation cumulée d'une énumération $P$ de pairs n'implique pas forcément le rejet des chaînes d'observation cumulée des énumérations de pairs qui préfixent $P$.
+En effet, si la $k+1$-ème opération invite le $k+1$-ème pair (quand $k \neq n$), alors le pair honnête $p_n$ n'est pas tenu d'observer la chaîne $x_1 \viseq \dotsb \viseq x_k$ qui permet l'exclusion des chaînes d'observation cumulée de l'énumération de pairs $p_1, \dotsc, p_k, p_n$.
+
+Une opération $x_0$ est stable si et seulement si chaque pair honnête invité observe $x_0$ et pour toute énumération de pairs mal-intentionnés invités distincts le pair honnête considéré ne peut plus accepter une chaîne d'observation cumulée de l'énumération de pairs considérée.
+Nous aboutissons ainsi au \autoref{th:svfjc-stability}.
+
+
 \begin{theorem}[Stabilité \emph{DynVFJC}]\label{th:svfjc-stability}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{DynVFJC}.
-Si l'ensemble des pairs invités sont honnêtes, alors une opération $x$ est stable si et seulement si les observateurs honnêtes requis observent $x$.
-Autrement, une opération $x$ est stable si et seulement si pour chaque énumération de $n$ pairs issue du produit cartésien des permutations des pairs mal-intentionnés invités par les pairs honnêtes invités, il existe une chaîne de visibilité de $n$ opérations telle que $x$ est visible ou égale à la première opération de la chaîne, pour les $j$ premières opérations ($k$ peut être égal à $0$) le i-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou un pair reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $k$ est différent de $n$ alors la $(k+1)$-ème opération de la chaîne invite le $(k+1)$-ème pair de l'énumération.
+Une opération $x_0$ est stable si et seulement si les observateurs honnêtes requis observent $x_0$ et pour chaque énumération de pairs $\tuple*{p_1, \dotsc, p_n}$ issue du produit cartésien des énumérations des pairs mal-intentionnés invités distincts par les pairs honnêtes invités, il existe une chaîne de visibilité $x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$, pour les $k$ premières opérations ($k \geq 0$) le $i$-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou est reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $k \neq n$, alors $x_{k+1}$ invite $p_{k+1}$.
+% et $x_k$ est visible ou égale à une opération $y$ qui invite $p_n$ ou est exécutée par $p_n$.
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{stable}_A^{\trm{DynVFJC}}(x_0) \iff\\
     &\trm{rqHonestObs}_A(x_0) \subseteq \trm{obs}_A(x_0) \:\land \\
-    &\forall \tuple*{p_1, \dotsc, p_n} \in \trm{Perm}(\trm{InvitedMalicious}_A) \times \trm{InvitedHonest}_A
-    \:\exists k \in 0 \ldotp\ldotp n \\
+    &\forall M \subseteq \trm{InvitedMalicious}_A \qsep M \neq \emptyset \implies \\
+    &\forall \tuple*{p_1, \dotsc, p_n} \in \trm{Perm}(M) \times \trm{InvitedHonest}_A
+    \:\exists k \in \irange{0}{n} \\
     & \exists x_0 \viseq \dotsb \viseq x_n \qsep
-    (k = n \lor \trm{call}(x_{k+1}) = \trm{invite}(p_{k+1})) \:\land\\
-    &\forall i \leq k \qsep p_i = \trm{peer}(x_i) \lor p_i \in \trm{knownMalicious}_A(x_i)
+    (k \neq n \implies \trm{call}(x_{k+1}) = \trm{invite}(p_{k+1})) \:\land\\
+    %&\exists y \in A \qsep x_k \viseq y \land (\trm{peer}(x_k) = p_n \lor \trm{call}(y) = \trm{invite}(p_n)) \:\land\\
+    &\forall i \in \irange{1}{k} \qsep p_i = \trm{peer}(x_i) \lor p_i \in \trm{knownMalicious}_A(x_i)
 \end{split}\end{equation*}
 \end{theorem}
+
+
+
+\begin{proof}
+En l'absence de pairs mal-intentionnés, la démonstration est identique à celle du \autoref{th:dyn-cs}.
+
+En présence d'au moins un pair mal-intentionné, une opération $x_0$ devient stable si et seulement si les observateurs honnêtes requis de $x_0$ observent $x_0$ et ne peuvent plus accepter de chaîne d'observation cumulée d'une énumération de pairs mal-intentionnés dont la première opération est concurrente à $x_0$.
+À partir de la \autoref{th:cumulated-obs-exclusion-dyn}, nous déduisons qu'une opération $x_0$ devient stable si et seulement si pour chaque énumération de pairs mal-intentionnés invités distincts et pour chaque pair honnête invité, le pair honnête observe une chaîne de visibilité liée à l'énumération de pairs telle que $x_0$ est visible ou égale à la première opération de cette chaîne.
+Dans le théorème, l'observation du pair honnête est matérialisée dans la chaîne sous la forme d'une opération.
+C'est pourquoi nous considérons des chaînes liées aux énumérations issues du produit cartésien de l'ensemble des énumérations de pairs mal-intentionnés invités distincts par l'ensemble des pairs honnêtes invités.
+\end{proof}
 
 \begin{figure}[htb]
 \centering
@@ -1931,6 +1996,20 @@ Autrement, une opération $x$ est stable si et seulement si pour chaque énumér
 \caption[Stabilité \acl{VFJC} dynamique]{Exemple d'une exécution abstraite avec des opérations \emph{DynVFJC}-stables (dvfjjcs).}\label{fig:dvfjcs-example}
 \end{figure}
 
+Prenons pour exemple l'exécution abstraite $A$ de la \autoref{fig:dvfjcs-example}.
+L'ensemble des pairs invités est composé de deux pairs mal-intentionnés $p_G$ et $p_M$ ($\trm{InvitedMalicious}_A = \set*{p_G, p_M}$), ainsi que de deux pairs honnêtes $p_A$ et $p_B$ ($\trm{InvitedHonest}_A = \set*{p_A, p_B}$).
+Le produit cartésien des énumérations des pairs mal-intentionnés invités distincts par les pairs honnêtes invités correspond à l'ensemble des énumérations suivantes~: $\tuple*{p_G, p_A}$, $\tuple*{p_G, p_B}$, $\tuple*{p_M, p_A}$, $\tuple*{p_M, p_B}$, $\tuple*{p_G, p_M, p_A}$, $\tuple*{p_G, p_M, p_B}$, $\tuple*{p_M, p_G, p_A}$, et $\tuple*{p_M, p_G, p_B}$.
+Une opération est stable si et seulement si pour chaque énumération de pairs elle est visible ou égale à la première opération d'une chaîne de visibilité liée à l'énumération considérée.
+La chaîne de visibilité $a_4 \viseq a_4$ est à la fois liée à l'énumération $\tuple*{p_G, p_A}$, et $\tuple*{p_G, p_B}$ étant donné que $a_4$ invite $p_G$.
+La chaîne de visibilité $m_1 \viseq a_4$ est liée à l'énumération de pairs $\tuple*{p_M, p_A}$.
+La chaîne de visibilité $m_1 \viseq b_1$ est liée à l'énumération de pairs $\tuple*{p_M, p_B}$.
+La chaîne de visibilité $a_4 \viseq a_4 \viseq a_4$ est à la fois liée à l'énumération $\tuple*{p_G, p_M, p_A}$ et à l'énumération $\tuple*{p_G, p_M, p_B}$, étant donné que $a_4$ invite $p_G$.
+La chaîne de visibilité $m_1 \viseq a_4 \viseq a_4$ est à la fois liée à l'énumération $\tuple*{p_M, p_G, p_A}$, et à l'énumération $\tuple*{p_M, p_G, p_B}$, étant donné que $m_1$ est une opération exécutée par $p_M$, $a_4$ invite $p_G$, et les pairs $p_A$ et $p_B$ observent $m_1$.
+Toutes ces chaînes débutent par $m_1$ ou $a_4$.
+$a_1$, $a_2$, $a_3$, et $m_1$ sont visibles ou égales à $m_1$ et $a_4$.
+Elles sont également observées par les pairs honnêtes invités.
+Ces quatres opérations sont donc stables.
+
 % En principe un pair mal-intentionné peut exécuter une seconde opération d'invitation initiale.
 % Nous considérons qu'il initie alors une autre collaboration.
 % En pratique nous pouvons garantir qu'un contenu répliqué est crypto-graphiquement lié à la première opération de la collaboration.
@@ -1941,6 +2020,12 @@ Autrement, une opération $x$ est stable si et seulement si pour chaque énumér
 \begin{theorem}\label{th:stabilizable-dyn-vfjc}
 Le modèle de cohérence \acl{VFJC} dynamique est stabilisable.
 \end{theorem}
+
+\begin{proof}
+Le modèle de cohérence \acl{VFJC} dynamique repose sur le modèle de cohérence \acl{VFJC}.
+D'après le \autoref{th:stabilizable-dyn-vfjc} toute opération d'une exécution abstraite qui respecte le modèle de cohérence \acl{VFJC} est à terme stable.
+Donc toute opération d'une exécution abstraite qui respecte le modèle de cohérence \emph{DynVFJC} est à terme stable.
+\end{proof}
 
 La stabilité \acl{VFJC} dynamique identifie des opérations stables malgré la présence de pairs mal-intentionnés et l'évolution de la composition du groupe de pairs.
 Des opérations peuvent devenir stables alors que de nouveaux pairs sont invités au fur et à mesure de l'évolution de la collaboration.
@@ -3930,7 +4015,7 @@ Chaque pair suspecte les autres pairs d'être mal-intentionnés.
 Lorsqu'un pair détermine la stabilité d'un message, il se considère comme le seul pair honnête.
 Parce-qu'il est lui-même suspecté mal-intentionné par les autres pairs, déterminer les messages convergents-stables revient en quelque sorte à considérer tous les pairs, y compris lui-même, comme des pairs mal-intentionnés.
 
-Un message $m$ est \emph{DynVFJC} convergent-stable au sein d'un journal $J$ si et seulement si pour chaque permutation $P \defeq \tuple{p_1, \dotsc, p_N}$ de l'ensemble des pairs invités $\trm{invited}_J$, il existe une chaîne de dépendances $m_1 \depeq \dotsb \depeq m_n$ telle que $m_1$ dépend de $m$ ou est égal à $m$, et le $j$-ème pair de la permutation est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
+Un message $m$ est \emph{DynVFJC} convergent-stable au sein d'un journal $J$ si et seulement si pour chaque énumération de pairs distincts $P \defeq \tuple{p_1, \dotsc, p_N}$ de l'ensemble des pairs invités $\trm{invited}_J$, il existe une chaîne de dépendances $m_1 \depeq \dotsb \depeq m_n$ telle que $m_1$ dépend de $m$ ou est égal à $m$, et le $j$-ème pair de la permutation est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur du message
     \item le pair est reconnu mal-intentionné dans le message
     \item le pair est invité dans le message
@@ -4374,7 +4459,7 @@ Nous avons ainsi pu définir des messages convergents-stables dans le journal et
 
 Dans cette section nous montrons que la troncature du journal ne remet pas en cause sa cohérence.
 En d'autres termes, le journal tronqué accepte et rejette les mêmes ensembles de messages qu'un journal complet.
-Il nous suffit de montrer que l'ensemble des messages utilisés pour déterminer si un message est bien-formé et acceptable immédiatement dans le journal sont présents autant dans un journal complet que dans une de ses versions tronquées.
+Il nous suffit de montrer que l'ensemble des messages utilisés pour déterminer si un message est bien-formé et acceptable immédiatement dans le journal sont présents autant dans un journal complet que dans une version tronquée.
 
 Pour tronquer son journal, un pair identifie un message $m$ convergent-stable.
 Il tronque un préfixe de son journal qui inclut uniquement des messages convergents-stables.
@@ -4479,6 +4564,8 @@ Une mise-à-jour n'est donc plus nécessaire à la résolution de conflits dès 
 qui sont ultérieurement livrées.
 Ils définissent ainsi le concept de \emph{coupure globale}.
 Un horodatage $t$ est une \emph{coupure globale} dès lors que l'ensemble des mises-à-jour avec un horodatage strictement inférieur à $t$ ont été livrées à l'ensemble des pairs.
+
+\clearpage
 
 La notion de coupure globale s'apparente à celle de stabilité.
 Toutefois, les horodatages utilisés n'encodent pas de causalité entre les mises-à-jour.
