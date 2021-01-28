@@ -261,7 +261,7 @@ Les modifications sont propagées en arrière plan aux autres pairs.
 Les pairs intègrent à leur copie les modifications qu'ils reçoivent.
 La \autoref{fig:optimisqtic-replciation-scenario} illustre un scénario de réplication optimiste.
 
-%Le support de collaboration qui implique un grand nombre de collaborateur·ice·s augmente le risque d'apparition de latences et de comportements mal-intentionnés.
+%Le support de collaboration qui implique un grand nombre de collaborateur·ice·s augmente le risque d'apparition de latences et de comportements malintentionnés.
 %Ce qui nous amène à questionner le passage à l'échelle et la sécurité des protocoles de réplication optimiste de contenu partagé.
 %Nous détaillons ces aspects dans la \autoref{sec:problematic}.
 
@@ -275,7 +275,7 @@ Ce qui nous amène à questionner la sécurité et le passage à l'échelle des 
 
 %Les infrastructures pair-à-pair de collaboration permettent d'envisager la conception d'applications hautement disponible, aux latences faibles, et qui passent à l'échelle.
 
-\subsection{Convergence en présence de pairs mal-intentionnés}
+\subsection{Convergence en présence de pairs malintentionnés}
 
 Les infrastructures pair-à-pair de collaboration permettent aux pairs de modifier en parallèle un contenu partagé.
 Pour ce faire, les pairs répliquent le contenu partagé et modifient leur copie respective.
@@ -298,16 +298,16 @@ Ce qui pourrait retarder, voire empêcher, la tenue de l'événement.
 Certains pairs peuvent trouver un intérêt à compromettre le succès d'une collaboration.
 Dans le cas de l'exemple précédent, il peut s'agir d'un opposant à la tenue de l'événement.
 Nous nous intéressons en particulier aux pairs qui entreprennent des actions pour faire diverger de manière permanente la vue des autres pairs.
-Ces pairs \emph{mal-intentionnés} cherchent donc à faire diverger de manière permanente les copies des autres pairs que nous qualifions d'\emph{honnêtes}.
-Pour ce faire, les pairs mal-intentionnés utilisent les faiblesses de certains protocoles de réplication~: ils transmettent à différents pairs honnêtes des modifications distinctes qui sont perçues comme identiques par le protocole.
+Ces pairs \emph{malintentionnés} cherchent donc à faire diverger de manière permanente les copies des autres pairs que nous qualifions d'\emph{honnêtes}.
+Pour ce faire, les pairs malintentionnés utilisent les faiblesses de certains protocoles de réplication~: ils transmettent à différents pairs honnêtes des modifications distinctes qui sont perçues comme identiques par le protocole.
 Il s'agit d'une \emph{équivoque}.
 Par exemple, l'opposant à l'événement peut infiltrer le groupe de bénévoles et faire en sorte que les bénévoles observent différentes dates de rendez-vous de préparation de l'événement.
 L'opposant répandrait ainsi la confusion et provoquerait l'absence de bénévoles à certains rendez-vous.
-La \autoref{fig:equivocation-scenario} illustre un scénario dans lequel un pair mal-intentionné effectue une équivoque.
+La \autoref{fig:equivocation-scenario} illustre un scénario dans lequel un pair malintentionné effectue une équivoque.
 Les pairs honnêtes ne détectent pas l'équivoque.
 Leurs copies divergent de manière permanente.
 
-\paragraph{}Ce qui nous amène à formuler notre première question de recherche~: \textbf{Est-il possible d'assurer la convergence des copies des pairs honnêtes en présence de pairs mal-intentionnés et de conserver les propriétés offertes par les infrastructures pair-à-pair de collaboration~?}
+\paragraph{}Ce qui nous amène à formuler notre première question de recherche~: \textbf{Est-il possible d'assurer la convergence des copies des pairs honnêtes en présence de pairs malintentionnés et de conserver les propriétés offertes par les infrastructures pair-à-pair de collaboration~?}
 
 \clearpage % better layout
 
@@ -362,7 +362,7 @@ Leurs copies divergent de manière permanente.
 \caption[Équivoque]{Exemple d'une équivoque qui vise à faire diverger de manière permanente les copies des collaboratrices honnêtes.
 Alice et Bea sont honnêtes.
 Elles répliquent de manière optimiste un dessin.
-Mallory est mal-intentionnée.
+Mallory est malintentionnée.
 Elle souhaite compromettre la collaboration entre Alice et Bea.
 \subref{fig:equivocation-scenario-1} Mallory effectue une équivoque.
 Elle transmet à Alice l'ajout d'un triangle orange, alors qu'elle transmet à Bea l'ajout d'un trapèze orange.
@@ -376,10 +376,10 @@ L'objectif de Mallory est atteint~: les copies de Alice et Bea demeurent diverge
 
 De nombreux protocoles de réplication optimiste synchronisent les copies en échangeant des opérations~\autocite{baquero_2018_pure-op-crdt}.
 L'opération synthétise une modification effectuée sur l'une des copies.
-Un pair mal-intentionné met en œuvre une équivoque en générant deux opérations distinctes mais qui sont perçues comme identiques par le protocole de réplication.
+Un pair malintentionné met en œuvre une équivoque en générant deux opérations distinctes mais qui sont perçues comme identiques par le protocole de réplication.
 Pour détecter de telles opérations, les pairs peuvent utiliser des \emph{journaux infalsifiables} d'opérations~\autocite{li_2004_sundr,mahajan_depot_2011,truong_authenticating_2012}.
 Chaque pair possède un journal dans lequel il enregistre les opérations qu'il transmet et qu'il reçoit.
-Chaque opération est signée par son auteur et référence des opérations sur-lesquelles elle dépend.
+Chaque opération est signée par son auteur et référence des opérations sur lesquelles elle dépend.
 Deux opérations distinctes ont une signature différente.
 Les pairs peuvent donc identifier les équivoques.
 En considérant que le protocole de réplication puisse intégrer des opérations distinctes présentées comme identiques, les journaux infalsifiables permettent donc d'assurer la convergence des copies des pairs honnêtes.
@@ -397,15 +397,15 @@ Certains protocoles de réplication~\autocite{feldman2010sporc,almeida_2018_delt
 L'état d'une copie occupe généralement un espace mémoire plus faible que le journal d'opérations.
 Le coût de transmission est ainsi plus faible et les nouveaux pairs obtiennent directement le contenu partagé.
 %Ces derniers peuvent ainsi contribuer plus rapidement sur le contenu partagé.
-Malheureusement les pairs mal-intentionnés peuvent compromettre la convergence des copies des pairs honnêtes en transmettant des états falsifiés.
+Malheureusement les pairs malintentionnés peuvent compromettre la convergence des copies des pairs honnêtes en transmettant des états falsifiés.
 Ils peuvent par exemple transmettre un ancien état et déclarer qu'il est à jour ou ajouter des modifications qui n'ont pas été transmises aux autres pairs.
 
 Pour réduire le coût lié à l'utilisation de journaux infalsifiables, nous proposons un protocole qui permet de tronquer un journal infalsifiable et d'authentifier un état à l'aide d'un journal tronqué.
-La troncature d'un journal infalsifiable est réalisée de telle manière à ne pas compromettre la détection des équivoques des pairs mal-intentionnés.
+La troncature d'un journal infalsifiable est réalisée de telle manière à ne pas compromettre la détection des équivoques des pairs malintentionnés.
 Pour ce faire, elle repose sur le concept de \emph{stabilité}.
 Une opération est stable dans un journal si toute opération acceptée ultérieurement dans le journal dépend sur cette opération.
 Pour rejoindre une collaboration, les nouveaux pairs récupèrent un état et le journal tronqué qui lui est associé.
-Le protocole leur permet de rejeter les états falsifiés par des pairs mal-intentionnés.
+Le protocole leur permet de rejeter les états falsifiés par des pairs malintentionnés.
 
 
 \subsection{Protocole de réplication pour la co-édition de texte}
@@ -553,7 +553,7 @@ Pour ce faire, nous concevons un nouveau protocole de réplication optimiste nom
 
 Le reste du manuscrit est organisé en 5 chapitres~:
 
-\paragraph{Le \autoref{ch:problematic}} introduit plus en détail les caractéristiques des infrastructures pair-à-pair de collaboration et met l'accent sur les problématiques de recherche liées à la convergence des copies et à sa protection. Le chapitre définit également l'adversaire du système qui contrôle les pairs mal-intentionnés.
+\paragraph{Le \autoref{ch:problematic}} introduit plus en détail les caractéristiques des infrastructures pair-à-pair de collaboration et met l'accent sur les problématiques de recherche liées à la convergence des copies et à sa protection. Le chapitre définit également l'adversaire du système qui contrôle les pairs malintentionnés.
 
 \paragraph{Le \autoref{ch:background}} présente les formalismes que nous utilisons dans les chapitres suivants pour décrire nos contributions.
 Nous introduisons en particulier la notion de cohérence de données et les types de données répliqués.
@@ -565,12 +565,12 @@ Le protocole à journaux complets protège la convergence des copies des pairs h
 Le protocole à journaux tronqués repose sur le protocole à journaux complets.
 Il permet la troncature des journaux et l'authentification de l'état d'une copie à l'aide d'un journal tronqué.
 Pour développer ce protocole, le chapitre introduit la notion de stabilité et \emph{DynVFJC}, un nouveau modèle de cohérence.
-%notre mécanisme pour tronquer un journal infalsifiable. Nous développons \emph{DynVFJC} un modèle de cohérence de donnée basé sur \acl{VFJC} qui permet de stabiliser un journal infalsifiable dans un groupe dont la composition évolué au cours du temps et qui peut inclure des pairs mal-intentionnés. Nous présentons également \acl{VFJCS} qui définit qu'elle partie du journal est stable.
+%notre mécanisme pour tronquer un journal infalsifiable. Nous développons \emph{DynVFJC} un modèle de cohérence de donnée basé sur \acl{VFJC} qui permet de stabiliser un journal infalsifiable dans un groupe dont la composition évolué au cours du temps et qui peut inclure des pairs malintentionnés. Nous présentons également \acl{VFJCS} qui définit qu'elle partie du journal est stable.
 Nous présentons également les travaux de la littérature en relation avec notre protocole.
 
 \paragraph{Le \autoref{ch:dotted-logootsplit}} présente un état de l'art des types séquences de données répliquées.
 Nous proposons un modèle unifié pour décrire et mieux appréhender un sous-ensemble de ces types séquences.
-À l'aide de ce modèle, nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différence d'états.
+À l'aide de ce modèle, nous répondons à notre deuxième question de recherche en proposant \emph{Dotted LogootSplit}, le premier type séquence de données répliquées synchronisé par différences d'états.
 
 \paragraph{Le \autoref{ch:conclusion}} clôt ce manuscrit et propose des axes d'exploration pour continuer les travaux de recherche présentés au sein de ce manuscrit.
 
@@ -581,7 +581,7 @@ La première contribution développée au sein de ce manuscrit a fait l'objet d'
 La seconde contribution présentée n'a pas encore fait l'objet d'une publication.
 En revanche, la proposition a été implémentée dans notre prototype d'éditeur collaboratif \emph{MUTE} qui est décrit dans l'une de nos publications~\autocite{2017_nicolas-mute-demo}.
 Notre dernière publication~\autocite{2019_yu_genericundo} est en lien avec nos travaux sur les types de données répliquées, mais n'est pas présentée au sein de ce manuscrit.
-Dans la suite de cette section nous référençons les articles qui ont été publiés au cours de cette thèse.
+Dans la suite de cette section, nous référençons les articles qui ont été publiés au cours de cette thèse.
 
 \begin{otherlanguage}{english}
 \subsection*{Prunable Authenticated Log and Authenticable Snapshot in Distributed Collaborative Systems \autocite{2018_elvinger_prunable-auth-log}}

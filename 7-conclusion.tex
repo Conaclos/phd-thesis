@@ -8,7 +8,7 @@
 % Il propose plusieurs axes de recherche à explorer.
 
 Les infrastructures pair-à-pair de collaboration et la réplication optimiste des contenus partagés ouvrent la voie vers la conception d'applications de collaboration hautement disponibles, aux latences faibles, qui tolèrent les partitions réseaux, et qui passent à l'échelle.
-Les protocoles de réplication optimiste proposés pour l'édition collaborative d'un contenu sont généralement vulnérables aux attaques d'un adversaire actif et ne tiennent pas toujours leurs promesses dans des cas d'utilisation exigeants tel que l'édition collaborative de texte en simultané.
+Les protocoles de réplication optimiste proposés pour l'édition collaborative d'un contenu sont généralement vulnérables aux attaques d'un adversaire actif et ne tiennent pas toujours leurs promesses dans des cas d'utilisation exigeants tels que l'édition collaborative de texte en simultané.
 
 Dans ce manuscrit, nous avons proposé deux protocoles qui permettent de répliquer de manière sûre un contenu, et un protocole de réplication optimiste de séquence qui résiste mieux aux aléas du réseau.
 Ce dernier chapitre est pour nous l'occasion de rappeler nos questions de recherche et d'y répondre.
@@ -31,9 +31,9 @@ Nous proposons plusieurs axes de recherche pour poursuivre nos travaux.
 \subsection{Résumé des contributions}
 
 La communauté scientifique a proposé de nombreux protocoles de réplication optimiste dans le but de concevoir des applications de collaboration hautement disponibles, aux latences faibles, et qui passent à l'échelle.
-La plupart des protocoles de réplication optimiste ne garantissent pas la convergence des copies du contenu en présence de pairs mal-intentionnés.
-Les pairs mal-intentionnés peuvent en effet produire des équivoques pour compromettre la convergence des copies des pairs honnêtes.
-Nous nous sommes donc demandé s'il était possible de protéger la convergence des copies des pairs honnêtes tout en préservant les propriétés désirées des protocoles de réplication optimiste.
+La plupart des protocoles de réplication optimiste ne garantissent pas la convergence des copies du contenu en présence de pairs malintentionnés.
+Les pairs malintentionnés peuvent en effet produire des équivoques pour compromettre la convergence des copies des pairs honnêtes.
+Nous nous sommes donc demandés s'il était possible de protéger la convergence des copies des pairs honnêtes tout en préservant les propriétés désirées des protocoles de réplication optimiste.
 
 Nous avons proposé deux protocoles qui protègent la convergence des copies des pairs honnêtes.
 Notre premier protocole repose sur le maintien d'un journal infalsifiable et répliqué.
@@ -46,7 +46,7 @@ La troncature du journal est effectuée de manière à protéger la cohérence d
 Elle repose sur le concept de \emph{stabilité}.
 Un message du journal est stable dès lors qu'il devient une dépendance de tout message ajouté ultérieurement dans le journal.
 Nous avons proposé un algorithme qui permet de déterminer si un message du journal est stable.
-Cet algorithme prend en compte l'invitation de nouveaux pairs et l'éviction de pairs mal-intentionnés.
+Cet algorithme prend en compte l'invitation de nouveaux pairs et l'éviction de pairs malintentionnés.
 Il a une complexité linéaire avec le nombre de messages dans le journal.
 Pour constituer sa copie du contenu partagé, un nouveau pair récupère un journal tronqué et l'état de la copie associée au journal.
 Il authentifie l'état de la copie à l'aide du journal tronqué.
@@ -54,12 +54,12 @@ Il authentifie l'état de la copie à l'aide du journal tronqué.
 Pour montrer la validité de nos protocoles, nous avons proposé un nouveau modèle de cohérence que nous avons nommé \acl{VFJC} Dynamique.
 Il s'agit d'une restriction du modèle de cohérence \acf{VFJC}.
 Son introduction nous a également amené à proposer le modèle de cohérence Causale Dynamique.
-Les deux modèles de cohérence que nous avons introduit tiennent compte de la dynamique des groupes et permettent la définition du concept de stabilité.
+Les deux modèles de cohérence que nous avons introduits tiennent compte de la dynamique des groupes et permettent la définition du concept de stabilité.
 Nous avons également défini le concept de stabilité pour le modèle de cohérence \acs{VFJC} et le modèle de cohérence Causale.
 
 Nos deux protocoles ne nécessitent pas de coordination entre les pairs.
 Chaque pair peut à tout moment modifier le contenu répliqué ou tronquer son journal.
-Par ailleurs, nos protocoles prennent en compte la dynamique des groupes collaboratifs et évincent les pairs qui sont reconnus mal-intentionnés.
+Par ailleurs, nos protocoles prennent en compte la dynamique des groupes collaboratifs et évincent les pairs qui sont reconnus malintentionnés.
 
 \subsection{Limites et perspectives}
 
@@ -97,8 +97,8 @@ Nous avons développé le concept de stabilité à travers plusieurs modèles de
 Nous avons employé ce concept pour tronquer le journal.
 Nous pensons que le concept de stabilité peut trouver de nombreuses applications.
 Il pourrait par exemple être le socle d'un protocole de consensus asynchrones~\autocite{bracha1985asynchronous}.
-Dans un protocole de consensus asynchrones, un ensemble de pairs s'accordent sur une valeur unique sans aucune coordination en présence de pairs mal-intentionnés.
-Le protocole doit résister aux équivoques des pairs mal-intentionnés.
+Dans un protocole de consensus asynchrones, un ensemble de pairs s'accordent sur une valeur unique sans aucune coordination en présence de pairs malintentionnés.
+Le protocole doit résister aux équivoques des pairs malintentionnés.
 Les pairs échangent des messages pour trouver un consensus.
 Un message convergent-stable garantit à un pair que tout sous-ensemble de pairs a connaissance du message et qu'il ne peut prétendre en avoir connaissance à un autre sous-ensemble de pairs.
 Les pairs peuvent ainsi trouver un consensus de manière déterministe à l'aide de l'ensemble de messages convergents-stables.
@@ -107,11 +107,11 @@ Le plus grand problème d'utilisabilité de notre protocole à journaux tronqué
 La troncature du journal repose sur le concept de stabilité.
 La stabilisation de messages exige la participation de l'ensemble des pairs qui ont été invités, à l'exception des pairs évincés.
 Un pair qui n'exécute pas d'opérations ou qui produit délibérément des messages qui dépendent uniquement de ses anciens messages bloque alors la stabilisation de messages.
-Pour remédier à ce problème nous pourrions évincer les pairs qui empêchent la stabilisation de messages.
+Pour remédier à ce problème, nous pourrions évincer les pairs qui empêchent la stabilisation de messages.
 
-Les pairs mal-intentionnés peuvent générer des messages non-linéaires et ainsi produire des embranchements.
-Nos protocoles rejettent les messages non-linéaires, et par extension les embranchements, qui ne sont pas acceptés par au moins un pair présumé honnête et connu.
-Les pairs mal-intentionnés peuvent inviter de nouveaux pairs dans un embranchement.
+Les pairs malintentionnés peuvent générer des messages non-linéaires et ainsi produire des embranchements.
+Nos protocoles rejettent les messages non-linéaires (et par extension les embranchements) qui ne sont pas acceptés par au moins un pair présumé honnête et connu.
+Les pairs malintentionnés peuvent inviter de nouveaux pairs dans un embranchement.
 Les pairs honnêtes peuvent donc être amenés à rejeter des invitations.
 Un nouveau pair peut détecter qu'il a été invité dans un embranchement rejeté par les autres pairs.
 Il pourrait alors demander à être de nouveau invité par un autre pair.
@@ -136,7 +136,7 @@ Un ordre d'intégration causal des opérations est généralement supposé.
 Les aléas du réseau conduisent au réordonnement et à la perte d'opérations.
 L'intégration d'opérations peut donc être retardée si l'une de leurs dépendances n'a pas été préalablement intégrée.
 Ce qui propage des ralentissements dans l'ensemble de la collaboration.
-Par ailleurs, l'échange et l'intégration des opérations après une longue période de déconnexion d'un·e des collaborateur·ice·s peut être coûteuse.
+Par ailleurs, l'échange et l'intégration des opérations après une longue période de déconnexion d'un·e des collaborateur·ice·s peuvent être coûteuses.
 Nous nous sommes donc demandé si un protocole de réplication optimiste pour l'édition collaborative de texte en simultané pouvait remédier à ces deux problèmes.
 
 Dans ce manuscrit, nous nous sommes intéressés aux types de données répliquées, communément nommés \acp{CRDT}.
@@ -167,13 +167,13 @@ Dans ces conditions, nous devrions mesurer les délais entre le moment où une m
 À plus long terme, nous souhaitons \begin{inlinelist}\item améliorer la résistance d'une séquence \emph{Dotted LogootSplit} aux attaques d'un adversaire actif, \item proposer une stratégie de synchronisation adaptative, et \item proposer une stratégie de génération de positions densément ordonnées qui limite les entrelacements de caractères\end{inlinelist}.
 Nous donnons un aperçu de ces deux axes de recherche dans les paragraphes suivants.
 
-Les protocoles de réplication optimiste sont généralement conçus en supposant l'absence de pairs mal-intentionnés.
-Les pairs mal-intentionnés peuvent produire des équivoques en vue de compromettre la convergence des pairs honnêtes.
-Certains \acp{CRDT} résistent par conception aux équivoques de pairs mal-intentionnés.
+Les protocoles de réplication optimiste sont généralement conçus en supposant l'absence de pairs malintentionnés.
+Les pairs malintentionnés peuvent produire des équivoques en vue de compromettre la convergence des pairs honnêtes.
+Certains \acp{CRDT} résistent par conception aux équivoques de pairs malintentionnés.
 Les séquences répliquées associent un identifiant unique à chaque valeur.
 La synchronisation des copies se base sur ses identifiants uniques.
-Un pair mal-intentionné peut produire une équivoque en associant un même identifiant à différentes valeurs.
-Dans le cas des séquences répliquées à positions densément ordonnées, telle qu'une séquence \emph{Dotted LogootSplit}, un pair mal-intentionné peut également produire une équivoque en associant à une valeur et son identifiant une position distincte.
+Un pair malintentionné peut produire une équivoque en associant un même identifiant à différentes valeurs.
+Dans le cas des séquences répliquées à positions densément ordonnées, telle qu'une séquence \emph{Dotted LogootSplit}, un pair malintentionné peut également produire une équivoque en associant à une valeur et son identifiant une position distincte.
 L'utilisation de nos protocoles à journaux infalsifiables permet de détecter les équivoques.
 Nous pourrions proposer des mécanismes pour résoudre les conflits de modification introduits par les équivoques.
 Cependant, nous pensons que ces problématiques devraient être prises en compte dans la conception des \acp{CRDT}.

@@ -13,11 +13,11 @@ Ce qui peut conduire à des incompréhensions et à l'échec de la collaboration
 Un individu peut trouver un intérêt à perturber, voire compromettre le succès d'une collaboration.
 Nous nous intéressons en particulier à un individu qui cherche à compromettre la convergence des copies.
 Cet individu est l'adversaire de la collaboration.
-Pour atteindre ses objectifs, l'adversaire contrôle le réseau et un ensemble de pairs que nous qualifions de \emph{mal-intentionnés}.
+Pour atteindre ses objectifs, l'adversaire contrôle le réseau et un ensemble de pairs que nous qualifions de \emph{malintentionnés}.
 Les pairs qui ne sont pas sous le contrôle de l'adversaire sont qualifiés d'\emph{honnêtes}.
 
-La présence de pairs mal-intentionnés représente un défi.
-Ils peuvent exposer des comportements mal-intentionnés difficiles à détecter et déjouer.
+La présence de pairs malintentionnés représente un défi.
+Ils peuvent exposer des comportements malintentionnés difficiles à détecter et déjouer.
 Ils peuvent en particulier produire des \emph{équivoques}.
 Une équivoque consiste à transmettre à différents pairs des modifications distinctes qui sont perçues comme identiques par le protocole de réplication.
 Les copies des pairs honnêtes divergent alors de manière permanente sans que les pairs honnêtes s'en rendent compte.
@@ -25,7 +25,7 @@ Les copies des pairs honnêtes divergent alors de manière permanente sans que l
 Pour détecter les équivoques et intégrer à leur copie l'ensemble des modifications effectuées sur le contenu, les pairs peuvent répliquer un \emph{journal infalsifiable}.
 Chaque pair possède un journal dans lequel il enregistre l'ensemble des modifications qu'il intègre à sa copie du contenu partagé.
 Une modification est accompagnée d'une signature cryptographique qui permet de s'assurer de son authenticité.
-Un pair mal-intentionné ne peut donc pas prétendre qu'une de ses modifications a été effectuée par un pair honnête.
+Un pair malintentionné ne peut donc pas prétendre qu'une de ses modifications a été effectuée par un pair honnête.
 Un journal infalsifiable contient uniquement des modifications authentiques.
 
 \begin{figure}[hbt]
@@ -116,7 +116,7 @@ Nous proposons ainsi deux mécanismes~:
 Pour supprimer une modification du journal, nous devons nous assurer qu'elle n'est pas nécessaire à la détection d'éventuelles équivoques futures.
 Pour ce faire, nous utilisons des journaux infalsifiables dans lesquels chaque modification déclare d'autres modifications comme dépendances.
 Les dépendances sont déclarées de manière à résister aux équivoques.
-En d'autres termes, si un pair mal-intentionné effectue une équivoque en générant deux modifications $x$ et $y$ et qu'une modification $z$ déclare dépendre de $x$, alors nous considérons qu'il n'est pas possible de prétendre que $z$ dépend de $y$.
+En d'autres termes, si un pair malintentionné effectue une équivoque en générant deux modifications $x$ et $y$ et qu'une modification $z$ déclare dépendre de $x$, alors nous considérons qu'il n'est pas possible de prétendre que $z$ dépend de $y$.
 Les modifications et leurs dépendances forment ainsi un graphe dirigé sans cycle.
 Nous contraignons l'acceptation de modifications dans un journal de manière à ce que les modifications acceptées ultérieurement partagent un ensemble croissant de dépendances.
 Nous déterminons cet ensemble à l'aide du concept de \emph{stabilité}.
@@ -154,9 +154,9 @@ La partie encadrée correspond à une version tronquée de ce journal.
 \end{figure}
 
 \paragraph{Transmission d'un état authentifiable.} Au lieu de récupérer un journal dans son intégralité, un pair qui rejoint une collaboration pourrait récupérer l'état d'une copie du contenu partagé.
-Un pair mal-intentionné peut construire un état de toutes pièces avant de le transmettre à un pair qui rejoint la collaboration.
+Un pair malintentionné peut construire un état de toutes pièces avant de le transmettre à un pair qui rejoint la collaboration.
 Le nouveau pair n'a aucun moyen de décider si l'état qu'il reçoit est authentique ou falsifié.
-Pour s'assurer de l'authenticité d'un état nous proposons un protocole qui permet d'authentifier un état à partir d'un journal tronqué.
+Pour s'assurer de l'authenticité d'un état, nous proposons un protocole qui permet d'authentifier un état à partir d'un journal tronqué.
 Lorsqu'un pair rejoint la collaboration, il récupère un état ainsi que le journal tronqué qui lui est associé.
 La \autoref{fig:invite-by-snaplog} illustre cette approche.
 
@@ -255,7 +255,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 %Certains journaux peuvent avoir vérifié et intégré des opérations, e d'autres peuvent les avoir rejetées parce qu'elles ne peuvent pas être vérifiées.
 %
 %Afin de maintenir un journal cohérent et convergent, les pairs doivent conserver les opérations nécessaires à la vérification de toutes nouvelles opérations.
-%Pour supprimer des opérations nous devons donc rencontrer deux conditions~: les opérations nécessaires à la vérification d'une opération devraient représenter un sous-ensemble du journal, et la collaboration devrait progresser de manière à ce qu'un préfixe croissant d'opérations n'est plus nécessaire pour vérifier toutes nouvelles opérations.
+%Pour supprimer des opérations, nous devons donc rencontrer deux conditions~: les opérations nécessaires à la vérification d'une opération devraient représenter un sous-ensemble du journal, et la collaboration devrait progresser de manière à ce qu'un préfixe croissant d'opérations n'est plus nécessaire pour vérifier toutes nouvelles opérations.
 %Ces deux contraintes peuvent être atteintes en utilisant un modèle de cohérence.
 %Un modèle de cohérence restreint la manière dont peuvent être mises en relation deux opérations.
 %La concurrence entre opérations joue un rôle important dans la détermination des opérations qui peuvent être ôtées du journal.
@@ -267,7 +267,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 % \section{Aperçu}\label{sec:protocole-overview}
 
 % La convergence à terme des copies est une propriété essentielle des infrastructures pair-à-pair de collaboration.
-% Des pairs mal-intentionnés peuvent trouver un intérêt à compromettre la convergence des copies des pairs honnêtes.
+% Des pairs malintentionnés peuvent trouver un intérêt à compromettre la convergence des copies des pairs honnêtes.
 % Pour empêcher de tels scénarios, les pairs honnêtes peuvent maintenir un journal infalsifiable et répliqué.
 % Ils enregistrent l'ensemble de leurs modifications dans leur journal respectif.
 % Les pairs synchronisent leurs journaux afin de récupérer et intégrer sur leur copie les modifications de chacun.
@@ -295,7 +295,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 % Au lieu de transmettre un journal à un nouveau pair, elles transmettent un état du document.
 
 % Notre contexte ne nous permet pas d'adopter cette approche.
-% En effet, un pair mal-intentionné peut facilement falsifier un état du document avant de la transmettre à un nouveau pair.
+% En effet, un pair malintentionné peut facilement falsifier un état du document avant de la transmettre à un nouveau pair.
 % Ce dernier n'a aucun moyen de vérifier l'authenticité de l'état.
 
 % Nous proposons une approche qui permet de tronquer le journal infalsifiable et d'authentifier un état à partir du journal tronqué qui lui est associé.
@@ -357,7 +357,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 % Un journal est stabilisable lorsqu'il a un préfixe d'opérations stable qui peut croître au cours de la collaboration.
 % Pour ce faire, nous devons contraindre l'acceptation des opérations au sein d'un journal de manière à ce qu'une opération soit stable une fois qu'un certain nombre de conditions sont rencontrées.
 
-% Dans la \autoref{sec:stability} nous développons le concept de stabilité et nous recherchons un modèle de cohérence stabilisable en présence de pairs mal-intentionnés.
+% Dans la \autoref{sec:stability} nous développons le concept de stabilité et nous recherchons un modèle de cohérence stabilisable en présence de pairs malintentionnés.
 
 %\section{Journaux}
 %
@@ -435,8 +435,8 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 %Les relations de dépendances entre opérations exposent donc les observations des pairs honnêtes.
 %Nous pouvons donc créer une correspondance entre les relations de dépendance au sein d'un journal et les relations de \emph{visibilité} au sein de l'exécution abstraite associée au journal.
 %
-%Les dépendances déclarées par les pair mal-intentionnées ne traduisent pas nécessairement leurs observations réelles.
-%Il en va de même au sein d'une exécution abstraite~: les relations de \emph{visibilité} ne traduisent pas les observations des pairs mal-intentionnées.
+%Les dépendances déclarées par les pair malintentionnées ne traduisent pas nécessairement leurs observations réelles.
+%Il en va de même au sein d'une exécution abstraite~: les relations de \emph{visibilité} ne traduisent pas les observations des pairs malintentionnées.
 %
 %Cette correspondance n'est pas suffisante.
 %Lorsqu'un pair honnête ajoute une opération dans son journal, il l'observe.
@@ -468,7 +468,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 %        \trm{noop} &
 %    \end{dcases}
 %\end{align*}
-%\item L'histoire $H$ n'inclut pas d'opérations d'interrogations.
+%\item L'histoire $H$ n'inclut pas d'opérations d'interrogation.
 %\begin{equation*}
 %    \trm{rval} \defeq \emptyset
 %\end{equation*}
@@ -496,13 +496,13 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 %\end{proposition}
 %
 %\begin{proof}
-%Suivant l'\autoref{th:rb-linear-order}, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (mal-intentionné ou honnête) est une énumération.
+%Suivant l'\autoref{th:rb-linear-order}, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (malintentionné ou honnête) est une énumération.
 %Par conséquent, la propriété~\ref{itm:bf1} est respectée.
 %
 %Toutes les opérations de $E$ sont visibles à l'opération d'observation implicite $\top_{\trm{vis}}$.
 %L'auteur de cette dernière est le possesseur du journal.
 %Il est par définition honnête.
-%Par conséquent, toutes les opération, y compris les opérations émises par des pairs mal-intentionnées, sont observées par au moins un pair honnête.
+%Par conséquent, toutes les opération, y compris les opérations émises par des pairs malintentionnées, sont observées par au moins un pair honnête.
 %La propriété~\ref{itm:bf2} est donc satisfaite.
 %\end{proof}
 %
@@ -515,21 +515,21 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 %Le journal qui lui est associé respecte donc le modèle de cohérence causale.
 %
 %Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
-%Nous savions alors quels pairs sont honnêtes et lesquels sont mal-intentionnés.
+%Nous savions alors quels pairs sont honnêtes et lesquels sont malintentionnés.
 %Une exécution abstraite associée à un journal décrit en revanche la connaissance qu'a le possesseur du journal sur l'exécution.
 %Nous adoptons donc un point de vue d'un pair.
-%Le pair ne sait pas si un pair donné est honnête ou mal-intentionné.
+%Le pair ne sait pas si un pair donné est honnête ou malintentionné.
 %Le pair pourrait faire confiance à un ensembles de pairs qu'il considère honnête.
-%Nous préférons prendre une approche plus pessimiste : un pair honnête considère que tout autre pair est potentiellement mal-intentionné.
+%Nous préférons prendre une approche plus pessimiste : un pair honnête considère que tout autre pair est potentiellement malintentionné.
 %
 %\begin{remark}
-%Dans une exécution abstraite associée à un journal, tous les pairs, à l'exception du possesseur du journal, sont considérés mal-intentionnés.
+%Dans une exécution abstraite associée à un journal, tous les pairs, à l'exception du possesseur du journal, sont considérés malintentionnés.
 %Puisque nous définissons nos concepts sur les exécutions abstraites, nous pouvons facilement changer cette hypothèse.
 %\end{remark}
 %
 %% Décrire un protocole à base de journaux répliqués ?
 %
-%Pour tronquer un journal nous avons besoin d'identifier quels opérations peuvent être su primées sans compromettre la cohérence du journal.
+%Pour tronquer un journal, nous avons besoin d'identifier quels opérations peuvent être su primées sans compromettre la cohérence du journal.
 %Dans la section suivante nous introduisons le concept de stabilité qui nous approche de cet identification.
 %
 
@@ -542,7 +542,7 @@ Dans ce manuscrit, nous disons qu'une modification est stable au sein d'un journ
 Pour permettre la stabilisation de modifications, les pairs doivent accepter les modifications dans leur journal sous certaines conditions.
 Par exemple, si toute modification est acceptée au sein d'un journal seulement si elle dépend de toutes les modifications déjà présentes dans le journal, alors toutes les modifications enregistrées dans le journal sont stables.
 Les relations de dépendances forment un ordre total.
-Notre objectif est de trouver des contraintes d'acceptation qui permettent à terme la stabilisation de toute modification et qui sont adaptées à la réplication optimiste et à la présence de pairs mal-intentionnés.
+Notre objectif est de trouver des contraintes d'acceptation qui permettent à terme la stabilisation de toute modification et qui sont adaptées à la réplication optimiste et à la présence de pairs malintentionnés.
 
 Au lieu de circonscrire nos contributions à des journaux, nous décrivons ces contraintes et le concept de stabilité dans un modèle plus général.
 Pour éviter l'introduction d'un nouveau modèle, nous réutilisons le concept d'exécution abstraite défini dans le \autoref{ch:background}.
@@ -552,7 +552,7 @@ Nous détaillons dans la \autoref{sec:full-log-protocol} comment obtenir à part
 Pour simplifier la compréhension, nous utilisons dans les exemples des exécutions abstraites qui ne sont pas forcément associées à des journaux.
 Les contraintes d'acceptation d'une modification au sein d'un journal se traduisent par des propriétés de cohérence sur les opérations au sein d'une exécution abstraite.
 
-% Nous recherchons un modèle de cohérence qui puisse être respecté par un protocole de réplication optimiste qui tolère la présence de pairs mal-intentionnés et permet la stabilisation d'opérations.
+% Nous recherchons un modèle de cohérence qui puisse être respecté par un protocole de réplication optimiste qui tolère la présence de pairs malintentionnés et permet la stabilisation d'opérations.
 % Le modèle de cohérence doit donc être compatible avec le modèle de cohérence à terme forte.
 % Il doit permettre aux pairs honnêtes de toujours exécuter une opération.
 
@@ -619,7 +619,7 @@ $x$ n'est donc pas $C'$-stable.
 Ce qui contredit l'hypothèse initiale.
 \end{proof}
 
-Nous souhaitons qu'au cours de l'exécution un ensemble croissant d'opérations deviennent stables.
+Nous souhaitons qu'au cours de l'exécution un ensemble croissant d'opérations devienne stable.
 En d'autres termes, toute opération devrait à terme devenir stable.
 La \autoref{def:stabilisable} exprime cette attente sous la forme d'une propriété de vivacité.
 
@@ -635,7 +635,7 @@ Un modèle de cohérence $C$ est stabilisable, et nous écrivons $C \in \trm{Sta
 \end{definition}
 % TODO: vérifier si on peut remplacer \sqsupset par \sqsupseteq_C
 
-Nous recherchons un modèle de cohérence stabilisable qui est réaliste dans le contexte de notre travail~: il doit garantir la disponibilité en lecture et en écritures des copies, ainsi que la convergence à terme des copies en présence de pairs mal-intentionnés.
+Nous recherchons un modèle de cohérence stabilisable qui est réaliste dans le contexte de notre travail~: il doit garantir la disponibilité en lecture et en écriture des copies, ainsi que la convergence à terme des copies en présence de pairs malintentionnés.
 Nous proposons d'abord d'explorer la notion de stabilité dans le modèle de cohérence causale et le modèle de cohérence \acl{VFJC}.
 Ces deux modèles sont présentés dans le \autoref{ch:background}.
 Nous construisons ensuite deux nouveaux modèles de cohérence qui sont stabilisables et adaptés à notre contexte.
@@ -742,7 +742,7 @@ Le \autoref{th:cs} définit formellement la stabilité causale.
 Dans l'exécution abstraite \subref{fig:cs-example-1}, l'opération $a_1$ est observée par son auteur $p_A$, par $p_B$ parce que $a_1$ est visible à $b_1$, et par $p_C$ parce que $a_1$ est visible à $c_2$.
 $\trm{obs}(a_1) = \set{p_A, p_B, p_C}$.
 $a_1$ est visible à toute opération future de $p_A$.
-$b_1$ et $c_2$ sont respectivement visible à toute opération future de $p_B$ et $p_C$.
+$b_1$ et $c_2$ sont respectivement visibles à toute opération future de $p_B$ et $p_C$.
 Par transitivité, $a_1$ est visible à toute opération future de $p_B$ et $p_C$.
 $a_1$ est donc causalement stable (cs).
 $c_1$ et $b_1$ ne sont pas causalement stables car le pair $p_A$ ne les observe pas.
@@ -833,24 +833,24 @@ Pour chaque opération, il existe donc une exécution abstraite dans laquelle l'
 Le modèle de cohérence causale est donc stabilisable.
 \end{proof}
 
-Le modèle de cohérence causale est stabilisable, mais il ne tolère pas la présence de pairs mal-intentionnés.
-il n'est donc pas adapté à notre contexte.
-Dans la section suivante nous nous intéressons à la stabilité au sein d'un modèle de cohérence qui autorise la présence de pairs mal-intentionnés.
+Le modèle de cohérence causale est stabilisable, mais il ne tolère pas la présence de pairs malintentionnés.
+Il n'est donc pas adapté à notre contexte.
+Dans la section suivante nous nous intéressons à la stabilité au sein d'un modèle de cohérence qui autorise la présence de pairs malintentionnés.
 
 
 \subsection{Stabilité \acl{VFJC}}\label{subsec:vfjcs}
 
-Le modèle de cohérence~\acf{VFJC} offre des garanties de convergence et de disponibilité en présence de pairs mal-intentionnés~\autocite{mahajan_2011_cac}.
+Le modèle de cohérence~\acf{VFJC} offre des garanties de convergence et de disponibilité en présence de pairs malintentionnés~\autocite{mahajan_2011_cac}.
 Pour ce faire, il relâche une contrainte de cohérence et autorise ainsi la présence d'opérations non-linéaires dans une exécution abstraite.
 Une opération est non-linéaire si une autre opération lui est concurrente et qu'elles sont toutes deux exécutées par le même pair.
 Dans la \autoref{fig:vfjc-malicious-obs}, $m_1$ et $m_2$ sont des opérations non-linéaires.
-Seuls les pairs mal-intentionnés peuvent être les auteurs d'opérations non-linéaires.
+Seuls les pairs malintentionnés peuvent être les auteurs d'opérations non-linéaires.
 Les opérations non-linéaires forment des embranchements.
 
 La formation d'embranchements rend plus difficile la définition de la stabilité.
 Il ne suffit plus qu'un pair observe une opération $x$ pour être assuré que cette dernière est visible à toutes ses opérations futures.
-En effet, le pair peut être mal-intentionné~: il peut exécuter une opération non-linéaire et concurrente à $x$.
-Dans l'exécution abstraite $A_1$ de la \autoref{fig:vfjc-malicious-obs}, le pair mal-intentionné $p_M$ observe l'opération $a_1$.
+En effet, le pair peut être malintentionné~: il peut exécuter une opération non-linéaire et concurrente à $x$.
+Dans l'exécution abstraite $A_1$ de la \autoref{fig:vfjc-malicious-obs}, le pair malintentionné $p_M$ observe l'opération $a_1$.
 Pour autant, dans l'extension de $A_1$, $p_M$ exécute une opération $m_2$ concurrente à $a_1$.
 %$m_1$ et $m_2$ sont des opérations non-linéaires.
 
@@ -890,7 +890,7 @@ Pour autant, dans l'extension de $A_1$, $p_M$ exécute une opération $m_2$ conc
     % Prefix
     \node[draw, dashed, label=below:$A_1$, fit=(B) (a2)] {};
 \end{tikzpicture}
-\caption[Opérations non-linéaires]{Exécution abstraite qui explique la modification d'un contenu partagé par un pair mal-intentionné $p_M$, ainsi que deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjc-malicious-obs}
+\caption[Opérations non-linéaires]{Exécution abstraite qui explique la modification d'un contenu partagé par un pair malintentionné $p_M$, ainsi que deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjc-malicious-obs}
 \end{figure}
 
 Cependant, le modèle de cohérence \acl{VFJC} contraint l'acceptation d'opérations non-linéaires.
@@ -899,17 +899,17 @@ En d'autres termes, une opération $y$ ne peut pas être immédiatement visible 
 Le seul moyen qu'ils ont d'accepter une opération non-linéaire est de l'accepter indirectement par l'acceptation d'une autre opération.
 Dans la \autoref{fig:vfjc-malicious-obs}, $p_A$ reconnaît $m_2$ comme une opération non-linéaire.
 Il accepte indirectement $m_2$ par l'acceptation de l'opération $b_1$.
-le pair $p_B$ ne reconnaît pas encore $m_2$ comme non-linéaire, il peut donc l'accepter directement.
+Le pair $p_B$ ne reconnaît pas encore $m_2$ comme non-linéaire, il peut donc l'accepter directement.
 
 Cette contrainte a des implications intéressantes qui nous permettent de définir la stabilité.
-Avant de nous intéresser à ses implications générales en présence de plusieurs pairs mal-intentionnés, nous montrons ses implications en présence d'un seul pair mal-intentionné.
+Avant de nous intéresser à ses implications générales en présence de plusieurs pairs malintentionnés, nous montrons ses implications en présence d'un seul pair malintentionné.
 
-\paragraph{En présence d'un pair mal-intentionné $p_M$,}
+\paragraph{En présence d'un pair malintentionné $p_M$,}
 une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations de $p_M$ qui sont concurrentes à $x$.
-Un pair honnête ne peut pas accepter directement une opération concurrente à $x$ de $p_M$ si et seulement si il a reconnu le pair comme mal-intentionné ou il reconnaît l'opération comme non-linéaire.
+Un pair honnête ne peut pas accepter directement une opération concurrente à $x$ de $p_M$ si et seulement si il a reconnu le pair comme malintentionné ou il reconnaît l'opération comme non-linéaire.
 D'après la \autoref{th:concur-triad}, si $x$ est visible ou égale à une opération $y$ de $p_M$, alors toute opération future de $p_M$ qui est concurrente à $x$ est également concurrente à $y$.
 Cette opération future est non-linéaire à $y$.
-Si un pair honnête reconnaît $p_M$ comme mal-intentionné ou observe une opération $y$ de $p_M$ telle que $x$ lui est visible, alors il ne peut pas accepter directement une opération future de $p_M$ qui est concurrente à $x$.
+Si un pair honnête reconnaît $p_M$ comme malintentionné ou observe une opération $y$ de $p_M$ telle que $x$ lui est visible, alors il ne peut pas accepter directement une opération future de $p_M$ qui est concurrente à $x$.
 Pour que $x$ devienne stable il suffit donc que chaque pair honnête observe une opération de $p_M$ qui lui est visible.
 
 Dans la \autoref{fig:vfjcs-one-malicious-1}, les pairs honnêtes $p_A$ et $p_B$ observent l'opération $m_1$ de $p_M$.
@@ -921,7 +921,7 @@ Le pair honnête  $p_B$ observe l'opération $m_2$ de $p_M$.
 Il ne peut plus accepter directement d'opérations non-linéaires à $m_2$.
 Toute opération visible à la fois à $m_1$ et $m_2$ est donc stable.
 C'est le cas de l'opération $a_1$.
-Dans la \autoref{fig:vfjcs-one-malicious-3}, le pair honnête $p_A$ reconnaît $p_M$ comme un pair mal-intentionné.
+Dans la \autoref{fig:vfjcs-one-malicious-3}, le pair honnête $p_A$ reconnaît $p_M$ comme un pair malintentionné.
 Il ne peut plus accepter directement une opération de $p_M$.
 Le pair honnête  $p_B$ observe l'opération $m_2$ de $p_M$.
 Il ne peut plus accepter directement d'opérations non-linéaires à $m_2$.
@@ -929,11 +929,11 @@ $a_1$ et $m_1$ sont donc stables.
 
 
 % Une opération $x$ d'une exécution abstraite $A$ est stable s'il n'existe pas d'extension de $A$ dans laquelle une opération $y$ est concurrente à $x$.
-% Si l'auteur de $y$ est le pair mal-intentionné, alors elle est visible à au moins une opération $z$ d'un pair honnête.
-% Si $x$ est stable, alors pour toute extension de $A$ il n'existe pas une opération $y$ d'un pair honnête concurrente à $x$ et il n'existe pas une chaîne de visibilité immédiate $y \idr z$ avec $y$ tel que l'auteur de $y$ est le pair mal-intentionné et l'auteur de $z$ est un pair honnête.
+% Si l'auteur de $y$ est le pair malintentionné, alors elle est visible à au moins une opération $z$ d'un pair honnête.
+% Si $x$ est stable, alors pour toute extension de $A$ il n'existe pas une opération $y$ d'un pair honnête concurrente à $x$ et il n'existe pas une chaîne de visibilité immédiate $y \idr z$ avec $y$ tel que l'auteur de $y$ est le pair malintentionné et l'auteur de $z$ est un pair honnête.
 %
 % Une opération $x$ devient stable lorsqu'il n'est plus possible d'exécuter une opération qui lui est concurrente.
-% En présence d'un seul pair mal-intentionné $p_M$, nous déduisons qu'une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations concurrentes à $x$ de $p_M$.
+% En présence d'un seul pair malintentionné $p_M$, nous déduisons qu'une opération $x$ devient stable lorsque les pairs honnêtes observent $x$ et qu'ils ne peuvent plus accepter d'opérations concurrentes à $x$ de $p_M$.
 % Si un pair honnête $h$ observe une opération $m_1$ de $p_M$ avec $x \viseq m_1$, alors $h$ ne peut plus accepter directement une opération de $p_M$ non-linéaire à $m_1$.
 % Une opération future $m_2$ de $p_M$ qui est concurrente à $x$ est nécessairement non-linéaire à $m_1$.
 % $h$ ne peut donc pas accepter directement $m_2$.
@@ -1058,7 +1058,7 @@ $a_1$ et $m_1$ sont donc stables.
 \end{tikzpicture}
 \caption{}\label{fig:vfjcs-one-malicious-3}
 \end{subfigure}
-\caption[Stabilité \acl{VFJC} en présence d'un pair mal-intentionné]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un seul pair mal-intentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjcs-one-malicious}
+\caption[Stabilité \acl{VFJC} en présence d'un pair malintentionné]{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un seul pair malintentionné $p_M$ et de deux pairs honnêtes $p_A$ et $p_B$.}\label{fig:vfjcs-one-malicious}
 \end{figure}
 
 \begin{proposition}\label{th:concur-triad}
@@ -1081,35 +1081,35 @@ $y$ et $z$ sont donc des opérations concurrentes.
 \end{proof}
 
 
-\paragraph{En présence de plusieurs pairs mal-intentionnés.}
-Dans une exécution abstraite, l'opération d'un pair mal-intentionné est nécessairement visible à au moins une opération d'un pair honnête.
-Plus généralement, une chaîne de visibilité immédiate $z_1 \idr \dotsb$ composée exclusivement d'opérations de pairs mal-intentionnés est visible à au moins une opération d'un pair honnête.
+\paragraph{En présence de plusieurs pairs malintentionnés.}
+Dans une exécution abstraite, l'opération d'un pair malintentionné est nécessairement visible à au moins une opération d'un pair honnête.
+Plus généralement, une chaîne de visibilité immédiate $z_1 \idr \dotsb$ composée exclusivement d'opérations de pairs malintentionnés est visible à au moins une opération d'un pair honnête.
 Une opération $x$ devient stable lorsque les pairs honnêtes \begin{inlinelist}
     \item observent $x$ et
-    \item ne peuvent plus accepter directement une chaîne de visibilité immédiate $z_1 \idr \dotsb \idr z_m$ composée exclusivement d'opérations de pairs mal-intentionnés dont la première opération $z_1$ est concurrente à $x$
+    \item ne peuvent plus accepter directement une chaîne de visibilité immédiate $z_1 \idr \dotsb \idr z_m$ composée exclusivement d'opérations de pairs malintentionnés dont la première opération $z_1$ est concurrente à $x$
 \end{inlinelist}.
-% La deuxième condition implique l'inexistence d'une chaîne de visibilité immédiate composée d'opérations de pairs mal-intentionnés et d'un pair honnête.
+% La deuxième condition implique l'inexistence d'une chaîne de visibilité immédiate composée d'opérations de pairs malintentionnés et d'un pair honnête.
 Un pair honnête ne peut plus accepter directement une telle chaîne s'il reconnaît la dernière opération $z_m$ de la chaîne comme non-linéaire.
 Nous devons donc trouver les conditions qui conduisent les pairs honnêtes à reconnaître $z_m$ comme non-linéaire.
 
 Afin de décomposer le problème, nous divisons l'ensemble de ces chaînes en sous-ensembles.
 Nous déterminons ensuite les conditions à remplir pour qu'un pair honnête rejette les châines d'un sous-ensemble donné.
-Pour ce faire, la \autoref{def:cumulated-obs} introduit le concept de \emph{chaîne d'observation cumulée}.
-Chaque sous-ensemble est associé à une énumération de pairs mal-intentionnés $P \defeq \tuple*{p_1, \dotsc, p_n}$ et est composé des chaînes d'observation cumulée de $P$.
-La \autoref{fig:cumulated-obs-3peers} illustre l'ensemble des chaînes d'observation cumulée de l'énumération de pairs $\tuple*{p_G, p_M, p_O}$.
+Pour ce faire, la \autoref{def:cumulated-obs} introduit le concept de \emph{chaîne d'observations cumulées}.
+Chaque sous-ensemble est associé à une énumération de pairs malintentionnés $P \defeq \tuple*{p_1, \dotsc, p_n}$ et est composé des chaînes d'observations cumulées de $P$.
+La \autoref{fig:cumulated-obs-3peers} illustre l'ensemble des chaînes d'observations cumulées de l'énumération de pairs $\tuple*{p_G, p_M, p_O}$.
 Chaque opération de la chaîne entre $g_1$ et $m_1$ a pour auteur $p_G$.
 Chaque opération de la chaîne entre $m_1$ et $o_1$ a pour auteur $p_G$ ou $p_M$.
 Chaque opération de la chaîne après $o_1$ a pour auteur $p_G$, $p_M$, ou $p_O$.
 
-% L'ensemble des châines d'observation cumulée de $P$ contient l'ensemble des chaînes d'observation cumulée des préfixes de $P$.
-% Par exemple, l'ensemble des chaînes d'observation cumulée de $\tuple*{p_G, p_M}$ inclut l'ensemble des chaînes d'observation cumulée de $\tuple*{p_G}$.
-% Si un pair rejette les châines d'observation cumulée de $P$ alors il rejette les châines d'observation cumulée des préfixes de $P$.
-% Pour rejeter l'ensemble des chaînes d'observation cumulée d'énumération de pairs mal-intentionnés nous pouvons donc exclure l'ensemble des chaînes d'observation cumulée des permutations des pairs mal-intentionnés.
-% Pour un ensemble de deux pairs mal-intentionnés $p_G$ et $p_M$, nous devrions donc rejeter les chaînes d'observation cumulée de $\tuple*{p_G, p_M}$ et $\tuple*{p_M, p_G}$.
+% L'ensemble des châines d'observations cumulées de $P$ contient l'ensemble des chaînes d'observations cumulées des préfixes de $P$.
+% Par exemple, l'ensemble des chaînes d'observations cumulées de $\tuple*{p_G, p_M}$ inclut l'ensemble des chaînes d'observations cumulées de $\tuple*{p_G}$.
+% Si un pair rejette les châines d'observations cumulées de $P$ alors il rejette les châines d'observations cumulées des préfixes de $P$.
+% Pour rejeter l'ensemble des chaînes d'observations cumulées d'énumération de pairs malintentionnés, nous pouvons donc exclure l'ensemble des chaînes d'observations cumulées des permutations des pairs malintentionnés.
+% Pour un ensemble de deux pairs malintentionnés $p_G$ et $p_M$, nous devrions donc rejeter les chaînes d'observations cumulées de $\tuple*{p_G, p_M}$ et $\tuple*{p_M, p_G}$.
 
-\begin{definition}[Chaîne d'observation cumulée]\label{def:cumulated-obs}
+\begin{definition}[Chaîne d'observations cumulées]\label{def:cumulated-obs}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \acs{FJC}.
-Une chaîne de visibilité immédiate $Z \defeq z_1 \idr \dotsb$ de $A$ est une chaîne d'observation cumulée d'une énumération de pairs distincts $\tuple*{p_1, \dotsc, p_n}$ si et seulement si elle inclut une chaîne de visibilité $Y \defeq y_1 \vis \dotsb \vis y_n$ telle que l'auteur de la $i$-ème opération de $Y$ est le $i$-ème pair de l'énumération, et l'auteur de toute opération de $Z$ est l'auteur d'une opération de $Y$ qui lui est visible ou égale.
+Une chaîne de visibilité immédiate $Z \defeq z_1 \idr \dotsb$ de $A$ est une chaîne d'observations cumulées d'une énumération de pairs distincts $\tuple*{p_1, \dotsc, p_n}$ si et seulement si elle inclut une chaîne de visibilité $Y \defeq y_1 \vis \dotsb \vis y_n$ telle que l'auteur de la $i$-ième opération de $Y$ est le $i$-ième pair de l'énumération, et l'auteur de toute opération de $Z$ est l'auteur d'une opération de $Y$ qui lui est visible ou égale.
 On a $y_1 = z_1$.
 \begin{equation*}
     \forall i \in \irange{1}{n} \qsep p_i = \trm{peer}(y_i) \land \forall z \in Z \:\exists y \in Y \qsep y \viseq z \land \trm{peer}(y) = \trm{peer}(z)
@@ -1162,20 +1162,19 @@ On a $y_1 = z_1$.
     \foreach \src/\dest in {z1/r1,r1.east/zn,zn/r2.west,r2.east/zm,zm/r3.west}
         \draw[pre] (\src) to (\dest);
 \end{tikzpicture}
-\caption[Ensemble des chaînes d'observation cumulée d'une énumération de pair]{Ensemble des chaînes d'observation cumulée de l'énumération de pairs $\tuple*{p_G,p_M,p_O}$.}\label{fig:cumulated-obs-3peers}
+\caption[Ensemble des chaînes d'observations cumulées d'une énumération de pair]{Ensemble des chaînes d'observations cumulées de l'énumération de pairs $\tuple*{p_G,p_M,p_O}$.}\label{fig:cumulated-obs-3peers}
 \end{figure}
 
-La \autoref{th:cumulated-obs-exclusion} présente les conditions à remplir pour qu'un pair honnête rejette les chaînes d'observation cumulée d'une énumération de pairs mal-intentionnés dont la première opération est concurrente à une opération $x$.
-À partir de cette proposition, nous déduisons que dans 
-l'exécution abstraite de la \autoref{fig:vfjcs-two-malicious-1}, l'existence de la chaîne de visibilité $g_1 \viseq m_2 \viseq a_2$ avec $a_1 \viseq g_1$ empêche $p_A$ d'accepter directement les chaînes d'observation cumulée de l'énumération de pairs $\tuple*{p_G, p_M}$ dont la première opération est concurrentes à $a_1$.
+La \autoref{th:cumulated-obs-exclusion} présente les conditions à remplir pour qu'un pair honnête rejette les chaînes d'observations cumulées d'une énumération de pairs malintentionnés dont la première opération est concurrente à une opération $x$.
+À partir de cette proposition, nous déduisons que dans l'exécution abstraite de la \autoref{fig:vfjcs-two-malicious-1}, l'existence de la chaîne de visibilité $g_1 \viseq m_2 \viseq a_2$ avec $a_1 \viseq g_1$ empêche $p_A$ d'accepter directement les chaînes d'observations cumulées de l'énumération de pairs $\tuple*{p_G, p_M}$ dont la première opération est concurrentes à $a_1$.
 
 \begin{proposition}\label{th:cumulated-obs-exclusion}
 Soit une exécution abstraite $A$ et une extension $A'$ de $A$ telles que $A$ et $A'$ respectent le modèle de cohérence \ac{VFJC}.
 Soit une opération $x_0$ de $A$.
-Soit une énumération de pairs $P \defeq \tuple*{p_1, \dotsc ,p_n}$ telle que $p_1, \dotsc, p_{n-1}$ sont des pairs mal-intentionnés, et $p_n$ est un pair honnête.
-$A'$ ne peut pas contenir une chaîne d'observation cumulée $Z$ de $P$ dont la première opération est concurrente à $x_0$ si et seulement si $A$ contient une chaîne de visibilité $X \defeq x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$ et le $i$-ème pair de $P$ est lié à la $i$-ème opération de $X$ par l'une des relations suivantes~: \begin{inlinelist}
+Soit une énumération de pairs $P \defeq \tuple*{p_1, \dotsc ,p_n}$ telle que $p_1, \dotsc, p_{n-1}$ sont des pairs malintentionnés, et $p_n$ est un pair honnête.
+$A'$ ne peut pas contenir une chaîne d'observations cumulées $Z$ de $P$ dont la première opération est concurrente à $x_0$ si et seulement si $A$ contient une chaîne de visibilité $X \defeq x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$ et le $i$-ième pair de $P$ est lié à la $i$-ième opération de $X$ par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur de l'opération $p_i = \trm{peer}(x_i)$, ou
-    \item le pair est reconnu mal-intentionné en l'opération $p_i \in \trm{knownMalicious}_A(x_i)$
+    \item le pair est reconnu malintentionné en l'opération $p_i \in \trm{knownMalicious}_A(x_i)$
 \end{inlinelist}.
 \end{proposition}
 
@@ -1187,22 +1186,22 @@ On a donc $y_1 = z_1$.
 Procédons par contradiction et récurrence.
 Supposons que $Z$ existe.
 
-Montrons que pour tout $j$ et $k$ avec $1 \leq j < k \leq n$, si $y_j$ est non-linéaire à $x_j$ ou si l'auteur de $y_j$ est reconnu mal-intentionné en $x_j$, alors $y_k$ est concurrente à $x_k$.
+Montrons que pour tout $j$ et $k$ avec $1 \leq j < k \leq n$, si $y_j$ est non-linéaire à $x_j$ ou si l'auteur de $y_j$ est reconnu malintentionné en $x_j$, alors $y_k$ est concurrente à $x_k$.
 Soit $z$ l'opération de $Z$ qui est immédiatement visible à $y_k$ ($z \idr y_k$).
 Par définition, l'auteur de $z$ est l'auteur d'une opération $y_l$ avec avec $l < k$ (éventuellement $z$).
 $y_l$ est visible à $y_k$ ($y_l \vis y_k$).
-D'après notre hypothèse de récurrence, l'auteur de $y_l$ est reconnu mal-intentionné en $x_l$ ($p_l \in \trm{knownMalicious}_A(x_l)$) ou $y_l$ est non-linéaire à $x_l$ ($y_l \concur x_l \land \trm{peer}(x_l) = p_l$).
+D'après notre hypothèse de récurrence, l'auteur de $y_l$ est reconnu malintentionné en $x_l$ ($p_l \in \trm{knownMalicious}_A(x_l)$) ou $y_l$ est non-linéaire à $x_l$ ($y_l \concur x_l \land \trm{peer}(x_l) = p_l$).
 $x_l$ ne peut pas être visible à $z_k$ autrement~\ref{itm:vfjc2} serait violée.
 D'après le \autoref{th:future-concur}, $x_l$ et $z_k$ sont concurrentes.
 Or $x_l$ est visible ou égale à $x_k$ ($x_l \viseq x_k$).
 D'après la \autoref{th:concur-triad}, $x_k$ et $y_k$ sont donc concurrentes ($x_k \concur y_k$).
-L'auteur de $y_k$ est soit reconnu mal-intentionné en $x_k$ ou est l'auteur de $x_k$.
+L'auteur de $y_k$ est soit reconnu malintentionné en $x_k$ ou est l'auteur de $x_k$.
 Dans le dernier cas, $z_k$ est non-linéaire à $x_k$.
 
 $x_0$ est concurrente à $z_1$.
 D'après la \autoref{th:concur-triad}, $z_1$ est concurrente à $x_1$ ($z_1 \concur x_1$).
 Nous déduisons par récurrence que $y_n$ est non-linéaire à $x_n$.
-$p_n$ est donc un pair mal-intentionné.
+$p_n$ est donc un pair malintentionné.
 Ce qui contredit une hypothèse initiale.
 
 %
@@ -1211,17 +1210,17 @@ Ce qui contredit une hypothèse initiale.
 Pour que $y_n$ ne puisse pas exister, il est nécessaire qu'une opération $x_n$ de $A$ dont l'auteur est $p_n$ existe et que $x_n$ ne puisse pas être visible à $y_n$.
 D'après le \autoref{th:future-concur}, si $x_n$ n'est pas visible à $y_n$, alors $x_n$ et $y_n$ sont forcément concurrentes (et donc non-linéaires dans notre cas).
 
-Montrons que si nous souhaitons que $y_k$ ($k > 1$) soit concurrente à une opération $x_k$ de $A$, alors pour tout $0 < j < k$, il doit exister une opération $x_j$ de $A$ visible ou égale à $x_k$ telle que $x_j$ soit non-linéaire à $y_j$ ou l'auteur de $y_j$ ($p_j$) soit reconnu mal-intentionné en $x_j$.
+Montrons que si nous souhaitons que $y_k$ ($k > 1$) soit concurrente à une opération $x_k$ de $A$, alors pour tout $0 < j < k$, il doit exister une opération $x_j$ de $A$ visible ou égale à $x_k$ telle que $x_j$ soit non-linéaire à $y_j$ ou l'auteur de $y_j$ ($p_j$) soit reconnu malintentionné en $x_j$.
 Soit $z$ l'opération de $Z$ immédiatement visible à $y_k$ ($z \idr y_k$).
-$x_k$ ne peut pas être visible à $y_k$ si et seulement si il existe une opération $x_l$ de $X$ visible ou égale à $x_k$ telle que l'auteur de $z$ est reconnu mal-intentionné en $x_l$ ou $z$ est non-linéaire à $x_l$.
+$x_k$ ne peut pas être visible à $y_k$ si et seulement si il existe une opération $x_l$ de $X$ visible ou égale à $x_k$ telle que l'auteur de $z$ est reconnu malintentionné en $x_l$ ou $z$ est non-linéaire à $x_l$.
 Si $x_l$ est non-linéaire à $z$, alors elle est également non-linéaire à $y_l$.
 Par construction, l'auteur de $z$ est l'un des pairs de l'énumération $p_1, \dotsc, p_{k-1}$.
-Pour que $y_k$ soit non-linéaire à une opération $x_k$ de $A$, il doit donc exister pour tout $0 < j < k$, une opération $x_j$ de $X$ visible à $x_k$ telle que $x_j$ soit non-linéaire à $y_j$ ou l'auteur de $y_j$ soit reconnu mal-intentionné en $x_j$.
+Pour que $y_k$ soit non-linéaire à une opération $x_k$ de $A$, il doit donc exister pour tout $0 < j < k$, une opération $x_j$ de $X$ visible à $x_k$ telle que $x_j$ soit non-linéaire à $y_j$ ou l'auteur de $y_j$ soit reconnu malintentionné en $x_j$.
 Pour que $x_1$ soit non-linéaire à $y_1$ il est nécessaire que $x_0$ soit visible ou égale à $x_1$.
 
 Par récurrence, nous générons un ensemble de châines de visibilité dont l'existence est nécessaire pour rejeter $Z$.
 Cet ensemble inclut la chaîne $X$.
-Pour s'en convaincre il suffit de supposer que l'opération de $Z$ qui est immédiatement visible à $y_n$ a pour auteur $p_{n-1}$ et de prendre $j = k-1$ à chaque étape de récurrence.
+Pour s'en convaincre, il suffit de supposer que l'opération de $Z$ qui est immédiatement visible à $y_n$ a pour auteur $p_{n-1}$ et de prendre $j = k-1$ à chaque étape de récurrence.
 L'existence de $X$ est donc nécessaire et suffisante pour rejeter $Z$.
 \end{proof}
 
@@ -1303,19 +1302,19 @@ L'existence de $X$ est donc nécessaire et suffisante pour rejeter $Z$.
 \end{tikzpicture}
 \caption{}\label{fig:vfjcs-two-malicious-2}
 \end{subfigure}
-\caption{Exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un pair honnête $p_A$, et de deux pairs mal-intentionnés $p_M$ et $p_G$.}\label{fig:vfjcs-two-malicious}
+\caption{Exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence d'un pair honnête $p_A$, et de deux pairs malintentionnés $p_M$ et $p_G$.}\label{fig:vfjcs-two-malicious}
 \end{figure}
 
-Le rejet des chaînes d'observation cumulée d'une énumération $P$ de pairs implique le rejet des chaînes d'observation cumulée des énumérations de pairs qui préfixent $P$.
-Par exemple, le rejet des chaînes d'observation cumulée de l'énumération $\tuple*{p_G, p_M, p_O}$, implique le rejet des chaînes d'observation cumulée des énumérations $\tuple*{p_G, p_M}$ et $\tuple*{p_G}$.
+Le rejet des chaînes d'observations cumulées d'une énumération $P$ de pairs implique le rejet des chaînes d'observations cumulées des énumérations de pairs qui préfixent $P$.
+Par exemple, le rejet des chaînes d'observations cumulées de l'énumération $\tuple*{p_G, p_M, p_O}$, implique le rejet des chaînes d'observations cumulées des énumérations $\tuple*{p_G, p_M}$ et $\tuple*{p_G}$.
 
-Il suffit donc de rejeter les chaînes d'observation cumulée de chaque permutation de l'ensemble des pairs mal-intentionnés pour les rejeter toutes.
-Pour un ensemble de deux pairs mal-intentionnés $p_G$ et $p_M$, il suffit de rejeter les chaînes d'observation cumulée de $\tuple*{p_G, p_M}$ et $\tuple*{p_M, p_G}$.
+Il suffit donc de rejeter les chaînes d'observations cumulées de chaque permutation de l'ensemble des pairs malintentionnés pour les rejeter toutes.
+Pour un ensemble de deux pairs malintentionnés $p_G$ et $p_M$, il suffit de rejeter les chaînes d'observations cumulées de $\tuple*{p_G, p_M}$ et $\tuple*{p_M, p_G}$.
 À partir de cette observation et de la \autoref{th:cumulated-obs-exclusion}, nous déduisons le \autoref{th:vfjc-stable}.
 
 Prenons pour exemple les exécutions abstraites de la \autoref{fig:vfjcs-two-malicious}.
-L'ensemble des pairs de ces exécutions abstraites est composé du pair honnête $p_A$ ($\trm{Honest} \defeq \set*{p_A}$) et des pairs mal-intentionnés $p_G$ et $p_M$ ($\trm{Malicious} \defeq \set*{p_G, p_M}$).
-Le produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes correspond à l'ensemble d'énumérations $\trm{Perm}(\trm{Malicious}) \times \trm{Honest} = \set{\tuple*{p_G, p_M, p_A}, \tuple*{p_M, p_G, p_A}}$.
+L'ensemble des pairs de ces exécutions abstraites est composé du pair honnête $p_A$ ($\trm{Honest} \defeq \set*{p_A}$) et des pairs malintentionnés $p_G$ et $p_M$ ($\trm{Malicious} \defeq \set*{p_G, p_M}$).
+Le produit cartésien des permutations des pairs malintentionnés par les pairs honnêtes correspond à l'ensemble d'énumérations $\trm{Perm}(\trm{Malicious}) \times \trm{Honest} = \set{\tuple*{p_G, p_M, p_A}, \tuple*{p_M, p_G, p_A}}$.
 Une opération est vfjc-stable si et seulement si pour chaque énumérations de pairs elle est visible ou égale à la première opération d'une chaîne de visibilité liée à l'énumération considérée.
 Dans l''exécution abstraite de la \autoref{fig:vfjcs-two-malicious-1}, les chaînes de visibilité $g_1 \viseq m_1 \viseq a_2$ et $m_1 \viseq g_1 \viseq a_2$ sont respectivement liées aux énumérations $\tuple*{p_G, p_M, p_A}$ et $\tuple*{p_M, p_G, p_A}$.
 $a_1$ et $m_1$ sont visibles ou égales à la première opération de ces deux chaînes.
@@ -1362,14 +1361,14 @@ $m_2$ est donc vfjc-stable.
 %     \foreach \src/\dest in {a1/m1,m1/g1,a1/a2,m2/a2,g1/a3,a2/a3}
 %         \draw[pre] (\src) to (\dest);
 % \end{tikzpicture}
-% \caption{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence de deux pairs mal-intentionnés $p_M$ et $p_G$ et d'un pair honnête $p_A$.
-% Le pair $p_M$ est reconnu mal-intentionné par $p_A$ et $p_G$.}\label{fig:vfjcs-evicted-peer}
+% \caption{Exemple d'exécutions abstraites avec des opérations vfjc-stables (vfjcs) en présence de deux pairs malintentionnés $p_M$ et $p_G$ et d'un pair honnête $p_A$.
+% Le pair $p_M$ est reconnu malintentionné par $p_A$ et $p_G$.}\label{fig:vfjcs-evicted-peer}
 % \end{figure}
 
 \begin{theorem}[Stabilité~\acs{VFJC}]\label{th:vfjc-stable}
-Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$, une opération $x_0$ est vfjc-stable si et seulement si les pairs honnêtes observent $x_0$ et pour chaque énumération de pairs $\tuple*{p_1, \dotsc, p_n}$ issue du produit cartésien des permutations des pairs mal-intentionnés par les pairs honnêtes, il existe une chaîne de visibilité $x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$ et le $i$-ème pair de l'énumération est lié à la $i$-ème opération de l'énumération par l'une des relations suivantes~: \begin{inlinelist}
+Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$, une opération $x_0$ est vfjc-stable si et seulement si les pairs honnêtes observent $x_0$ et pour chaque énumération de pairs $\tuple*{p_1, \dotsc, p_n}$ issue du produit cartésien des permutations des pairs malintentionnés par les pairs honnêtes, il existe une chaîne de visibilité $x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$ et le $i$-ième pair de l'énumération est lié à la $i$-ième opération de l'énumération par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur de l'opération $p_i = \trm{peer}(x_i)$, ou
-    \item le pair est reconnu mal-intentionné en l'opération $p_i \in \trm{knownMalicious}_A(x_i)$
+    \item le pair est reconnu malintentionné en l'opération $p_i \in \trm{knownMalicious}_A(x_i)$
 \end{inlinelist}.
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{stable}_A^{\trm{VFJC}}(x_0) \iff \\
@@ -1380,18 +1379,18 @@ Dans une exécution abstraite qui respecte le modèle de cohérence $\trm{VFJC}$
 \end{theorem}
 
 \begin{proof}
-En l'absence de pairs mal-intentionnés, la démonstration est identique à celle du \autoref{th:cs}.
-
-En présence d'au moins un pair mal-intentionné, une opération $x_0$ devient stable si et seulement si les pairs honnêtes observent $x_0$ et ne peuvent plus accepter de chaîne d'observation cumulée d'une énumération de pairs mal-intentionnés dont la première opération est concurrente à $x_0$.
-À partir de la \autoref{th:cumulated-obs-exclusion}, nous déduisons qu'une opération $x_0$ devient stable si et seulement si pour chaque permutation de l'ensemble des pairs mal-intentionnés et pour chaque pair honnête, le pair honnête observe une chaîne de visibilité liée à la permutation de pairs telle que $x_0$ est visible ou égale à la première opération de cette chaîne.
+En l'absence de pairs malintentionnés, la démonstration est identique à celle du \autoref{th:cs}.
+%
+En présence d'au moins un pair malintentionné, une opération $x_0$ devient stable si et seulement si les pairs honnêtes observent $x_0$ et ne peuvent plus accepter de chaîne d'observations cumulées d'une énumération de pairs malintentionnés dont la première opération est concurrente à $x_0$.
+À partir de la \autoref{th:cumulated-obs-exclusion}, nous déduisons qu'une opération $x_0$ devient stable si et seulement si pour chaque permutation de l'ensemble des pairs malintentionnés et pour chaque pair honnête, le pair honnête observe une chaîne de visibilité liée à la permutation de pairs telle que $x_0$ est visible ou égale à la première opération de cette chaîne.
 Dans le théorème, l'observation du pair honnête est matérialisée dans la chaîne sous la forme d'une opération.
-C'est pourquoi nous considérons des chaînes liées aux énumérations issues du produit cartésien de l'ensemble des permutations de l'ensemble des pairs mal-intentionnés par l'ensemble des pairs honnêtes.
+C'est pourquoi nous considérons des chaînes liées aux énumérations issues du produit cartésien de l'ensemble des permutations de l'ensemble des pairs malintentionnés par l'ensemble des pairs honnêtes.
 \end{proof}
 
 
-%\begin{definition}[Pairs mal-intentionnés évincés]\label{def:evicted-peers}
-%Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{VFJC}, un pair mal-intentionné est évincé de $A$ si et seulement si il n'existe pas une extension qui respecte le modèle de cohérence \ac{VFJC} et qui inclut une opération de ce pair absente de $A$.
-%$\trm{Evicted}_A$ et $\overline{\trm{Evicted}}_A$ dénotent respectivement l'ensemble des pairs mal-intentionnés évincés et l'ensemble des pairs mal-intentionnés non-évincés.
+%\begin{definition}[Pairs malintentionnés évincés]\label{def:evicted-peers}
+%Dans une exécution abstraite $A$ qui respecte le modèle de cohérence \ac{VFJC}, un pair malintentionné est évincé de $A$ si et seulement si il n'existe pas une extension qui respecte le modèle de cohérence \ac{VFJC} et qui inclut une opération de ce pair absente de $A$.
+%$\trm{Evicted}_A$ et $\overline{\trm{Evicted}}_A$ dénotent respectivement l'ensemble des pairs malintentionnés évincés et l'ensemble des pairs malintentionnés non-évincés.
 %\begin{align*}
 %\trm{Evicted}_A &\defeq \set*{ p \notin \trm{Honest} \given \forall A' \sqsupset_{\trm{VFJC}} A \:\forall x \in A' \sminus A \qsep \trm{peer}(x) \neq p}\\
 %\overline{\trm{Evicted}}_A &\defeq \trm{Peers} \sminus \trm{Honest} \sminus \trm{Evicted}_A
@@ -1405,13 +1404,13 @@ Le modèle de cohérence \ac{VFJC} est stabilisable.
 
 \begin{proof}
 Le modèle de cohérence \ac{VFJC} borne le nombre d'embranchements que les pairs honnêtes peuvent accepter~\autocite{mahajan_2011_cac}.
-Un pair mal-intentionné ne peut donc pas exécuter une infinité d'opération concurrente à toute opération $x$.
+Un pair malintentionné ne peut donc pas exécuter une infinité d'opération concurrente à toute opération $x$.
 Le modèle de cohérence \ac{VFJC} permet la jonction des embranchements.
 Dès lors qu'un pair honnête observe une opération, tout pair honnête peut l'observer au moins de manière indirect.
 Toute opération $x$ est donc à terme visible à toute opération future.
 \end{proof}
 
-Le modèle de cohérence \ac{VFJC} est stabilisable (\autoref{th:stabilizable-vfjc}) et tolère la présence de pairs mal-intentionnés.
+Le modèle de cohérence \ac{VFJC} est stabilisable (\autoref{th:stabilizable-vfjc}) et tolère la présence de pairs malintentionnés.
 Cependant, la stabilisation d'une opération requiert le concours de l'ensemble des pairs qui ne sont pas évincés.
 Dans les deux sous-sections suivantes nous définissons des modèles de cohérence qui prennent en compte la nature dynamique des groupes de pairs.
 
@@ -1683,20 +1682,20 @@ Pour chaque opération, il existe donc une exécution abstraite où l'opération
 Le modèle de cohérence causale dynamique est donc stabilisable.
 \end{proof}
 
-Pour être réaliste nous devrions également prendre en compte les pairs qui quittent une collaboration.
+Pour être réaliste, nous devrions également prendre en compte les pairs qui quittent une collaboration.
 Par simplicité nous ne les prenons pas un compte.
 Les pairs pourraient quitter une collaboration à l'aide d'une opération dédiée à cet effet.
 Le pair serait alors évincé.
 
 Le modèle de cohérence causale dynamique permet à des opérations de devenir stable (\autoref{th:stabilizable-dyn-causal}) dans un contexte où le groupe de pairs évolue au cours de la collaboration.
-Similairement au modèle de cohérence causale, il ne tolère pas la présence de pairs mal-intentionnés.
+Similairement au modèle de cohérence causale, il ne tolère pas la présence de pairs malintentionnés.
 Dans la section suivante nous proposons de définir un nouveau modèle de cohérence basé sur les modèles de cohérence \acs{VFJC} et \emph{Invitation} pour définir une stabilité adaptée aux groupes dynamiques.
 
 
 \subsection{Stabilité~\acl{VFJC} dynamique}\label{subsec:dvfjcs}
 
-Le modèle de cohérence \ac{VFJC} tolère la présence de pairs mal-intentionnés.
-Il inclut toutefois des contraintes qui permettent à terme d'évincer les pairs reconnus mal-intentionnés.
+Le modèle de cohérence \ac{VFJC} tolère la présence de pairs malintentionnés.
+Il inclut toutefois des contraintes qui permettent à terme d'évincer les pairs reconnus malintentionnés.
 Cette caractéristique nous a permis de définir la stabilité \ac{VFJC}.
 Tous les pairs, à l'exception des pairs évincés à terme, doivent participer pour qu'une opération devienne stable.
 C'est une condition réaliste lorsque le groupe de pairs est de taille raisonnable et que la composition du groupe est connue à l'initialisation de la collaboration.
@@ -1705,13 +1704,13 @@ Le modèle de cohérence causale dynamique nous a permis de stabiliser une opér
 Il exige qu'un pair soit invité avant qu'il puisse exécuter des opérations.
 L'invitation d'un pair est rendue explicite à l'aide d'une opération qui est visible à toutes les opérations du pair.
 Il est ainsi possible de définir une stabilité adaptée aux groupes dynamiques.
-Dans cette section nous proposons un modèle de cohérence qui respose sur les modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permet de définir une stabilité adaptée aux groupes dynamiques en présence de pairs mal-intentionnés.
+Dans cette section nous proposons un modèle de cohérence qui repose sur les modelés de cohérence \acs{VFJC} et \emph{Invitation} qui nous permet de définir une stabilité adaptée aux groupes dynamiques en présence de pairs malintentionnés.
 
 La conjonction des modèles de cohérence \acs{VFJC} et \emph{Invitation} ne permet pas d'aboutir à une telle définition.
-En effet, si nous considérons un ensemble (dénombrable) infini de pairs composé d'au moins un pair mal-intentionné, un pair mal-intentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
+En effet, si nous considérons un ensemble (dénombrable) infini de pairs composé d'au moins un pair malintentionné, un pair malintentionné peut toujours inviter un autre pair dans une opération concurrente à une opération $x$.
 Toute opération $x$ ne peut donc pas devenir stable sans la participation de l'ensemble des pairs.
-Dans la \autoref{fig:vfjc-invitation-issue}, le pair mal-intentionné $p_M$ invite un pair $p_G$ dans un embranchement dont il est à l'origine.
-$p_A$ reconnaît que $p_M$ est mal-intentionné, mais il présume honnête le pair $p_G$.
+Dans la \autoref{fig:vfjc-invitation-issue}, le pair malintentionné $p_M$ invite un pair $p_G$ dans un embranchement dont il est à l'origine.
+$p_A$ reconnaît que $p_M$ est malintentionné, mais il présume honnête le pair $p_G$.
 $p_A$ est forcé d'accepter l'opération linéaire $g_1$.
 
 \begin{figure}[htb]
@@ -1758,7 +1757,7 @@ $p_A$ est forcé d'accepter l'opération linéaire $g_1$.
     % Prefix
     \node[draw, dashed, label=below:$A_1$, fit=(G) (a3) (la1)] {};
 \end{tikzpicture}
-\caption[Exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation}]{Exemple  d'une exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation} dans laquelle le pair mal-intentionné $p_M$ invite le pair $p_G$ dans un nouvel embranchement.}\label{fig:vfjc-invitation-issue}
+\caption[Exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation}]{Exemple  d'une exécution abstraite qui respecte les modèles de cohérence \emph{VFJC} et \emph{Invitation} dans laquelle le pair malintentionné $p_M$ invite le pair $p_G$ dans un nouvel embranchement.}\label{fig:vfjc-invitation-issue}
 \end{figure}
 
 Pour pouvoir définir une stabilité adaptée à des groupes dynamiques, il nous faut rejeter ce type d'embranchements.
@@ -1773,7 +1772,7 @@ Pour ce faire, nous pourrions rejeter les relations de visibilité immédiate en
 La \autoref{def:known-invited} définit formellement ce que nous nommons \emph{invité connu}.
 Le \autoref{tab:invited} indique les invités connus de chaque opération de l'exécution abstraite de la \autoref{fig:vfjc-invitation-issue}.
 Dans la \autoref{fig:vfjc-invitation-issue}, $a_3$ et $g_1$ sont immédiatement visibles à $a_4$.
-le pair $p_A$ est un invité connu en $g_1$.
+Le pair $p_A$ est un invité connu en $g_1$.
 En revanche, $p_G$ n'est pas un invité connu en $a_3$.
 La jonction de ces deux branches n'est donc pas autorisée.
 
@@ -1805,15 +1804,15 @@ $\trm{invited}_A(y)$ désigne l'ensemble des pairs invités connus en $y$.
 
 Contraindre chaque pair à observer l'invitation d'un nouveau pair avant d'observer les opérations de ce nouveau pair est un peu trop strict.
 En effet, des exécutions abstraites qui pourraient être stabilisables sont rejetées.
-En réalité, nous n'avons pas besoin que chaque pair observe l'invitation, il suffit d'un seul pair qui n'est pas reconnu mal-intentionné.
+En réalité, nous n'avons pas besoin que chaque pair observe l'invitation, il suffit d'un seul pair qui n'est pas reconnu malintentionné.
 Lorsqu'un pair joint deux branches, il s'assure ainsi que pour chaque opération qui est immédiatement visible à la jonction, l'invitation de l'auteur de l'opération est observée par un invité connu dans chaque branche jointe.
-Cet observateur ne doit pas être reconnu mal-intentionné à la jonction.
+Cet observateur ne doit pas être reconnu malintentionné à la jonction.
 La \autoref{def:invitation-obs} définit ce que nous nommons observateur connu d'une invitation d'un pair en une opération.
 Le \autoref{tab:invited} indique les observateurs connus de l'invitation du pair $p_G$ en chaque opération de l'exécution abstraite de la \autoref{fig:vfjc-invitation-issue}.
 Dans la \autoref{fig:vfjc-invitation-issue}, l'invitation de $p_G$ est observée par $p_G$ et $p_M$ avant l'exécution de $a_1$.
 $p_G$ n'est pas un invité connu en $a_3$.
 $p_M$ est un invité connu en $a_3$.
-Cependant, il est reconnu mal-intentionné en $a_4$.
+Cependant, il est reconnu malintentionné en $a_4$.
 La jonction n'est donc pas autorisée.
 Nous définissons ainsi le modèle de cohérence \ac{VFJC} dynamique dans la \autoref{def:svfjc-consistency}.
 
@@ -1841,7 +1840,7 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence \emph{D
   %\begin{equation*}
   %    x \idr z \land y \idr z \implies \trm{peer}(x) \in \trm{knownInvited}_A(y)
   %\end{equation*}
-  L'invitation de l'auteur d'une opération $x$ qui est immédiatement visible à une opération $z$ doit être observée par au moins un invité connu qui n'est pas reconnu mal-intentionné en $z$ dans chaque opération $y$ qui est immédiatement visible à $z$.
+  L'invitation de l'auteur d'une opération $x$ qui est immédiatement visible à une opération $z$ doit être observée par au moins un invité connu qui n'est pas reconnu malintentionné en $z$ dans chaque opération $y$ qui est immédiatement visible à $z$.
   \begin{equation*}
       x \idr z \land y \idr z \implies \exists p \in \trm{invited}_A(y) \sminus \trm{knownMalicious}_A(z) \qsep p \in \trm{invitationObs}_A(\trm{z, peer}(x))
   \end{equation*}
@@ -1852,27 +1851,27 @@ Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence \emph{D
 \end{definition}
 
 Lorsqu'un pair est invité dans un embranchement rejeté par les autres pairs, il est exclu de manière permanente par les autres pairs.
-Pour respecter notre définition initiale de la stabilité au sein d'une exécution abstraite, nous considérons un tel pair comme mal-intentionné.
+Pour respecter notre définition initiale de la stabilité au sein d'une exécution abstraite, nous considérons un tel pair comme malintentionné.
 Un collaborateur ou une collaboratrice attaché·e à un tel pair pourrait détecter cette exclusion.
 Il ou elle pourrait donc demander à un autre pair de la collaboration de l'inviter pour obtenir une nouvelle identité (un nouveau pair).
 
 Les raisonnements élaborés dans la \autoref{subsec:vfjcs} peuvent être en partie repris.
 Au lieu de considérer l'ensemble des pairs, nous nous restreignons aux pairs invités.
-Il suffit donc que chaque pair honnête invité observe pour chaque permutation de pairs mal-intentionnés invités, une chaîne de visibilité correspondante pour que les opérations qui sont visibles ou sont égales à la première opération de chacune de ces chaînes soient stables.
+Il suffit donc que chaque pair honnête invité observe pour chaque permutation de pairs malintentionnés invités, une chaîne de visibilité correspondante pour que les opérations qui sont visibles ou sont égales à la première opération de chacune de ces chaînes soient stables.
 
 
 Cependant, il est nécessaire de prendre en compte les contraintes introduites par les invitations.
 L'invitation d'un pair est visible à toutes les opérations de ce pair.
 Si un pair est invité après une opération $x$, alors il ne peut pas exécuter d'opération concurrente à $x$.
 Pour faciliter l'expression de la stabilité, la \autoref{def:invited} introduit l'ensemble des pairs invités au sein d'une exécution abstraite et des sous-ensembles correspondant.
-La \autoref{th:cumulated-obs-exclusion-dyn} indique els conditions à rencontrer pour exclure les chaînes d'observation cumulée d'une énumération de pairs mal-intentionnés.
+La \autoref{th:cumulated-obs-exclusion-dyn} indique les conditions à rencontrer pour exclure les chaînes d'observations cumulées d'une énumération de pairs malintentionnés.
 
 \clearpage
 
 \begin{definition}[Invités]\label{def:invited}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{Invitation}.
 Nous notons $\trm{Invited}_A$, l'ensemble des pairs invités en $A$.
-$\trm{InvitedHonest}_A$ et $\trm{InvitedMalicious}_A$ sont respectivement les pairs honnêtes invités en $A$ et les pairs mal-intentionnés invités en $A$.
+$\trm{InvitedHonest}_A$ et $\trm{InvitedMalicious}_A$ sont respectivement les pairs honnêtes invités en $A$ et les pairs malintentionnés invités en $A$.
 \begin{align*}
 &\trm{Invited}_A \defeq \set*{p \in \trm{Peers} \given \exists x \in A \qsep \trm{call}(x) = \trm{invite}(p)}\\
 &\trm{InvitedHonest}_A \defeq \trm{Invited}_A \cap \trm{Honest}\\
@@ -1884,13 +1883,13 @@ $\trm{InvitedHonest}_A$ et $\trm{InvitedMalicious}_A$ sont respectivement les pa
 \begin{proposition}\label{th:cumulated-obs-exclusion-dyn}
 Soit une exécution abstraite $A$ et une extension $A'$ de $A$ telles que $A$ et $A'$ respectent le modèle de cohérence \emph{DynVFJC}.
 Soit une opération $x_0$ de $A$.
-Soit une énumération de pairs $P \defeq \tuple*{p_1, \dotsc ,p_n}$ telle que $p_1, \dotsc, p_{n-1}$ sont des pairs mal-intentionnés, et $p_n$ est un pair honnête.
-$A'$ ne peut pas contenir une chaîne d'observation cumulée $Z$ de $P$ dont la première opération est concurrente à $x_0$ si et seulement si $A$ contient une chaîne de visibilité $X \defeq x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$, pour les $k$ premières opérations ($0 \leq k \leq n$) le $i$-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou est reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $k \neq n$, alors la $(k+1)$-ème opération de la chaîne invite le $(k+1)$-ème pair de l'énumération.
+Soit une énumération de pairs $P \defeq \tuple*{p_1, \dotsc ,p_n}$ telle que $p_1, \dotsc, p_{n-1}$ sont des pairs malintentionnés, et $p_n$ est un pair honnête.
+$A'$ ne peut pas contenir une chaîne d'observations cumulées $Z$ de $P$ dont la première opération est concurrente à $x_0$ si et seulement si $A$ contient une chaîne de visibilité $X \defeq x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$, pour les $k$ premières opérations ($0 \leq k \leq n$) le $i$-ième pair de l'énumération est l'auteur de la $i$-ième opération de la chaîne ou est reconnu malintentionné dans la $i$-ième opération de la chaîne, et si $k \neq n$, alors la $(k+1)$-ième opération de la chaîne invite le $(k+1)$-ième pair de l'énumération.
 \end{proposition}
 
 \begin{proof}
 Toutes les opérations de $X$ sont des opérations de $A$.
-Les pairs reconnus mal-intentionnés dans une opération de $X$ et les auteurs des opérations de $X$ sont donc des pairs invités de $A$ ($\forall x \in X \qsep \trm{peer}(x) \in \trm{Invited}_A \land \trm{knownMalicious}_A(x) \subset \trm{Invited}_A$).
+Les pairs reconnus malintentionnés dans une opération de $X$ et les auteurs des opérations de $X$ sont donc des pairs invités de $A$ ($\forall x \in X \qsep \trm{peer}(x) \in \trm{Invited}_A \land \trm{knownMalicious}_A(x) \subset \trm{Invited}_A$).
 
 Si il ne peut exister une chaîne $X$ avec $k \neq n$, alors la démonstration est identique à celle de la \autoref{th:cumulated-obs-exclusion}.
 
@@ -1909,16 +1908,16 @@ Si cette relation de visibilité ne peut exister sans violer une autre propriét
 À partir de la démonstration du \autoref{th:cumulated-obs-exclusion}, nous déduisons que la chaîne $X$ est nécessaire pour rejeter $Z$.
 \end{proof}
 
-Le rejet des chaînes d'observation cumulée d'une énumération $P$ de pairs n'implique pas forcément le rejet des chaînes d'observation cumulée des énumérations de pairs qui préfixent $P$.
-En effet, si la $k+1$-ème opération invite le $k+1$-ème pair (quand $k \neq n$), alors le pair honnête $p_n$ n'est pas tenu d'observer la chaîne $x_1 \viseq \dotsb \viseq x_k$ qui permet l'exclusion des chaînes d'observation cumulée de l'énumération de pairs $p_1, \dotsc, p_k, p_n$.
+Le rejet des chaînes d'observations cumulées d'une énumération $P$ de pairs n'implique pas forcément le rejet des chaînes d'observations cumulées des énumérations de pairs qui préfixent $P$.
+En effet, si la $k+1$-ième opération invite le $k+1$-ième pair (quand $k \neq n$), alors le pair honnête $p_n$ n'est pas tenu d'observer la chaîne $x_1 \viseq \dotsb \viseq x_k$ qui permet l'exclusion des chaînes d'observations cumulées de l'énumération de pairs $p_1, \dotsc, p_k, p_n$.
 
-Une opération $x_0$ est stable si et seulement si chaque pair honnête invité observe $x_0$ et pour toute énumération de pairs mal-intentionnés invités distincts le pair honnête considéré ne peut plus accepter une chaîne d'observation cumulée de l'énumération de pairs considérée.
+Une opération $x_0$ est stable si et seulement si chaque pair honnête invité observe $x_0$ et pour toute énumération de pairs malintentionnés invités distincts le pair honnête considéré ne peut plus accepter une chaîne d'observations cumulées de l'énumération de pairs considérée.
 Nous aboutissons ainsi au \autoref{th:svfjc-stability}.
 
 
 \begin{theorem}[Stabilité \emph{DynVFJC}]\label{th:svfjc-stability}
 Soit une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{DynVFJC}.
-Une opération $x_0$ est stable si et seulement si les observateurs honnêtes requis observent $x_0$ et pour chaque énumération de pairs $\tuple*{p_1, \dotsc, p_n}$ issue du produit cartésien des énumérations des pairs mal-intentionnés invités distincts par les pairs honnêtes invités, il existe une chaîne de visibilité $x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$, pour les $k$ premières opérations ($k \geq 0$) le $i$-ème pair de l'énumération est l'auteur de la i-ème opération de la chaîne ou est reconnu mal-intentionné dans la i-ème opération de la chaîne, et si $k \neq n$, alors $x_{k+1}$ invite $p_{k+1}$.
+Une opération $x_0$ est stable si et seulement si les observateurs honnêtes requis observent $x_0$ et pour chaque énumération de pairs $\tuple*{p_1, \dotsc, p_n}$ issue du produit cartésien des énumérations des pairs malintentionnés invités distincts par les pairs honnêtes invités, il existe une chaîne de visibilité $x_1 \viseq \dotsb \viseq x_n$ telle que $x_0 \viseq x_1$, pour les $k$ premières opérations ($k \geq 0$) le $i$-ième pair de l'énumération est l'auteur de la $i$-ième opération de la chaîne ou est reconnu malintentionné dans la $i$-ième opération de la chaîne, et si $k \neq n$, alors $x_{k+1}$ invite $p_{k+1}$.
 % et $x_k$ est visible ou égale à une opération $y$ qui invite $p_n$ ou est exécutée par $p_n$.
 \begin{equation*}\begin{split}
 \MoveEqLeft\trm{stable}_A^{\trm{DynVFJC}}(x_0) \iff\\
@@ -1936,12 +1935,12 @@ Une opération $x_0$ est stable si et seulement si les observateurs honnêtes re
 
 
 \begin{proof}
-En l'absence de pairs mal-intentionnés, la démonstration est identique à celle du \autoref{th:dyn-cs}.
+En l'absence de pairs malintentionnés, la démonstration est identique à celle du \autoref{th:dyn-cs}.
 
-En présence d'au moins un pair mal-intentionné, une opération $x_0$ devient stable si et seulement si les observateurs honnêtes requis de $x_0$ observent $x_0$ et ne peuvent plus accepter de chaîne d'observation cumulée d'une énumération de pairs mal-intentionnés dont la première opération est concurrente à $x_0$.
-À partir de la \autoref{th:cumulated-obs-exclusion-dyn}, nous déduisons qu'une opération $x_0$ devient stable si et seulement si pour chaque énumération de pairs mal-intentionnés invités distincts et pour chaque pair honnête invité, le pair honnête observe une chaîne de visibilité liée à l'énumération de pairs telle que $x_0$ est visible ou égale à la première opération de cette chaîne.
+En présence d'au moins un pair malintentionné, une opération $x_0$ devient stable si et seulement si les observateurs honnêtes requis de $x_0$ observent $x_0$ et ne peuvent plus accepter de chaînes d'observations cumulées d'une énumération de pairs malintentionnés dont la première opération est concurrente à $x_0$.
+À partir de la \autoref{th:cumulated-obs-exclusion-dyn}, nous déduisons qu'une opération $x_0$ devient stable si et seulement si pour chaque énumération de pairs malintentionnés invités distincts et pour chaque pair honnête invité, le pair honnête observe une chaîne de visibilité liée à l'énumération de pairs telle que $x_0$ est visible ou égale à la première opération de cette chaîne.
 Dans le théorème, l'observation du pair honnête est matérialisée dans la chaîne sous la forme d'une opération.
-C'est pourquoi nous considérons des chaînes liées aux énumérations issues du produit cartésien de l'ensemble des énumérations de pairs mal-intentionnés invités distincts par l'ensemble des pairs honnêtes invités.
+C'est pourquoi nous considérons des chaînes liées aux énumérations issues du produit cartésien de l'ensemble des énumérations de pairs malintentionnés invités distincts par l'ensemble des pairs honnêtes invités.
 \end{proof}
 
 \begin{figure}[htb]
@@ -1997,8 +1996,8 @@ C'est pourquoi nous considérons des chaînes liées aux énumérations issues d
 \end{figure}
 
 Prenons pour exemple l'exécution abstraite $A$ de la \autoref{fig:dvfjcs-example}.
-L'ensemble des pairs invités est composé de deux pairs mal-intentionnés $p_G$ et $p_M$ ($\trm{InvitedMalicious}_A = \set*{p_G, p_M}$), ainsi que de deux pairs honnêtes $p_A$ et $p_B$ ($\trm{InvitedHonest}_A = \set*{p_A, p_B}$).
-Le produit cartésien des énumérations des pairs mal-intentionnés invités distincts par les pairs honnêtes invités correspond à l'ensemble des énumérations suivantes~: $\tuple*{p_G, p_A}$, $\tuple*{p_G, p_B}$, $\tuple*{p_M, p_A}$, $\tuple*{p_M, p_B}$, $\tuple*{p_G, p_M, p_A}$, $\tuple*{p_G, p_M, p_B}$, $\tuple*{p_M, p_G, p_A}$, et $\tuple*{p_M, p_G, p_B}$.
+L'ensemble des pairs invités est composé de deux pairs malintentionnés $p_G$ et $p_M$ ($\trm{InvitedMalicious}_A = \set*{p_G, p_M}$), ainsi que de deux pairs honnêtes $p_A$ et $p_B$ ($\trm{InvitedHonest}_A = \set*{p_A, p_B}$).
+Le produit cartésien des énumérations des pairs malintentionnés invités distincts par les pairs honnêtes invités correspond à l'ensemble des énumérations suivantes~: $\tuple*{p_G, p_A}$, $\tuple*{p_G, p_B}$, $\tuple*{p_M, p_A}$, $\tuple*{p_M, p_B}$, $\tuple*{p_G, p_M, p_A}$, $\tuple*{p_G, p_M, p_B}$, $\tuple*{p_M, p_G, p_A}$, et $\tuple*{p_M, p_G, p_B}$.
 Une opération est stable si et seulement si pour chaque énumération de pairs elle est visible ou égale à la première opération d'une chaîne de visibilité liée à l'énumération considérée.
 La chaîne de visibilité $a_4 \viseq a_4$ est à la fois liée à l'énumération $\tuple*{p_G, p_A}$, et $\tuple*{p_G, p_B}$ étant donné que $a_4$ invite $p_G$.
 La chaîne de visibilité $m_1 \viseq a_4$ est liée à l'énumération de pairs $\tuple*{p_M, p_A}$.
@@ -2010,7 +2009,7 @@ $a_1$, $a_2$, $a_3$, et $m_1$ sont visibles ou égales à $m_1$ et $a_4$.
 Elles sont également observées par les pairs honnêtes invités.
 Ces quatres opérations sont donc stables.
 
-% En principe un pair mal-intentionné peut exécuter une seconde opération d'invitation initiale.
+% En principe un pair malintentionné peut exécuter une seconde opération d'invitation initiale.
 % Nous considérons qu'il initie alors une autre collaboration.
 % En pratique nous pouvons garantir qu'un contenu répliqué est crypto-graphiquement lié à la première opération de la collaboration.
 % L'adresse unique du contenu répliqué pourrait par exemple correspondre au \emph{hash} de la première opération.
@@ -2027,7 +2026,7 @@ D'après le \autoref{th:stabilizable-dyn-vfjc} toute opération d'une exécution
 Donc toute opération d'une exécution abstraite qui respecte le modèle de cohérence \emph{DynVFJC} est à terme stable.
 \end{proof}
 
-La stabilité \acl{VFJC} dynamique identifie des opérations stables malgré la présence de pairs mal-intentionnés et l'évolution de la composition du groupe de pairs.
+La stabilité \acl{VFJC} dynamique identifie des opérations stables malgré la présence de pairs malintentionnés et l'évolution de la composition du groupe de pairs.
 Des opérations peuvent devenir stables alors que de nouveaux pairs sont invités au fur et à mesure de l'évolution de la collaboration.
 Nous pensons que le concept de stabilité peut trouver de nombreuses applications.
 %Elle peut par exemple être la base d'un mécanisme de consensus asynchrone.
@@ -2065,7 +2064,7 @@ Dans la section \autoref{sec:pruned-log-protocol} nous explorons l'une de ses ap
 %Dans cette section nous nous basons sur ce principe pour tronquer une partie de ce préfixe.
 %Nous parlons ainsi de journal tronqué.
 %
-%Notre contexte exige de prendre en compte la présence de pairs mal-intentionnées dans le groupe de pair, ainsi que l'évolution de la composition du groupe.
+%Notre contexte exige de prendre en compte la présence de pairs malintentionnées dans le groupe de pair, ainsi que l'évolution de la composition du groupe.
 %Nous nous intéressons donc à des journaux qui respectent le modèle de cohérence \acl{VFJC} Dynamique que nous avons défini dans la \autoref{subsec:dvfjcs}.
 %
 %\subsection{Cohérence des journaux tronqués}
@@ -2135,13 +2134,13 @@ Dans la section \autoref{sec:pruned-log-protocol} nous explorons l'une de ses ap
 %Nous augmentons toute opération intégrée $x$ d'un journal $J$ par~:
 %\begin{itemize}
 %\item les invités connus en $x$ $\trm{knownInvited}(x)$
-%\item les pairs reconnus mal-intentionnés en $x$ $\trm{knownMalicious}(x)$
+%\item les pairs reconnus malintentionnés en $x$ $\trm{knownMalicious}(x)$
 %\end{itemize}
 %
 %\begin{definition}[Journal augmenté bien-formé]
 %Un journal (augmenté) $J$ est bien-formé si et seulement si~:
 %\begin{description}
-%\item[pairs reconnus mal-intentionnés]
+%\item[pairs reconnus malintentionnés]
 %\begin{equation*}
 %    \forall y \in A \qsep \trm{knownMalicious}(y) =
 %    \left(\bigcup \set*{\trm{knownMalicious}(x) \given x \idr y}\right)
@@ -2315,7 +2314,7 @@ Un message $m$ est identifié par un n-uplet dénoté $\trm{id}(m)$ composé de 
 \end{equation}
 
 Le \emph{hash} permet de distinguer deux messages transmis par le même pair avec le même numéro, mais qui divergent par leur contenu ou leurs dépendances.
-Seuls les pairs mal-intentionnés sont à l'origine de tels messages.
+Seuls les pairs malintentionnés sont à l'origine de tels messages.
 Le \emph{hash} d'un message est calculé sur l'ensemble du message et de ses méta-données, à l'exception de sa signature.
 Nous supposons que la \emph{fonction de hash} utilisée résiste aux \emph{collisions}\footnote{L'adversaire n'a pas les ressources nécessaires pour produire deux messages avec le même \emph{hash}.} et aux \emph{préimages}\footnote{L'adversaire n'a pas les ressources nécessaires pour produire un message avec un \emph{hash} donné.}.
 
@@ -2347,7 +2346,7 @@ Nous représentons un journal à l'aide d'un graphe dirigé et linéarisé.
 Un sommet correspond à un message et un arc dirigé indique que sa source est une dépendance déclarée de sa destination.
 Par exemple, dans le journal de la \autoref{fig:log-example-2}, $a_1$ est une dépendance déclarée de $a_2$.
 Les messages sont horizontalement arrangés sur une ligne.
-Cette arrangement traduit leur ordre d'ajout dans le journal.
+Cet arrangement traduit leur ordre d'ajout dans le journal.
 Si un message est ajouté avant un autre message, alors le premier se trouve à gauche du second.
 Par exemple, le message $a_1$ est ajouté avant le message $a_2$.
 Le \autoref{tab:msg-metadata} indique le contenu et certaines méta-données des message du  la \autoref{fig:log-example-2}.
@@ -2427,10 +2426,10 @@ Initialement cet ensemble est vide.
 
 La restriction du graphe aux messages d'un pair honnête forme un ordre total strict, une \enquote{ligne}.
 Nous parlons ainsi de messages \emph{linéaires}.
-Les messages d'un pair mal-intentionné peuvent former un arbre.
+Les messages d'un pair malintentionné peuvent former un arbre.
 Deux messages au sein d'\emph{embranchements} distincts sont \emph{non-linéaires}.
-Lorsqu'un journal $J$ inclut des messages non-linéaires pour un pair $p$, nous disons que $p$ est \emph{reconnu mal-intentionné} dans $J$.
-$\trm{knownMalicious}_J$ est l'ensemble des pairs reconnus mal-intentionnés dans $J$.
+Lorsqu'un journal $J$ inclut des messages non-linéaires pour un pair $p$, nous disons que $p$ est \emph{reconnu malintentionné} dans $J$.
+$\trm{knownMalicious}_J$ est l'ensemble des pairs reconnus malintentionnés dans $J$.
 A chaque fois qu'un message non-linéaire est ajouté au journal, l'ensemble est mis à jour.
 Le prédicat $\trm{linear}_J(m)$ nous informe si le message est linéaire avec les messages déjà présents dans $J$.
 Le calcul du prédicat $\trm{linear}_J(m)$ est détaillé ci-après.
@@ -2445,7 +2444,7 @@ $\trm{knownMalicious}_J$ est initialisé avec un ensemble vide.
 
 Nous notons $\trm{vv}_J$ un vecteur de versions~\autocite{parker_1983_versionvector,mattern_1988_timevector} qui associe à un pair le numéro du dernier message dont il est l'auteur qui a été ajouté dans $J$.
 Le numéro associé à un pair est initialisé à $0$ lorsque son invitation est ajouté dans le journal.
-Lorsqu'un pair est reconnu mal-intentionné son association est supprimée du vecteur de versions.
+Lorsqu'un pair est reconnu malintentionné son association est supprimée du vecteur de versions.
 $\trm{vv}_J(p)$ retourne le numéro associé au pair $p$.
 Le vecteur de versions est initialement vide.
 %
@@ -2475,14 +2474,14 @@ Il est déduit des deux structures de données dépendantes précédentes.
 %    \end{dcases}
 %\end{equation*}
 
-Un message bien-formé $m$ est non-linéaire à un message d'un journal $J$ si et seulement si il créée un embranchement ou si son auteur est déjà reconnu mal-intentionné dans $J$.
+Un message bien-formé $m$ est non-linéaire à un message d'un journal $J$ si et seulement si il créée un embranchement ou si son auteur est déjà reconnu malintentionné dans $J$.
 % Un message bien-formé ne peut pas joindre des embranchements dont son auteur est à l'origine.
 % $m$ fait donc partie d'un embranchement.
 % Il est non-linéaire à chacun et est non-linéaire avec les messages des autres embranchements.
 %
 Un message bien-formé dépend d'une suite de messages du même auteur avec des numéros contigus.
 L'ajout du message $m$ dans $J$ créée donc un nouvel embranchement si et seulement si il existe un autre message dans le journal du même auteur avec le même numéro.
-Si l'auteur du message est déjà reconnu mal-intentionné, alors le message $m$ est forcément non-linéaire avec au moins un message du journal.
+Si l'auteur du message est déjà reconnu malintentionné, alors le message $m$ est forcément non-linéaire avec au moins un message du journal.
 Autrement, le message $m$ est non-linéaire si son numéro n'est pas contigu avec celui du précédent message du même pair.
 Nous pouvons ainsi préciser le prédicat $\trm{linear}_J(m)$.
 %
@@ -2739,9 +2738,9 @@ Ainsi nous devons vérifier si $m$ dépend d'une invitation seulement lorsque so
 %    \forall \tuple*{\trm{p}, \_, \_} \in \trm{deps}_m \qsep p, \trm{peer}_m \in \trm{knownInvited}_J
 %\end{equation*}
 
-Finalement, le pair s'assure que l'auteur du message $m$ et les auteurs des dépendances déclarées de $m$ ne sont pas reconnus mal-intentionnés dans le sous-journal qui contient uniquement $m$ et ses dépendances.
+Finalement, le pair s'assure que l'auteur du message $m$ et les auteurs des dépendances déclarées de $m$ ne sont pas reconnus malintentionnés dans le sous-journal qui contient uniquement $m$ et ses dépendances.
 Le sous-journal ne doit pas contenir deux messages avec le même auteur et le même numéro.
-%Le pair effectue cette vérification seulement lorsque l'auteur de $m$ ou de l'une de ses dépendances est un pair reconnu mal-intentionné.
+%Le pair effectue cette vérification seulement lorsque l'auteur de $m$ ou de l'une de ses dépendances est un pair reconnu malintentionné.
 %
 %\begin{equation*}\begin{split}
 %    &(\trm{deps}_m \cup \set*{\trm{id}(m)}) \cap \trm{knownMalicious}_W \neq \emptyset \implies\\
@@ -2754,7 +2753,7 @@ Le sous-journal ne doit pas contenir deux messages avec le même auteur et le m�
 \end{equation}
 
 \begin{remark}
-Les pairs mal-intentionnés peuvent déclarer des dépendances indirectes arbitraires.
+Les pairs malintentionnés peuvent déclarer des dépendances indirectes arbitraires.
 Des messages théoriquement bien formés si on se restreint aux dépendances directes peuvent ainsi se retrouver mal-formés.
 Ceci n'a aucune incidence sur la convergence des copies, étant donné que l'ensemble des pairs honnêtes effectuent les mémés vérifications et rejettent donc les même messages.
 \end{remark}
@@ -2809,9 +2808,9 @@ Nous expliquons dans les deux paragraphes suivants dans quels cas cette exécuti
 
 \emph{Cas 1.} Un pair honnête doit uniquement générer des messages bien-formés.
 Lorsqu'un pair génère un nouveau message $m$, il déclare comme dépendances de ce message les messages maximaux du journal ($\trm{deps}_m \assign \trm{max}_J$).
-Pour être bien-formé, ce message ne doit pas déclarer en tant que dépendance, un message dont l'auteur est reconnu mal-intentionné dans le journal.
+Pour être bien-formé, ce message ne doit pas déclarer en tant que dépendance, un message dont l'auteur est reconnu malintentionné dans le journal.
 Il se peut que l'acceptation immédiate d'un message dans le journal conduise à l'ajout de messages en attente qui sont non-linéaires avec l'un des messages maximaux du journal.
-Un ou plusieurs auteurs de messages maximaux du journal peuvent donc être reconnu mal-intentionnés à l'issue de l'ajout dans le journal de messages en attente.
+Un ou plusieurs auteurs de messages maximaux du journal peuvent donc être reconnu malintentionnés à l'issue de l'ajout dans le journal de messages en attente.
 Si l'ajout d'un message et de ses dépendances en attente conduisent à cette situation, alors le protocole exécute une opération d'acquiescement avant leurs ajouts.
 Pour simplifier, le protocole peut exécuter systématiquement une opération d'acquiescement avant l'ajout d'un message qui a au moins une dépendance en attente.
 
@@ -2867,7 +2866,7 @@ Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter.
 Un pair de la collaboration peut inviter à tout moment un nouveau pair.
 Pour ce faire, il exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
 Il signe et transmet au nouveau pair un message qui contient l'identifiant $p_i$ et son journal.
-Un pair mal-intentionné peut transmettre un identifiant quelconque et un journal arbitraire.
+Un pair malintentionné peut transmettre un identifiant quelconque et un journal arbitraire.
 
 Le nouveau pair $p_i$ vérifie d'abord l'authenticité du message.
 Il construit son journal $J$ et l'état de sa copie $S$ à partir du journal reçu.
@@ -2950,7 +2949,7 @@ Il n'y a pas de messages mal-formés et de message qui demeurent en attente.
 
 Pour illustrer le protocole à journaux complets, nous prenons une exécution dans laquelle quatre pairs modifient un ensemble répliqué.
 Les pairs $p_A$, $p_B$, et $p_C$ sont honnêtes.
-Le pair $p_M$ est un pair mal-intentionné.
+Le pair $p_M$ est un pair malintentionné.
 Le protocole est exécuté par les pairs honnêtes.
 La \autoref{fig:full-log-protocol-peer-a} et la \autoref{fig:full-log-protocol-peer-b} présentent respectivement l'évolution de l'état du journal du pair $p_A$ et l'évolution de l'état du journal du pair $p_B$.
 Elles présentent également l'évolution de l'état de certaines structures de données.
@@ -2981,7 +2980,7 @@ Il est accepté immédiatement dans le journal.
 Étant donné qu'il dépend du message en attente $m_1'$, ce dernier est également accepté dans le journal.
 Avant ces ajouts, le protocole exécute une opération d'acquiescement qui donne lieu à la génération du message $a_4 \defeq \tuple*{ack}$.
 Cette exécution permet d'éviter d'avoir le message non-linéaire $m_1$ parmi les messages maximaux du journal.
-L'ajout de $m_1'$ dans le journal implique la reconnaissance de $p_M$ comme un pair mal-intentionné.
+L'ajout de $m_1'$ dans le journal implique la reconnaissance de $p_M$ comme un pair malintentionné.
 Toute livraison ultérieure d'un message bien-formé de $p_M$ sera systématiquement mis en attente.
 $p_C$ est désormais un invité connu dans $J$.
 Finalement, $p_A$ livre le message bien-formé $b_3$ (8).
@@ -3359,7 +3358,7 @@ Autrement, le message doit inclure une dépendance déclarée du même auteur av
     \end{dcases}
 \end{equation}
 
-Pour être bien-formé, un message $m$ ne doit pas reconnaître comme mal-intentionné son auteur ou l'auteur d'une de ses dépendances déclarées.
+Pour être bien-formé, un message $m$ ne doit pas reconnaître comme malintentionné son auteur ou l'auteur d'une de ses dépendances déclarées.
 Cette vérification requiert le parcours du journal (\autoref{eq:honest-verif}).
 Nous pouvons utiliser un système de marquage qui permet de connaître les embranchements sur lesquels dépend un message.
 Tous les messages d'un embranchement sont associés à l'identifiant du message à l'origine de l'embranchement.
@@ -3412,8 +3411,8 @@ En déclarant comme dépendance l'un de ses messages, un pair honnête atteste a
 Les relations de dépendance entre les messages exposent donc les observations des pairs honnêtes.
 Nous pouvons donc créer une correspondance entre les relations de dépendance au sein d'un journal et les relations de visibilité au sein de l'exécution abstraite associée au journal.
 
-Les dépendances déclarées par les pairs mal-intentionnées ne traduisent pas nécessairement leurs observations réelles.
-Il en va de même au sein d'une exécution abstraite~: les relations de \emph{visibilité} ne traduisent pas les observations des pairs mal-intentionnées.
+Les dépendances déclarées par les pairs malintentionnées ne traduisent pas nécessairement leurs observations réelles.
+Il en va de même au sein d'une exécution abstraite~: les relations de \emph{visibilité} ne traduisent pas les observations des pairs malintentionnées.
 
 Cette correspondance n'est pas suffisante.
 Lorsqu'un pair honnête ajoute un message dans son journal, il l'observe.
@@ -3448,7 +3447,7 @@ Si $x_A$ n'est pas l'opération d'observation implicite., l'appel de $x_A$ est u
         \trm{ack} &
     \end{dcases}
 \end{equation*}
-%\item L'histoire $H$ n'inclut pas d'opérations d'interrogations.
+%\item L'histoire $H$ n'inclut pas d'opérations d'interrogation.
 %\begin{equation*}
 %    \trm{rval} \defeq \emptyset
 %\end{equation*}
@@ -3543,13 +3542,13 @@ La relation retourne-avant est donc un ordre total strict.
 \end{proof}
 
 \begin{proof}[Démonstration du \autoref{th:wf-abs-exec-log}.]
-Suivant le \autoref{th:rb-enum}, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (mal-intentionné ou honnête) est un ordre total strict.
+Suivant le \autoref{th:rb-enum}, nous déduisons que toute restriction de la relation \emph{retourne-avant} aux opérations d'un pair donné (malintentionné ou honnête) est un ordre total strict.
 Par conséquent, la propriété~\ref{itm:bf1} est respectée.
 
 Toute opération de $A$ est visible ou égale à l'opération d'observation implicite $\top_{\trm{vis}}$.
 L'auteur de cette dernière est le possesseur du journal.
 Il est par définition honnête.
-Par conséquent, toutes les opérations, y compris les opérations des pairs mal-intentionnées, sont observées par au moins un pair honnête.
+Par conséquent, toutes les opérations, y compris les opérations des pairs malintentionnées, sont observées par au moins un pair honnête.
 La propriété~\ref{itm:bf2} est satisfaite.
 \end{proof}
 
@@ -3559,7 +3558,7 @@ Un journal $J$ construit à partir du protocole à journaux complets est associ�
 $A$ privée de l'opération d'observation implicite respecte également \emph{DynVFJC}.
 \end{theorem}
 
-Pour nous aider dans la démonstration de ce théorème nous démontrons plusieurs lemmes~:
+Pour nous aider dans la démonstration de ce théorème, nous démontrons plusieurs lemmes~:
 
 \begin{lemma}\label{th:has-deps}
 Lorsqu'un message $m$ est ajouté dans le journal $J$ du pair $p_i$, l'ensemble des dépendances déclarées sont déjà présentes dans le journal.
@@ -3581,7 +3580,7 @@ La relation de dépendance entre les messages du journal est un ordre partiel st
 Par construction la relation de dépendance est transitive et stricte.
 Par construction l'ordre d'ajout des messages est total et strict.
 D'après le \autoref{th:has-deps}, les dépendances d'un message sont présentes dans le journal avant l'ajout de ce dernier.
-par conséquent, il ne peut y avoir de cycle de dépendances.
+Par conséquent, il ne peut y avoir de cycle de dépendances.
 La relation de dépendance est donc un ordre partiel strict et l'ordre d'ajout en est une extension linéaire.
 \end{proof}
 
@@ -3597,7 +3596,7 @@ La relation de dépendance restreinte aux messages du possesseur du journal form
 \end{proof}
 
 \begin{lemma}\label{th:max-without-known-malicious}
-L'ensemble $\trm{max}_J$ des messages maximaux du journal $J$ inclut uniquement des messages dont l'auteur n'est pas reconnu mal-intentionné dans $J$.
+L'ensemble $\trm{max}_J$ des messages maximaux du journal $J$ inclut uniquement des messages dont l'auteur n'est pas reconnu malintentionné dans $J$.
 \end{lemma}
 \begin{proof}
 Un message est ajouté dans le journal par l'exécution d'une opération de modification, la livraison d'un message bien-formé, ou lorsqu'un pair rejoint la collaboration.
@@ -3615,14 +3614,14 @@ Son ajout immédiat dans $J$ conduit préalablement à l'ajout de ses dépendanc
 Certaines de ses dépendances en attente peuvent être des messages non-linéaires avec un ou plusieurs messages du journal.
 Ces dépendances non-linéaires ne sont pas ajoutés dans l'ensemble $\trm{max}_J$ puisqu'il s'agit de dépendances de $m$.
 En revanche, un message maximal du journal peut être non-linéaire avec l'une des dépendances du message ajouté.
-L'ajout d'un message et de ses dépendances en attente peut donc conduire à la présence d'un message dans l'ensemble $\trm{max}_J$ dont l'auteur est reconnu mal-intentionné dans $J$.
+L'ajout d'un message et de ses dépendances en attente peut donc conduire à la présence d'un message dans l'ensemble $\trm{max}_J$ dont l'auteur est reconnu malintentionné dans $J$.
 Pour éviter cette situation, le protocole exécute une opération d'acquiescement avant ces ajouts.
 L'exécution d'une opération d'acquiescement génère un message d'acquiescement.
 A l'issue de ces ajouts, l'ensemble $\trm{max}_J$ contient deux messages~: le message d'acquiescement et le message $m$.
 Ces deux messages sont linéaires.
 La livraison d'un message garantit donc l'absence de messages non-linéaire dans l'ensemble $\trm{max}_J$.
 
-Lors du processus d'initialisation pour rejoindre la collaboration, un pair vérifie après chaque ajout de message dans le journal l'absence de messages maximaux dont le pair est reconnu mal-intentionné dans $J$.
+Lors du processus d'initialisation pour rejoindre la collaboration, un pair vérifie après chaque ajout de message dans le journal l'absence de messages maximaux dont le pair est reconnu malintentionné dans $J$.
 \end{proof}
 
 \begin{proof}[Démonstration du \autoref{th:abs-exec-full-log-consistency}]
@@ -3645,12 +3644,12 @@ L'ordre de visibilité restreint aux opérations du possesseur du journal est do
 \medskip
 
 Démontrons que l'exécution abstraite associée à un journal respecte la propriété~\ref{itm:vfjc2}.
-Pour démontrer cette propriété il nous faut montrer qu'un pair qui suit le protocole ne produit pas de messages et n'accepte pas de messages qui viole cette propriété.
+Pour démontrer cette propriété, il nous faut montrer qu'un pair qui suit le protocole ne produit pas de messages et n'accepte pas de messages qui viole cette propriété.
 Lorsque le pair exécute une opération, il génère un message $m$ qu'il ajoute à son journal.
 $m$ dépend des messages maximaux $\trm{max}_J$ du journal.
-D'après le \autoref{th:max-without-known-malicious}, l'ensemble $\trm{max}_J$ n'inclut pas de messages de pairs reconnus mal-intentionnés dans $J$.
-Le message généré ne déclare donc pas de dépendances dont les pairs sont reconnus mal-intentionné dans le sous-journal qui inclut ce message et ses dépendances.
-Lorsqu'un pair vérifie qu'un message est bien-formé, il vérifie notamment que ce message ne déclare pas une dépendance dont l'auteur est reconnu mal-intentionné dans le sous-journal qui contient seulement le message et ses dépendances (\autoref{eq:honest-verif}).
+D'après le \autoref{th:max-without-known-malicious}, l'ensemble $\trm{max}_J$ n'inclut pas de messages de pairs reconnus malintentionnés dans $J$.
+Le message généré ne déclare donc pas de dépendances dont les pairs sont reconnus malintentionné dans le sous-journal qui inclut ce message et ses dépendances.
+Lorsqu'un pair vérifie qu'un message est bien-formé, il vérifie notamment que ce message ne déclare pas une dépendance dont l'auteur est reconnu malintentionné dans le sous-journal qui contient seulement le message et ses dépendances (\autoref{eq:honest-verif}).
 Les relations de dépendances directes d'un message correspondent à un sous-ensemble non-strict des dépendances déclarées du message.
 Un message $x_A$ est immédiatement visible à un message $y_A$ dans l'exécution abstraite $A$ associée au journal tel que $x_A$ et $y_A$ ne sont pas l'opération d'observation implicite si et seulement si le message associé à $x_A$ est une dépendance directe du message associé à $y_A$.
 L'exécution abstraite restreinte aux opérations exécutées qui sont associées à des messages du journal respectent donc la propriété~\ref{itm:vfjc2}.
@@ -3702,12 +3701,12 @@ Par correspondance, l'exécution abstraite associée au journal respecte la prop
 
 
 %Dans le \autoref{ch:background}, nous utilisions les exécutions abstraite pour expliquer une exécution d'un point de vue global.
-%Nous savions alors quels pairs sont honnêtes et lesquels sont mal-intentionnés.
+%Nous savions alors quels pairs sont honnêtes et lesquels sont malintentionnés.
 %Une exécution abstraite associée à un journal décrit en revanche la connaissance qu'a le possesseur du journal sur l'exécution.
 %Nous adoptons donc un point de vue d'un pair.
-%Le pair ne sait pas si un pair donné est honnête ou mal-intentionné.
+%Le pair ne sait pas si un pair donné est honnête ou malintentionné.
 %Le pair pourrait faire confiance à un ensembles de pairs qu'il considère honnête.
-%Nous préférons prendre une approche plus pessimiste : un pair honnête considère que tout autre pair est potentiellement mal-intentionné.
+%Nous préférons prendre une approche plus pessimiste : un pair honnête considère que tout autre pair est potentiellement malintentionné.
 
 
 \subsection{Stabilité des messages du journal}\label{subsec:msg-stable}
@@ -3780,14 +3779,14 @@ Les temps de début et de fin du déroulement des événements sont relevés sur
 Chaque exécution d'une opération d'interrogation ou d'une opération de modification par un pair honnête se manifeste par une opération dans l'histoire.
 Le temps de début et de fin d'exécution permettent de déduire les relations retourne-avant entre les opérations des pairs honnêtes.
 
-Les pairs honnêtes peuvent accepter dans leur journal les messages de pairs mal-intentionnés.
-Chaque message d'un pair mal-intentionné accepté dans le journal d'au moins un pair honnête qui exécute par la suite une opération donne lieu à une opération dans l'histoire de l'exécution.
+Les pairs honnêtes peuvent accepter dans leur journal les messages de pairs malintentionnés.
+Chaque message d'un pair malintentionné accepté dans le journal d'au moins un pair honnête qui exécute par la suite une opération donne lieu à une opération dans l'histoire de l'exécution.
 Les pairs honnêtes peuvent accepter à des temps distincts un même message.
 L'oracle utilise la date à laquelle le message a été accepté pour la première fois de l'exécution dans un journal pour définir les relations retourne-avant entre l'opération $x$ correspondante au message et les autres opérations.
 Les relations retourne-avant entre cette opération et les opérations des pairs honnêtes sont définies comme suit.
 Si la date de fin de l'exécution d'une opération est strictement inférieure à la date de première acceptation de $x$, alors l'opération retourne-avant $x$.
 Si la date de début de l'exécution d'une opération est strictement supérieure à la date de première acceptation de $x$, alors $x$ retourne-avant cette opération.
-La définition des relations retourne-avant entre les exécutions des opérations des pairs mal-intentionnés suit l'ordre de leur date d'acceptation première.
+La définition des relations retourne-avant entre les exécutions des opérations des pairs malintentionnés suit l'ordre de leur date d'acceptation première.
 Si la date d'acceptation première de $x$ est strictement inférieure à la date d'acceptation première de $y$, alors $x$ retourne-avant $y$.
 
 Puisque les événements se déroulent les uns à la suite des autres sur un pair, la restriction de la relation retourne-avant aux messages d'un pair honnête forme un ordre total strict.
@@ -3796,7 +3795,7 @@ L'histoire est donc bien-formée.
 
 Le protocole présenté produit des histoires bien-formées.
 Nous nous intéressons désormais à montrer que le protocole offre les garanties de cohérences décrites par le modèle de cohérence \emph{DynVFJC}.
-Pour ce faire nous montrons que les histoires peuvent être augmentées en des exécutions abstraites bien-formées qui respectent ce modèle de cohérence.
+Pour ce faire, nous montrons que les histoires peuvent être augmentées en des exécutions abstraites bien-formées qui respectent ce modèle de cohérence.
 
 Les exécutions abstraites formées par les histoires auxquelles ont été ajoutées la relation de visibilité comme défini ci-après respectent le modèle de cohérence $\trm{DynVFJC}$.
 
@@ -3806,8 +3805,8 @@ Pour chaque exécution d'une opération, une relation de visibilité est créée
 A noter que certaines relations sont déjà créées par le procédé précédent.
 Ce procédé permet de créer des relations de visibilité dont la source est une opération de lecture. 
 
-Le message d'un pair mal-intentionné donne lieu à une opération dans l'histoire seulement si un pair honnête accepte ce message dans son journal et qu'il exécute par la suite une opération.
-Par construction, l'opération d'un pair mal-intentionné est donc toujours visible à au moins une opération d'un pair honnête.
+Le message d'un pair malintentionné donne lieu à une opération dans l'histoire seulement si un pair honnête accepte ce message dans son journal et qu'il exécute par la suite une opération.
+Par construction, l'opération d'un pair malintentionné est donc toujours visible à au moins une opération d'un pair honnête.
 L'exécution abstraite produite est donc bien-formée.
 
 Les relations de visibilité entre les opérations de modification traduisent les relations de dépendances entre les messages qu'elles génèrent.
@@ -3844,7 +3843,7 @@ En suivant la même structure de démonstration que celle du \autoref{th:abs-exe
 
 \subsubsection{Convergence des pairs honnêtes}
 
-Le modèle de cohérence \emph{DynVFJC} considère les pairs honnêtes qui ont été invités dans des embranchements rejetés par les autres pairs honnêtes comme des pairs mal-intentionnés.
+Le modèle de cohérence \emph{DynVFJC} considère les pairs honnêtes qui ont été invités dans des embranchements rejetés par les autres pairs honnêtes comme des pairs malintentionnés.
 En pratique, nous ne pouvons pas faire une telle hypothèse.
 Nous devons donc admettre que notre protocole peut conduire un pair honnête à diverger des autres pairs honnêtes du groupe.
 Toutefois, ce dernier peut aisément détecter que le message qui l'a invité est non-linéaire et que ses opérations sont systématiquement rejetés par les autres pairs.
@@ -3974,7 +3973,7 @@ Le pair vérifie alors que l'empreinte de cet état est identique à l'empreinte
     \trm{footprint}_m = \trm{footprint}(S_m)
 \end{equation}
 
-Dans le protocole à journaux complets, nous vérifions qu'un message ne déclare pas une dépendance dont l'auteur est reconnu mal-intentionné dans le sous-journal qui inclut $m$ et ses dépendances.
+Dans le protocole à journaux complets, nous vérifions qu'un message ne déclare pas une dépendance dont l'auteur est reconnu malintentionné dans le sous-journal qui inclut $m$ et ses dépendances.
 La suppression de messages du journal peut compromettre le résultat de cette vérification.
 Certains messages peuvent être perçues comme linéaires, alors qu'ils sont en réalité non-linéaires avec des messages supprimés.
 Nous devons donc nous assurer que les messages des auteurs des dépendances déclarées de $m$ ne sont pas non-linéaires avec les messages intégrés sur l'état $I$.
@@ -4010,17 +4009,17 @@ Un message bien-formé pour le protocole à journaux tronqués est également bi
 Les journaux maintenus par le protocole à journaux tronqués sont donc associés à des exécutions abstraites qui respectent le modèle de cohérence \emph{DynVFJC}.
 Les pairs s'intéressent donc à la stabilité \emph{DynVFJC}.
 
-Puisque les pairs mal-intentionnés sont capables de générer des messages non-linéaires, la stabilité \emph{DynVFJC} traite différemment les pairs honnêtes et les pairs mal-intentionnés.
-Chaque pair suspecte les autres pairs d'être mal-intentionnés.
+Puisque les pairs malintentionnés sont capables de générer des messages non-linéaires, la stabilité \emph{DynVFJC} traite différemment les pairs honnêtes et les pairs malintentionnés.
+Chaque pair suspecte les autres pairs d'être malintentionnés.
 Lorsqu'un pair détermine la stabilité d'un message, il se considère comme le seul pair honnête.
-Parce-qu'il est lui-même suspecté mal-intentionné par les autres pairs, déterminer les messages convergents-stables revient en quelque sorte à considérer tous les pairs, y compris lui-même, comme des pairs mal-intentionnés.
+Parce-qu'il est lui-même suspecté malintentionné par les autres pairs, déterminer les messages convergents-stables revient en quelque sorte à considérer tous les pairs, y compris lui-même, comme des pairs malintentionnés.
 
-Un message $m$ est \emph{DynVFJC} convergent-stable au sein d'un journal $J$ si et seulement si pour chaque énumération de pairs distincts $P \defeq \tuple{p_1, \dotsc, p_N}$ de l'ensemble des pairs invités $\trm{invited}_J$, il existe une chaîne de dépendances $m_1 \depeq \dotsb \depeq m_n$ telle que $m_1$ dépend de $m$ ou est égal à $m$, et le $j$-ème pair de la permutation est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
+Un message $m$ est \emph{DynVFJC}-convergent-stable au sein d'un journal $J$ si et seulement si pour chaque énumération de pairs distincts $P \defeq \tuple{p_1, \dotsc, p_N}$ de l'ensemble des pairs invités $\trm{invited}_J$, il existe une chaîne de dépendances $m_1 \depeq \dotsb \depeq m_n$ telle que $m_1$ dépend de $m$ ou est égal à $m$, et le $j$-ième pair de la permutation est lié au $j$-ième message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur du message
-    \item le pair est reconnu mal-intentionné dans le message
+    \item le pair est reconnu malintentionné dans le message
     \item le pair est invité dans le message
 \end{inlinelist}.
-S'il existe $k$ tel que le $k$-ème pair est invité dans le $k$-ème message, alors il s'agit du dernier message ($k = n$).
+S'il existe $k$ tel que le $k$-ième pair est invité dans le $k$-ième message, alors il s'agit du dernier message ($k = n$).
 Autrement la taille de la chaîne est égale à la taille de l'énumération ($n = N$).
 Nous disons que la chaîne de dépendances est \emph{stabilisante} pour la permutation $P$ de pairs.
 
@@ -4028,10 +4027,9 @@ La \autoref{fig:log-stability-example} montre un exemple d'un journal qui a des 
 Le \autoref{tab:log-stability-example-metadata} indique le contenu des messages et leurs méta-données.
 Le \autoref{tab:log-stability-example} justifie la stabilité convergente du message $b_2$ et de ses dépendances.
 Il indique pour chaque permutation des pairs invités une chaîne de dépendance stabilisante.
-Par exemple, si nous prenons la permutation $\tuple*{p_M, p_B, p_A}$.
-La châines de dépendances $b_2 \depeq b_2 \depeq a_5$ est stabilisante pour cette permutation.
+Par exemple, si nous prenons la permutation $\tuple*{p_M, p_B, p_A}$, alors La châines de dépendances $b_2 \depeq b_2 \depeq a_5$ est stabilisante pour cette permutation.
 La chaîne prend source en $b_2$.
-$p_M$ est reconnu mal-intentionné en $b_2$, $p_B$ est l'auteur de $b_2$, et $p_A$ est l'auteur de $a_5$.
+$p_M$ est reconnu malintentionné en $b_2$, $p_B$ est l'auteur de $b_2$, et $p_A$ est l'auteur de $a_5$.
 
 
 \begin{figure}[hbt]
@@ -4110,8 +4108,7 @@ Notre algorithme repose sur deux principes~:
     \item Au lieu de parcourir chaque chemin de dépendance du journal, nous en parcourons un seul.
 \end{itemize}
 
-Un pair qui récupère un journal tronqué doit être capable de vérifier que le journal est correctement 
-tronqué.
+Un pair qui récupère un journal tronqué doit être capable de vérifier que le journal est correctement tronqué.
 Si un pair détermine qu'un message est convergent-stable dans son journal, alors un pair qui récupère ce journal doit également le déterminer convergent-stable.
 Ils doivent donc parcourir le même chemin dans le journal et considérer la même énumération de pairs.
 
@@ -4128,9 +4125,9 @@ Dans l'exemple que nous considérons, nous supposons l'ordre suivant entre les i
 La formation d'une énumération minimale qui inclut toutes les permutations est un problème ouvert~\autocite{engen2018_containing}.
 Toutefois plusieurs articles~\autocite{adleman_1974_shortperm,koutas1975shortest,galbiati1976permutation,zualinescu2011shorter,radomirovic2012construction} prouvent des bornes supérieures sur la taille de cette énumération.
 Pour ce faire, ils décrivent dans leur preuve la génération d'une telle énumération.
-L'\autoref{alg:all-perm-enum} est une adaptation de la construction mathématique décrite dans l'un de ces articles~\autocite{adleman_1974_shortperm}.
+L'\autoref{alg:all-perm-enum} adapte la construction mathématique décrite dans l'article de~\textcite{adleman_1974_shortperm}.
 Il a une complexité quadratique par rapport à la taille de l'ensemble passé en paramètre.
-Le \autoref{tab:all-perm-enum-example} donne des exemples de l'appel de la fonction de l''\autoref{alg:all-perm-enum}.
+Le \autoref{tab:all-perm-enum-example} donne des exemples d'appel.
 
 \clearpage
 
@@ -4174,9 +4171,9 @@ Le \autoref{tab:all-perm-enum-example} donne des exemples de l'appel de la fonct
 \end{algorithmic}
 \end{algorithm}
 
-Ainsi, un message $m$ est convergent-stable si pour l'énumération de pairs $\tuple*{p_1, \dotsc}$ généré par l'\autoref{alg:all-perm-enum} auquel est passé en paramètre l'ensemble ordonné $\trm{invited}_J$ des pairs invités, il existe une chaîne $m_1 \depeq \dotsc \depeq m_n$ issue du chemin parcouru qui prend source en $m$ telle que le $j$-ème pair de l'énumération est lié au $j$-ème message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
+Ainsi, un message $m$ est convergent-stable si pour l'énumération de pairs $\tuple*{p_1, \dotsc}$ généré par l'\autoref{alg:all-perm-enum} auquel est passé en paramètre l'ensemble ordonné $\trm{invited}_J$ des pairs invités, il existe une chaîne $m_1 \depeq \dotsc \depeq m_n$ issue du chemin parcouru qui prend source en $m$ telle que le $j$-ième pair de l'énumération est lié au $j$-ième message de la chaîne par l'une des relations suivantes~: \begin{inlinelist}
     \item le pair est l'auteur du message
-    \item le pair est reconnu mal-intentionné dans le message
+    \item le pair est reconnu malintentionné dans le message
     \item le pair est invité dans le message
 \end{inlinelist}.
 Contrairement à la définition de la stabilité convergente d'un message, nous ne prenons pas en compte la spécificité des invitations.
@@ -4229,19 +4226,19 @@ Les variables $j$ et $k$ permettent respectivement d'itérer sur le journal $J$ 
 La variable $\trm{prev}$ enregistre le dernier message traité du chemin à parcourir.
 Ce chemin prend source en $x$.
 Le reste de l'algorithme parcourt l'énumération de pairs et le journal $J$ (lignes 11 à 24).
-Si le message fait partie du chemin à parcourir (ligne 12), nous avançons d'un pas dans l'énumération de pairs si et seulement si le pair actuel de l'énumération est \begin{inlinelist}\item l'auteur du message actuel, ou s'il est \item le pair invité dans le message actuel (le message actuel est une invitation), ou s'il est \item reconnu mal-intentionné dans $Z$ (il est présent dans l'ensemble $\trm{knwonMalicious}_Z$) \end{inlinelist}.
+Si le message fait partie du chemin à parcourir (ligne 12), nous avançons d'un pas dans l'énumération de pairs si et seulement si le pair actuel de l'énumération est \begin{inlinelist}\item l'auteur du message actuel, ou s'il est \item le pair invité dans le message actuel (le message actuel est une invitation), ou s'il est \item reconnu malintentionné dans $Z$ (il est présent dans l'ensemble $\trm{knwonMalicious}_Z$) \end{inlinelist}.
 Dès lors que nous n'avançons plus dans l'énumération de pairs, nous progressons d'un pas dans le journal $J$.
 Le message actuel est alors ajouté au journal temporaire $Z$.
 Si l'énumération de pairs est entièrement parcourue, le message $m$ est convergent-stable (ligne 25).
 
 L'\autoref{alg:convergent-stable} ajoute une optimisation.
-Puisque la chaîne considérée prend source en $m$, tous les messages de la chaîne ne peuvent pas dépendre directement d'un message d'un pair reconnu mal-intentionné en $m$.
-Nous pouvons donc considérer une énumération qui contient les permutations des pairs invités auquel est retiré les pairs reconnus mal-intentionnés en $m$.
+Puisque la chaîne considérée prend source en $m$, tous les messages de la chaîne ne peuvent pas dépendre directement d'un message d'un pair reconnu malintentionné en $m$.
+Nous pouvons donc considérer une énumération qui contient les permutations des pairs invités auquel est retiré les pairs reconnus malintentionnés en $m$.
 Si $m$ est l'unique message des messages maximaux du journal $Z$, alors $m$ dépend d'un préfixe du journal.
-Les pairs reconnus mal-intentionnés en $m$ correspondent donc aux pairs reconnus mal-intentionnés dans $Z$.
+Les pairs reconnus malintentionnés en $m$ correspondent donc aux pairs reconnus malintentionnés dans $Z$.
 Dans le cas où $m$ ne dépend pas d'un préfixe du journal, nous ne considérons pas cette optimisation.
 
-Pour illustrer cette algorithme, nous testons la stabilité convergente du message $m_1$ du journal de la \autoref{fig:log-stability-example}.
+Pour illustrer cet algorithme, nous testons la stabilité convergente du message $m_1$ du journal de la \autoref{fig:log-stability-example}.
 Le message est déterminé convergent-stable par l'algorithme.
 La valeurs des variables initialisées par l'algorithme entre la lignes 2 et la ligne 13 sont détaillées dans le \autoref{tab:log-stability-example-algo-const}.
 L'évolution de ces variables entre la ligne 14 et 27 est détaillée dans le \autoref{tab:log-stability-example-algo-loop}.
@@ -4351,7 +4348,7 @@ Ces deux indices correspondent aux emplacements des messages $b_2$ et $b_3$ au s
 Les messages convergents-stables sont entourés}\label{fig:log-stability-example-b}
 \end{figure}
 
-Un pair mal-intentionné pourrait déclarer le premier message du journal complet comme dépendance pour empêcher la troncature des journaux des pairs honnêtes.
+Un pair malintentionné pourrait déclarer le premier message du journal complet comme dépendance pour empêcher la troncature des journaux des pairs honnêtes.
 C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarées aux dépendances directes du message.
 Un message qui déclare des dépendances indirectes est mal-formé (\autoref{eq:direct-dep-verif}).
 
@@ -4384,9 +4381,10 @@ Pour initier une nouvelle collaboration, un pair exécute une première opérati
 
 \paragraph{Rejoindre une collaboration.}
 Pour rejoindre une collaboration, un nouveau pair doit d'abord se faire inviter.
-Un pair de la collaboration peut inviter à tout moment un nouveau pair. Pour ce faire, il exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
+Un pair de la collaboration peut inviter à tout moment un nouveau pair.
+Pour ce faire, il exécute une opération d'invitation qui génère l'identifiant $p_i$ du nouveau pair.
 Il signe et transmet au nouveau pair un message qui contient l'identifiant $p_i$, son journal $J$, son état $I$, $\trm{vv}_I$, $\trm{knownMalicious}_I$, et $\trm{stabilityRef}$.
-Un pair mal-intentionné peut transmettre des données arbitraires.
+Un pair malintentionné peut transmettre des données arbitraires.
 
 Le nouveau pair $p_i$ vérifie d'abord l'authenticité du message.
 Nous notons $G$ le journal reçu pour le distinguer du journal $J$ du pair $p_i$.
@@ -4466,30 +4464,30 @@ Il tronque un préfixe de son journal qui inclut uniquement des messages converg
 Ces messages ne doivent pas être des dépendances de messages qui ne sont pas convergents-stables et doivent être distincts de $m$.
 Si les dépendances déclarées d'un message livré ont été préalablement livrées, alors elles sont présentes dans le journal étendu $W$.
 
-Si les dépendances déclarées de $m$ sont présentes dans le journal étendu $W$ et que l'auteur de $m$ n'est pas reconnu mal-intentionné, alors il existe au moins un message de l'auteur de $m$ qui n'est pas convergent-stable et est présent dans le journal étendu.
+Si les dépendances déclarées de $m$ sont présentes dans le journal étendu $W$ et que l'auteur de $m$ n'est pas reconnu malintentionné, alors il existe au moins un message de l'auteur de $m$ qui n'est pas convergent-stable et est présent dans le journal étendu.
 Le possesseur du journal peut ainsi vérifier que le numéro de $m$ est contigu au dernier message reçu de l'auteur de $m$.
-Si l'auteur de $m$ est reconnu mal-intentionné, il se peut qu'aucun de ses message ne soit présent dans le journal étendu.
-Le fait qu'il soit reconnu mal-intentionné est convergent-stable.
+Si l'auteur de $m$ est reconnu malintentionné, il se peut qu'aucun de ses message ne soit présent dans le journal étendu.
+Le fait qu'il soit reconnu malintentionné est convergent-stable.
 Le message sera donc déclaré mal-formé même s'il dépendait correctement d'un de ses messages dont le numéro est contigu à celui de $m$.
 Dans le journal complet le message aurait pu être déclaré bien-formé.
-Cependant, le fait qu'il soit reconnu mal-intentionné de manière convergente-stable implique que son message ne peut dans tous les cas être ajouté au journal $J$.
+Cependant, le fait qu'il soit reconnu malintentionné de manière convergente-stable implique que son message ne peut dans tous les cas être ajouté au journal $J$.
 
 Comme tout autre message du journal, un message d'invitation ne peut être supprimé du journal si les messages qui dépendent de ce message ne deviennent pas convergents-stables.
 Pour devenir convergent-stable, le pair invité dans l'invitation doit participer à leur stabilisation.
 Il est donc toujours possible de vérifier que le premier message d'un pair honnête (numéro égal à $1$) dépend de son invitation.
-En revanche pour un pair reconnu mal-intentionné, il est possible que cette vérification ne puisse plus l'être.
+En revanche pour un pair reconnu malintentionné, il est possible que cette vérification ne puisse plus l'être.
 Nous retombons dans le même schéma que celui présenté dans le paragraphe précédent.
 
-Le pair vérifie que l'auteur d'un message et les auteurs des dépendances déclarées de ce message ne sont pas reconnus mal-intentionnés dans le journal qui regroupe le message et ses dépendances.
-Un pair est reconnu mal-intentionné si le journal contient deux messages non-linéaires dont il est l'auteur.
+Le pair vérifie que l'auteur d'un message et les auteurs des dépendances déclarées de ce message ne sont pas reconnus malintentionnés dans le journal qui regroupe le message et ses dépendances.
+Un pair est reconnu malintentionné si le journal contient deux messages non-linéaires dont il est l'auteur.
 La troncature du journal peut conduire à un cas où il existe bien un couple de messages non-linéaires, mais l'un d'entre eux a été supprimé du journal.
-Or l'état $I$ intègre l'ensemble des messages supprimés du journal.
-Ses structures de données dépendantes permettent en particulier de tester si certains messages sont non-linéaires avec les messages intégrés dans l'état $I$.
-Pour répondre à ce problème le pair vérifie également qu'il n'existe pas un message non-linéaire avec un message intégré dans l'état $I$ pour l'auteur du message vérifié et les auteurs des dépendances déclarées du message.
+Or, l'état $I$ intègre l'ensemble des messages supprimés du journal.
+Ses structures de données dépendantes permettent de tester si certains messages sont non-linéaires avec les messages intégrés dans l'état $I$.
+Pour répondre à ce problème, le pair vérifie également qu'il n'existe pas un message non-linéaire avec un message intégré dans l'état $I$ pour l'auteur du message vérifié et les auteurs des dépendances déclarées du message.
 
 Dans les protocoles que nous avons présentés, les pairs honnêtes déclarent les dépendances directes de leurs messages.
-Les pairs mal-intentionnés peuvent déclarer des dépendances indirectes.
-Un pair mal-intentionné peut ainsi s'assurer qu'un de ses messages déclare une dépendance présente dans le journal d'un premier pair honnête et supprimée d'un journal d'un autre pair honnête.
+Les pairs malintentionnés peuvent déclarer des dépendances indirectes.
+Un pair malintentionné peut ainsi s'assurer qu'un de ses messages déclare une dépendance présente dans le journal d'un premier pair honnête et supprimée d'un journal d'un autre pair honnête.
 Ce qui conduit à une divergence des deux pairs honnêtes.
 Pour éviter cette situation, les pairs honnêtes vérifient que les messages déclarent uniquement des dépendances directes.
 Ainsi le message rejeté par le second pair honnête pour cause d'une dépendance manquante, est rejeté également par le premier pair car la dépendance est reconnue indirecte.
@@ -4508,7 +4506,7 @@ Ce préfixe contient des messages convergent-stables qui ne sont pas déclarés 
 % Il nous faut désormais montrer que les pairs honnêtes qui rejoignent la collaboration en récupérant un journal tronqué accompagné d'un état ne compromet par la cohérence de l'exécution.
 
 % Nous supposons qu'au moins un pair honnête observe l'invitation du nouveau pair et que le message qui représente la preuve de cette observation est présente dans le journal tronqué récupéré.
-% Si ce n'est pas le cas, le nouveau pair est considéré mal-intentionné.
+% Si ce n'est pas le cas, le nouveau pair est considéré malintentionné.
 
 % L'histoire de l'exécution est construite de la même manière que celle du protocole à journaux complets.
 
@@ -4527,11 +4525,11 @@ Cet état permet de reconstituer des états à partir du journal tronqué et de 
 La conservation de cet état peut être évitée si les types de données répliquées sont équipés d'une opération qui annule l'intégration d'un message.
 Dans ce cas, l'état observé par le pair qui exécute une invitation peut être reconstitué par l'annulation des messages qui ne sont pas des dépendances de l'invitation.
 
-La stabilisation d'un message requiert la participation de l'ensemble des pairs qui ne sont pas reconnus mal-intentionnés.
+La stabilisation d'un message requiert la participation de l'ensemble des pairs qui ne sont pas reconnus malintentionnés.
 Si l'un de ces pairs n'exécute pas d'opérations de modification, il peut bloquer la stabilisation des journaux des autres pairs.
-Il peut s'agir d'un pair honnête qui n'a pas contribué depuis un long moment ou d'un pair mal-intentionné qui le fait délibérément.
-Pour répondre à cette problématique, un pair honnête ou mal-intentionné devrait être évincé de la collaboration après une certaine durée d'inactivité.
-Le mécanisme d'éviction pourrait reposer sur le même principe que celui proposé pour les pairs mal-intentionnés.
+Il peut s'agir d'un pair honnête qui n'a pas contribué depuis un long moment ou d'un pair malintentionné qui le fait délibérément.
+Pour répondre à cette problématique, un pair honnête ou malintentionné devrait être évincé de la collaboration après une certaine durée d'inactivité.
+Le mécanisme d'éviction pourrait reposer sur le même principe que celui proposé pour les pairs malintentionnés.
 
 
 \section{Travaux en relation}
@@ -4542,7 +4540,7 @@ Le mécanisme d'éviction pourrait reposer sur le même principe que celui propo
 Les relations de dépendances entre les messages forment ainsi un journal causal.
 Ils constatent que certaines méta-données d'un message ne sont plus nécessaires une fois que toutes les opérations reçues dépendent de ce dernier.
 Ils constatent également que certains messages ne sont plus utiles pour répondre aux interrogations soumises au contenu répliqué.
-Pour déterminer quels messages et quels méta-données peuvent être supprimés, ils introduisent le concept de stabilité causale au sein de journaux causaux.
+Pour déterminer quels messages et quelles méta-données peuvent être supprimés, ils introduisent le concept de stabilité causale au sein de journaux causaux.
 
 Dans ce chapitre, nous avons généralisé la notion de stabilité aux modèles de cohérence.
 Nous avons ainsi défini la stabilité causale au sein d'exécutions abstraites.
@@ -4560,8 +4558,7 @@ Leur protocole démontre que la notion de stabilité peut avoir un intérêt dan
 \paragraph{Coupure globale.} L'utilisation d'une notion de stabilité pour tronquer un journal répliqué n'est pas nouvelle.
 \textcite{sarin_1987_discarding} introduisent un mécanisme pour supprimer les mises-à-jour qui ne sont plus nécessaires à la résolution de conflits et à la convergence des copies au sein d'une base de données distribuées.
 Une mise-à-jour peut entrer en conflit avec une mise-à-jour précédemment livrée seulement si cette dernière à un horodatage qui dépasse le horodatage de la première.
-Une mise-à-jour n'est donc plus nécessaire à la résolution de conflits dès lors que son horodatage est strictement inférieur aux horodatages de l'ensemble des mises-à-jour
-qui sont ultérieurement livrées.
+Une mise-à-jour n'est donc plus nécessaire à la résolution de conflits dès lors que son horodatage est strictement inférieur aux horodatages de l'ensemble des mises-à-jour qui sont ultérieurement livrées.
 Ils définissent ainsi le concept de \emph{coupure globale}.
 Un horodatage $t$ est une \emph{coupure globale} dès lors que l'ensemble des mises-à-jour avec un horodatage strictement inférieur à $t$ ont été livrées à l'ensemble des pairs.
 
@@ -4582,7 +4579,7 @@ Un message concurrent à un message dont la livraison est stable peut toujours �
 
 \subsection{Journaux infalsifiables}
 
-la litérature propose de nombreux protocoles qui reposent sur un journal infalsifiable~\autocite{terry_bayou_1995,mahajan_astro_2008,mahajan_depot_2011,truong_authenticating_2012,kollmann2019_snapdoc}.
+La litérature propose de nombreux protocoles qui reposent sur un journal infalsifiable~\autocite{terry_bayou_1995,mahajan_astro_2008,mahajan_depot_2011,truong_authenticating_2012,kollmann2019_snapdoc}.
 Nous présentons les deux travaux qui se rapprochent le plus des objectifs que nous nous sommes donnés et qui utilisent un modèle de système et un modèle d'adversaire proches des nôtres.
 
 % PRACTI
@@ -4608,7 +4605,7 @@ L'article ne discute pas de ce problème.
 De même, l'article ne discute pas des messages qui dépendent d'un message inclus dans un résumé.
 Si le pair ne possède pas les messages résumés, il ne peut pas accepter ces messages.
 
-Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs mal-intentionnés.
+Notre protocole garantit un modèle de cohérence plus fort qui évince les pairs malintentionnés.
 Il garantit également la convergence des pairs honnêtes.
 
 
@@ -4618,8 +4615,8 @@ L'historique de la collaboration correspond à un journal infalsifiable dans leq
 Les pairs ne transmettent pas leur journal aux nouveaux pairs.
 Pour rejoindre la collaboration, un nouveau pair récupère l'état d'une copie du contenu partagé.
 
-\emph{SnapDoc} tolère la présence de pairs mal-intentionnés.
-Un pair mal-intentionné peut falsifier un état du contenu, avant de le transmettre à un nouveau pair.
+\emph{SnapDoc} tolère la présence de pairs malintentionnés.
+Un pair malintentionné peut falsifier un état du contenu, avant de le transmettre à un nouveau pair.
 Pour limiter les falsifications, l'état est accompagné de plusieurs données infalsifiables qui permettent son authentification.
 Il est en particulier accompagné du dernier message de chaque pair de la collaboration et de preuves qui démontrent l'absence d'embranchements (de messages non-linéaires) au sein du journal.
 
@@ -4647,13 +4644,13 @@ Le journal d'un nouveau pair occupera donc moins de mémoire que le journal d'un
 Notre protocole à journaux tronqués et \emph{SnapDoc} se différencient également sur les garanties de cohérence qu'ils offrent.
 \emph{SnapDoc} autorise l'apparition d'embranchements, mais ne permet pas leurs jonctions.
 Les journaux et les copies des pairs honnêtes peuvent donc diverger.
-Notre protocole respecte un modèle de cohérence plus faible qui permet la jonction des embranchements et l'éviction à terme des pairs mal-intentionnés.
-il permet la convergence des copies des pairs honnêtes à la condition que l'invitation de chaque nouveau pair honnête soit acceptée par un pair honnête existant
+Notre protocole respecte un modèle de cohérence plus faible qui permet la jonction des embranchements et l'éviction à terme des pairs malintentionnés.
+Il permet la convergence des copies des pairs honnêtes à la condition que l'invitation de chaque nouveau pair honnête soit acceptée par un pair honnête existant
 
 Du point de vue de la sécurité, \emph{SnapDoc} offre une garantie supplémentaire par rapport à notre protocole.
-Il ne permet pas à un pair mal-intentionné d'envoyer un état falsifié dans lequel se trouve des éléments irréductibles produits par un pair honnête.
+Il ne permet pas à un pair malintentionné d'envoyer un état falsifié dans lequel se trouve des éléments irréductibles produits par un pair honnête.
 Il permet en effet l'authentification de chaque éléments irréductibles qui compose l'état.
-Cependant, le pair mal-intentionné à la liberté de supprimer des éléments irréductibles d'un état initialement authentique sans que le nouveau pair puisse le détecter.
+Cependant, le pair malintentionné à la liberté de supprimer des éléments irréductibles d'un état initialement authentique sans que le nouveau pair puisse le détecter.
 Cette faculté provient du fait que la composition de l'accumulateur cryptographique est inconnue.
 Similairement à notre protocole, un nouveau pair est certain qu'il a un état authentique seulement lorsqu'il reçoit le message d'un pair honnête qui dépend de l'invitation du nouveau pair.
 
@@ -4671,9 +4668,9 @@ Notre protocole pourrait reposer sur des accumulateurs cryptographiques pour am�
 
 \section{Conclusion}
 
-Les journaux infalsifiables permettent de sécuriser la convergence d'un contenu partagé en présence de pairs mal-intentionnés.
+Les journaux infalsifiables permettent de sécuriser la convergence d'un contenu partagé en présence de pairs malintentionnés.
 La conservation de l'ensemble du journal a un coût.
-Pour remédier à ce problème nous avons proposé un protocole qui permet de tronquer le journal.
+Pour remédier à ce problème, nous avons proposé un protocole qui permet de tronquer le journal.
 Nous avons également proposé un protocole pour authentifier un état à partir d'un journal tronqué.
 Un pair peut ainsi récupérer un journal tronqué et un état pour rejoindre une collaboration.
 

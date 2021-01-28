@@ -13,8 +13,7 @@ Les collaborateur·ice·s sont connecté·e·s à un serveur.
 Toute modification qu'elles et ils effectuent sur le document textuel est transmise au serveur.
 Le serveur transmet alors une mise-à-jour à l'ensemble des collaborateur·ice·s.
 Cette architecture engendre des problèmes de confidentialité, de vie privée, de censure, et de sécurité.
-Elle souffre également d'un problème de disponibilité, de latences élevées, d'un passage à l'échelle pauvre,
-et d'une restriction des formes que peut prendre une collaboration.
+Elle souffre également d'un problème de disponibilité, de latences élevées, d'un passage à l'échelle pauvre, et d'une restriction des formes que peut prendre une collaboration.
 
 Afin de répondre à ces problématiques, de nouveaux travaux proposent de fonder les éditeurs collaboratifs sur des protocoles de réplication optimiste de séquences de caractères~\autocite{oster_2006_woot,weiss_2009_logoot,preguica_2009_treedoc,roh_2011_rga}.
 Chaque collaborateur·ice dispose d'une copie du document sur laquelle il ou elle exécute ses opérations.
@@ -45,7 +44,7 @@ La synchronisation par états présente toutefois un surcoût trop important pou
 Au fur et à mesure que l'état croît, le coût de communication et de fusion s'accroît~\autocite{enes_2018_efficient-sync-state-based-crdt}.
 
 La synchronisation par différences d'états~\autocite{almeida_2018_delta-crdt-revisited} a montré qu'il était possible de conserver les avantages de la synchronisation par états tout en réduisant leur coût en communication et en fusion~\autocite{enes_2018_efficient-sync-state-based-crdt}.
-Lorsqu'un pair exécute une opération il dérive un message qui contient une différence d'états.
+Lorsqu'un pair exécute une opération, il génère un message qui contient une différence d'états.
 Les protocoles sont conçus de manière à ce que cette différence soit bien plus petite que l'état complet.
 Les différences d'états doivent être transmises au moins une fois.
 Les hypothèses de livraison des messages restent faibles.
@@ -60,13 +59,12 @@ Ce protocole est présenté de manière générique à l'aide d'un formalisme qu
 \section{État de l'art}\label{sec:state-art-seq}
 
 Dans cette section, nous présentons le type abstrait de données répliquées Séquence, ainsi que les séquences répliquées proposées dans la littérature.
-Pour finir nous présentons une classification des séquences répliquées proposées dans la littérature.
+Pour finir, nous présentons une classification des séquences répliquées proposées dans la littérature.
 
 \subsection{Séquences répliquées sans conflits}\label{subsec:replseq}
 
 Une séquence arrange de manière ordonnée des valeurs.
-La composition de la séquence évolue au cours du temps~:
-des valeurs peuvent être insérées et supprimées de la séquence.
+La composition de la séquence évolue au cours du temps~: des valeurs peuvent être insérées et supprimées de la séquence.
 Pour ce faire, le type abstrait Séquence dispose d'une opération d'insertion $\trm{ins}$ et d'une opération de suppression $\trm{del}$.
 Il dispose également d'une opération de lecture $\trm{rd}$.
 L'exécution de l'opération $\trm{ins}(n, v)$ insère la valeur $v$ avant la $n$-ième valeur de la séquence.
@@ -136,11 +134,10 @@ Dans la \autoref{sec:crdt-spec} nous avons montré que les opérations non-commu
 Il s'agit d'opérations incompatibles.
 Les opérations de modifications d'une séquence reposent sur des indices d'insertion et de suppression.
 L'indice associé à une valeur est susceptible de changer après l'exécution d'une opération.
-Lorsqu'une valeur est insérée (respectivement supprimée) avant la $n$-ième valeur, cette dernière devient la $n+1$-ème valeur (respectivement la $n-1$-ème valeur).
+Lorsqu'une valeur est insérée (respectivement supprimée) avant la $n$-ième valeur, cette dernière devient la $n+1$-ième valeur (respectivement la $n-1$-ième valeur).
 Il en résulte que la majorité des opérations sont incompatibles.
 Seules deux suppressions qui affectent le même indice sont compatibles.
-Dans la lignée des travaux sur la réplication optimiste de séquences~\autocite{oster_2006_woot,sun_1998_cci}, nous soutenons qu'un pair ne souhaite pas insérer une valeur avant la $n$-ième valeur ou supprimer la $n$-ième valeur~:
-un pair souhaite insérer une valeur entre deux autres valeurs et supprimer une valeur bien déterminée.
+Dans la lignée des travaux sur la réplication optimiste de séquences~\autocite{oster_2006_woot,sun_1998_cci}, nous soutenons qu'un pair ne souhaite pas insérer une valeur avant la $n$-ième valeur ou supprimer la $n$-ième valeur~: un pair souhaite insérer une valeur entre deux autres valeurs et supprimer une valeur bien déterminée.
 Dans la \autoref{fig:seq-example}, l'intention de l'opération $a_2$ est d'insérer $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
 
 Dans une séquence, il est toujours possible d'insérer une valeur quelconque entre deux autres valeurs.
@@ -395,7 +392,7 @@ Une séquence \emph{WOOT} est une liste des valeurs insérées auxquelles sont a
 Les méta-données d'une valeur incluent l'identifiant de la valeur, et les identifiants des valeurs entre lesquelles elle a été initialement insérée.
 
 Lorsqu'un pair exécute une opération d'insertion de la valeur $v$ avant la $n$-ième valeur, il procède en plusieurs étapes.
-Il génère d'abord un nouvel identifiant pour $v$ et récupère les identifiants de la $n-1$-ème valeur et de la $n$-ième valeur.
+Il génère d'abord un nouvel identifiant pour $v$ et récupère les identifiants de la $n-1$-ième valeur et de la $n$-ième valeur.
 Il s'agit des valeurs entre lesquelles la valeur doit être insérée.
 Le pair génère alors un message d'insertion qui contient la valeur, l'identifiant de la valeur, et les identifiants des valeurs entre lesquelles la valeur doit être insérée.
 Le message est intégré à la copie de la séquence et est transmis aux autres pairs.
@@ -500,7 +497,7 @@ Les pierres tombales sont représentées par un caractère barré.
 \end{figure}
 
 Lorsqu'un pair exécute une opération de suppression il détermine d'abord l'identifiant de la valeur à supprimer.
-Il génère alors un message de suppression qui contient seulement cet identifiant.
+Il génère un message de suppression qui contient cet identifiant.
 Ce message est intégré à la copie de la séquence et est transmis aux autres pairs.
 
 L'intégration d'un message de suppression est relativement simple.
@@ -537,10 +534,10 @@ Contrairement à \emph{WOOT}, la séquence n'a pas besoin de retenir les référ
 Cette caractéristique résulte d'un algorithme de placement des valeurs plus simple.
 
 Lorsqu'un pair exécute une opération d'insertion de la valeur $v$ avant la $n$-ième valeur de la séquence, il génère un message d'insertion.
-Le message d'insertion contient la valeur, l'identifiant de la valeur, et l'identifiant de la $n-1$-ème valeur.
-La $n-1$-ème valeur correspond à la valeur après laquelle $v$ doit être insérée.
+Le message d'insertion contient la valeur, l'identifiant de la valeur, et l'identifiant de la $n-1$-ième valeur.
+La $n-1$-ième valeur correspond à la valeur après laquelle $v$ doit être insérée.
 Par la suite nous constaterons que les identifiants de $v$ et de la $n$-ième valeur conduisent nécessairement à placer $v$ avant la $n$-ième valeur.
-L'intention d'insérer $v$ entre la $n-1$-ème valeur et la $n$-ième valeur est donc respectée à la fois par le référence à la $n-1$-ème valeur et par le choix des identifiants associés aux valeurs.
+L'intention d'insérer $v$ entre la $n-1$-ième valeur et la $n$-ième valeur est donc respectée à la fois par le référence à la $n-1$-ième valeur et par le choix des identifiants associés aux valeurs.
 Le message est intégré à la copie de la séquence et est propagé aux autres pairs.
 
 L'intégration d'un message d'insertion d'une valeur $v$ se déroule comme suit.
@@ -674,7 +671,7 @@ Une nouvelle position est donc obtenue en recopiant éventuellement des élémen
 Dans le cas de la chaîne $\textsf{abx}$, les éléments $\textsf{a}$ et $\textsf{b}$ sont recopiés et $\textsf{x}$ a été généré.
 Deux pairs peuvent insérer une valeur au même endroit.
 Pour assurer que des insertions parallèles ne génèrent pas les mêmes positions, deux pairs ne doivent pas générer le même élément.
-Pour s'en assurer \emph{Logoot} utilise comme éléments des couples formés par un entier et l'identifiant du pair qui a généré le couple.
+Pour s'en assurer, \emph{Logoot} utilise comme éléments des couples formés par un entier et l'identifiant du pair qui a généré le couple.
 Finalement pour éviter qu'un pair génère deux positions identiques, un nombre séquentiel est adjoint à la liste de couples.
 Chaque pair incrémente son propre nombre séquentiel après chaque exécution d'une opération d'insertion.
 Le nombre séquentiel est donc consommé par la génération d'une nouvelle position.
@@ -691,13 +688,13 @@ L'exécution d'une opération d'insertion d'une valeur $v$ produit un message d'
 Pour générer sa position, les positions $p_1$ et $p_2$ des valeurs entre lesquelles $v$ doit être insérée sont récupérées.
 La position de $v$ doit être comprise entre ces deux positions.
 Le nombre séquentiel est déjà connu, il suffit de générer la liste de la nouvelle position.
-Pour simplifier l'explication nous considérons que les positions $p_1$ et $p_2$ ont des listes de taille infinie.
+Pour simplifier l'explication, nous considérons que les positions $p_1$ et $p_2$ ont des listes de taille infinie.
 Ces listes de taille infinie sont obtenues en ajoutant des couples minimaux à $p_1$ et des couples maximaux à $p_2$.
 $p_1$ reste donc inférieur à $p_2$.
-La liste de la nouvelle position partage un préfixe commun de $n$ couples ($n \geq 0$) avec la liste de $p_1$ tel qu'il ne soit pas possible de choisir un entier compris entre les entiers du $k$-ème couple de $p_1$ et du $k$-ème couple de $p_2$ avec $k \leq n$.
-Un $n+1$-ème couple est ajouté à la liste.
+La liste de la nouvelle position partage un préfixe commun de $n$ couples ($n \geq 0$) avec la liste de $p_1$ tel qu'il ne soit pas possible de choisir un entier compris entre les entiers du $k$-ième couple de $p_1$ et du $k$-ième couple de $p_2$ avec $k \leq n$.
+Un $n+1$-ième couple est ajouté à la liste.
 Ce couple est généré par le pair qui insère $v$.
-Son entier est choisi aléatoirement entre les entiers du $n+1$-ème couple de $p_1$ et du $n+1$-ème couple de $p_2$.
+Son entier est choisi aléatoirement entre les entiers du $n+1$-ième couple de $p_1$ et du $n+1$-ième couple de $p_2$.
 Le message est intégré à la copie et transmis aux autres pairs.
 
 \begin{figure}[tb]
@@ -760,7 +757,7 @@ Puisqu'il s'agit de la cinquième insertion de $p_A$, son nombre séquentiel est
 Le caractère inséré est donc associé à la position $l_A q_{A5}$.
 On constate un ordre total entre les positions des valeurs insérées~: $f_A1 < h_A2 < l_A3 < l_A q_A5 < m_A4 < p_A6 < r_A7 < t_B1$.
 
-L'intégration d'un message d'insertion d'une valeur $v$ de position $p$ se déroule simplement par le placement de $v$ de manière à ce que les positions des valeurs qui précèdent $v$ dans la séquence soient inférieures à $p$ et les positions des valeurs qui succèdent $v$ soient supérieures à $p$.
+L'intégration d'un message d'insertion d'une valeur $v$ de position $p$ place $v$ de manière à ce que les positions des valeurs qui précèdent $v$ dans la séquence soient inférieures à $p$ et les positions des valeurs qui succèdent $v$ soient supérieures à $p$.
 
 L'exécution d'une opération de suppression produit un message de suppression qui contient la position de la valeur à supprimer.
 L'intégration de ce message supprime définitivement la valeur associée à la position contenue dans le message.
@@ -860,8 +857,6 @@ La taille des positions croît rapidement.
 Les nœuds qui sont des \emph{pierres tombales} sont barrés.}\label{fig:treedoc}
 \end{figure}
 
-\clearpage % better layout
-
 La \autoref{fig:treedoc} correspond à la séquence \emph{Treedoc} obtenue après l'exécution du scénario de la \autoref{fig:replseq-sematic-1}.
 Le caractère $\textsf{'\textit{y}'}$ a pour position $111$ et identifiant $A_4$.
 Le caractère $\textsf{'\textit{i}'}$ est inséré entre les caractères $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
@@ -881,7 +876,7 @@ Une position \emph{LogootSplit} est une liste de quadruples.
 L'ordre total et dense des positions est formé par l'ordre lexicographique entre les listes de quadruples et les quadruples.
 Un quadruple est composé d'un entier choisi aléatoirement, de l'identifiant du pair qui a généré le quadruple, d'un nombre séquentiel, et d'un indice de bloc.
 Dans la \autoref{fig:logootsplit}, le caractère $\textsf{'\textit{\negthinspace!}'}$ est associé à une position qui contient le quadruple $\tuple{20, B, 1, 0}$.
-Ce quadruple est noté $t^{B1}_0$ où $t$ est la $20$-ème lettre de l'alphabet latin.
+Ce quadruple est noté $t^{B1}_0$ où $t$ est la $20$-ième lettre de l'alphabet latin.
 Deux positions sont agrégeables si et seulement si elles partagent la même liste de quadruples, à l'exception des derniers dont les indices de blocs sont différents mais contiguës.
 Par exemple, la position $f^{A1}_2q^{A2}_0$ est agrégeable à la position $f^{A1}_2q^{A2}_1$.
 Deux valeurs de la séquence peuvent être groupées en un bloc si et seulement si elles sont contiguës dans la séquence et leurs positions sont agrégeables.
@@ -982,7 +977,7 @@ Ce travail a été adapté pour \emph{RGA}\autocite{briot_2016_rgasplit}.
 
 Les \acp{CRDT} séquences attachent à chaque élément des méta-données qui permettent de former l'ordre de la séquence.
 Ces méta-données sont générées de manière à garantir l'intention des insertions et des suppressions.
-Les séquences répliquées que nous avons présentés peuvent être réparties en deux approches~:
+Les séquences répliquées que nous avons présentées peuvent être réparties en deux approches~:
 %Nous distinguons deux approches qui reposent sur des principes de générations distincts de ces méta-données.
 
 \paragraph{L'approche à pierres tombales}\autocite{oster_2006_woot, roh_2011_rga} identifie chaque valeur avec un identifiant unique et immuable.
@@ -1405,7 +1400,7 @@ Dans la sous-section suivante nous introduisons l'approche à granularité varia
 
 Les séquences répliquées précédemment présentées associent à chaque valeur une position.
 Dans le cas d'édition collaborative de texte, les valeurs sont des caractères.
-Le caractère prend moins de mémoire que la position qui lui est associé.
+Le caractère prend moins de mémoire que la position qui lui est associée.
 Le support de l'édition collaborative induit donc un coût important en mémoire.
 Ce coût se retrouve également en communication puisque chaque message d'insertion contient la valeur et sa position.
 
@@ -1419,7 +1414,7 @@ Chaque bloc est indexé par la position associée à la première valeur.
 La position de chaque valeur est inférée à partir de cette dernière et de leur indice dans le bloc.
 
 Prenant une position $p$, il existe une unique position $q$ qui est strictement supérieure et agrégeable à $q$.
-Par simplicité nous assumons que $p$ est l'unique position qui est inférieure à $q$ et agrégeable à $q$.
+Par simplicité nous supposons que $p$ est l'unique position qui est inférieure à $q$ et agrégeable à $q$.
 Par conséquent toute position entre $p$ et $q$ ne peuvent être agrégé ni avec $p$ ni avec $q$.
 Il s'en suit que l'insertion d'une valeur entre deux valeurs qui appartiennent à un bloc conduit à la division du bloc en deux blocs.
 Ce type d'insertion produit ainsi trois blocs.
@@ -1439,7 +1434,7 @@ Une chaîne de positions agrégeables peut être déduite à partir de sa premi�
 \begin{proof}
 Nous procédons par induction. La première position est connue. Supposons que nous connaissions la $n$-ième position de la chaîne que nous notons $p$.
 $\trm{agg}(p)$ est l'unique position agrégeable à $p$ et strictement supérieure à $p$.
-Elle est la $n+1$-ème position de la chaîne.
+Elle est la $n+1$-ième position de la chaîne.
 A partir de la première position $q$ et de la taille $m$ de la chaîne nous pouvons ainsi obtenir la chaîne $\set{p_k \in P \given 0 \leq k < m \land p_0 = q \land \forall 0 \leq i < m-1 \qsep \trm{agg}(p_i) = p_{i+1}}$.
 \end{proof}
 
@@ -1524,9 +1519,9 @@ La \autoref{fig:deltaseq} présente l'implémentation générique d'une séquenc
 Nous donnons un exemple de l'exécution de cette implémentation dans la sous-section suivante.
 Nous représentons un état d'une telle séquence par un couple $\tuple*{m, c}$ où $m$ associe les positions aux valeurs de la séquence et $c$ est le contexte causal de la séquence (\autoref{eq:deltaseq-state}).
 Les messages de synchronisation sont des différences d'états.
-L'exécution de l'insertion d'une valeur $v$ à l'indice $j$ génère une position $p$ comprise entre les positions associées aux $j-1$-ème et $j$-ème valeurs de la séquence.
+L'exécution de l'insertion d'une valeur $v$ à l'indice $j$ génère une position $p$ comprise entre les positions associées aux $j-1$-ième et $j$-ième valeurs de la séquence.
 Le message d'insertion consiste donc en un couple qui contient uniquement l'association de $p$ à la valeur $v$ et un contexte causal qui contient uniquement l'identifiant unique dérivé de la position (\autoref{eq:deltaseq-ins}).
-L'exécution de la suppression de la $j$-ème valeur génère un message de suppression qui contient aucune association et un contexte causal qui contient uniquement l'identifiant de la valeur à supprimer (\autoref{eq:deltaseq-del}).
+L'exécution de la suppression de la $j$-ième valeur génère un message de suppression qui contient aucune association et un contexte causal qui contient uniquement l'identifiant de la valeur à supprimer (\autoref{eq:deltaseq-del}).
 
 La fusion d'un état $\sigma_1 \defeq \tuple*{m, c}$ avec un état $\sigma_2 \defeq \tuple*{m', c'}$ produit un état $\sigma_3 \defeq \tuple*{m'', c''}$ (\autoref{eq:deltaseq-integr}).
 Le contexte causal de $\sigma_3$ correspond à l'union des contextes causaux de $\sigma_1$ et $\sigma_2$.
@@ -1593,7 +1588,7 @@ Cependant, contrairement aux positions \emph{Logoot}, les positions \emph{Logoot
 Dans la sous-section suivante, nous présentons un nouveau type de position qui permet à la fois une représentation efficace du contexte causal et l'agrégation de positions.
 
 
-\subsection{LogootSplit dot-ifié}\label{subsec:dotted-logootsplit}
+\subsection{Dotted LogootSplit}\label{subsec:dotted-logootsplit}
 
 Les positions \emph{Logoot} permettent de représenter efficacement le contexte causal par un vecteur de versions.
 Pour ce faire, chaque valeur est identifiée par un \emph{dot}~: un couple qui consiste d'un pair et d'un nombre séquentiel.
@@ -1705,13 +1700,13 @@ La fusion de deux états correspond à leur borne supérieure dans le sup-demi t
 
 La séquence obtenue est relativement proche de celle obtenue avec \emph{LogootSplit} (\autoref{fig:logootsplit}).
 Cependant, nos positions sont de taille plus faible, étant donné que nous utilisons une composante en moins dans les n-uplets.
-\emph{Dotted LogootSplit} a également moins d'hypothèse sur la livraison de messages.
+\emph{Dotted LogootSplit} fait également moins d'hypothèse sur la livraison de messages.
 Ce qui permet la conception de protocoles de synchronisation plus souples et mieux adaptés aux conditions du réseau ou au type de collaboration rencontré.
 Dans l'exemple précédent, nous avons combiné la transmission d'états complets avec la transmission de différences d'états irréductibles et la transmission de différences d'états décomposables.
 
 Nous avons implémenté \emph{Dotted LogootSplit}\footnote{Le code source est disponible sur \emph{GitHub}~: \href{https://github.com/coast-team/dotted-logootsplit}{github.com/coast-team/dotted-logootspli}} et intégré ce protocole de réplication à l'éditeur collaboratif \emph{MUTE}\footnote{\href{https://coedit.re}{coedit.re}}.
 Il a été testé dans des conditions réelles à l'aide d'une synchronisation par opérations.
-Dans ces conditions il a montré des performances similaires à celles de \emph{LogootSplit}.
+Dans ces conditions, il a montré des performances similaires à celles de \emph{LogootSplit}.
 
 \clearpage
 
@@ -2078,7 +2073,7 @@ Le contenu répliqué est une séquence \emph{Dotted LogootSplit}.}\label{fig:de
     \draw (A4rB1) to (A3A4rB1);
     \draw[ultra thick] (A3A4B1) to (A3A4rB1);
 \end{tikzpicture}
-\caption[Sup-demi-treillis des états d'une séquence \emph{Dotted Logootsplit}]{Aperçu du diagramme de Hasse du sup-demi-treillis des états d'une séquence \emph{Dotted Logootsplit}.
+\caption[Sup-demi-treillis des états d'une séquence \emph{Dotted LogootSplit}]{Aperçu du diagramme de Hasse du sup-demi-treillis des états d'une séquence \emph{Dotted LogootSplit}.
 Les états entourés par des tirets sont irréductibles.
 }\label{fig:dottedlogootsplit-semilattice}
 \end{figure}

@@ -40,14 +40,14 @@ La convergence des copies conditionne le succès d'une collaboration.
 Si les collaborateur·ice·s ne sont pas capables de partager une vue globalement convergente dans des délais raisonnables, leur collaboration est probablement compromise.
 Assurer à terme la convergence des copies est donc important.
 
-Les algorithmes existants de réplication de données supposent généralement l'absence de collaborateur·ice·s mal-intentionné·e·s.
+Les algorithmes existants de réplication de données supposent généralement l'absence de collaborateur·ice·s malintentionné·e·s.
 Plus largement, ils supposent l'absence d'un adversaire actif.
 Cette hypothèse n'est pas réaliste au sein d'infrastructures pair-à-pair.
 Les pairs partagent les mêmes responsabilités et peuvent nuire au succès de la collaboration.
 Certains pairs peuvent par exemple mener des attaques pour assurer une divergence permanente des copies des autres pairs.
 Dans ce manuscrit de thèse, nous nous intéressons à cette problématique et nous proposons des mécanismes de défense pour assurer à terme la convergence.
 
-Ce chapitre introduit dans un premier temps la réplication de données. Il développe ensuite la notion de convergence et d'intention des opérations.
+Ce chapitre introduit dans un premier temps la réplication de données. Il développe ensuite la notion de convergence.
 Il termine sur le modèle du système auquel nous nous intéressons et il définit l'adversaire du système.
 
 \section{Réplication de données}\label{sec:optimistic-replication}
@@ -186,7 +186,7 @@ Les applications n'ont pas toujours besoin de maintenir une cohérence forte.
 En général, le maintien d'une cohérence plus faible est suffisant~\autocite{terry_baseball_2013, hellerstein_calm_2019, decandia_dynamo_2007}.
 Prenant cette observation en considération, la \textbf{réplication optimiste}~\autocite{saito_2005_optimisticreplication} sacrifie la cohérence forte pour atteindre une haute disponibilité et des latences basses.
 Elle autorise la modification et l'interrogation des copies sans aucune coordination.
-Les pairs modifient indépendamment leurs copies.
+Les pairs modifient indépendamment leur copie.
 Ce qui conduit à la divergence des copies.
 Deux copies divergentes fournissent des réponses différentes à au moins une interrogation.
 Les pairs se synchronisent pour échanger leurs modifications.
@@ -271,6 +271,8 @@ Elle garantit également qu'une modification intégrée par un pair finit par l'
   \end{description}
 \end{definition}
 
+\clearpage
+
 La convergence des copies est généralement une tâche difficile.
 Cette difficulté réside principalement dans la présence de conflits de modification.
 La \autoref{fig:modif-conflict} présente un scénario où un conflit de modification survient.
@@ -339,7 +341,7 @@ L'intégration \textquote{naïve} des modifications dans des ordres distincts co
 
 Le succès d'une collaboration est conditionné par la capacité des copies à converger.
 \textcite{ignat_2015_user-and-delay} ont montré que les activités de collaboration en simultané étaient compromises lorsque le délai entre des modifications de contenu et leurs observations par les autres était trop important.
-Dans l'idéal la convergence devrait être atteinte le plus rapidement possible.
+Dans l'idéal, la convergence devrait être atteinte le plus rapidement possible.
 Pour réduire au maximum les délais de convergence, toute coordination devrait être évitée~\autocite{bailis_coordavoidance_2014}.
 
 \begin{figure}[htb]
@@ -459,8 +461,8 @@ L'idée centrale de la \emph{convergence unidirectionnelle} est que deux pairs $
 %pour que leurs copies convergent.
 %\end{definition}
 
-La non-nécessité de coordination pour obtenir des copies convergentes, suggère une résolution déterministe des conflits de modification.
-Dans le cas de la bibliothèque, on peut supposer que dans la majorité des cas, des emprunts simultanés concernent des livres ou des exemplaires différents sur des périodes distinctes.
+La non-nécessité de coordination pour obtenir des copies convergentes suggère une résolution déterministe des conflits de modification.
+Dans le cas de la bibliothèque, nous pouvons supposer que dans la majorité des cas, des emprunts simultanés concernent des livres ou des exemplaires différents sur des périodes distinctes.
 Toutefois, des conflits d'emprunts peuvent survenir.
 Le nombre d'exemplaires d'un nouveau livre peut être insuffisant par rapport au nombre de lecteur·ice·s intéressé·e·s.
 Plusieurs stratégies peuvent être mises en place pour résoudre ces conflits.
@@ -509,7 +511,7 @@ On peut considérer que l'emprunteur·ice final·e correspond à la personne qui
 \begin{figure}[htb]
 \centering
 \includegraphics{fig/impl.pdf}
-\caption[Modèle du système]{Une infrastructure de collaboration composée de 3 pairs qui répliquent le contenu partagé. Les 3 pairs sont connectés par un réseau asynchrone.}\label{fig:collab-system}
+\caption[Modèle du système]{Une infrastructure de collaboration composée de trois pairs qui répliquent le contenu partagé. Les trois pairs sont connectés par un réseau asynchrone.}\label{fig:collab-system}
 \end{figure}
 
 Dans les infrastructures pair-à-pair de collaboration, chaque collaborateur·ice est associé·e à un pair qui lui est exclusif.
@@ -535,24 +537,24 @@ Un protocole de réplication optimiste doit respecter un ensemble de propriété
 Pour assurer ces propriétés, un protocole doit résister aux défaillances qu'il rencontre au cours de ses exécutions.
 Par exemple, il doit se prémunir contre les défaillances inhérentes aux réseaux.
 
-Les protocoles de réplication optimiste supposent généralement l'absence de comportements mal-intentionnés.
+Les protocoles de réplication optimiste supposent généralement l'absence de comportements malintentionnés.
 Cette hypothèse n'est pas réaliste au sein d'activités massives de collaboration.
-Plus un groupe de collaborateur·ice·s est large, plus il est probable que le groupe inclue un ou plusieurs collaborateur·ice·s mal-intentionné·e·s.
+Plus un groupe de collaborateur·ice·s est large, plus il est probable que le groupe inclue un ou plusieurs collaborateur·ice·s malintentionné·e·s.
 
-Les défaillances d'un système peuvent être accidentelles ou résultantes de comportements mal-intentionnés.
-Sans perte de généralité, nous considérons que toute défaillance est le résultat de comportements mal-intentionnés.
+Les défaillances d'un système peuvent être accidentelles ou résultantes de comportements malintentionnés.
+Sans perte de généralité, nous considérons que toute défaillance est le résultat de comportements malintentionnés.
 Ces comportements sont exprimés par l'adversaire du système.
 L'adversaire du système est mû par un objectif et contrôle des ressources telles que le réseau et des pairs, pour atteindre son objectif.
 
 L'objectif de notre adversaire est de compromettre la convergence des copies des collaborateur·ice·s honnêtes~\footnote{Dans la littérature le terme \textquote{correct} est également utilisé.}.
 Et ce dans le but de faire échouer leur collaboration.
-Pour simplifier les références ultérieures, nous proposons de classifier les capacités de l'adversaire à travers trois profils~: réseau asynchrone non-fiable, réseau corrompu, pairs perturbés, pairs mal-intentionnés.
+Pour simplifier les références ultérieures, nous proposons de classifier les capacités de l'adversaire à travers trois profils~: \emph{réseau asynchrone non-fiable}, \emph{réseau corrompu}, \emph{pairs perturbés}, et \emph{pairs malintentionnés}.
 
 \paragraph{Réseau asynchrone non-fiable.} L'adversaire contrôle le réseau et peut exposer l'ensemble des comportements observés sur un réseau asynchrone non-fiable~\autocite{lynch_1996_asyncnet}.
 En particulier, les messages échangés entre les pairs peuvent être réordonnés, dupliqués, retardés, et omis.
 L'adversaire peut séparer les pairs en partitions.
 Toutefois il ne peut pas empêcher les pairs honnêtes de s'échanger à terme un nombre non-borné de messages.
-Ce qui implique qu'il ne peut pas maintenir indéfiniment une partition réseau ou omettre tous les messages émits par un pair.
+Ce qui implique qu'il ne peut pas maintenir indéfiniment une partition réseau ou omettre tous les messages envoyés par un pair.
 Cette limitation est nécessaire pour que des propriétés de vivacité, telles que l'\emph{intégration à terme}, soient réalisables.
 
 \paragraph{Réseau asynchrone corrompu.} L'adversaire a les limitations et les capacités décrites dans le profil \emph{réseau asynchrone non-fiable}.
@@ -562,12 +564,12 @@ Il peut par exemple changer l'émetteur d'un message ou le contenu d'un message.
 \paragraph{Pairs restaurés.} L'adversaire peut perturber un pair honnête.
 Il peut le soumettre à des lenteurs arbitraires.
 Il ne peut toutefois pas empêcher un pair de progresser dans l'exécution du protocole.
-L'adversaire peut également produire des pannes qui rendent momentanément le pair indisponible.
+L'adversaire peut également produire des pannes qui rendent le pair momentanément indisponible.
 Nous supposons que les pairs honnêtes disposent d'une mémoire durable et fiable de sorte à ce qu'ils retrouvent l'état dans lequel ils se trouvaient juste avant leur dernière panne.
 Pour les mêmes raisons que celles évoquées dans le profil \emph{réseau asynchrone non-fiable}, l'adversaire ne peut pas provoquer des pannes dans l'objectif d'arrêter l'exécution définitive du protocole ou d'empêcher indéfiniment les pairs honnêtes de s'échanger un nombre non-borné de messages.
 
-\paragraph{Pairs mal-intentionnés.} L'adversaire contrôle un ensemble de pairs mal-intentionnés~\footnote{Dans la littérature, le terme \textquote{défectueux} est également utilisé.} qui peuvent librement travailler de concert.
-Il peut librement connecter de nouveaux pairs mal-intentionnés et déconnecter, éventuellement indéfiniment, des pairs mal-intentionnés. Les pairs mal-intentionnés peuvent se comporter de manière arbitraire.
+\paragraph{Pairs malintentionnés.} L'adversaire contrôle un ensemble de pairs malintentionnés~\footnote{Dans la littérature, le terme \textquote{défectueux} est également utilisé.} qui peuvent librement travailler de concert.
+Il peut librement connecter de nouveaux pairs malintentionnés et déconnecter, éventuellement indéfiniment, des pairs malintentionnés. Les pairs malintentionnés peuvent se comporter de manière arbitraire.
 
 \paragraph{}L'adversaire peut utiliser l'ensemble de ses capacités et de ses ressources pour exprimer des comportements complexes.
 Toutefois, nous supposons les limitations suivantes~:
@@ -580,12 +582,15 @@ Toutefois, nous supposons les limitations suivantes~:
 \end{itemize}
 
 Les protocoles de réplication optimiste s'intéressent généralement à un adversaire qui a les profils \emph{réseau asynchrone non-fiable} et \emph{pairs restaurés}.
-En ajoutant les deux autres profils \emph{réseau corrompu} et \emph{pairs mal-intentionnés} nous obtenons un adversaire qui est Byzantin~\autocite{lamport_1982_byzantinegeneralsproblem}.
+En ajoutant les deux autres profils \emph{réseau corrompu} et \emph{pairs malintentionnés} nous obtenons un adversaire qui est Byzantin~\autocite{lamport_1982_byzantinegeneralsproblem}.
 
-Certain·e·s auteur·ice·s font la distinction entre les pairs mal-intentionnés et les pairs honnêtes-mais-défaillants.
-Un pair honnête-mais-défaillant expose des comportements qui peuvent être prêtés à un pair mal-intentionné.
-Un pair honnête n'a pas la capacité de décider si un comportement nuisible d'un pair est le résultat d'une défaillance ou de motivations mal-intentionnées.
-Nous considérons donc les pairs honnêtes-mais-défaillants comme des pairs mal-intentionnés.
+\clearpage
+
+Certain·e·s auteur·ice·s font la distinction entre les pairs malintentionnés et les pairs honnêtes-mais-défaillants.
+Un pair honnête-mais-défaillant expose des comportements qui peuvent être prêtés à un pair malintentionné.
+Un pair honnête n'a pas la capacité de décider si un comportement nuisible d'un pair est le résultat d'une défaillance ou de motivations malintentionnées.
+Nous considérons donc les pairs honnêtes-mais-défaillants comme des pairs malintentionnés.
+Nous supposons qu'il existe au moins un pair honnête au sein de la collaboration.
 
 
 \section{Synthèse et objectifs}
@@ -598,9 +603,9 @@ Elle conditionne le succès d'une collaboration.
 Afin d'assurer des latences faibles et un passage à l'échelle du protocole, nous nous intéressons à des propriétés de convergence qui ne nécessitent pas de coordination.
 
 Le passage à l'échelle et les latences faibles des protocoles de réplication optimiste auxquels nous nous intéressons permettent le support de collaboration massive.
-Ce type de collaboration a une probabilité plus importante de rencontrer des comportements mal-intentionnés.
+Ce type de collaboration a une probabilité plus importante de rencontrer des comportements malintentionnés.
 Nous avons choisi de nous intéresser à des protocoles qui résistent à un adversaire Byzantin.
-Ce dernier contrôle le réseau et un ensemble de pairs mal-intentionnés.
+Ce dernier contrôle le réseau et un ensemble de pairs malintentionnés.
 Il peut également perturber le fonctionnement des pairs honnêtes.
 
 Dans ce manuscrit nous cherchons à assurer la convergence des copies des pairs honnêtes sans la nécessité de coordination.

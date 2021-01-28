@@ -22,12 +22,14 @@
 %% in the same archive or directory.)
 
 %% CHANGES from the original version:
-%% To follow original author's whished, the file was renamed modern-thesul
+%% To follow original author's whished, the file was renamed thesulx
 %%
 %% - Remove command `removefromreset`.
 %%   It is incorporated in LaTeX since 2018
 %%   See https://tex.stackexchange.com/questions/468406/latex-error-command-removefromreset-already-defined
 %% - Replace obsolete command \centerline by \centering
+%% - Remove class ref behind title page
+%% - Add \makeClassRef
 
 \def\filedate{2013/10/06}
 \def\fileversion{v0.14}
@@ -391,7 +393,23 @@
     \if@twoside
        \thispagestyle{empty}
        \hbox{}
-       \par\vfill\@dcd\@p@ndor@
+       %\par\vfill\@dcd\@p@ndor@
+       \newpage
+       \addtocounter{page}{-2}%
+    \else
+       \addtocounter{page}{-1}%
+    \fi
+    }%
+\newcommand{\MakeClassRef}%
+    {%
+    \newpage
+    \thispagestyle{empty}%
+    \hbox{}
+    \par\vfill\@dcd\@p@ndor@
+    \newpage
+    \if@twoside
+       \thispagestyle{empty}
+       \hbox{}
        \newpage
        \addtocounter{page}{-2}%
     \else

@@ -1,4 +1,4 @@
-\documentclass[12pt]{thesul}
+\documentclass[12pt]{thesulx}
 
 \input{0-preambule/acronyms.tex}
 \input{0-preambule/algo.tex}
@@ -14,7 +14,6 @@
 
 % TIP: You should also remove 'draft' from the class
 %\ThesisDraft
-
 
 % Which chapter to include?
 \includeonly{
@@ -46,16 +45,17 @@
 \Encadrants={François Charoy & Professeur des universités, Université de Lorraine\\
     Gérald oster & Maître de conférence, Université de Lorraine}
 \MakeThesisTitlePage{}
+\MakeClassRef{}
 
 \WriteChapterLabelInToc{}
 \dominitoc{} % mini-toc init
 
+\pagestyle{ThesisHeadings}
 \tableofcontents
 
 \DontWriteThisInToc\listoffigures
 \DontWriteThisInToc\listoftables
 %\DontWriteThisInToc\listoftheorems[ignore={remark,lemma}]%
-
 \mainmatter{}
 \include{1-intro}
 \include{2-problematic}

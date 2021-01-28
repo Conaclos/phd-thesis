@@ -1,3 +1,7 @@
+\cleardoublepage
+\pagestyle{empty} % fix thesul
+
+\AbstractsOnEvenPage
 \begin{ThesisAbstract}
 \vspace{-7em}
 \small
@@ -10,11 +14,11 @@ Chaque pair (individu) modifie sa propre copie du contenu.
 La modification concurrente des copies conduit à leur divergence.
 Les protocoles de réplication sont responsables de la convergence des copies.
 
-Ces protocoles supposent l'absence de pairs mal-intentionnés qui compromettent la convergence des copies.
+Ces protocoles supposent l'absence de pairs malintentionnés qui compromettent la convergence des copies.
 Pouvons-nous protéger la convergence des copies et préserver les propriétés des infrastructures pair-à-pair~?
 Nous proposons deux protocoles qui protègent la convergence des copies.
 Le premier protocole maintient un journal répliqué et infalsifiable qui enregistre les modifications du contenu.
-Les pairs conservent l'intégralité du journal pour déjouer les attaques des pairs mal-intentionnés et pour le transmettre à ceux qui rejoignent la collaboration.
+Les pairs conservent l'intégralité du journal pour déjouer les attaques des pairs malintentionnés et pour le transmettre à ceux qui rejoignent la collaboration.
 Le second protocole permet aux pairs de tronquer leur journal.
 La troncature du journal repose sur le concept de \emph{Stabilité}.
 Une modification devient stable lorsque toute modification intégrée dans le journal dépend d'elle.
