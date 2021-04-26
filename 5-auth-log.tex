@@ -2774,7 +2774,7 @@ Le journal étendu $W$ correspond au journal $J$ auquel a été ajouté les mess
 Le message $m$ est accepté immédiatement dans le journal si et seulement si \begin{inlinelist}\item le journal est vide, ou si \item le message est linéaire, les invitations de son auteur et des auteurs de ses dépendances sont présentes dans le journal $J$\end{inlinelist}.
 Autrement, le message est mis en attente~: il est ajouté à l'ensemble $\trm{pending}$.
 Il pourra être accepté ultérieurement, lorsqu'un message qui dépend de ce dernier est accepté dans le journal.
-La prédicat $\trm{accepted}_J(m)$ indique si le message $m$ peut être accepté immédiatement dans le journal $J$.
+Le prédicat $\trm{accepted}_J(m)$ indique si le message $m$ peut être accepté immédiatement dans le journal $J$.
 %
 \begin{equation}\begin{split}
     \MoveEqLeft\trm{accepted}_J(m) \defiff\\

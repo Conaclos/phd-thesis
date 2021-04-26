@@ -12,6 +12,7 @@
 *.toc
 *.maf
 *.mtc*
+*.out
 *.run.xml
 main.pdf
 __latexindent_temp.tex

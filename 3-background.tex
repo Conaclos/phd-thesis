@@ -431,7 +431,7 @@ Le \autoref{tab:op-ctx-obs} donne le contexte des opérations de l'exécution ab
 \begin{definition}[Contexte]\label{def:op-context}
 Le \emph{contexte} d'une opération $x$ dans une \emph{exécution abstraite} $A$, dénoté par $\trm{ctx}_A(x)$, correspond à l'ensemble des opérations de modification\footnote{\textcite{burckhardt_eventualconsistency_2014,viotti_consistency_2016} incluent également les opérations d'interrogation dans le contexte d'une opération. Nous les excluons pour simplifier l'expression de certaines propriétés de cohérence.} qui lui sont visibles.
 \begin{equation*}
-    \trm{ctx}_A(x) \defeq \set*{y \in A \given y \vis x \land \trm{op}(y) \neq \trm{rd}}
+    \trm{ctx}_A(x) \defeq \set*{y \in A \given y \vis x \land \trm{call}(y) \neq \trm{rd}}
 \end{equation*}
 \end{definition}
 
@@ -1126,7 +1126,7 @@ En dehors de cette section, par abus de langage, nous parlerons de cohérence ca
 \end{definition}
 
 \begin{proposition}\label{th:rb-vis}
-Dans une exécution abstraite $A$ qui respecte le modèle de cohérence causale, la relation de visibilité est égale à la relation retourne-avant pour les opérations d'un même pair.
+Dans une exécution abstraite $A$ qui respecte le modèle de cohérence causale non-spéculative, la relation de visibilité est égale à la relation retourne-avant pour les opérations d'un même pair.
 \begin{equation*}
     A \in \trm{Causal} \land x, y \in A \land \trm{peer}(x) = \trm{peer}(y) \implies (x \rb y \iff x \vis y)
 \end{equation*}
