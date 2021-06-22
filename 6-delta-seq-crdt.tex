@@ -158,14 +158,14 @@ C'est pourquoi, la littérature présente des spécifications partielles qui se 
 Une spécification complète devient alors un raffinement d'une spécification partielle qui choisit une linéarisation de l'ordre partiel.
 La littérature présente trois spécifications partielles~:
 
-\paragraph{La spécification faible}\autocite{attiyai_2016_spec-text-editing} ne prend pas en compte les valeurs supprimées dans l'ordre partiel entre les valeurs.
+\paragraph{La spécification faible}\autocite{attiyai_2016_spec-text-editing}\index{specification-faible@Spécification faible} ne prend pas en compte les valeurs supprimées dans l'ordre partiel entre les valeurs.
 Dans l'exécution abstraite de la \autoref{fig:replseq-sematic-1}, si nous ne prenons pas en compte la valeur supprimée $\textsf{'\textit{y}'}$, alors $p_A$ insère la chaîne $\textsf{'\textit{ies}'}$ entre $\textsf{'\textit{d}'}$ et la fin de la séquence.
 De même, $p_B$ insère $\textsf{'\textit{\negthinspace!}'}$ entre $\textsf{'\textit{d}'}$ et la fin de la séquence.
 Nous obtenons ainsi l'ordre partiel illustré dans la \autoref{fig:replseq-sematic-2}.
 Cet ordre admet 4 extensions linéaires.
 Le protocole de réplication utilisée par \emph{Google Docs} respecte la spécification faible~\autocite{wei2018_jupiterweak}.
 
-\paragraph{La spécification forte}\autocite{attiyai_2016_spec-text-editing} prend en  compte l'ordre partiel entre toutes les valeurs, y compris les valeurs supprimées.
+\paragraph{La spécification forte}\autocite{attiyai_2016_spec-text-editing}\index{specification-forte@Spécification forte} prend en  compte l'ordre partiel entre toutes les valeurs, y compris les valeurs supprimées.
 Dans l'exécution abstraite de la \autoref{fig:replseq-sematic-1}, si nous prenons en compte la valeur supprimée $\textsf{'\textit{y}'}$, alors $p_A$ insère $\textsf{'\textit{i}'}$ entre $\textsf{'\textit{d}'}$ et $\textsf{'\textit{y}'}$.
 Il insère également la chaîne $\textsf{'\textit{es}'}$ entre $\textsf{'\textit{y}'}$ et la fin de la séquence.
 $p_B$ insère $\textsf{'\textit{\negthinspace!}'}$ entre $\textsf{'\textit{y}'}$ et la fin de la séquence.
@@ -174,7 +174,7 @@ Cet ordre admet 3 extensions linéaires.
 
 \clearpage % better layout
 
-\paragraph{La spécification forte sans entrelacement}\autocite{kleppmann2019_interleaving,kleppmann2018opsets} évite les entrelacements de n-uplet de valeurs insérés en parallèle.
+\paragraph{La spécification forte sans entrelacement}\autocite{kleppmann2019_interleaving,kleppmann2018opsets}\index{specification-forte-sans-entrala@Spécification forte sans entrelacement} évite les entrelacements de n-uplet de valeurs insérés en parallèle.
 Dans l'exécution abstraite de la \autoref{fig:replseq-sematic-1}, la chaîne $\textsf{'\textit{es}'}$ est insérée en parallèle du caractère $\textsf{'\textit{\negthinspace!}'}$.
 La spécification forte sans entrelacement produit le même ordre partiel que la spécification forte, mais elle rejette l'extension linéaire qui produit un entrelacement, c'est-à-dire la chaîne $\textit{ladie\textit{\negthinspace!}s}$.
 Le caractère $\textsf{'\textit{\negthinspace!}'}$ apparaît nécessairement avant ou après la chaîne $\textsf{'\textit{es}'}$.
@@ -308,7 +308,7 @@ Elles correspondent à des extensions linéaires des ordres partiels induits par
 %Ce dernier présente une adaptation~\autocite{kleppmann2019_interleaving} pour respecter la spécification forte sans entrelacement.
 %Bien que ce ne soit pas prouvé, les protocoles de réplication optimiste de séquences présentés dans cet état de l'art respectent la spécification forte.
 
-%Les \acp{CRDT} séquences attachent à chaque élément des méta-données qui permettent de former l'ordre de la séquence.
+%Les \acp{CRDT} séquences attachent à chaque valeur des méta-données qui permettent de former l'ordre de la séquence.
 %Ces méta-données sont générés de manière à garantir l'intention d'une insertion et d'une suppression.
 %Nous distinguons deux approches qui reposent sur des principes de générations distincts de ces méta-données.
 %
@@ -372,7 +372,7 @@ Le message est intégré à la copie de la séquence avant d'être transmis aux 
 Nous détaillons chacune de ses procédures pour chacun des \acp{CRDT} que nous présentons.
 Nous caractérisons également la structure du \ac{CRDT} et des messages qu'il génère.
 
-\paragraph{WOOT}\autocite{oster_2006_woot} est le premier \ac{CRDT} séquence présenté dans la littérature.
+\paragraph{WOOT}\autocite{oster_2006_woot}\index{sequence-woot@Séquence WOOT} est le premier \ac{CRDT} séquence présenté dans la littérature.
 Plusieurs optimisations de \emph{WOOT}~\autocite{weiss2007wooki,ahmednacer2011evaluatingcrdts} ont été proposées.
 Il prend à la lettre la formulation de l'intention d'une insertion~: une valeur référence les deux valeurs entre lesquelles elle est insérée.
 
@@ -518,7 +518,7 @@ Pour insérer une valeur, les valeurs qu'elle référencent doivent être déjà
 Un message d'insertion doit donc être livré après les messages d'insertion des valeurs référencées.
 
 
-\paragraph{\acf{RGA}}\autocite{roh_2011_rga} améliore l'approche proposée par \emph{WOOT}.
+\paragraph{\acf{RGA}}\autocite{roh_2011_rga}\index{sequence-rga@Séquence RGA} améliore l'approche proposée par \emph{WOOT}.
 Une valeur référence uniquement la valeur qui la précède dans la séquence.
 Deux valeurs qui référencent la même valeur sont ordonnées entre elles à l'aide de leurs identifiants respectifs.
 
@@ -543,7 +543,7 @@ Le message est intégré à la copie de la séquence et est propagé aux autres 
 L'intégration d'un message d'insertion d'une valeur $v$ se déroule comme suit.
 L'identifiant de la valeur $v_1$ après laquelle $v$ doit être insérée est récupéré à partir du message.
 Pour déterminer l'emplacement de $v$, le pair applique l'algorithme récursif suivant.
-S'il n'y a aucune valeur après $v_1$, alors $v$ y est simplement placé.
+S'il n'y a aucune valeur après $v_1$, alors $v$ y est simplement placée.
 Sinon l'identifiant de $v$ est comparé à l'identifiant de la valeur $v_2$ qui se situe juste après $v_1$.
 Si l'identifiant de $v$ est supérieur à l'identifiant de $v_2$, alors $v$ est placée entre $v_1$ et $v_2$.
 Dans le cas contraire, $v$ doit être insérée après $v_2$.
@@ -555,7 +555,7 @@ Un identifiant $\tuple*{n, p_i}$ est noté $n_i$.
 $p_B$ débute avec la séquence $\textsf{'\textit{lady}'}$.
 Il insère le caractère $\textsf{'\textit{\negthinspace!}'}$ entre $\textsf{'\textit{y}'}$ et la fin de la séquence.
 Il génère un identifiant dont l'horodatage est supérieur a ceux déjà générés dans la séquence.
-Il génère donc un horodatage égale à $5$.
+Il génère donc un horodatage égal à $5$.
 L'intégration de cette insertion s'effectue simplement en plaçant le caractère après $\textsf{'\textit{y}'}$.
 Il intègre ensuite l'insertion du caractère $\textsf{'\textit{i}'}$ qui référence le caractère $\textsf{'\textit{d}'}$.
 Les caractères $\textsf{'\textit{y}'}$ et $\textsf{'\textit{\negthinspace!}'}$ se situent déjà après $\textsf{'\textit{d}'}$.
@@ -655,7 +655,7 @@ En pratique, on s'attend à ce que la taille de ces ensembles soit faible~\autoc
 %\paragraph{Yata}\autocite{nicolaescu2015yjs} emprunte des idées de \emph{WOOT} et \emph{RGA}.
 
 
-\paragraph{Logoot}\autocite{weiss_2009_logoot} prend une approche distincte de \emph{WOOT} et \emph{RGA}.
+\paragraph{Logoot}\autocite{weiss_2009_logoot}\index{sequence-logoot@Séquence Logoot} prend une approche distincte de \emph{WOOT} et \emph{RGA}.
 Une valeur ne référence pas d'autres valeurs.
 Une valeur peut donc être placée sans la présence des valeurs entre lesquelles elle a été insérée.
 Pour ce faire, chaque valeur est associée à une position unique et immuable.
@@ -775,7 +775,7 @@ Cette croissance de la taille des positions est particulièrement notable lorsqu
 Il souffre d'entrelacements~\autocite{kleppmann2019_interleaving}.
 
 
-\paragraph{Treedoc}\autocite{preguica_2009_treedoc} repose sur la même idée que \emph{Logoot}~: placer les valeurs indépendamment des autres à l'aide de positions uniques et immuables.
+\paragraph{Treedoc}\autocite{preguica_2009_treedoc}\index{sequence-treedoc@Séquence Treedoc} repose sur la même idée que \emph{Logoot}~: placer les valeurs indépendamment des autres à l'aide de positions uniques et immuables.
 Cependant, \emph{Treedoc} pose des contraintes sur les structures de données utilisées afin d'éviter le stockage des positions.
 
 Les valeurs sont rangées au sein d'un arbre binaire.
@@ -868,7 +868,7 @@ Les messages doivent être livrés exactement une fois et les messages de suppre
 Les messages d'insertion peuvent être livrés dans un ordre arbitraire.
 
 
-\paragraph{LogootSplit}\autocite{andre_2013_logootsplit} réduit l'occupation mémoire d'une séquence \emph{Logoot} en groupant les valeurs par \emph{blocs}.
+\paragraph{LogootSplit}\autocite{andre_2013_logootsplit}\index{sequence-logootsplit@Séquence LogootSplit} réduit l'occupation mémoire d'une séquence \emph{Logoot} en groupant les valeurs par \emph{blocs}.
 Pour ce faire, \emph{LogootSplit} modifie la structure des positions de manière à ce qu'elles puissent être agrégées.
 Des valeurs contiguës dans la séquence dont les positions sont agrégeables sont groupées au sein d'un \emph{bloc}.
 
@@ -975,12 +975,12 @@ Ce travail a été adapté pour \emph{RGA}\autocite{briot_2016_rgasplit}.
 
 \subsection{Catégorisation des séquences répliquées}
 
-Les \acp{CRDT} séquences attachent à chaque élément des méta-données qui permettent de former l'ordre de la séquence.
+Les \acp{CRDT} séquences attachent à chaque valeur des méta-données qui permettent de former l'ordre de la séquence.
 Ces méta-données sont générées de manière à garantir l'intention des insertions et des suppressions.
 Les séquences répliquées que nous avons présentées peuvent être réparties en deux approches~:
 %Nous distinguons deux approches qui reposent sur des principes de générations distincts de ces méta-données.
 
-\paragraph{L'approche à pierres tombales}\autocite{oster_2006_woot, roh_2011_rga} identifie chaque valeur avec un identifiant unique et immuable.
+\paragraph{L'approche à pierres tombales}\autocite{oster_2006_woot, roh_2011_rga}\index{sequence-pierres-tombales@Séquence à pierres tombales} identifie chaque valeur avec un identifiant unique et immuable.
 Une valeur référence une des valeurs entre lesquelles elle est insérée ou éventuellement les deux.
 D'autres méta-données peuvent être ajoutées pour déterminer l'ordre total des valeurs de la séquence.
 Cette approche se caractérise généralement par une complexité spatiale constante des méta-données associées aux valeurs.
@@ -991,7 +991,7 @@ Pour ne pas apparaître lors des lectures, ces valeurs sont marquées et devienn
 Parce qu'elles sont conservées au sein de la séquence répliquée, les pierres tombales réduisent les performances générales de la séquence répliquée lorsque le nombre de suppressions est important.
 \emph{WOOT} et \emph{RGA} utilisent cette approche.
 
-\paragraph{L'approche à positions densément ordonnées}\autocite{weiss_2009_logoot, preguica_2009_treedoc, nedelec_2013_lseq} associe à chaque valeur une position unique et immuable.
+\paragraph{L'approche à positions densément ordonnées}\autocite{weiss_2009_logoot, preguica_2009_treedoc, nedelec_2013_lseq}\index{sequence-positions@Séquence à positions} associe à chaque valeur une position unique et immuable.
 L'ensemble des positions est densément et totalement ordonné.
 Lorsqu'une valeur est insérée entre deux autres valeurs, sa position est générée de sorte à ce qu'elle soit comprise entre les positions de ces deux dernières.
 Les positions sont indépendantes~: une valeur peut être insérée même si les valeurs entre lesquelles elle a été initialement insérée sont absentes.
@@ -1005,7 +1005,7 @@ Ce qui réduit les performances de la séquence répliquée.
 %Chaque approche a connu des raffinements qui ont conduit à des séquence à granularité variable.
 %Les valeurs sont groupées en blocs et les méta-données sont attachées aux blocs au lieu d'être attachées individuellement aux valeurs.
 
-\paragraph{}Les deux familles de séquences répliquées réduisent toutes deux leur occupation mémoire en adoptant une approche à granularité variable~\cite{yu_2012_string-wise-crdt, andre_2013_logootsplit, briot_2016_rgasplit}.
+\paragraph{}Les deux familles de séquences répliquées réduisent toutes deux leur occupation mémoire en adoptant une approche à granularité variable~\cite{yu_2012_string-wise-crdt, andre_2013_logootsplit, briot_2016_rgasplit}\index{sequence-granularite-var@Séquence à granularité variable}.
 Les valeurs sont groupées en blocs et leurs identifiants sont agrégés.
 La réduction est particulièrement notable lorsque les séquences sont utilisées pour l'édition collaborative~\autocite{andre_2013_logootsplit,briot_2016_rgasplit}.
 
@@ -1139,7 +1139,7 @@ Dans la littérature, l'ensemble des entiers naturels est souvent utilisé comme
 En choisissant des nombres consécutifs pour chaque nouvelle position prise, il est possible de représenter de manière concise les identifiants locaux qui ne peuvent pas être utilisés pour la nouvelle position.
 En effet, au lieu de passer l'ensemble des nombres utilisés nous pouvons passer leur maximum.
 Nous parlons ainsi de nombres séquentiels.
-Lorsque les entiers naturels séquentiels sont utilisés comme identifiants locaux, conformément à la littérature, nous parlons de \emph{dot} pour désigner l'identifiant $\trm{id}(p)$ d'une position $p$.
+Lorsque les entiers naturels séquentiels sont utilisés comme identifiants locaux, conformément à la littérature, nous parlons de \emph{dot}\index{dot@Dot} pour désigner l'identifiant $\trm{id}(p)$ d'une position $p$.
 Nous parlons alors de positions \emph{dot}-ifiées.
 La \autoref{def:dot-pos} définit ce qu'est une position \emph{dot}-ifiée.
 
@@ -1408,7 +1408,7 @@ Au lieu d'utiliser des caractères en tant que valeurs, certains travaux~\autoci
 Cette approche à le désavantage de ne pas permettre l'insertion de caractères au sein de ces chaînes de caractères.
 Ce n'est donc pas une approche généralisable à toute applications d'édition collaborative de texte.
 
-L'approche à granularité variable propose de permettre l'agrégation de valeurs et de leur position en blocs.
+L'approche à granularité variable propose de permettre l'agrégation de valeurs et de leur position en blocs\index{positions-agregeables@Positions agrégeables}.
 Elles peuvent donc être représentées efficacement en mémoire tout en autorisant leur séparation en plusieurs blocs.
 Chaque bloc est indexé par la position associée à la première valeur.
 La position de chaque valeur est inférée à partir de cette dernière et de leur indice dans le bloc.
@@ -1419,7 +1419,7 @@ Par conséquent toute position entre $p$ et $q$ ne peuvent être agrégé ni ave
 Il s'en suit que l'insertion d'une valeur entre deux valeurs qui appartiennent à un bloc conduit à la division du bloc en deux blocs.
 Ce type d'insertion produit ainsi trois blocs.
 
-\begin{definition}[Positions Agrégeable]\label{def:offest-positions}
+\begin{definition}[Positions agrégeable]\label{def:offest-positions}
 Un ensemble $P$ de positions est un ensemble de positions \emph{agrégeables}, et nous écrivons $P \in \trm{AggPos}$, si et seulement si l'ensemble est équipé d'une fonction bijective $\trm{agg}$ qui retourne l'unique position agrégeable et strictement supérieure à la position passée en paramètre.
 \begin{equation*}
     \trm{agg}: \set*{p \in P} \to \set*{q \in P \given p <_P q}
@@ -1427,7 +1427,7 @@ Un ensemble $P$ de positions est un ensemble de positions \emph{agrégeables}, e
 \end{definition}
 % agg could be a prefix order instead.
 
-\begin{theorem}
+\begin{theorem}[Réduction d'une chaîne de positions agrégeables]
 Une chaîne de positions agrégeables peut être déduite à partir de sa première position et de sa longueur.
 \end{theorem}
 
@@ -1495,7 +1495,7 @@ Si une insertion d'une valeur est intégrée après sa suppression, la valeur es
 L'intention de la suppression est violée.
 Pour s'assurer qu'une valeur supprimée est définitivement supprimée, et ce même lorsque son insertion est intégrée ultérieurement, nous devons garder une trace de l'ensemble des valeurs qui ont été insérées dans la séquence.
 Nous employons un \emph{contexte causal}~\autocite{almeida_2018_delta-crdt-revisited} qui inclut l'identifiant unique de chaque valeur insérée dans la séquence.
-Nous définissons donc le contexte causal comme un ensemble fini d'identifiants de valeurs (\autoref{eq:cc-state}).
+Nous définissons donc le contexte causal\index{contexte-causal@Contexte causal} comme un ensemble fini d'identifiants de valeurs (\autoref{eq:cc-state}).
 Un identifiant d'une valeur correspond à un couple $\tuple*{i, l}$ où $i$ est l'identifiant du pair qui a généré l'identifiant, et $l$ est un identifiant local à ce pair.
 La fonction $\trm{lids}$ donne l'ensemble des identifiants locaux présents dans le contexte causal pour un pair donné (\autoref{eq:cc-lids}).
 

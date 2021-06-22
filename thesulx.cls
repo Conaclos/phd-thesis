@@ -298,8 +298,8 @@
 \newcommand{\ClearJury}{\@thesis@jury={}}
 \ClearJury
 \NewJuryCategory{President}{\textit{Pr\'esident :}}{\textit{Pr\'esidents :}}
-\NewJuryCategory{Rapporteurs}{\textit{Rapporteur :}}{\textit{Rapporteurs :}}
-\NewJuryCategory{Examinateurs}{\textit{Examinateur :}}{\textit{Examinateurs :}}
+\NewJuryCategory{Rapporteurs}{\textit{Rapporteur·ice :}}{\textit{Rapporteur·ice·s :}}
+\NewJuryCategory{Examinateurs}{\textit{Examinatrice :}}{\textit{Examinateurs :}}
 \NewJuryCategory{Invites}{\textit{Invit\'e :}}{\textit{Invit\'es :}}
 \NewJuryCategory{Encadrants}{\textit{Encadrant :}}{\textit{Encadrants :}}
 \def\@selecti#1{\expandafter\@@selecti#1}

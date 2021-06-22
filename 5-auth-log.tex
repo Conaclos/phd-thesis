@@ -112,7 +112,7 @@ Bien que certaines applications requièrent cet historique pour fournir des fonc
 
 Nous proposons ainsi deux mécanismes~:
 
-\paragraph{Troncature du journal.} Au lieu de préserver l'intégralité du journal, seules les modifications nécessaires à la détection d'équivoques pourraient être conservées.
+\paragraph{Troncature du journal.}\index{troncature-journal@Troncature du journal} Au lieu de préserver l'intégralité du journal, seules les modifications nécessaires à la détection d'équivoques pourraient être conservées.
 Pour supprimer une modification du journal, nous devons nous assurer qu'elle n'est pas nécessaire à la détection d'éventuelles équivoques futures.
 Pour ce faire, nous utilisons des journaux infalsifiables dans lesquels chaque modification déclare d'autres modifications comme dépendances.
 Les dépendances sont déclarées de manière à résister aux équivoques.
@@ -153,7 +153,7 @@ La partie encadrée correspond à une version tronquée de ce journal.
 }\label{fig:log-example}
 \end{figure}
 
-\paragraph{Transmission d'un état authentifiable.} Au lieu de récupérer un journal dans son intégralité, un pair qui rejoint une collaboration pourrait récupérer l'état d'une copie du contenu partagé.
+\paragraph{Transmission d'un état authentifiable.}\index{authentification-etat@Authentification d'un état} Au lieu de récupérer un journal dans son intégralité, un pair qui rejoint une collaboration pourrait récupérer l'état d'une copie du contenu partagé.
 Un pair malintentionné peut construire un état de toutes pièces avant de le transmettre à un pair qui rejoint la collaboration.
 Le nouveau pair n'a aucun moyen de décider si l'état qu'il reçoit est authentique ou falsifié.
 Pour s'assurer de l'authenticité d'un état, nous proposons un protocole qui permet d'authentifier un état à partir d'un journal tronqué.
@@ -536,6 +536,7 @@ Elle vérifie également l'authenticité de l'état reçu à partir du journal t
 \section{Stabilité}\label{sec:stability}
 
 \subsection{Généralités}\label{subsec:general-stability}
+\index{stabilite@Stabilité}
 
 Dans la littérature~\autocite{baquero_2018_pure-op-crdt, shapiro_2011_crdt,birman_1991_causalmulticast}, la stabilité désigne souvent un prédicat qui une fois vrai le reste pour toujours.
 Dans ce manuscrit, nous disons qu'une modification est stable au sein d'un journal lorsqu'elle devient une dépendance de toutes les modifications qui sont ultérieurement acceptées dans le journal.
@@ -556,7 +557,7 @@ Les contraintes d'acceptation d'une modification au sein d'un journal se traduis
 % Le modèle de cohérence doit donc être compatible avec le modèle de cohérence à terme forte.
 % Il doit permettre aux pairs honnêtes de toujours exécuter une opération.
 
-Pour définir la stabilité au sein d'une exécution abstraite, la \autoref{def:abstract-exec-extension} introduit le concept d'extension d'une exécution abstraite.
+Pour définir la stabilité au sein d'une exécution abstraite, la \autoref{def:abstract-exec-extension} introduit le concept d'extension d'une exécution abstraite\index{extension-execution-abstraite@Extension d'une exécution abstraite}.
 Cette définition repose sur le concept d'extension d'une histoire introduit dans la \autoref{subsec:consistency-spec-liveness-safety} du \autoref{ch:background}.
 
 \begin{definition}[Extension d'une exécution abstraite]\label{def:abstract-exec-extension}
@@ -584,7 +585,7 @@ Une exécution abstraite $A' \defeq \tuple*{H',\trm{vis}'}$ est une extension d'
 % \end{equation*}
 % \end{definition}
 
-Dans une exécution abstraite, une opération est stable une fois qu'elle est visible à toute opération future.
+Dans une exécution abstraite, une opération est stable\index{operation-stable@Opération stable} une fois qu'elle est visible à toute opération future.
 Puisque l'acceptation d'une opération est conditionnée par le modèle de cohérence, la stabilité l'est également.
 Une opération peut être stable pour un modèle de cohérence donné et ne pas l'être pour un autre.
 La \autoref{def:stable} définit formellement la stabilité.
@@ -599,7 +600,7 @@ $x$ est $C$-stable dans $A$, et nous écrivons $\trm{stable}_A^C(x)$, si et seul
 \end{definition}
 
 
-\begin{theorem}\label{th:stability-hierarchy}
+\begin{theorem}[Force des modèles de cohérence et stabilité]\label{th:stability-hierarchy}
 Soit deux modèles de cohérence $C$ et $C'$ tels que $C$ est plus fort que $C'$.
 Si une opération d'une exécution abstraite $A$ est $C'$-stable, alors elle est également $C$-stable.
 \begin{equation*}
@@ -621,7 +622,7 @@ Ce qui contredit l'hypothèse initiale.
 
 Nous souhaitons qu'au cours de l'exécution un ensemble croissant d'opérations devienne stable.
 En d'autres termes, toute opération devrait à terme devenir stable.
-La \autoref{def:stabilisable} exprime cette attente sous la forme d'une propriété de vivacité.
+La \autoref{def:stabilisable}\index{operation-stabilisable@Opération stabilisable} exprime cette attente sous la forme d'une propriété de vivacité.
 
 \begin{definition}[Opération stabilisable]\label{def:stabilisable}
 Soit une opération $x$ d'une exécution abstraite $A$ qui respecte un modèle de cohérence $C$.
@@ -644,6 +645,7 @@ Nous construisons ensuite deux nouveaux modèles de cohérence qui sont stabilis
 \clearpage % better layout
 
 \subsection{Stabilité causale}\label{subsec:cs}
+\index{stabilite-causale@Stabilité causale}
 
 \textcite{baquero_2018_pure-op-crdt} ont introduit la stabilité causale comme un moyen de réduire la taille d'un journal.
 La stabilité causale permet de supprimer les méta-données des opérations qui ne sont plus nécessaires au maintien de la cohérence de la copie et du journal d'un pair.
@@ -822,7 +824,7 @@ Ce qui rentre en contradiction avec une hypothèse initiale.
 \end{proof}
 
 
-\begin{theorem}\label{th:stabilizable-causal}
+\begin{theorem}[Modèle de cohérence causale stabilisable]\label{th:stabilizable-causal}
 Le modèle de cohérence causale est stabilisable.
 \end{theorem}
 
@@ -839,6 +841,7 @@ Dans la section suivante nous nous intéressons à la stabilité au sein d'un mo
 
 
 \subsection{Stabilité \acl{VFJC}}\label{subsec:vfjcs}
+\index{stabilite-vfjc@Stabilité \acl{VFJC}}
 
 Le modèle de cohérence~\acf{VFJC} offre des garanties de convergence et de disponibilité en présence de pairs malintentionnés~\autocite{mahajan_2011_cac}.
 Pour ce faire, il relâche une contrainte de cohérence et autorise ainsi la présence d'opérations non-linéaires dans une exécution abstraite.
@@ -1095,7 +1098,7 @@ Nous devons donc trouver les conditions qui conduisent les pairs honnêtes à re
 Afin de décomposer le problème, nous divisons l'ensemble de ces chaînes en sous-ensembles.
 Nous déterminons ensuite les conditions à remplir pour qu'un pair honnête rejette les châines d'un sous-ensemble donné.
 Pour ce faire, la \autoref{def:cumulated-obs} introduit le concept de \emph{chaîne d'observations cumulées}.
-Chaque sous-ensemble est associé à une énumération de pairs malintentionnés $P \defeq \tuple*{p_1, \dotsc, p_n}$ et est composé des chaînes d'observations cumulées de $P$.
+Chaque sous-ensemble est associé à une énumération de pairs malintentionnés $P \defeq \tuple*{p_1, \dotsc, p_n}$ et est composé des chaînes d'observations cumulées de $P$.\index{@chaine-observations-cumuleeChaîne d'observations cumulées}
 La \autoref{fig:cumulated-obs-3peers} illustre l'ensemble des chaînes d'observations cumulées de l'énumération de pairs $\tuple*{p_G, p_M, p_O}$.
 Chaque opération de la chaîne entre $g_1$ et $m_1$ a pour auteur $p_G$.
 Chaque opération de la chaîne entre $m_1$ et $o_1$ a pour auteur $p_G$ ou $p_M$.
@@ -1398,7 +1401,7 @@ C'est pourquoi nous considérons des chaînes liées aux énumérations issues d
 %\end{definition}
 
 
-\begin{theorem}\label{th:stabilizable-vfjc}
+\begin{theorem}[Modèle de cohérence VFJC stabilisable]\label{th:stabilizable-vfjc}
 Le modèle de cohérence \ac{VFJC} est stabilisable.
 \end{theorem}
 
@@ -1417,6 +1420,7 @@ Dans les deux sous-sections suivantes nous définissons des modèles de cohéren
 %\clearpage
 
 \subsection{Stabilité causale dynamique}\label{subsec:dcs}
+\index{stabilite-causale-dyn@Stabilité causale dynamique}
 
 Dans les sections précédentes, nous avons montré qu'une opération, au sein d'une exécution abstraite qui respecte le modèle de cohérence causale ou le modèle de cohérence \ac{VFJC} peut à terme devenir stable.
 Dans le cas d'une exécution abstraite qui respecte le modèle de cohérence causale, tous les pairs doivent observer une opération pour que cette dernière soit stable.
@@ -1431,7 +1435,7 @@ Il permet de stabiliser des opérations avec la participation d'un sous-ensemble
 Au cours du temps, les pairs joignent la collaboration.
 La composition du groupe de pairs varie tout au long de la collaboration~: le groupe est dynamique.
 A un instant donné il y a donc un ensemble de pairs qui a joint la collaboration et un ensemble complémentaire de pairs qui n'a pas encore joint la collaboration.
-Nous introduisons une opération d'invitation pour suivre l'évolution de la composition du groupe.
+Nous introduisons une opération d'invitation\index{operation-invitation@Opération d'invitation} pour suivre l'évolution de la composition du groupe.
 
 Nous restreignons la capacité d'un nouveau pair à exécuter des opérations concurrentes à d'autres en introduisant une contrainte supplémentaire.
 Un pair hérite des observations du pair qui l'invite.
@@ -1447,7 +1451,7 @@ Pour simplifier, nous supposons qu'une opération d'invitation invite un seul pa
 Cette dernière simplification permet d'éviter en particulier les invitations concurrentes qui sont la source d'une complexité supplémentaire pour définir la stabilité.
 L'invitation d'un pair est visible à toutes les opérations de ce pair.
 Seul le pair qui initie la collaboration s'invite lui-même dans sa première opération.
-La \autoref{def:invitation-consistency} regroupe ces contraintes au sein du modèle de cohérence \emph{Invitation}.
+La \autoref{def:invitation-consistency} regroupe ces contraintes au sein du modèle de cohérence \emph{Invitation}\index{coherence-invitation@Cohérence Invitation}.
 La \autoref{def:dyn-causal-consistency} présente le modèle de cohérence causale dynamique qui correspond à la conjonction du modèle de cohérence causale et du modèle de cohérence \emph{Invitation}.
 
 % Pour joindre une collaboration et commencer à contribuer, un pair doit constituer l'état actuel du contenu répliqué.
@@ -1612,7 +1616,7 @@ En effet, il n'existe pas une invitation de $p_B$ qui est visible à $b_1$.}\lab
 
 À partir de ces deux remarques nous en déduisant que seuls les pairs dont l'invitation est visible ou est concurrente à une opération $x$ peuvent exécuter une opération concurrente à $x$.
 $x$ devient stable dès lors que ces pairs l'observent.
-Nous parlons d'\emph{observateurs requis}.
+Nous parlons d'\emph{observateurs requis}\index{obseravteur-honnete-requis@Observateurs honnêtes requis}.
 La \autoref{def:honest-rq-obs} définit formellement les observateurs requis d'une opération.
 
 \begin{definition}[Observateurs honnêtes requis]\label{def:honest-rq-obs}
@@ -1671,7 +1675,7 @@ Ce qui contredit une hypothèse.
 \end{proof}
 
 
-\begin{theorem}\label{th:stabilizable-dyn-causal}
+\begin{theorem}[Modèle de cohérence causale dynamique stabilisable]\label{th:stabilizable-dyn-causal}
 Le modèle de cohérence causale dynamique est stabilisable.
 \end{theorem}
 
@@ -1693,6 +1697,7 @@ Dans la section suivante nous proposons de définir un nouveau modèle de cohér
 
 
 \subsection{Stabilité~\acl{VFJC} dynamique}\label{subsec:dvfjcs}
+\index{stabilite-vfjc-dyn@Stabilité~\acs{VFJC} dynamique}
 
 Le modèle de cohérence \ac{VFJC} tolère la présence de pairs malintentionnés.
 Il inclut toutefois des contraintes qui permettent à terme d'évincer les pairs reconnus malintentionnés.
@@ -1808,7 +1813,7 @@ En réalité, nous n'avons pas besoin que chaque pair observe l'invitation, il s
 Lorsqu'un pair joint deux branches, il s'assure ainsi que pour chaque opération qui est immédiatement visible à la jonction, l'invitation de l'auteur de l'opération est observée par un invité connu dans chaque branche jointe.
 Cet observateur ne doit pas être reconnu malintentionné à la jonction.
 La \autoref{def:invitation-obs} définit ce que nous nommons observateur connu d'une invitation d'un pair en une opération.
-Le \autoref{tab:invited} indique les observateurs connus de l'invitation du pair $p_G$ en chaque opération de l'exécution abstraite de la \autoref{fig:vfjc-invitation-issue}.
+Le \autoref{tab:invited} indique les observateurs connus de l'invitation\index{observateurs-connus-invitation@Observateurs connus d'une invitation} du pair $p_G$ en chaque opération de l'exécution abstraite de la \autoref{fig:vfjc-invitation-issue}.
 Dans la \autoref{fig:vfjc-invitation-issue}, l'invitation de $p_G$ est observée par $p_G$ et $p_M$ avant l'exécution de $a_1$.
 $p_G$ n'est pas un invité connu en $a_3$.
 $p_M$ est un invité connu en $a_3$.
@@ -2016,7 +2021,7 @@ Ces quatres opérations sont donc stables.
 
 % En pratique, un pair honnête peut attendre que son invitation soit observée par plusieurs pairs pour diminuer le risque de contribuer sur un embranchement rejeté par les pairs de la collaboration.
 
-\begin{theorem}\label{th:stabilizable-dyn-vfjc}
+\begin{theorem}[Modèle de cohérence VFJC dynamique stabilisable]\label{th:stabilizable-dyn-vfjc}
 Le modèle de cohérence \acl{VFJC} dynamique est stabilisable.
 \end{theorem}
 
@@ -2210,7 +2215,7 @@ Les pairs exécutent des opérations pour modifier et interroger le contenu part
 Ils exécutent ces dernières sur leur copie $S$ du contenu partagé.
 Les opérations d'interrogation et les opérations de modification dépendent du type du contenu.
 
-Les protocoles que nous décrivons nécessitent la présence d'une \emph{opération d'invitation} et d'une \emph{opération d'acquiescement}.
+Les protocoles que nous décrivons nécessitent la présence d'une \emph{opération d'invitation} et d'une \emph{opération d'acquiescement}\index{operation-acquiescement@Opération d'acquiescement}.
 L'opération d'invitation permet à un nouveau pair de rejoindre la collaboration.
 L'opération d'acquiescement est directement exécutée par le protocole pour respecter certains invariants. 
 Nous présenterons ces invariants lors de la description du protocole.
@@ -2294,17 +2299,17 @@ Un journal est un ensemble ordonné dont l'ordre entre les messages correspond �
 Cet ordre correspond donc également à l'ordre dans lequel les messages ont été intégrés à la copie du contenu partagé.
 Le journal est initialement vide.
 
-Pour former un journal infalsifiable, chaque message est accompagné d'une signature cryptographique et référence éventuellement d'autres messages.
-Les messages qu'il référence sont ses \emph{dépendances déclarés}.
+Pour former un journal infalsifiable\index{journal-infalsifiable@Journal infalsifiable}, chaque message est accompagné d'une signature cryptographique et référence éventuellement d'autres messages.
+Les messages qu'il référence sont ses \emph{dépendances déclarées}\index{dependance-declarees@Dépendance déclarée}.
 Tout message $m$ est augmenté des méta-données suivantes~:
 \begin{description}
     \item[$\trm{peer}_m$:] l'identifiant de l'auteur de $m$ 
     \item[$\trm{num}_m$:] le numéro de $m$
-    \item[$\trm{deps}_m$:] l'ensemble des dépendances déclarés de $m$
+    \item[$\trm{deps}_m$:] l'ensemble des dépendances déclarées de $m$
     \item[$\trm{sig}_m$:] la signature cryptographique de $m$
 \end{description}
 
-Un pair honnête produit une séquence de messages avec des numéros contigus.
+Un pair honnête produit une séquence de messages avec des numéros contigus\index{numero-message@Numéro d'un message}.
 Le premier message a un numéro égal à $1$, le second message a un numéro égal à $2$, et ainsi de suite.
 Le numéro d'un message $m$ correspond donc au nombre de messages générés ($m$ inclus) par son auteur $\trm{peer}_m$.
 Un message $m$ est identifié par un n-uplet dénoté $\trm{id}(m)$ composé de l'identifiant du pair qui est à son origine, son numéro, et son \emph{hash} $h(m)$.
@@ -2335,7 +2340,7 @@ Ils conservent leur clef privée et publient leur clef publique.
 Une clef publique permet d'identifier un·e collaborateur·ice.
 Un·e collaborateur·ice peut être associé·e à plusieurs pairs.
 Chaque pair peut par exemple être un appareil distinct.
-L'identifiant d'un pair est un couple constitué d'une clef publique et d'un \emph{hash}.
+L'identifiant d'un pair est un couple constitué d'une clef publique et d'un \emph{hash}.\index{identifiant-pair@Identifiant d'un pair}
 Le \emph{hash} permet de distinguer deux pairs qui disposent de la même clef publique.
 Pour s'assurer que le pair est invité une unique fois, le \emph{hash} est généré à partir d'une partie du contenu du message d'invitation et de ses méta-données.
 Ce \emph{hash} est calculé sur la clef publique du pair et sur l'ensemble des méta-données du message d'invitation à l'exception de sa signature.
@@ -2404,6 +2409,7 @@ Le journal de messages est la structure de données principale de notre protocol
 Lorsqu'il est mis à jour d'autres structures de données que nous qualifions de \emph{dépendantes} sont également mises à jour.
 
 \subsubsection{Structures de données dépendantes}
+\index{structure-donnees-dependantes@Structures de données dépendantes}
 
 Le journal $J$ et la copie $S$ du contenu partagé d'un pair $p_i$ sont conservés en étroite synchronisation.
 Lorsqu'un message $m$ est accepté dans le journal, $m$ est intégré à la copie $S$.
@@ -2442,7 +2448,7 @@ $\trm{knownMalicious}_J$ est initialisé avec un ensemble vide.
     \end{dcases}
 \end{equation}
 
-Nous notons $\trm{vv}_J$ un vecteur de versions~\autocite{parker_1983_versionvector,mattern_1988_timevector} qui associe à un pair le numéro du dernier message dont il est l'auteur qui a été ajouté dans $J$.
+Nous notons $\trm{vv}_J$ un vecteur de versions~\autocite{parker_1983_versionvector,mattern_1988_timevector}\index{vecteur-versions@Vecteurs de versions} qui associe à un pair le numéro du dernier message dont il est l'auteur qui a été ajouté dans $J$.
 Le numéro associé à un pair est initialisé à $0$ lorsque son invitation est ajouté dans le journal.
 Lorsqu'un pair est reconnu malintentionné son association est supprimée du vecteur de versions.
 $\trm{vv}_J(p)$ retourne le numéro associé au pair $p$.
@@ -2667,7 +2673,7 @@ Pour simplifier la description du protocole et nous concentrer sur ses points le
 Les messages des pairs honnêtes sont à terme tous livrés par cette couche réseau.
 
 L'acceptation d'un message dans le journal $J$ passe par deux étapes principales.
-Un pair vérifie d'abord que le message est bien-formé.
+Un pair vérifie d'abord que le message est bien-formé.\index{message-bien-forme@Message bien-formé}
 Si le message est bien-formé, alors il est ensuite traité.
 Un message traité est soit accepté immédiatement dans le journal $J$ ou il est mis en attente pour y être accepté ultérieurement sous certaines conditions.
 
@@ -2877,7 +2883,7 @@ Si la condition n'est pas remplie l'initialisation échoue.
 Nous détaillons cet algorithme étape par étape dans les paragraphes suivants.
 
 \begin{algorithm}[ht]
-\caption{Initialisation à partir d'un journal reçu $G$}\label{alg:full-log-init}
+\caption[Initialisation à partir d'un journal reçu]{Initialisation à partir d'un journal reçu $G$}\label{alg:full-log-init}
 \begin{algorithmic}[1]
 \Procedure{$\trm{init}_i$}{$G$}
     \State $\trm{ackInvited} \assign \emptyset$
@@ -3421,7 +3427,7 @@ Pour ce faire, une exécution abstraite associée inclut une opération supplém
 L'opération d'observation implicite a pour auteur le possesseur du journal.
 Toutes les autres opérations sont visibles à l''opération d'observation implicite.
 
-La \autoref{def:exec-abs-log} définit l'exécution abstraite associée à un journal.
+La \autoref{def:exec-abs-log} définit l'exécution abstraite associée à un journal\index{execution-abstraite-associéé@Exécution abstraite associée à un journal}.
 La \autoref{fig:exec-abs-log-example} donne un exemple d'exécution abstraite associée à un journal.
 $\top_{\trm{vis}}$ est l'opération d'observation implicite.
 
@@ -3524,7 +3530,7 @@ Nous démontrons dans la suite de cette sous-section que l'exécution abstraite 
 \caption[Exécution abstraite associée à un journal]{Exécution abstraite associée au journal de la \autoref{fig:log-example-2}.}\label{fig:exec-abs-log-example}
 \end{figure}
 
-\begin{theorem}\label{th:wf-abs-exec-log}
+\begin{theorem}[Exécution abstraite associée bien-formée]\label{th:wf-abs-exec-log}
 L'exécution abstraite associée à un journal est bien-formée.
 \end{theorem}
 
@@ -3553,12 +3559,12 @@ La propriété~\ref{itm:bf2} est satisfaite.
 \end{proof}
 
 
-\begin{theorem}\label{th:abs-exec-full-log-consistency}
+\begin{theorem}[Exécution abstraite associée DynVFJC]\label{th:abs-exec-full-log-consistency}
 Un journal $J$ construit à partir du protocole à journaux complets est associé à une exécution abstraite $A$ qui respecte le modèle de cohérence \emph{DynVFJC}.
 $A$ privée de l'opération d'observation implicite respecte également \emph{DynVFJC}.
 \end{theorem}
 
-Pour nous aider dans la démonstration de ce théorème, nous démontrons plusieurs lemmes~:
+Pour démontrer de ce théorème, nous démontrons plusieurs lemmes~:
 
 \begin{lemma}\label{th:has-deps}
 Lorsqu'un message $m$ est ajouté dans le journal $J$ du pair $p_i$, l'ensemble des dépendances déclarées sont déjà présentes dans le journal.
@@ -3713,7 +3719,7 @@ Par correspondance, l'exécution abstraite associée au journal respecte la prop
 
 Le protocole à journaux tronqués repose sur le concept de stabilité pour tronquer le journal.
 Il repose sur le protocole à journaux complets.
-La \autoref{def:stable-msg} définit ce qu'est un message stable, et le \autoref{th:op-msg-stable} créé une correspondance entre messages stables et opérations stables.
+La \autoref{def:stable-msg} définit ce qu'est un message stable\index{message-stable@Message stable}, et le \autoref{th:op-msg-stable} créé une correspondance entre messages stables et opérations stables.
 
 \begin{definition}[Message stable]\label{def:stable-msg}
 Dans un journal $J$, un message $m$ est stable si et seulement si tout message ajouté ultérieurement à $J$ dépend de $m$.
@@ -3744,7 +3750,7 @@ Deux journaux avec le même ensemble de messages, mais possédés par des pairs 
 Cette différence provient du fait qu'ils ont des exécutions abstraites distinctes.
 Il peut être utile d'introduire une notion de stabilité convergente.
 Cette utilité est démontrée par le protocole que nous développons dans la \autoref{sec:pruned-log-protocol}.
-Deux journaux avec le même ensemble de messages ont le même ensemble de \emph{messages convergents-stables}.
+Deux journaux avec le même ensemble de messages ont le même ensemble de \emph{messages convergents-stables}\index{message-convergent-stable@Message convergent-stable}.
 
 \begin{definition}[Message convergent-stable]\label{def:msg-conv-stable}
 Soit deux journaux $J_1$ et $J_2$ avec le même ensemble de messages, mais avec un possesseur distinct (et éventuellement un ordre d'ajout distinct des messages).
@@ -3887,7 +3893,7 @@ Cet état est accompagné des structures de données dépendantes $\trm{knownMal
 Elles sont mises à jour lorsqu'un message est intégré à l'état $I$.
 Leur initialisation et leur mise-à-jour s'effectue de la même manière que les structures de données dépendantes du journal.
 
-Nous parlons d'\emph{empreinte} d'un état $I$, le \emph{hash} calculé sur $I$ et ses structures de données dépendantes.
+Nous parlons d'\emph{empreinte} d'un état $I$\index{empreinte-etat@Empreinte d'un état}, le \emph{hash} calculé sur $I$ et ses structures de données dépendantes.
 Le \emph{hash} est calculé de manière à résister aux collisions et aux attaques de préimages.
 Deux états convergents, c'est-à-dire qui ont intégré le même ensemble de messages et qui ont les même structures de données dépendantes, ont un \emph{hash} identique.
 L'empreinte de $I$ est notées $\trm{footprint}(I)$.
@@ -3914,7 +3920,7 @@ Un message $m$ d'invitation est accompagné des même méta-données qu'un autre
 \begin{description}
     \item[$\trm{peer}_m$:] l'identifiant de l'auteur de $m$ 
     \item[$\trm{num}_m$:] le numéro de $m$
-    \item[$\trm{deps}_m$:] l'ensemble des dépendances déclarés de $m$
+    \item[$\trm{deps}_m$:] l'ensemble des dépendances déclarées de $m$
     \item[$\trm{sig}_m$:] la signature cryptographique de $m$
     \item[$\trm{footprint}_m$] l'\emph{empreinte} de la copie $S$ du contenu avant l'exécution de l'invitation.
 \end{description}
@@ -4021,7 +4027,7 @@ Un message $m$ est \emph{DynVFJC}-convergent-stable au sein d'un journal $J$ si 
 \end{inlinelist}.
 S'il existe $k$ tel que le $k$-ième pair est invité dans le $k$-ième message, alors il s'agit du dernier message ($k = n$).
 Autrement la taille de la chaîne est égale à la taille de l'énumération ($n = N$).
-Nous disons que la chaîne de dépendances est \emph{stabilisante} pour la permutation $P$ de pairs.
+Nous disons que la chaîne de dépendances est \emph{stabilisante} pour l'énumération $P$ de pairs.
 
 La \autoref{fig:log-stability-example} montre un exemple d'un journal qui a des messages convergents-stables.
 Le \autoref{tab:log-stability-example-metadata} indique le contenu des messages et leurs méta-données.
@@ -4145,7 +4151,7 @@ Le \autoref{tab:all-perm-enum-example} donne des exemples d'appel.
 \end{table}
 
 \begin{algorithm}[ht]
-\caption{Génération déterministe d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}\label{alg:all-perm-enum}
+\caption[Génération déterministe d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs]{Génération déterministe d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs $\tuple*{p_1, \dotsc, p_n}$.}\label{alg:all-perm-enum}
 \begin{algorithmic}[1]
 \Function{$\trm{allPermEnum}$}{$\tuple*{p_1, \dotsc, p_n}$}
     \If{$n = 1$}
@@ -4181,7 +4187,7 @@ Une invitation est considérée comme une simple observation du pair invité.
 La chaîne de dépendance doit donc avoir une taille égale à la taille de l'énumération.
 
 \begin{algorithm}[ht]
-\caption{Détermine si un message $m$ est convergent-stable dans $J$.}\label{alg:convergent-stable}
+\caption[Détermine si un message est convergent-stable]{Détermine si un message $m$ est convergent-stable dans $J$.}\label{alg:convergent-stable}
 \begin{algorithmic}[1]
 \Function{$\trm{convergentStable}$}{$m$}
 \textbf{require} $x \in J$
@@ -4353,7 +4359,7 @@ C'est pourquoi nous limitons au sein de ce protocole les dépendances déclarée
 Un message qui déclare des dépendances indirectes est mal-formé (\autoref{eq:direct-dep-verif}).
 
 \begin{algorithm}[ht]
-\caption{Troncature du journal d'un pair $p_i$.}\label{alg:log-truncation}
+\caption[Troncature du journal d'un pair]{Troncature du journal d'un pair $p_i$.}\label{alg:log-truncation}
 \begin{algorithmic}[1]
 \Procedure{$\trm{attemptTruncation}_i$}{}
     \State \textbf{let} $\tuple*{y_1, \dotsc, y_n} \assign J$
@@ -4398,7 +4404,7 @@ Il initialise les structures dépendantes de son journal à l'aide des structure
 \clearpage
 
 \begin{algorithm}[ht]
-\caption{Initialisation du journal et de la copie du pair $p_i$ à partir d'un journal tronqué $G$, d'un état $I$, des structures de données dépendantes de $I$, et de la référence de stabilité $\trm{stabilityRef}$.}\label{alg:pruned-log-init}
+\caption[Initialisation à partir d'un journal tronqué et d'un état]{Initialisation du journal et de la copie du pair $p_i$ à partir d'un journal tronqué $G$, d'un état $I$, des structures de données dépendantes de $I$, et de la référence de stabilité $\trm{stabilityRef}$.}\label{alg:pruned-log-init}
 \begin{algorithmic}[1]
 \Procedure{$\trm{init}_i$}{$G$}
     \State $S \assign I$

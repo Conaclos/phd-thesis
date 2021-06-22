@@ -49,17 +49,15 @@ Dans la \autoref{subsec:consistency-spec-liveness-safety} nous montrons comment 
 Les collaborateur·ice·s s'attendent à ce que les infrastructures de collaboration leur offrent un certain nombre de garanties de cohérence des copies du contenu partagé.
 La \autoref{fig:causal-expectation} illustre un scénario dans lequel Bea s'attend à ce que Alice lise les messages textuels dans l'ordre dans lequel elle les a écrits.
 Certains protocoles de réplication optimiste peuvent respecter les attentes de Bea et d'autres peuvent ne pas les respecter.
-Les attentes des collaborateur·ice·s sont exprimées sous la forme de propriétés de cohérence.
-
-% EXEMPLE : SMS texting, matrix protocol
+Les attentes des collaborateur·ice·s sont exprimées sous la forme de propriétés de cohérence\index{properiete-coherence@Propriété de cohérence}.
 
 Les propriétés de cohérence sont de différentes natures.
 Certaines contraignent l'ordre dans lequel les modifications sont intégrées par les pairs.
 D'autres spécifient la valeur retournée par les interrogations des pairs.
 Elles expriment toutes des garanties qui sont offertes aux collaborateur·ice·s.
 De ce fait, elles s'expriment sur les interactions des collaborateur·ice·s avec le protocole et sur les réponses que le protocole fournit aux collaborateur·ice·s.
-Les collaborateur·ice·s interagissent avec le système en exécutant des opérations.
-L'ensemble des opérations exécutées forme une \emph{histoire}.
+Les collaborateur·ice·s interagissent avec le système en exécutant des opérations\index{op@Opérations exécutées}.
+L'ensemble des opérations exécutées forme une \emph{histoire}\index{hstoire@Histoire}.
 L'histoire de la \autoref{fig:causal-expectation} est constituée des trois opérations de Alice (pair $p_A$) et des trois opérations de Bea (pair $p_B$).
 
 \clearpage
@@ -128,7 +126,7 @@ Lorsque nous raisonnons sur l'exécution d'opérations, nous nous intéressons s
 Les dates de début et de fin d'exécution d'une opération fournissent plus d'information que nécessaire.
 Pour faciliter le raisonnement sur l'ordre d'exécution des opérations d'une histoire, nous introduisons la relation suivante~:
 
-\paragraph{Retourne-avant~\autocite{burckhardt_eventualconsistency_2014}.} Une relation d'ordre partiel qui rend compte des opérations dont l'exécution ne coïncide pas dans le temps.
+\paragraph{Retourne-avant~\autocite{burckhardt_eventualconsistency_2014}.}\index{relation-retourne-avant@Relation retourne-avant} Une relation d'ordre partiel qui rend compte des opérations dont l'exécution ne coïncide pas dans le temps.
 Une opération $x$ retourne-avant une opération $y$, et nous écrivons $x \rb y$, si et seulement si l'exécution de $x$ se termine avant que l'exécution de $y$ débute.
 Si $x$ ne retourne pas avant $y$ et si $y$ ne retourne pas avant $x$, alors leur exécution coïncide.
 La \autoref{fig:rb-example} montre un exemple de deux opérations dont l'exécution coïncide dans le temps.
@@ -224,7 +222,7 @@ Ici, cette information est explicitement marquée par l'utilisation de la relati
 Elle définit en particulier les caractéristiques associées aux opérations.
 Le \autoref{tab:op-attributes} donne les caractéristiques des opérations de l'histoire de la \autoref{fig:causal-expectation}.
 
-\begin{definition}[histoire~\autocite{burckhardt_eventualconsistency_2014}]\label{def:history}
+\begin{definition}[histoire]\label{def:history}~\autocite{burckhardt_eventualconsistency_2014}
 Une \emph{histoire} d'un contenu partagé de type $T$ est un n-uplet $H \defeq \tuple*{E, \trm{peer}, \trm{call}, \trm{rval}, \trm{rb}}$ tel que $E$ est un ensemble dénombrable d'opérations.
 Pour toute opération $x$~:
 \begin{itemize}
@@ -263,7 +261,7 @@ Il s'agit d'un ordre partiel localement fini\footnote{Pour tout couple d'opérat
 Un protocole garantit une propriété de cohérence si et seulement si toutes les histoires qu'il peut produire vérifient cette propriété.
 Une histoire vérifie une propriété de cohérence si et seulement si ses caractéristiques (valeur de retour des opérations, ordre d'exécution, \ldots) peuvent être expliquées par l'ajout de la relation suivante~:
 
-\paragraph{Visibilité~\autocite{burckhardt_eventualconsistency_2014}.} Une relation qui rend compte de l'intégration des effets des opérations de modification par les pairs.
+\paragraph{Visibilité~\autocite{burckhardt_eventualconsistency_2014}.}\index{relation-visibilite@Relation de visibilité} Une relation qui rend compte de l'intégration des effets des opérations de modification par les pairs.
 Si une opération de modification $x$ est visible à une opération d'interrogation $y$, alors $x$ a (éventuellement) un effet sur la valeur de retour de $y$.
 Nous disons aussi que l'effet de $x$ a été intégré à la copie avant l'exécution de l'opération $y$ sur cette même copie.
 %Si une opération $x$ est visible à une opération $y$ alors la première a été intégrée par le pair avant l'exécution de $y$.
@@ -276,11 +274,11 @@ Par souci de concision, nous écrivons $x \viseq y$ si $x$ est visible ou est é
 % En procédant de la sortes nos propriétés mélangent des contraintes d'ordre et des contraintes de type.
 % Afin de séparer les contraintes nous exprimant nos propriétés de cohérence à l'aide d'exécution abstraites.
 
-\paragraph{} Une histoire augmentée de la relation de \emph{visibilité} consiste en une \emph{exécution abstraite}~\autocite{burckhardt_eventualconsistency_2014}.
+\paragraph{} Une histoire augmentée de la relation de \emph{visibilité} consiste en une \emph{exécution abstraite}~\autocite{burckhardt_eventualconsistency_2014}\index{execuction-abstraite@Exécution abstraite}.
 La \autoref{def:abstract-exec} définit formellement une exécution abstraite.
 La \autoref{fig:vis-example} est une exécution abstraite de l'histoire de la \autoref{fig:causal-expectation}.
 
-\begin{definition}[exécution abstraite~\autocite{burckhardt_eventualconsistency_2014}]\label{def:abstract-exec}
+\begin{definition}[exécution abstraite]\label{def:abstract-exec}~\autocite{burckhardt_eventualconsistency_2014}
 Une \emph{exécution abstraite} d'un contenu partagé de type $T$ est un n-uplet $A \defeq \tuple*{H, \trm{vis}}$ tel que~:
 \begin{itemize}
   \item $H$ est une histoire d'un contenu partagé de type $T$.
@@ -425,7 +423,7 @@ Ces expressions peuvent parfois être peu lisibles.
 Par exemple, pour spécifier le type de retour d'une opération de lecture, il est nécessaire de prendre en compte l'ensemble des opérations de modification qui sont visibles à cette opération de lecture.
 Dans la \autoref{fig:vis-example}, si un ajout de message textuel est visible à une opération de lecture, alors cette dernière inclut ce message dans sa valeur de retour.
 Pour faciliter l'expression de telles propriétés, nous introduisons dans la \autoref{def:op-context} le \emph{contexte} d'une opération.
-Le contexte d'une opération regroupe les opérations de modification qui lui sont visibles.
+Le contexte d'une opération\index{context-operation@Contexte d'une opération} regroupe les opérations de modification qui lui sont visibles.
 Le \autoref{tab:op-ctx-obs} donne le contexte des opérations de l'exécution abstraite de la \autoref{fig:vis-example}.
 
 \begin{definition}[Contexte]\label{def:op-context}
@@ -489,8 +487,8 @@ Nous qualifions ces pairs de malintentionnés.
 
 Dans cette section nous proposons une extension du formalisme de \textcite{burckhardt_eventualconsistency_2014}.
 Cette extension permet de décrire des exécutions dans lesquels des pairs peuvent déroger au protocole.
-Nous qualifions ces pairs de \emph{malintentionnés}.
-Inversement, les pairs qui suivent le protocole sont qualifiés d'\emph{honnêtes}.
+Nous qualifions ces pairs de \emph{malintentionnés}\index{pairs-malintentionnes@Pairs malintentionnés}.
+Inversement, les pairs qui suivent le protocole sont qualifiés d'\emph{honnêtes}\index{pairs-honnetes@Pairs honnêtes}.
 Nous notons $\trm{Honest}$ et $\trm{Malicious}$ l'ensemble des pairs honnêtes et malintentionnés.
 L'union de ces deux ensembles correspond à l'ensemble des pairs $\trm{Peers}$.
 Ces ensembles sont connus, étant donné que nous décrivons des exécutions d'un point de vue global.
@@ -501,7 +499,7 @@ Les opérations exécutées sur un même pair sont donc linéairement ordonnées
 Elles forment une énumération.
 Les opérations d'un pair honnête peuvent donc être numérotées dans l'ordre dans lequel elles sont exécutées.
 Dans la \autoref{fig:vis-example} on observe ainsi deux énumérations $a_1 \rb a_2 \rb a_3$ et $b_1 \rb b_2 \rb b_3$.
-Une histoire qui remplie cette condition est une \emph{histoire bien-formée}.
+Une histoire qui remplie cette condition est une \emph{histoire bien-formée}\index{histoire-bien-formee@Histoire bien-formée}.
 La \autoref{def:wf-history-malicious} définit formellement une histoire bien-formée.
 
 \begin{definition}[histoire bien-formée]\label{def:wf-history-malicious}
@@ -528,7 +526,7 @@ Les pairs honnêtes acceptent uniquement les interactions reconnues par le proto
 En d'autres termes ils rejettent toutes les interactions qui ne correspondent pas à des opérations définies par le protocole.
 Au sein d'une exécution abstraite, une opération est acceptée par les pairs honnêtes si et seulement si elle est exécutée par un pair honnête ou si elle est visible à au moins une opération exécutée par un pair honnête.
 Une opération acceptée est ainsi observée par au moins un pair honnête.
-La \autoref{def:op-obs} définit ce qu'est un observateur d'une opération.
+La \autoref{def:op-obs} définit ce qu'est un observateur d'une opération\index{observateurs-operations@Observateurs d'une opération}.
 Le \autoref{tab:op-ctx-obs} donne les observateurs de chaque opération de l'histoire de la \autoref{fig:causal-expectation}.
 
 \begin{definition}[Observateurs]\label{def:op-obs}
@@ -540,7 +538,7 @@ $\trm{obs}_A(x)$ désigne l'ensemble des observateurs de $x$.
 \end{equation*}
 \end{definition}
 
-Une \emph{exécution abstraite bien-formée} inclut uniquement les opérations qui sont observées par les pairs honnêtes.
+Une \emph{exécution abstraite bien-formée}\index{execuction-abstraite-bien-formee@Exécution abstraite bien-formée} inclut uniquement les opérations qui sont observées par les pairs honnêtes.
 Ces opérations correspondent \begin{inlinelist}
     \item aux opérations exécutées par les pairs honnêtes et
     \item aux opérations exécutées par des pairs malintentionnés qui sont visibles à au moins une opération d'un pair honnête
@@ -723,6 +721,8 @@ La généralisation du formalisme de~\textcite{burckhardt_eventualconsistency_20
 Ces descriptions nous permettent de rendre compte des propriétés de cohérence qu'un protocole garantit en présence de pairs malintentionnés.
 
 \subsection{Vivacité et sûreté}\label{subsec:consistency-spec-liveness-safety}
+\index{propriete-vivacite@Propriétés de vivacité}
+\index{propriete-surete@Propriétés de sûreté}
 
 La littérature divise les propriétés de cohérence entre propriétés de sûreté et propriétés de vivacité.
 Une propriété de sûreté décrit \enquote{quelque chose de mauvais} qui ne devrait jamais survenir~\autocite{lamport_1977_correctness}.
@@ -742,7 +742,7 @@ Une histoire peut décrire les opérations exécutées sur l'intégralité ou un
 Elle décrit une partie d'une exécution lorsqu'elle enregistre l'ensemble des opérations exécutées depuis le commencement de l'exécution jusqu'à un temps donné.
 Une histoire peut évoluer vers plusieurs histoires hypothétiques dans lesquelles de nouvelles opérations ont été exécutées.
 Par abus de langage nous parlons d'\emph{opérations futures}.
-Ces histoires hypothétiques sont des \emph{extensions de l'histoire}.
+Ces histoires hypothétiques sont des \emph{extensions de l'histoire}\index{extension-histoire@Extension d'une histoire}.
 La \autoref{def:hist-ext} définit formellement l'extension d'une histoire.
 
 \begin{definition}[Extension d'une histoire]\label{def:hist-ext}
@@ -826,7 +826,7 @@ La classification des propriétés de cohérence en propriétés de vivacité et
 Pour apprécier la différence entre deux protocoles de réplication, il suffit d'énumérer l'ensemble des propriétés de cohérence que chacun garantit.
 La comparaison de ces ensembles de propriétés de cohérence peut être fastidieux.
 C'est pour cette raison que les propriétés de cohérence sont généralement réunies au sein de \emph{modèles de cohérence}.
-Un protocole garantit un \emph{modèle de cohérence} si toutes les histoires qu'il peut produire peuvent être justifiées par au moins une \emph{exécution abstraite} qui respecte ce modèle de cohérence.
+Un protocole garantit un \emph{modèle de cohérence}\index{model-coherence@Modèle de cohérence} si toutes les histoires qu'il peut produire peuvent être justifiées par au moins une \emph{exécution abstraite} qui respecte ce modèle de cohérence.
 %Par abus de langage, nous désignons l'ensemble des exécutions abstraites qui respectent un modèle de cohérence par le nom du modèle de cohérence.
 La \autoref{def:consistency-model} introduit un abus de langage qui permet de désigner l'ensemble des exécutions abstraites qui respectent un modèle de cohérence par le nom du modèle de cohérence.
 
@@ -848,7 +848,7 @@ Certains modèles de cohérence permettent des exécutions que d'autres ne perme
 Un modèle de cohérence est dit plus fort qu'un second modèle de cohérence s'il accepte un sous-ensemble strict des exécutions abstraites que le premier accepte.
 Dans la \autoref{def:consistency-hierearchy}, nous introduisons la notation que nous utilisons pour mettre en évidence qu'un modèle de cohérence est plus fort qu'un autre.
 Deux modèles de cohérence sont incompatibles si l'un n'est pas plus fort que l'autre.
-Nous pouvons néanmoins juger de la \enquote{force} d'un modèle de cohérence par rapport au nombre d'exécutions abstraites qu'il accepte.
+Nous pouvons néanmoins juger de la \enquote{force}\index{force-modele-coherence@Force des modèles de cohérence} d'un modèle de cohérence par rapport au nombre d'exécutions abstraites qu'il accepte.
 L'ensemble des modèles de cohérence est alors partiellement ordonné
 ~\autocite{viotti_consistency_2016}.
 
@@ -876,6 +876,7 @@ Nous décrivons également le modèle de cohérence \acf{VFJC} sur lequel nous n
 Pour faciliter son introduction, nous présentons le modèle de cohérence \acf{FJC}.
 
 \subsection{Cohérence à terme forte}\label{subsec:strong-eventual-consistency}
+\index{coherence-a-termes@Cohérence à terme forte}
 
 Le modèle de cohérence à terme est le modèle le plus faible qu'un protocole de réplication doit respecter~\autocite{saito_2005_optimisticreplication,burckhardt_eventualconsistency_2014}.
 Dans ce manuscrit nous considérons un modèle de cohérence avec une propriété de convergence plus forte.
@@ -913,6 +914,7 @@ Un protocole peut assurer l'un ou plusieurs de ces modèles ainsi que le modèle
 \clearpage
 
 \subsection{Cohérence causale}\label{subsec:caucal-consistency}
+\index{coherence-causal@Cohérence causale}
 
 Le modèle de cohérence causale capture les relations de causalités potentielles entre les opérations et garantit que les pairs honnêtes intègrent les effets des opérations en respectant leurs causalités.
 Si une opération $x$ cause potentiellement une opération $y$, alors tous les pairs honnêtes intègrent l'effet de $x$ avant l'effet de $y$.
@@ -943,7 +945,7 @@ La causalité potentielle est transitive.
 Dans une exécution abstraite qui respecte le modèle de cohérence causale, si une opération $x$ cause potentiellement une opération $y$, alors l'effet de $x$ est intégré avant l'exécution de $y$.
 Il s'ensuit que chaque relation de causalité potentielle donne lieu à une relation de visibilité.
 La relation de visibilité devient donc transitive.
-La transitivité de la relation de visibilité nous permet de définir la relation de \emph{concurrence} et la relation de \emph{visibilité immédiate}.
+La transitivité de la relation de visibilité nous permet de définir la relation de \emph{concurrence}\index{relation-concurrence@Relation de concurrence} et la relation de \emph{visibilité immédiate}\index{relation-visibilite-immediate@Relation de visibilité immédiate}.
 Ces relations simplifient l'expression de propriétés de cohérence que nous aborderons ultérieurement.
 
 % \paragraph{Précédence.}
@@ -1100,7 +1102,7 @@ En dehors de cette section, par abus de langage, nous parlerons de cohérence ca
 
 \clearpage
 
-\begin{definition}[Cohérence causale non-spéculative~\autocite{mahajan_2011_cac}]\label{def:causal-consistency}
+\begin{definition}[Cohérence causale non-spéculative]\label{def:causal-consistency}~\autocite{mahajan_2011_cac}
   Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence causale non-spéculative, et nous écrivons $A \in \trm{Causal}$, si et seulement si~:
 
   \begin{description}
@@ -1158,6 +1160,7 @@ Un protocole naïf pourrait~:
 
 
 \subsection{Cohérence \emph{\acl{FJC}}}
+\index{coherence-fjc@Cohérence \acl{FJC}}
 
 % TODO: revoir avec le lien avec la section sur la cohérence causale
 
@@ -1286,7 +1289,7 @@ $p_M$ est un pair malintentionné.
 Il prétend au pair $p_A$ que sa deuxième opération est $m_2$, alors qu'il prétend au pair $p_B$ que sa deuxième opération est $m_3$.}\label{fig:causal-violation}
 \end{figure}
 
-\begin{definition}[Cohérence \emph{\acl{FJC}} non-spéculative~\autocite{mahajan_2011_cac}]\label{def:fjc-consistency}
+\begin{definition}[Cohérence \emph{\acl{FJC}} non-spéculative]\label{def:fjc-consistency}~\autocite{mahajan_2011_cac}
   Soit une exécution abstraite bien-formée $A$. $A$ respecte le modèle de cohérence \emph{\acf{FJC}} non-spéculative, et nous écrivons $A \in \trm{FJC}$, si et seulement si~:
 
   \begin{description}
@@ -1351,22 +1354,22 @@ Ainsi, l'application considère que deux opérations non-linéaires n'ont pas é
 
 
 \subsection{Cohérence \emph{\acl{VFJC}}}
+\index{coherence-vfjc@Cohérence \acl{VFJC}}
 
 Les pairs malintentionnés peuvent réaliser des équivoques.
-Dans une exécution abstraite, ces équivoques se traduisent par des opérations non-linéaires.
+Dans une exécution abstraite, ces équivoques se traduisent par des opérations non-linéaires\index{operation-non-lineaire@Opérations non-linéaires}.
 Une opération est non-linéaire s'il existe une opération du même auteur qui lui est concurrente.
-Chaque opération non-linéaire forme un embranchement.
+Chaque opération non-linéaire forme un embranchement\index{embranchement@Embranchement}.
 Pour préserver la convergence des copies, le modèle de cohérence~\acf{VFJC}~\autocite{mahajan_2011_cac} permet aux pairs d'accepter des opérations non-linéaires.
 Les pairs peuvent ainsi joindre des embranchements.
 
 Pour certains contenus répliqués, les équivoques peuvent produire des conflits de modification difficiles à identifier et à résoudre.
-%Leur résolution peut notamment produire un surcoût [Depot?].
 De ce fait, il est souhaitable d'empêcher à terme la réalisation de nouvelles équivoques.
 Pour ce faire, les pairs qui en produisent doivent être à terme évincés.
 Leurs opérations futures devraient donc à terme être rejetées.
 
 De manière optimiste, un pair honnête présume que les autres pairs sont honnêtes tant qu'ils ne produisent pas d'équivoques.
-Un pair reconnaît qu'un pair est malintentionné dès lors qu'il observe deux opérations non-linéaires de ce dernier.
+Un pair reconnaît qu'un pair est malintentionné\index{pair-reconnu-malintentionne@Pairs reconnus malintentionnés} dès lors qu'il observe deux opérations non-linéaires de ce dernier.
 Cette observation se traduit par une jonction d'embranchements.
 Dans l'exécution abstraite $A_1$ de la \autoref{fig:provably-malicious}, le pair $p_A$ observe les opérations non-linéaires $m_2$ et $m_3$ du pair $p_M$. $p_A \in \trm{obs}_{A_1}(m_2) \cap \trm{obs}_{A_1}(m_3)$.
 Il reconnaît ainsi $p_M$ comme malintentionné.
@@ -1541,7 +1544,7 @@ En d'autres termes, reconnaître qu'un pair est malintentionné devrait être re
 Si un pair est reconnu malintentionné en une opération $x$, alors une opération de ce pair ne peut être immédiatement visible à $x$.
 Il s'agit de la propriété~\ref{itm:vfjc2} du modèle de cohérence \acf{VFJC} que nous présentons dans la \autoref{def:vfjc-consistency}.
 
-\begin{definition}[Cohérence \emph{\acl{VFJC}}~\autocite{mahajan_2011_cac}]\label{def:vfjc-consistency}
+\begin{definition}[Cohérence \emph{\acl{VFJC}}]\label{def:vfjc-consistency}~\autocite{mahajan_2011_cac}
   Soit une exécution abstraite $A$. $A$ respecte le modèle de cohérence \emph{\acf{VFJC}}, et nous écrivons $A \in \trm{VFJC}$, si et seulement si~:
 
   \begin{description}
@@ -1648,7 +1651,7 @@ La suppression et l'ajout en parallèle d'une même valeur dans un ensemble rép
 L'exécution abstraite respecte le modèle de cohérence causale.}\label{fig:set-conflict-example}
 \end{figure}
 
-Les \acfp{CRDT}~\autocite{shapiro_2011_crdt,roh_2011_rga} sont des types de données conçus pour être répliqués et modifiés en parallèle par un ensemble de pairs.
+Les \acfp{CRDT}~\autocite{shapiro_2011_crdt,roh_2011_rga}\index{crdt@\aclp{CRDT}} sont des types de données conçus pour être répliqués et modifiés en parallèle par un ensemble de pairs.
 Ils encapsulent la complexité des protocoles de réplication optimiste derrière une interface bien définie.
 Les concepteur·ice·s d'applications peuvent ainsi se concentrer sur la sémantique des contenus répliqués.
 Nous spécifions un \ac{CRDT} avec deux modèles~\autocite{preguia2018_crdt}~: un type abstrait de données répliquées et un schéma de synchronisation.
@@ -1659,6 +1662,7 @@ Il repose lui-même sur un modèle réseau.
 Nous détaillons cet aspect dans la \autoref{sec:crdt-sync}.
 
 \subsection{Type abstrait de données répliquées}\label{sec:crdt-spec}
+\index{type-abstrait-donnees-repliquees@Type abstrait de données répliquées}
 
 Pour modifier et consulter un contenu, un pair exécute respectivement des opérations de modification et des opérations d'interrogation.
 L'exécution des opérations d'interrogation ne modifient pas le contenu.
@@ -1981,6 +1985,7 @@ Les \acp{CRDT} proposent différentes stratégies de synchronisation que nous pr
 
 
 \subsection{Schéma de synchronisation}\label{sec:crdt-sync}
+\index{schema-synchronisation@Schéma de synchronisation}
 
 Afin de converger, les pairs doivent intégrer l'ensemble des modifications effectuées sur les copies du contenu partagé.
 Pour ce faire, les pairs s'échangent leurs modifications sous forme de messages.
@@ -2002,7 +2007,7 @@ Ces identifiants sont généralement des couples dont le premier élément est l
 Ce second élément est communément nommé \emph{nombre séquentiel}.
 Ces couples sont dénommés \emph{dots}~\autocite{baquero_2018_pure-op-crdt}.
 
-Pour décrire l'implémentation de ces ensembles répliqués, nous introduisons un formalisme inspirée des travaux de \textcite{baquero_2018_pure-op-crdt}.
+Pour décrire l'implémentation de ces ensembles répliqués, nous introduisons un formalisme inspiré des travaux de \textcite{baquero_2018_pure-op-crdt}.
 Notre formalisme nous permet de décrire de manière unifiée les \acp{CRDT} synchronisés par opérations et les \acp{CRDT} synchronisés par états.
 Une fois initialisé, un \ac{CRDT} peut être soumis aux événements d'entrés suivants~:
 \begin{itemize}
@@ -2036,7 +2041,7 @@ Dans les paragraphes suivants nous détaillons les différences entre les diffé
 \end{table}
 
 
-\paragraph{Les \acp{CRDT} synchronisés par opérations~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt}} représentent les modifications effectuées sur une copie par des opérations intégrables.
+\paragraph{Les \acp{CRDT} synchronisés par opérations~\autocite{baquero_2014_pure-op-crdt,baquero_2018_pure-op-crdt}}\index{crdt-op@\acp{CRDT} synchronisés par opérations} représentent les modifications effectuées sur une copie par des opérations intégrables.
 Il est important de distinguer les opérations exécutées et les opérations intégrables.
 L'exécution d'une opération de modification donne lieu à la génération d'un message qui encapsule une opération intégrable.
 Par abus de langage nous pouvons parler d'opérations lorsque l'ambiguïté n'est pas possible.
@@ -2188,7 +2193,7 @@ Quel que soit l'ordre d'intégration de ces deux opérations, la valeur $v$ sera
 L'implémentation décrite respecte donc la sémantique \emph{Add-Win}.
 
 
-\paragraph{Les \acp{CRDT} synchronisés par états} transmettent directement l'état mis à jour au reste des pairs.
+\paragraph{Les \acp{CRDT} synchronisés par états}\index{crdt-etats@\acp{CRDT} synchronisés par états} transmettent directement l'état mis à jour au reste des pairs.
 L'ensemble des messages et l'ensemble des états du \ac{CRDT} sont donc confondus.
 Lorsqu'un pair reçoit l'état mis à jour d'un autre pair, il le fusionne avec l'état actuel de sa copie.
 La fonction d'intégration $\trm{integrate}$ permet donc de fusionner deux états.
@@ -2201,7 +2206,7 @@ Il s'agit de la borne supérieure des états fusionnés.
 Ainsi un état fusionné avec lui-même donne l'état lui-même.
 La fusion d'un état $\sigma_1$ avec un état supérieur $\sigma_2$ donne $\sigma_2$.
 Ces propriétés forment une structure algébrique connue.
-En effet, l'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}.
+En effet, l'ensemble des états équipé de la fonction d'intégration forme un sup-demi-treillis~\autocite{davey2002lattice}\index{sup-demi-treillis@Sup-demi-treillis}.
 Chaque modification enfle l'état actuel pour obtenir un état qui lui est supérieur ou égal.
 Ainsi si l'appel $\trm{prepare}_i(\sigma_1, \_)$ donne l'état $\sigma_2$, alors $\sigma_2$ est supérieur ou égal à $\sigma_2$ et leur fusion donne $\sigma_2$.
 
@@ -2331,9 +2336,9 @@ Les états entourés sont irréductibles.
 
 \clearpage % better layout
 
-\paragraph{Les \acp{CRDT} synchronisés par différences}~\autocite{almeida_2018_delta-crdt-revisited} sont une sous-famille des \acp{CRDT} synchronisés par états.
+\paragraph{Les \acp{CRDT} synchronisés par différences}\index{crdt-diff@\acp{CRDT} synchronisés par différences}~\autocite{almeida_2018_delta-crdt-revisited} sont une sous-famille des \acp{CRDT} synchronisés par états.
 Ils permettent la conception de mécanismes de synchronisation plus efficaces~\autocite{enes_2018_efficient-sync-state-based-crdt}.
-Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles.
+Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles\index{etats-irreductibles@États irréductible}.
 Un état est irréductible si et seulement si il ne peut pas être obtenu par la fusion de deux états distincts et s'il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
 Dans la \autoref{fig:state-add-win-set-semilattice}, les états irréductibles sont entourés.
 L'état minimal est $\tuple*{\emptyset, \emptyset}$.

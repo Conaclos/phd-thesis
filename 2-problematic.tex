@@ -51,6 +51,7 @@ Ce chapitre introduit dans un premier temps la réplication de données. Il dév
 Il termine sur le modèle du système auquel nous nous intéressons et il définit l'adversaire du système.
 
 \section{Réplication de données}\label{sec:optimistic-replication}
+\index{replication-donnees@Réplication de données}
 
 La réplication de données maintient des copies de contenus partagés sur un ensemble de pairs.
 Elle augmente la disponibilité d'un contenu en permettant son interrogation et sa modification en dépit de la défaillance de pairs.
@@ -151,7 +152,7 @@ La cohérence forte maintient l'illusion de l'interrogation et la modification d
 \end{figure}
 
 Le maintien de l'illusion de l'interrogation et de la modification d'une seule copie a un coût.
-Elle requiert une coordination étroite entre les pairs.
+Elle requiert une coordination étroite entre les pairs\index{coordination@Coordination}.
 Une coordination qui peut se traduire par des communications systématiques avant chaque modification, voire avant chaque interrogation.
 Les latences et les défaillances inhérentes aux réseaux~\cite{rotem_falalcies_2006} rendent cette coordination problématique.
 Elle engendre plusieurs problèmes~:
@@ -250,11 +251,12 @@ Les copies finissent par converger~: les pairs obtiennent le même ensemble.}\la
 
 
 \section{Convergence des copies}\label{sec:convergence}
+\index{convergence-des-copies@Convergence des copies}
 
 %Un protocole de réplication optimiste autorise les modifications en concurrence sans coordination.
 %La divergence des copies est donc inévitable.
 
-Un protocole de réplication optimiste peut garantir plusieurs modèles de cohérence dits \enquote{faibles}.
+Un protocole de réplication optimiste\index{replication-optimiste@Réplication optimiste de données} peut garantir plusieurs modèles de cohérence dits \enquote{faibles}.
 L'une des garanties élémentaires de ces modèle concerne la convergence des copies.
 En l'absence de modifications, les copies devraient converger.
 Toute interrogation sur deux copies convergentes donne la même réponse.
@@ -408,7 +410,7 @@ Les pairs se coordonnent après l'intégration des modifications afin de converg
 \end{figure}
 
 
-Un protocole de réplication optimiste garantit une \emph{convergence à terme} des copies des pairs.
+Un protocole de réplication optimiste garantit une \emph{convergence à terme}\index{convergence-a-termes@Convergence à terme} des copies des pairs.
 La convergence à terme assure seulement que les pairs qui ont intégré un même ensemble de modifications convergeront dans un futur plus ou moins proche.
 Elle ne donne aucune borne sur le temps nécessaire et le nombre de communications nécessaires  pour converger.
 La \autoref{fig:convergence-post-coord} illustre un scénario dans lequel deux pairs intègrent leurs modifications respectives et se coordonnent ensuite afin de converger.
@@ -421,9 +423,9 @@ La formulation d'une propriété de vivacité inclut généralement l'expression
 Afin de faire converger plus rapidement les copies et exclure l'utilisation de coordinations, nous devons contraindre la convergence avec des propriétés de sûreté.
 Une propriété de sûreté décrit \enquote{quelque chose de mauvais} qui ne devrait jamais survenir.
 Une propriété de sûreté doit être respectée en tout point de l'exécution d'un protocole.
-\textcite{shapiro_2011_crdt} proposent la \emph{convergence forte} comme propriété de sûreté de la convergence.
+\textcite{shapiro_2011_crdt} proposent la \emph{convergence forte}\index{convergence-forte@COnvergence forte} comme propriété de sûreté de la convergence.
 
-\begin{definition}[Convergence forte~\autocite{shapiro_2011_crdt}]\label{def:strong-convergence}
+\begin{definition}[Convergence forte]~\autocite{shapiro_2011_crdt}\label{def:strong-convergence}
 Les pairs qui ont intégré le même ensemble de modifications ont des copies convergentes.
 \end{definition}
 
@@ -532,6 +534,7 @@ La copie est donc \emph{toujours disponible}~\autocite{mahajan_2011_cac} pour ê
 
 
 \section{Adversaire du système}
+\index{advseraire@Adversaire du système}
 
 Un protocole de réplication optimiste doit respecter un ensemble de propriétés de cohérence.
 Pour assurer ces propriétés, un protocole doit résister aux défaillances qu'il rencontre au cours de ses exécutions.
@@ -582,7 +585,7 @@ Toutefois, nous supposons les limitations suivantes~:
 \end{itemize}
 
 Les protocoles de réplication optimiste s'intéressent généralement à un adversaire qui a les profils \emph{réseau asynchrone non-fiable} et \emph{pairs restaurés}.
-En ajoutant les deux autres profils \emph{réseau corrompu} et \emph{pairs malintentionnés} nous obtenons un adversaire qui est Byzantin~\autocite{lamport_1982_byzantinegeneralsproblem}.
+En ajoutant les deux autres profils \emph{réseau corrompu} et \emph{pairs malintentionnés} nous obtenons un adversaire qui est Byzantin~\autocite{lamport_1982_byzantinegeneralsproblem}\index{adversaire-byzantin@Adversaire Byzantin}.
 
 \clearpage
 

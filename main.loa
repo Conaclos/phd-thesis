@@ -1,0 +1,12 @@
+\defcounter {refsection}{0}\relax 
+\contentsline {algorithm}{\numberline {1}{\ignorespaces Livraison d'un message\relax }}{91}{algorithm.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {algorithm}{\numberline {2}{\ignorespaces Initialisation à partir d'un journal reçu}}{92}{algorithm.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {algorithm}{\numberline {3}{\ignorespaces Génération déterministe d'une énumération qui contient toutes les permutations d'un ensemble ordonné de pairs}}{113}{algorithm.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {algorithm}{\numberline {4}{\ignorespaces Détermine si un message est convergent-stable}}{114}{algorithm.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {algorithm}{\numberline {5}{\ignorespaces Troncature du journal d'un pair}}{117}{algorithm.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {algorithm}{\numberline {6}{\ignorespaces Initialisation à partir d'un journal tronqué et d'un état}}{118}{algorithm.6}%
