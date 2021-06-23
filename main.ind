@@ -15,7 +15,7 @@
   \item Contexte causal, \hyperpage{148}
   \item Convergence à terme, \hyperpage{17}
   \item Convergence des copies, \hyperpage{16}
-  \item COnvergence forte, \hyperpage{18}
+  \item Convergence forte, \hyperpage{18}
   \item Coordination, \hyperpage{14}
   \item \aclp{CRDT}, \hyperpage{43}
   \item \acp{CRDT} synchronisés par différences, \hyperpage{54}
@@ -31,10 +31,11 @@
 
   \item Embranchement, \hyperpage{40}
   \item Empreinte d'un état, \hyperpage{108}
-  \item États irréductible, \hyperpage{54}
+  \item Équivoque, \hyperpage{5}
+  \item État irréductible, \hyperpage{54}
   \item Exécution abstraite, \hyperpage{27}
   \item Exécution abstraite bien-formée, \hyperpage{30}
-  \item Exécution abstraite associée à un journal, \hyperpage{99}
+  \item Exécution abstraite associée, \hyperpage{99}
   \item Extension d'une exécution abstraite, \hyperpage{61}
   \item Extension d'une histoire, \hyperpage{32}
 
@@ -112,13 +113,13 @@
   \item Séquence WOOT, \hyperpage{130}
   \item Spécification faible, \hyperpage{128}
   \item Spécification forte, \hyperpage{128}
-  \item Spécification forte sans entrelacement, \hyperpage{129}
+  \item Spécification sans entrelacement, \hyperpage{129}
   \item Stabilité, \hyperpage{61}
   \item Stabilité causale, \hyperpage{63}
   \item Stabilité causale dynamique, \hyperpage{71}
   \item Stabilité \acl{VFJC}, \hyperpage{65}
   \item Stabilité~\acs{VFJC} dynamique, \hyperpage{75}
-  \item Structures de données dépendantes, \hyperpage{85}
+  \item Structure de données dépendantes, \hyperpage{85}
   \item Sup-demi-treillis, \hyperpage{51}
 
   \indexspace

@@ -30,6 +30,7 @@ acknowledgments,
 }
 
 \makeindex
+\usepackage{idxlayout}
 
 \begin{document}
 \ThesisTitle{Réplication sécurisée dans les infrastructures pair-à-pair de collaboration}
@@ -54,18 +55,18 @@ acknowledgments,
 \dominitoc{} % mini-toc init
 
 \pagestyle{ThesisHeadings}
-\tableofcontents
-
 
 \renewcommand{\listfigurename}{Liste des figures}
 \renewcommand{\listtablename}{Liste des tableaux}
 \renewcommand{\listtheoremname}{Liste des définitions et théorèmes}
 \renewcommand{\listalgorithmname}{Liste des algorithmes}
 
+\tableofcontents
 \listoffigures
 \listoftables
 \listoftheorems[ignoreall,show={theorem,definition}]
 \listofalgorithms
+
 \mainmatter{}
 \include{1-intro}
 \include{2-problematic}
@@ -75,13 +76,10 @@ acknowledgments,
 \include{7-conclusion}
 
 \printbibliography{}
-
 \printindex{}
 
 %\appendix
 %\include{8-math-notations}
-
 \include{9-colophon}
-
 \include{0-abstract}
 \end{document}

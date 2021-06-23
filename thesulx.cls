@@ -30,6 +30,8 @@
 %% - Replace obsolete command \centerline by \centering
 %% - Remove class ref behind title page
 %% - Add \makeClassRef
+%% - remove redefinition of listoffigure and listoftable (generate bad toc link)
+%% - remove redefinition of index (generate bad toc link)
 
 \def\filedate{2013/10/06}
 \def\fileversion{v0.14}
@@ -1447,13 +1449,7 @@
      \let\item\@idxitem}
     {\onecolumn}
 \newcommand\PrintIndex{\@input@{\jobname.ind}}
-\AtBeginDocument{%
-    \ifx\@printindex\undefined
-       \let\printindex\PrintIndex
-    \else
-       \def\printindex{\@ifnextchar [{\@printindex}{\@printindex[default]}}
-       \let\PrintIndex\printindex
-    \fi}
+
 \newcommand\@Glo@Introduction{}
 \newcommand\BeginGloWith[1]%
            {\renewcommand\@Glo@Introduction{#1\par\bigskip}}
@@ -1510,43 +1506,11 @@
 \newcommand\@Lof@Introduction{}
 \newcommand\BeginLofWith[1]%
            {\renewcommand\@Lof@Introduction{#1\par\bigskip}}
-\renewcommand\listoffigures{%
-    \if@twocolumn
-      \@restonecoltrue\onecolumn
-    \else
-      \@restonecolfalse
-    \fi
-    \if@classic@section
-      \global\@classic@sectionfalse
-      \chapter*{\listfigurename}
-    \else
-      \SpecialSection{\listfigurename}
-    \fi
-    \generic@mark{\listfigurename}%
-    \@Lof@Introduction
-    \@starttoc{lof}%
-    \if@restonecol\twocolumn\fi
-    }
+
 \newcommand\@Lot@Introduction{}
 \newcommand\BeginLotWith[1]%
            {\renewcommand\@Lot@Introduction{#1\par\bigskip}}
-\renewcommand\listoftables{%
-    \if@twocolumn
-      \@restonecoltrue\onecolumn
-    \else
-      \@restonecolfalse
-    \fi
-    \if@classic@section
-      \global\@classic@sectionfalse
-      \chapter*{\listtablename}
-    \else
-      \SpecialSection{\listtablename}
-    \fi
-    \generic@mark{\listtablename}%
-    \@Lot@Introduction
-    \@starttoc{lot}%
-    \if@restonecol\twocolumn\fi
-    }
+
 \pagenumbering{roman}
 \setlength\@tempdima{\paperheight}
 \addtolength\@tempdima{-2in}

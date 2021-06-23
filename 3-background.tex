@@ -222,7 +222,7 @@ Ici, cette information est explicitement marquée par l'utilisation de la relati
 Elle définit en particulier les caractéristiques associées aux opérations.
 Le \autoref{tab:op-attributes} donne les caractéristiques des opérations de l'histoire de la \autoref{fig:causal-expectation}.
 
-\begin{definition}[histoire]\label{def:history}~\autocite{burckhardt_eventualconsistency_2014}
+\begin{definition}[Histoire]\label{def:history}~\autocite{burckhardt_eventualconsistency_2014}
 Une \emph{histoire} d'un contenu partagé de type $T$ est un n-uplet $H \defeq \tuple*{E, \trm{peer}, \trm{call}, \trm{rval}, \trm{rb}}$ tel que $E$ est un ensemble dénombrable d'opérations.
 Pour toute opération $x$~:
 \begin{itemize}
@@ -278,7 +278,7 @@ Par souci de concision, nous écrivons $x \viseq y$ si $x$ est visible ou est é
 La \autoref{def:abstract-exec} définit formellement une exécution abstraite.
 La \autoref{fig:vis-example} est une exécution abstraite de l'histoire de la \autoref{fig:causal-expectation}.
 
-\begin{definition}[exécution abstraite]\label{def:abstract-exec}~\autocite{burckhardt_eventualconsistency_2014}
+\begin{definition}[Exécution abstraite]\label{def:abstract-exec}~\autocite{burckhardt_eventualconsistency_2014}
 Une \emph{exécution abstraite} d'un contenu partagé de type $T$ est un n-uplet $A \defeq \tuple*{H, \trm{vis}}$ tel que~:
 \begin{itemize}
   \item $H$ est une histoire d'un contenu partagé de type $T$.
@@ -502,7 +502,7 @@ Dans la \autoref{fig:vis-example} on observe ainsi deux énumérations $a_1 \rb 
 Une histoire qui remplie cette condition est une \emph{histoire bien-formée}\index{histoire-bien-formee@Histoire bien-formée}.
 La \autoref{def:wf-history-malicious} définit formellement une histoire bien-formée.
 
-\begin{definition}[histoire bien-formée]\label{def:wf-history-malicious}
+\begin{definition}[Histoire bien-formée]\label{def:wf-history-malicious}
 En présence de pairs malintentionnés, une histoire $H$ est \emph{bien-formée} si et seulement si pour tout pair honnête $h$, la projection de la relation \emph{retourne-avant} sur $h$ forme une énumération.
 %$\tuple*{H|_p, \trm{rb}}$ est une énumération pour tout pair honnête $p$.
 %$H|_p$ correspond à l'ensemble des opérations exécutées sur le pair honnête $p$.
@@ -550,7 +550,7 @@ La \autoref{fig:wf-example} donne un exemple d'exécution abstraite mal-formée 
 %Les pairs malintentionnés peuvent exécuter des opérations arbitraires.
 %Les pairs honnêtes observent uniquement les opérations possible pour le contenu qu'ils partagent.
 
-\begin{definition}[exécution abstraite bien-formée]\label{def:wf-abstract-exec-malicious}
+\begin{definition}[Exécution abstraite bien-formée]\label{def:wf-abstract-exec-malicious}
     En présence de pairs malintentionnés, une \emph{exécution abstraite} $A \defeq \tuple*{H, \trm{vis}}$ est \emph{bien-formée} si et seulement si~:
     \begin{description}
       \item[\namedlabel{itm:bf1}{BF1}] $H$ est une \emph{histoire bien-formée}.
@@ -2338,7 +2338,7 @@ Les états entourés sont irréductibles.
 
 \paragraph{Les \acp{CRDT} synchronisés par différences}\index{crdt-diff@\acp{CRDT} synchronisés par différences}~\autocite{almeida_2018_delta-crdt-revisited} sont une sous-famille des \acp{CRDT} synchronisés par états.
 Ils permettent la conception de mécanismes de synchronisation plus efficaces~\autocite{enes_2018_efficient-sync-state-based-crdt}.
-Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles\index{etats-irreductibles@États irréductible}.
+Ils reposent sur l'idée de décomposer un état en un ensemble d'états irréductibles\index{etat-irreductible@État irréductible}.
 Un état est irréductible si et seulement si il ne peut pas être obtenu par la fusion de deux états distincts et s'il ne correspond pas à un état minimal (un état qui est inférieur à tout autre état).
 Dans la \autoref{fig:state-add-win-set-semilattice}, les états irréductibles sont entourés.
 L'état minimal est $\tuple*{\emptyset, \emptyset}$.

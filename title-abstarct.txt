@@ -1,13 +1,14 @@
-\cleardoublepage
-\pagestyle{empty} % fix thesul
+-- Version française --
 
-\AbstractsOnEvenPage
-\begin{ThesisAbstract}
-\vspace{-7em}
-\small
+Titre :
+Réplication sécurisée dans les infrastructures pair-à-pair de collaboration
 
-\subsection*{\centering Résumé}
 
+Mots clefs :
+réplication optimiste, pair-à-pair, collaboration, sécurité, convergence, CRDT
+
+
+Résumé :
 Une application de collaboration permet à plusieurs individus de coéditer un contenu.
 Les infrastructures pair-à-pair de collaboration visent à la conception d'applications hautement disponibles, aux latences faibles, qui tolèrent les partitions réseaux, et qui passent à l'échelle.
 Chaque pair (individu) modifie sa propre copie du contenu.
@@ -15,28 +16,39 @@ La modification concurrente des copies conduit à leur divergence.
 Les protocoles de réplication sont responsables de la convergence des copies.
 
 Ces protocoles supposent l'absence de pairs malintentionnés qui compromettent la convergence des copies.
-Pouvons-nous protéger la convergence des copies et préserver les propriétés des infrastructures pair-à-pair~?
+Pouvons-nous protéger la convergence des copies et préserver les propriétés des infrastructures pair-à-pair ?
 Nous proposons deux protocoles qui protègent la convergence des copies.
 Le premier protocole maintient un journal répliqué et infalsifiable qui enregistre les modifications du contenu.
 Les pairs conservent l'intégralité du journal pour déjouer les attaques des pairs malintentionnés et pour le transmettre à ceux qui rejoignent la collaboration.
 Le second protocole permet aux pairs de tronquer leur journal.
-La troncature du journal repose sur le concept de \emph{Stabilité}.
+La troncature du journal repose sur le concept de Stabilité.
 Une modification devient stable lorsque toute modification intégrée dans le journal dépend d'elle.
 Pour rejoindre la collaboration, un pair récupère une copie et un journal tronqué.
 Il vérifie l'authenticité de la copie à partir du journal tronqué.
 
-Un type de données répliquées (\emph{CRDT}) encapsule un protocole de réplication.
-Les \emph{CRDTs} séquences supposent généralement un ordre d'intégration causal des modifications du contenu.
+Un type de données répliquées (CRDT) encapsule un protocole de réplication.
+Les CRDTs séquences supposent généralement un ordre d'intégration causal des modifications du contenu.
 Le retard d'une modification propage des ralentissements dans l'ensemble du système.
 La connexion d'un pair peut engendrer l'intégration de nombreuses modifications.
-Pouvons-nous éliminer ces ralentissements et ces intégrations coûteuses~?
-Nous formalisons une famille de \emph{CRDTs} séquences et nous proposons une approche qui permet leur synchronisation par différences d'états.
+Pouvons-nous éliminer ces ralentissements et ces intégrations coûteuses ?
+Nous formalisons une famille de CRDTs séquences et nous proposons une approche qui permet leur synchronisation par différences d'états.
 Les différences d'états peuvent être intégrées dans un ordre arbitraire et résumer plusieurs modifications.
-Nous proposons un \emph{CRDT} séquence qui tire avantage de notre approche.
+Nous proposons un CRDT séquence qui tire avantage de notre approche.
 
-\begin{otherlanguage}{english}
-\subsection*{\centering Abstract}
 
+
+-- Version anglaise --
+
+
+Title:
+Secured replication in collaborative P2P environment
+
+
+Keywords:
+optimistic replication,P2P,collaboration,security,convergence,CRDT
+
+
+Abstract:
 A collaborative application allows multiple users to edit a shared content.
 Collaborative peer-to-peer environments aim to design applications with desirable properties: high-availability, low-latency, fault-tolerance, and scalability.
 Every peer (user) modifies her own copy of the content.
@@ -49,21 +61,17 @@ We propose two protocols to secure convergence.
 The first protocol maintains a replicated and unforgeable log that stores the modifications of the content.
 Peers preserve the full log in order to foil the attacks of malicious peers and to transmit it to new peers.
 The second protocol enables the peers to truncate their log.
-The log truncation relies on the concept of \emph{Stability}.
+The log truncation relies on the concept of Stability.
 A modification becomes stable once every modification added in the log depends on it.
 To join the collaboration, a peer retrieves a copy of
 the content and a truncated log used for checking the copy authenticity.
 
-A \acf{CRDT} encapsulates a replication protocol.
-Sequence \emph{CRDTs} generally assume the integration of content modifications in a causal order.
+A CRDT encapsulates a replication protocol.
+Sequence CRDTs generally assume the integration of content modifications in a causal order.
 A delayed integration propagates slowness across the system.
 The connection of a peer may lead to the integration of multiple modifications.
 Can we remove these delays and these costly integrations?
-We formalize a family of sequence \emph{CRDTs} and we propose their synchronization using delta states.
+We formalize a family of sequence CRDTs and we propose their synchronization using delta states.
 Delta states can be integrated in any order.
 They are able to summarize several modifications.
-We propose a sequence \emph{CRDT} that takes advantage of our approach.
-\end{otherlanguage}
-\end{ThesisAbstract}
-
-\let\clearpage\relax % fix thesul: does not add a blank page
+We propose a sequence CRDT that takes advantage of our approach.

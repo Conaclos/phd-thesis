@@ -1,11 +1,12 @@
 \indexentry{infrastructure-pair-a-pair@Infrastructures pair-à-pair|hyperpage}{4}
 \indexentry{pairs@Pairs|hyperpage}{4}
+\indexentry{equivoque@Équivoque|hyperpage}{5}
 \indexentry{replication-donnees@Réplication de données|hyperpage}{14}
 \indexentry{coordination@Coordination|hyperpage}{14}
 \indexentry{convergence-des-copies@Convergence des copies|hyperpage}{16}
 \indexentry{replication-optimiste@Réplication optimiste de données|hyperpage}{16}
 \indexentry{convergence-a-termes@Convergence à terme|hyperpage}{17}
-\indexentry{convergence-forte@COnvergence forte|hyperpage}{18}
+\indexentry{convergence-forte@Convergence forte|hyperpage}{18}
 \indexentry{advseraire@Adversaire du système|hyperpage}{19}
 \indexentry{adversaire-byzantin@Adversaire Byzantin|hyperpage}{20}
 \indexentry{properiete-coherence@Propriété de cohérence|hyperpage}{24}
@@ -41,7 +42,7 @@
 \indexentry{crdt-etats@\acp{CRDT} synchronisés par états|hyperpage}{51}
 \indexentry{sup-demi-treillis@Sup-demi-treillis|hyperpage}{51}
 \indexentry{crdt-diff@\acp{CRDT} synchronisés par différences|hyperpage}{54}
-\indexentry{etats-irreductibles@États irréductible|hyperpage}{54}
+\indexentry{etat-irreductible@État irréductible|hyperpage}{54}
 \indexentry{troncature-journal@Troncature du journal|hyperpage}{59}
 \indexentry{authentification-etat@Authentification d'un état|hyperpage}{60}
 \indexentry{stabilite@Stabilité|hyperpage}{61}
@@ -62,16 +63,16 @@
 \indexentry{dependance-declarees@Dépendance déclarée|hyperpage}{83}
 \indexentry{numero-message@Numéro d'un message|hyperpage}{83}
 \indexentry{identifiant-pair@Identifiant d'un pair|hyperpage}{84}
-\indexentry{structure-donnees-dependantes@Structures de données dépendantes|hyperpage}{85}
+\indexentry{structure-donnees-dependantes@Structure de données dépendantes|hyperpage}{85}
 \indexentry{vecteur-versions@Vecteurs de versions|hyperpage}{85}
 \indexentry{message-bien-forme@Message bien-formé|hyperpage}{88}
-\indexentry{execution-abstraite-associéé@Exécution abstraite associée à un journal|hyperpage}{99}
+\indexentry{execution-abstraite-associee@Exécution abstraite associée|hyperpage}{99}
 \indexentry{message-stable@Message stable|hyperpage}{104}
 \indexentry{message-convergent-stable@Message convergent-stable|hyperpage}{104}
 \indexentry{empreinte-etat@Empreinte d'un état|hyperpage}{108}
 \indexentry{specification-faible@Spécification faible|hyperpage}{128}
 \indexentry{specification-forte@Spécification forte|hyperpage}{128}
-\indexentry{specification-forte-sans-entrala@Spécification forte sans entrelacement|hyperpage}{129}
+\indexentry{specification-sans-entrala@Spécification sans entrelacement|hyperpage}{129}
 \indexentry{sequence-woot@Séquence WOOT|hyperpage}{130}
 \indexentry{sequence-rga@Séquence RGA|hyperpage}{132}
 \indexentry{sequence-logoot@Séquence Logoot|hyperpage}{133}
